@@ -1,0 +1,1 @@
+heloo {{Auth::user()->fname}}, how are you?
