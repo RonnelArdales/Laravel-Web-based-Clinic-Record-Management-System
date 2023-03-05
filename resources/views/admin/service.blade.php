@@ -159,6 +159,26 @@
 <script>
     $(document).ready(function (){
 
+        deleteall();
+        
+        function deleteall () {
+            if (window.location.href) {
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "post",
+                url: "/admin/billing/addtocart/deleteall",
+                datatype: "json",
+                success: function(response){ 
+                }
+            });
+                
+            }
+        }
+
         $(".modal").on("hidden.bs.modal", function(){
             $('#create, #edit, #delete').find('input').val("");
             $('#name, #price, #error_servicename, #error_price').html("");

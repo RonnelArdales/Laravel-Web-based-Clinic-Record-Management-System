@@ -177,8 +177,8 @@
 
 }
 
-td{
-  height: -20vh;
+.table{
+  
 }
 
 .tbody{
@@ -186,9 +186,8 @@ td{
 }
 .modal-xl{
 width: 2000px;
-}
-.table{
-  height:100px;
+
+
 }
 
 .viewbody{
@@ -230,105 +229,49 @@ width: 2000px;
 
 <div class="whole d-flex d-flex-1">
 
-  <aside id="sidebar" class="sidenav border-right border-dark">
+<h1>upload file</h1>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>filename</th>
                 
-    <div class="p-2.5 mt-3 d-flex  justify-content-center">
-      <img style="border-radius: 100%; height:9.5vw; width: 9.5vw; margin-bottom: 5% ; " src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt="JGRPSYlogo">
-    </div>
-      <div class="overflow-auto" style="height: 72vh"> 
-      @if (Auth::user()->usertype == 'admin')
-      <ul class="no-bullet">
-        <li class="  my-2 mx-3  {{Request::is('admin/dashboard') ? 'active' : '';}}">
-          <a href="/admin/dashboard"> <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/home_wvybu9.png" alt=""> Home</a>
-     </li>
-     <li class=" my-2 mx-3  {{Request::is('admin/profile') ? 'active' : '';}}">
-      <a href="/admin/profile"> <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" alt=""> Profile</a>
-  </li>
-  <li class="  my-2 mx-3  {{Request::is('/admin/appointment') ? 'active' : '';}}">
-    <a href="/admin/appointment"> <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296625/JG%20marquez/booking_te8ipg.png" alt=""> Appointment</a>
-  </li>  
-  <li class="  my-2 mx-3  {{Request::is('') ? 'active' : '';}}">
-    <a href="#"> <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296625/JG%20marquez/booking_te8ipg.png" alt=""> Queing</a>
-  </li> 
-  <li class=" my-2 mx-3 {{Request::is('/admin/transaction') ? 'active' : '';}}">
-    <a href="/admin/transaction"> <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/consult_las4n9.png" alt=""> Transaction</a>
-  </li> 
-  <li class=" my-2 mx-3 {{Request::is('/admin/billing') ? 'active' : '';}}">
-    <a href="/admin/billing"> <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> Billing</a>
-  </li>
-  
-  <li>
-    <button class="btn dropdown-btn rounded"> <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/settings_ttbpof.png" alt=""> Reports 
-      <i class="fa fa-caret-down"></i>
-    </button>
-                <div class="dropdown-container" style="padding-left: 10%;">
-                  <a href="/admin/reports/user">Users</a>
-                  <a href="#">Transaction</a>
-                  <a href="#">Audit trail</a>
-                  <a href="#">Services</a>
-                  <a href="#">Billing</a>
-                </div>
-          </li>
-  <li>
-    <button class="btn dropdown-btn rounded"> <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/settings_ttbpof.png" alt=""> Settings 
-      <i class="fa fa-caret-down"></i>
-    </button>
-                <div class="dropdown-container" style="padding-left: 10%;">
-                  <a href="/admin/service">Service</a>
-                  <a href="/admin/discount">Discount</a>
-                  <a href="#">Business Hours</a>
-                  <a href="#"> <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296805/JG%20marquez/guestpage_zylemm.png" alt=""> Guest Page</a>
-                </div>
-          </li>
+                    <th>Actions</th> 
+                </tr>
+            </thead>
+            <tbody >
+                @if (count($uploads)> 0 )
+                @foreach ($uploads as $upload)
+                <tr class="overflow-auto">
+                    <td>{{$upload->id}}</td>
+                    <td>{{$upload->file}}</td>
+                    <td>
+                        <a href="upload/show/{{$upload->id}}">view</a>
+                        <a href="upload/download/{{$upload->file}}">download</a>
+                            {{-- <button class="edit btn btn-primary btn-sm">show</button>   
+                            <button type="button" value="" class="edit btn btn-primary btn-sm">Edit</button>   
+                            <button type="button" value="" class="edit btn btn-primary btn-sm">Edit</button>    --}}
+                    {{-- <button type="button" value="{{$service->servicecode}}" class="edit btn btn-primary btn-sm">Edit</button>
+                    <button type="button" value="{{$service->servicecode}}" class="delete btn  btn-danger btn-sm">delete</button></td> --}}
+                </tr>
+                @endforeach
+                @else
+                <tr>
+                    <td colspan="4" style="text-align: center;">No Service Found</td>
+              
+                  </tr>
+                   
+                @endif
+              
+            </tbody>
+        </table>
     
-        
-          <form action="/logout" method="POST">
-            @csrf
-            <li class="nav-item">
-                <button type="submit" class="btn dropdown-btn rounded">Logout</button>
-            </li>
-            </form>
+    </div>
+ 
+</div>
 
-    </ul>
-    @else
-    <ul class="no-bullet">
-      <li class="  my-2 mx-3  {{Request::is('secretary/dashboard') ? 'active' : '';}}">
-        <a href="/secretary/dashboard"><i>dashboard</i> </a>
-    </li>
-        <li class=" my-2 mx-3  {{Request::is('secretary/profile') ? 'active' : '';}}">
-            <a href="/secretary/profile"><i>Profile</i> </a>
-        </li>
-        <li class=" my-2 mx-3  {{Request::is('secretary/appointment') ? 'active' : '';}}">
-            <a href="/secretary/appointment"><i></i>Appointment </a>
-        </li>  
-        <li class=" my-2 mx-3 {{Request::is('') ? 'active' : '';}}">
-            <a href="/secretary/dashboard"><i>Booking</i> </a>  
-        <li>
-            <button class="btn dropdown-btn rounded">Settings 
-                <i class="fa fa-caret-down"></i>
-              </button>
-              <div class="dropdown-container">
-                <a href="/admin/service">Service</a>
-                <a href="/admin/discount">Discount</a>
-                <a href="#">Business Hours</a>
-                <a href="#">Guest Page</a>
-              </div>
-        </li>
-        <form action="/logout" method="POST">
-          @csrf
-          <li class="nav-item">
-              <a button type="submit" class="nav-link"><img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/logout_nv4ryo.png" alt=""> Log Out</button>
-          </li>
-          </form>
-  </ul>
-  
-      @endif
-      </div>
-  </aside>
-
-<main class="main overflow-auto ">
-    @yield('content')
-</main>
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
@@ -351,5 +294,3 @@ width: 2000px;
     </script>
 
 @yield('scripts')
-
-

@@ -3,57 +3,74 @@
     
 
    
-<div class="container">
-  <div class="row">
-    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-      <div class="card border-0 shadow rounded-3 my-5">
-        <div class="login d-flex align-items-center py-5">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-9 col-lg-8 mx-auto">
-             
-        
+
+            <div style="background: #EDDBC0; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);width: 358px;
+            height: 415px; margin-left:15%; margin-top:5%; padding: 3% 4% 3% 4%">
+              
+              <div style="display:flex; flex-direction:row;">
+                  <div style="background-color:#829460;width:4px; height: 70px; border-radius:5px; margin-right:2px "></div>
+                  <p style="black;font-family: 'Song Myung'; font-style: normal; font-weight: 450; font-size: 44px; line-height: 70px;">welcome.</p>
+                </div>
+
                 @if(Session::has('success'))
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                     <span class="block sm:inline">{{Session::get('success')}}</span>
                   </div>
-                @endif
-                <h3 class="login-heading mb-4">Sign in</h3>
-  
+                @endif 
+ 
                 <!-- Sign In Form -->
-                <form action="/login/process" method="POST">
+        <form action="/login/process" method="POST">
                   @csrf
-                  <div class="form-floating mb-3">
-                    <input  class="form-control"   name="email" value="{{old('email')}}" >
-                    <label for="floatingInput">Email address</label>
-                  </div>
-                  <div class="form-floating mb-1">
-                    <input type="password" class="form-control" autocomplete="off"  id="floatingPassword" name="password" >
-                    <label for="floatingPassword">Password</label>
-                  </div>
+            
+                    <input style="font-family:Poppins; margin-bottom:5%; border:none; border-bottom: 2px solid rgba(0, 0, 0, 0.5);;background-color:#EDDBC0; width:100%"  placeholder="E-mail" name="email" value="{{old('email')}}" >  
+                    <input style="font-family:Poppins; margin-bottom:5%;border:none; border-bottom: 2px solid rgba(0, 0, 0, 0.5);;background-color:#EDDBC0; width:100% " placeholder="Password" type="password" autocomplete="off"  id="floatingPassword" name="password" >  
+                
                   @if(Session::has('error'))
-                  <span  role="alert" class="block  text-danger">{{Session::get('error')}}</span>
+                  <span  role="alert">{{Session::get('error')}}</span>
               @endif
-          
-             
-  
-                  <div class="d-grid">
-                    <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mt-2 mb-2" type="submit">Sign in</button>
-                 
-                    <div class="text-center">
-                      <a class="small" href="/identify">Forgot password?</a>
-                    </div>
-                  </div>
-  
-                </form>
+
+             <div style="text-align: center; margin-top: 2%">
+            <button type="submit"    style="text-align:center; background: #829460; border-radius: 20px; width:85%; border:none; color:white; font-family: Poppins;font-weight:700; font-size:15px;" >Log In</button>
+           
+            <p style="margin-top: 10px"> --------- or ---------</p>
+
+            <a href="/register" style="text-decoration:none; font-family:Poppins; text-align:center; color:#829460; line-height: 1vw;border-radius: 20px; width: px; border: 2px solid #829460; padding:0 68px 0 68px;font-weight:700;font-size:15px " >Sign Up</a> 
+            
+              <div  style="margin-top: 5%; display:flex; flex-direction:row;font-size: 15px;">
+                <p style="font-family: 'Poppins';
+                font-style: normal;
+                font-weight: 400;">Forgot Password?</p>
+                <a style="font-family: 'Poppins';
+                font-style: normal;
+                font-weight: 400;margin-left:2px;" href="/identify"> Click Here</a>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+           </div>
+           </div>
+        </form> 
+       </div>
+
+       <div style="position: absolute; width: 17%;height: 88%;
+       top:0px;
+       margin-top:2%;
+       left:60%;
+       background: #829460;
+       border-radius: 200px;
+       text-align:center; padding-top:10%;">
+  
+        <img  style=" height: 13vw; width: 13vw; margin-left:auto; margin-right: auto; border-radius: 9999px;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt="logo">
+        <p style="font-family: 'Noto Serif Gujarati';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 16px;
+        text-align: center;
+        text-transform: uppercase;
+        margin-top:6%;
+        color: #FFFFFF;"> JGMarquez, RPsy</p>
+
+      </div>        
+
+
 
 {{-- <div class=" h-screen bg-[#EDDBC0]">
     <form action="/login/process" method="POST">

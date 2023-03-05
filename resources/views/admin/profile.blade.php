@@ -8,13 +8,26 @@
          </button></h1>
        </div>
        <div>
+        <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Usertype</label>
+        <select name="usertype" class="usertypetable" id="usertypetable">
+          <option value="patient">patient</option>
+          <option value="secretary">secretary</option>
+          <option value="admin">admin</option>
+        </select>
+
+          <input type="search" name="search" id="search" placeholder="search"> 
+  
         
        </div>
  
        <div id="success"></div>
-<div class="card">
+<div class="card " style="height: 400px" id="patient">
     <div class="card-body">
-        <table class="table table-bordered table-striped">
+      <div class="d-flex justify-content-center">
+        <h4>Profile</h4>
+      </div>
+        <table class="table patient table-bordered table-striped" >
+
             <thead>
                 <tr>
                     <th>id</th>
@@ -32,7 +45,7 @@
             </thead>
             <tbody >
               @if (count($users) > 0)
-              @foreach ($users as $user)
+              @foreach ($users->where('usertype', 'patient') as $user)
               <tr class="overflow-auto">
                   <td>{{$user->id}}</td>
                   <td>{{$user->fname}}</td>
@@ -59,10 +72,120 @@
                
             </tbody>
         </table>
-    
     </div>
- 
 </div>
+
+{{-- secretary --}}
+<div class="card" style="height: 400px"  id="secretary" hidden>
+  <div class="card-body">
+    <div class="d-flex justify-content-center">
+      <h4>Secretary</h4>
+    </div>
+      <table class="table secretary table-bordered table-striped" >
+
+          <thead>
+              <tr>
+                  <th>id</th>
+                  <th>First name</th>
+                  <th>Middle name</th>
+                  <th>Last name</th> 
+                  <th>Birthday</th>
+                  <th>Address</th>
+                  <th>Gender</th>
+                  <th>Mobile no.</th>
+                  <th>Email</th>
+                  <th>Action</th>
+
+              </tr>
+          </thead>
+          <tbody >
+            @if (count($users) > 0)
+            @foreach ($users->where('usertype', 'secretary') as $user)
+            <tr class="overflow-auto">
+                <td>{{$user->id}}</td>
+                <td>{{$user->fname}}</td>
+                <td>{{$user->mname}}</td>
+                <td>{{$user->lname}}</td>
+                <td>{{$user->birthday}}</td>
+                <td>{{$user->address}}</td>
+                <td>{{$user->gender}}</td>
+                <td>{{$user->mobileno}}</td>
+                <td>{{$user->email}}</td>
+                
+                <td>
+                <button type="button" value="{{$user->id}}" class="view btn2 btn btn-primary ">view</button>
+                <button type="button" value="{{$user->id}}" class="edit btn2 btn btn-primary ">Edit</button>
+                <button type="button" value="{{$user->id}}" class="delete btn2 btn  btn-danger">delete</button></td>
+            </tr>
+            @endforeach
+            @else
+            <tr>
+              <td colspan="4" style="text-align: center;">no user Found</td>
+  
+            </tr>
+            @endif
+             
+          </tbody>
+      </table>
+  </div>
+</div>
+
+{{-- admin --}}
+
+<div class="card" style="height: 400px"  id="admin" hidden>
+  <div class="card-body">
+    <div class="d-flex justify-content-center">
+      <h4>Admin</h4>
+    </div>
+      <table class="table  admin table-bordered table-striped" >
+
+          <thead>
+              <tr>
+                  <th>id</th>
+                  <th>First name</th>
+                  <th>Middle name</th>
+                  <th>Last name</th> 
+                  <th>Birthday</th>
+                  <th>Address</th>
+                  <th>Gender</th>
+                  <th>Mobile no.</th>
+                  <th>Email</th>
+                  <th>Action</th>
+
+              </tr>
+          </thead>
+          <tbody >
+            @if (count($users) > 0)
+            @foreach ($users->where('usertype', 'admin') as $user)
+            <tr class="overflow-auto">
+                <td>{{$user->id}}</td>
+                <td>{{$user->fname}}</td>
+                <td>{{$user->mname}}</td>
+                <td>{{$user->lname}}</td>
+                <td>{{$user->birthday}}</td>
+                <td>{{$user->address}}</td>
+                <td>{{$user->gender}}</td>
+                <td>{{$user->mobileno}}</td>
+                <td>{{$user->email}}</td>
+                
+                <td>
+                <button type="button" value="{{$user->id}}" class="view btn2 btn btn-primary ">view</button>
+                <button type="button" value="{{$user->id}}" class="edit btn2 btn btn-primary ">Edit</button>
+                <button type="button" value="{{$user->id}}" class="delete btn2 btn  btn-danger">delete</button></td>
+            </tr>
+            @endforeach
+            @else
+            <tr>
+              <td colspan="4" style="text-align: center;">no user Found</td>
+  
+            </tr>
+            @endif
+             
+          </tbody>
+      </table>
+  </div>
+</div>
+
 
 {{-- modal --}}
 {{-- create --}}
@@ -98,7 +221,7 @@
           
 
                 <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Birthday</label>
-                <input class=" birthday bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text"> 
+                <input class=" birthday bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="date"> 
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="birthday"></span>
                 </div>
@@ -111,7 +234,7 @@
         
                 
                 <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Gender</label>
-                <select name="gender" class="gender">
+                <select name="gender" class="gender" >
                   <option value="">--select</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -139,10 +262,11 @@
                 </div>
             
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Usertype</label>
-                <select name="usertype" class="usertype">
+                <select name="usertype" class="usertype" >
                   <option value="">--select--</option>
                   <option value="patient">Patient</option>
                   <option value="secretary">Secretary</option>
+                  <option value="admin">Admin</option>
                 </select>
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="usertype"></span>
@@ -241,6 +365,7 @@
               <option value="" {{$user->usertype == "" ? 'selected' : ''}}></option>
               <option value="patient" {{$user->usertype == "patient" ? 'selected' : ''}}>Patient</option>
               <option value="secretary" {{$user->usertype == "secretary" ? 'selected' : ''}}>Secretary</option>
+              <option value="admin" {{$user->usertype == "admin" ? 'selected' : ''}}>Admin</option>
             </select>
             <div class="mt-0 mb-2">
               <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_usertype"></span>
@@ -325,6 +450,7 @@
             <option value="" {{$user->usertype == "" ? 'selected' : ''}}></option>
             <option value="patient" {{$user->usertype == "patient" ? 'selected' : ''}}>Patient</option>
             <option value="secretary" {{$user->usertype == "secretary" ? 'selected' : ''}}>Secretary</option>
+            <option value="admin" {{$user->usertype == "admin" ? 'selected' : ''}}>Admin</option>
           </select>
 
   </div>
@@ -372,10 +498,76 @@
 <script>
     $(document).ready(function (){
 
+      refresh_table();
+      deleteall();
+        
+        function deleteall () {
+            if (window.location.href) {
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "post",
+                url: "/admin/billing/addtocart/deleteall",
+                datatype: "json",
+                success: function(response){ 
+                }
+            });
+                
+            }
+        }
+  
+      function refresh_table(){
+        var usertype = $('#usertypetable').val()
+        if( usertype == 'secretary' ){
+                $('.secretary').load(location.href+' .secretary');
+               } else if (usertype == 'patient') {
+                $('.patient').load(location.href+' .patient');
+               } else {
+                $('.admin').load(location.href+' .admin');
+               }
+      }
+
+
+
         $(".modal").on("hidden.bs.modal", function(){
             $('#create, #edit, #delete').find('input').val("");
-            $('#error_fname, #error_lname, #error_gender, #error_usertype, #error_birthday, #error_address, #error_mobileno, #error_email, #error_password, #fname, #mname, #lname,#gender, #usertype, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password ').html("");
+
+            $('#error_fname, #error_lname, #error_gender, #error_usertype, #error_birthday, #error_address, #error_mobileno, #error_email, #error_password, #fname, #mname, #lname, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password ').html("");
         });
+
+        //show and hide table
+
+        $('#usertypetable').on('change', function(e){
+                e.preventDefault();
+                var usertype = $(this).val();
+               if( usertype == 'secretary' ){
+                    $('#patient').attr("hidden",true);
+                    $('#admin').attr("hidden",true);
+                    $("#secretary").attr("hidden",false);
+                    refresh_table();
+                      //  alert(usertype);
+               } else if (usertype == 'patient') {
+                $('#patient').attr("hidden",false);
+                    $('#admin').attr("hidden",true);
+                    $("#secretary").attr("hidden",true);
+                    refresh_table();
+               } else {
+                $('#patient').attr("hidden",true);
+                    $('#admin').attr("hidden",false);
+                    $("#secretary").attr("hidden",true);
+                    refresh_table();
+               }
+            
+            })
+
+
+            $('#search').on('keyup', function(e){
+              var search = $(this).val();
+              alert(search);
+            })
 
         //store data
         $(document).on('click', '.add_user', function(e){
@@ -396,7 +588,7 @@
                 'password_confirmation': $('.password_confirmation').val(),
                 'usertype': $('.usertype').val(),
             }
-            console.log(data);
+            // console.log(data);
             //always add csrf token
             $.ajaxSetup({
                 headers: {
@@ -409,7 +601,8 @@
                 data: data,
                 datatype: "json",
                 success: function(response){
-                    // console.log(response);
+                    console.log(response);
+
                     if(response.status == 400){
                       $('#fname, #mname, #lname,#gender, #usertype, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password'  ).html("");
                         $.each(response.errors.first_name, function (key, err_values){
@@ -448,12 +641,16 @@
                         
 
                     }else{
+                    
                       $('#success' ).html("");
                         $('#success' ).addClass('alert alert-success');
                         $('#success').text('success');
                         $('#create').modal('hide');
-                        $('#create').find('input').val("");
-                        $('.table').load(location.href+' .table');
+                        $('#create').find('option').val("");
+                        refresh_table();
+                        hidetables();
+                    
+            
                     }
                 }
             });
@@ -598,7 +795,7 @@
                         $('#success').text('update successfully');
                         $('#edit').modal('hide');
                         $('#edit').find('input').val("");
-                        $('.table').load(location.href+' .table');
+                    
                     }
         }
     });
@@ -631,7 +828,7 @@
                         $('#success').text('deleted successfully');
                         $('#delete').modal('hide');
                         $('#delete').find('input').val("");
-                        $('.table').load(location.href+' .table');
+                       refresh_table();
         }
     });
         });

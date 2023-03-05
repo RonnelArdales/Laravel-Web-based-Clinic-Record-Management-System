@@ -1,1 +1,1 @@
-heloo {{Auth::user()->fname}}, how are you?
+heloo how are you?

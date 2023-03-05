@@ -83,24 +83,31 @@ class ClinicuserController extends Controller {
             "usertype" => ['min:4'],
   
         ]);
-
         //hashing of password
-        $validated['password'] = bcrypt($validated['password']);
-        $validated['usertype'] = 'patient';
-        //kunin yung data galing model ("Clinicusers")
-        User::create($validated);
-        $user = User::where('email','=', $request->input('email'))->first(); 
-        auth()->login($user);
-        $otp = rand(10, 99999);
-             EmailOtp::create([
-                'user_id' => Auth::user()->id,
-                'email' =>  Auth::user()->email,
-                'verifycode' => $otp,
-             ]);
-             Mail::to(Auth::user()->email)->send(new SendVerifycode($otp));
-        return redirect('/verify-email');
-        //$email = $request->input('email');
-        // return redirect('/verify')->with('email', $email);
-        // auth()->login($clinicuser);
+      $encrypt = bcrypt($request->input('password'));
+      $user = new User();
+            $user->fname = $request->input('first_name');
+            $user->mname = $request->input('mname');
+            $user->lname = $request->input('last_name');
+            $user->birthday = $request->input('birthday');
+            $user->address = $request->input('address');
+            $user->gender = $request->input('gender');
+            $user->mobileno = $request->input('mobile_number');
+            $user->email = $request->input('email');
+            $user->username = $request->input('username');
+            $user->password = $encrypt;
+            $user->usertype = 'patient'; //usertype
+            $user->save();
+             return redirect('/login');
+        // $userauth = User::where('email','=', $request->input('email'))->first(); 
+        // auth()->login($userauth);
+        // $otp = rand(10, 99999);
+        //      EmailOtp::create([
+        //         'user_id' => Auth::user()->id,
+        //         'email' =>  Auth::user()->email,
+        //         'verifycode' => $otp,
+        //      ]);
+        //      Mail::to(Auth::user()->email)->send(new SendVerifycode($otp));
+        // return redirect('/verify-email');
     }
 }

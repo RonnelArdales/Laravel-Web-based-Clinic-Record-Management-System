@@ -3,10 +3,15 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicuserController;
+use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PrintController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SecretaryController;
 use App\Mail\HelloMail;
 use App\Models\Clinicuser;
+use App\Models\Service;
+use App\Models\Upload;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +48,15 @@ Route::post('/login/process', [ClinicuserController::class, 'process']);
 
 Route::post('/logout', [ClinicuserController::class, 'logout'])->name('logout');
 
+Route::get('/View_upload', function(){
+    $service = Upload::all();
+    return view('upload')->with('uploads', $service);
+});
+
+Route::post('/upload', [AdminController::class, 'upload_file']);
+
+Route::get('/upload/show/{id}', [AdminController::class, 'upload_show']);
+Route::get('/upload/download/{file}', [AdminController::class, 'upload_download']);
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -51,43 +65,70 @@ Route::post('/logout', [ClinicuserController::class, 'logout'])->name('logout');
 Route::prefix('/admin')->middleware('auth', 'isadmin' )->group(function(){
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');//show dashboard page
 
-    //profile
+    //----------------------Profile----------------------------//
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile') ;  //display users
-    Route::get('/profile/createuser', [AdminController::class, 'create_user_page']) ;   //create users
     Route::post('/profile/createuser/store', [AdminController::class, 'store_user']);   //save users in database
-    // Route::get('/profile/edit/{id}', [AdminController::class, 'show_user']);  
     Route::get('/profile/edit/{id}', [AdminController::class, 'edit_user'])->name('users.show');//show edit user
     Route::put('/profile/update/{id}', [AdminController::class, 'update_user']); //update user data
     Route::delete('/profile/delete/{id}', [AdminController::class, 'delete_user']); //delete user data
 
-    //discount(done)
-    Route::get('/fetch-discount', [AdminController::class, 'fetch_discount']); //fetch disocunt data from database
+    //----------------------discount----------------------------//
     Route::get('/discount', [AdminController::class, 'discount_show'])->name('discount.show');   //display discount table
-    Route::get('/discount/creatediscount', [AdminController::class, 'create_discount']) ; //display (wala na to)
     Route::post('/discount/creatediscount/store', [AdminController::class, 'store_discount']) ;  //create discount
     Route::get('/discount/edit/{discountcode}', [AdminController::class, 'edit_discount']); //display editable discount
     Route::put('/discount/update/{discountcode}', [AdminController::class, 'update_discount']);  //store updated discount  
     Route::delete('/discount/delete/{discountcode}', [AdminController::class, 'delete_discount']); //delete discount
 
-    //service
-    Route::get('/fetch-service', [AdminController::class, 'fetch_service']); 
-    Route::get('/service', [AdminController::class, 'service_show'])->name('service.show'); 
-    //display
-    // Route::get('/service/createservice', [AdminController::class, 'create_service']) ; 
-    Route::post('/service/createservice/store', [AdminController::class, 'store_service']) ;    //create discount
-    //display editable discount
-    Route::get('/service/edit/{servicecode}', [AdminController::class, 'edit_service']);
-    //store updated discount
-    Route::put('/service/update/{servicecode}', [AdminController::class, 'update_service']);   
-    //delete discount
+    //----------------------service----------------------------//
+    Route::get('/service', [AdminController::class, 'service_show'])->name('service.show'); //display service table
+    Route::post('/service/createservice/store', [AdminController::class, 'store_service']) ;    //create service
+    Route::get('/service/edit/{servicecode}', [AdminController::class, 'edit_service']);    //display editable discount
+    Route::put('/service/update/{servicecode}', [AdminController::class, 'update_service']);    //store updated discount
     Route::delete('/service/delete/{servicecode}', [AdminController::class, 'delete_service']); //delete discount
 
-    //appointment page
+     //----------------------appointment----------------------------//
     Route::get('/appointment', [AdminController::class, 'appointment_show'])->name('appointment.show'); 
+    Route::put('/appointment/book/{id}', [AdminController::class, 'appointment_book']); 
+    Route::put('/appointment/delete/{id}', [AdminController::class, 'appointment_book']);
+    Route::get('/appointment/getuser/{id}', [AdminController::class, 'get_user']); 
+    Route::get('/appointment/Calendar-fetch', [AdminController::class, 'get_time']); 
+
+     //----------------------reports----------------------------//
+     Route::get('/reports/user', [ReportController::class, 'view_user']); 
+     Route::get('/reports/print_user', [PrintController::class, 'print_user']); 
+
+
+      //----------------------transaction----------------------------//
+      Route::get('/transaction', [AdminController::class, 'view_transaction']); 
+      Route::post('/transaction/store', [AdminController::class, 'store_transaction']); 
+      Route::get('/transaction/getuser/{id}', [AdminController::class, 'getappointment_user']);
+      Route::delete('/transaction/delete/{id}', [AdminController::class, 'delete_transaction']);
+      Route::get('/transaction/edit/{id}', [AdminController::class, 'edit_transaction']);
+      Route::post('/transaction/update/{id}', [AdminController::class, 'update_transaction']);
+      Route::get('/transaction/download/{id}', [PrintController::class, 'upload_download_transaction']);
+      Route::get('/transaction/view/{id}', [PrintController::class, 'upload_view_transaction']);
+      
+
+        //----------------------Billing----------------------------//
+        Route::get('/billing', [AdminController::class, 'view_billing']);
+        Route::get('/billing/getservice/{id}', [AdminController::class, 'get_service']);
+        Route::get('/billing/getid', [AdminController::class, 'get_id']);
+        Route::post('/billing/addtocart/store', [AdminController::class, 'store_addtocart']);
+        Route::post('/billing/addtocart/deleteall', [AdminController::class, 'deleteall_addtocart']);
+        Route::get('/billing/pagination/paginate-data', [AdminController::class, 'addtocart_paginate']);
+        
+        
+
+        //-------------------upload---------------------------//
+    
+        //-------------------search----------------------------//
+        Route::get('/profile/search-name', [AdminController::class, 'search_user']);
+       
+
 
 });
 
-Route::prefix('/secretary')->middleware('auth', 'issecretary' )->group(function(){
+    Route::prefix('/secretary')->middleware('auth', 'issecretary' )->group(function(){
     Route::get('/dashboard', function () {return view('secretary.dashboard');});
 
     Route::get('/profile', [SecretaryController::class, 'profile'])->name('secretary.profile') ;  //display users
@@ -132,6 +173,11 @@ Route::prefix('/patient')->middleware('auth', 'ispatient')->group(function(){
     Route::get('/profile', [PatientController::class, 'profileshow'])->name('patient.profile') ;
     Route::get('/profile/edit', [PatientController::class, 'edit_profile']);
     Route::put('/profile/update/{id}', [PatientController::class, 'update_profile']);
+    Route::get('/appointment', [FullCalendarController::class, 'index']);
+    Route::get('/appointment/business-hour', [FullCalendarController::class, 'index_businesshour']);
+    Route::post('/action', [FullCalendarController::class,'store']);
+    Route::get('/service-get/{servicename}', [FullCalendarController::class,'getprice']);
+    Route::post('/appointment/create', [FullCalendarController::class, 'create']);
 });
 
 
