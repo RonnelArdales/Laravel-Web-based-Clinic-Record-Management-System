@@ -55,31 +55,33 @@
             @error('email'){{$message}}@enderror
             <br>
     
-            {{-- <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Username</label>
-            <input class="bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 
-            border-gray-400 mg-5" type="text" name="username">
+            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Username</label>
+            <input class="bg-white rounded  focus:outline-none" type="text" value="{{Auth::user()->username}}" name="username">
             @error('username'){{$message}}@enderror
             <br>
 
             <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >old Password</label>
-            <input class="bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 
-            border-gray-400 mg-5" type="text" name="username">
+            <input class="bg-white rounded  focus:outline-none" type="text" name="old_password">
             @error('username'){{$message}}@enderror
             <br>
     
-            <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3" for="password" >Password</label>
-            <input class="bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" type="password" name="password" >
+            <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3" for="password">New Password</label>
+            <input class="bg-white rounded  focus:outline-none" type="password" name="password" >
             @error('password'){{$message}}@enderror
             <br>
-    
+              
             <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3" for="password_confirmation" >Confirm Password</label>
-            <input class="bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" type="text" name="password_confirmation">
+            <input class="bg-white rounded  focus:outline-none" type="password" name="password_confirmation">
             @error('password_confirmation'){{$message}}@enderror
-            </div> --}}
+            </div>
     
           <button class="p-2 w-30 bg-[#829460]  mt-7 rounded" type="submit">update</button>
           </form>
         </div>
+
+        @if(Session::has('error'))
+        <span  role="alert" class="block  text-danger">{{Session::get('error')}}</span>
+    @endif
     
     </div>
          

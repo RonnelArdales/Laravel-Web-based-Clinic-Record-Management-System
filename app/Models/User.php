@@ -50,4 +50,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function appointment(){
+                                        //1st parameter - unique id sa appointment table
+                                       //2nd parameter - unique id sa user table (sa table na pagmumulan ng data)
+        return $this->hasOne(Appointment::class, 'user_id', 'id'); // select * from appointment where id or userid = 
+    }
+
+    public function appointments(){
+        return $this->hasMany(Appointment::class, 'user_id', 'id');
+    }
 }

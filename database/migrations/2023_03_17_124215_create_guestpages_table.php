@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('appointments', function (Blueprint $table) {
-            $table->dropColumn('appointment_date');
-            $table->dropColumn('appointment_time');
+        Schema::create('guestpages', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('content', 1500);
+            $table->string('image')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -26,8 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('appointments', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('guestpages');
     }
 };

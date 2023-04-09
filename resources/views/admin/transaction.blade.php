@@ -5,27 +5,39 @@
         <div class="col-md-8 col-md-offset-5">
             <h1>Transaction</h1>
            </div>
-     
            <div id="success"></div>
-     
-        <div class="card">
-            <div class="card-body" style="height:70vh ">
-                <div class="d-flex bd-highlight ">
-                    <div class="me-auto bd-highlight"><form action="/admin/reports/print_user" method="get" style="margin-bottom: 20px">
-                        <label for="">full name</label>
-                        <input type="text" value="" name="searchname" id="searchname">
-                        <label style="margin-left: 30px" for="">from</label>
-                        <input type="date" value="" name="from" id="from">
-                        <label for="">to</label>
-                        <input type="date" value="" name="to" id="to">
-                       </form>
-                    </div>
-                    <div class="mb-2 bd-highlight"><button type="button" class="btn btn-primary ml-20" data-bs-toggle="modal" data-bs-target="#create">
-                        create
-                      </button></div>
-                  </div>
-     
-        <table  class=" table transaction table-bordered table-striped">
+           
+           
+<div style="margin-top: 15px; align-items:center; display:flex; d-flex;  margin-bottom:1%;" >
+	<div class="me-auto">
+	<i class="fa fa-search"></i>
+	  <input type="search" name="appointment_name" id="appointment_name" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" > 
+	</div>
+    <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" type="button" class="btn btn-primary ml-6 show-create" data-bs-toggle="modal" data-bs-target="#create" >
+	create
+    </button>
+    </div>
+
+           {{-- <div style="margin-top: 15px; align-items:center; display:flex; d-flex;  margin-bottom:1%;">
+            <div class="me-auto bd-highlight"><form action="/admin/reports/print_user" method="get" style="margin-bottom: 20px">
+                <label for="">full name</label>
+                <input type="text" value="" name="searchname" id="searchname">
+                <label style="margin-left: 30px" for="">from</label>
+                <input type="date" value="" name="from" id="from">
+                <label for="">to</label>
+                <input type="date" value="" name="to" id="to">
+                <a href="" style="margin-bottom: 2px"><img  style="height: 28px; magin-bottom:2px" src="https://cdn-icons-png.flaticon.com/512/9131/9131000.png" alt=""></a>
+               </form>
+            </div>
+            <div class="mb-2 bd-highlight"><button type="button" class="btn btn-primary ml-20" data-bs-toggle="modal" data-bs-target="#create">
+                create
+              </button></div>
+          </div> --}}
+
+        <div class="card"style="background:#EDDBC0;border:none; " >
+          <div class="transaction" style="padding:0%">
+            <div class="card-body" style="height:70vh width:100%; min-height:64vh; display: flex; overflow-x: auto;  font-size: 15px; ">
+        <table  class=" table table-bordered table-striped" style="background-color: white" >
             <thead>
                 <tr>
                     <th>Transaction no</th>
@@ -60,15 +72,19 @@
                 @endif
             </tbody>
         </table>
+      
     </div>
+    <div style="">
+      {!! $transactions->links() !!}
+   </div>
 </div>
-
+</div>
 {{-- create --}}
 <div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Create Service</h1>
+      <div class="modal-content" style="background: #EDDBC0;">
+        <div class="modal-header" style="border-bottom-color: gray">
+          <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Create transaction</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -77,30 +93,30 @@
                     <form method="POST" id="store_data" enctype="multipart/form-data">
                         {{ csrf_field() }}
                     <label for="">userid</label><br>
-                    <input type="text" style="width: 310px" id="userid" name="userid">
-                    <button style="width: 150px" class="patient" type="button" id="patient">show appointment</button><br>
+                    <input type="text" style="width: 310px" class="rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="userid" name="userid">
+                    <button style="width: 150px"  class="patient" type="button" id="patient">show appointment</button><br>
                     <label for="">fullname</label><br>
-                    <input type="text" style="width: 450px" id="fullname" name="fullname">
+                    <input type="text" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 450px" id="fullname" name="fullname">
                     <label for="">Consultation date</label>
-                    <input type="text" style="width: 450px" id="consultation" name="consultation">
+                    <input type="text" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 450px" id="consultation" name="consultation">
                     <label for="">upload pdf</label><br>
-                    <input type="file" style="width: 450px" id="pdf" name="pdf"><br>
+                    <input type="file" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 450px" id="pdf" name="pdf"><br>
                     <label for="">Password</label>
-                    <input type="password" style="width: 450px" id="password" name="password">
+                    <input type="password" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 450px" id="password" name="password">
                     <label for="">Confirm password</label>
-                    <input type="password" style="width: 450px" id="password_confirmation" name="password_confirmation">
+                    <input class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="password" style="width: 450px" id="password_confirmation" name="password_confirmation">
    
-        </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class=" add_transaction p-2 w-30 bg-[#829460]  mt-7 rounded" >Submit</button>
-        </form>
-        </div>
+                </div>
+                </div>
+                    <div class="modal-footer" style="border-top-color: gray">
+                    <button type="button" style=" border-radius: 30px; border: 2px solid #829460;width: 110px;height: 37px; color:#829460;; background:transparent;" data-bs-dismiss="modal">Close</button>
+                    <button class=" add_transaction p-2 w-30 bg-[#829460]  mt-7 " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Create</button>
+                    </form>
+                    </div>
+          </div>
       </div>
     </div>
   </div>
-</div>
 
   {{-- edit modal --}}
   <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -141,6 +157,7 @@
     </div>
   </div>
 </div>
+
 {{------------------------View transaction-------------------------------}}
 <div class="modal fade" id="view" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -240,32 +257,32 @@
                     </div>
                     </div>
                 </div>
-    </div>
 
-    {{----------delete modal--------------}}
+                   {{----------delete modal--------------}}
     <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-5 pt-6  ">
-                    <div class=" columns-1 sm:columns-2">
-                        <input type="text" id="transactionid">
-                    <h6>Do you want to delete this data?</h6>
-            </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button class=" delete_transaction p-2 w-30 bg-[#829460]  mt-7 rounded" >delete</button>
-            </div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="mb-5 pt-6  ">
+                  <div class=" columns-1 sm:columns-2">
+                      <input type="text" id="transactionid">
+                  <h6>Do you want to delete this data?</h6>
+          </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button class=" delete_transaction p-2 w-30 bg-[#829460]  mt-7 rounded" >delete</button>
           </div>
         </div>
       </div>
     </div>
-</div>
+  </div>
+    </div>
+
 @endsection
 
 @section('scripts')

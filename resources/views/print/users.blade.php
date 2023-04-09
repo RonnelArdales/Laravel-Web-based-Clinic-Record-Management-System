@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
-    <h1>Users</h1>
-
-<div class="card">
-    <div class="card-body">
-
-        
-        <table class="table table-bordered table-striped">
+  <div style="text-align: center">
+      <h2>JG Marquez Users</h2>
+  </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
           <thead>
             <tr>
                 <th>id</th>
@@ -25,6 +25,8 @@
                 <th>Gender</th>
                 <th>Mobile no.</th>
                 <th>Email</th>
+                <th>Username</th>
+                <th>Status</th>
 
             </tr>
         </thead>
@@ -41,7 +43,8 @@
               <td>{{$user->gender}}</td>
               <td>{{$user->mobileno}}</td>
               <td>{{$user->email}}</td>
-              
+              <td>{{$user->username}}</td>
+              <td>{{$user->status}}</td>
 
           </tr>
           @endforeach
@@ -54,6 +57,8 @@
         </tbody>
         </table>
     </div>
+
+    {{-- <img src="{{ public_path("logo/".report.png) }}" alt="" style="width: 150px; height: 150px;"> --}}
 </div>
    
 </body>

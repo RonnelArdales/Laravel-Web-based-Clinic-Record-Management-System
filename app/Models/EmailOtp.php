@@ -13,5 +13,6 @@ class EmailOtp extends Authenticatable
         'user_id',
         'email',
         'verifycode',
+        'expire_at',
     ];
 }

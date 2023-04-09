@@ -15,18 +15,48 @@ class Appointment extends Model
         'date' => 'date',
     ];
 
-    // public function setDateAttribute( $value ) {
-    //     $this->attributes['date'] = Carbon::createFromFormat('m-d-Y', $value)->format('Y-m-d');
+    public function setDateAttribute( $value ) {
+        $this->attributes['date'] = Carbon::createFromFormat('m-d-Y', $value)->format('Y-m-d');
+
+      }
+    //   public function setTimeAttribute( $value ) {
+    //     $this->attributes['time'] = Carbon::createFromFormat('h:i A', $value)->format('H:i:s');
 
     //   }
 
-      public function getDateAttribute($value)
-{
-    return Carbon::parse($value)->format('m/d/Y');
+    public function getDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('m/d/Y');
+    }
+    
+    public function getTimeAttribute($value)
+    {
+        return Carbon::parse($value)->format('h:i A');
+    }
+
+public function user(){
+    //parameter
+                                        //2nd unique id sa appointment table 
+                                            //3rd  unique id sa user table
+    // return $this->belongsTo(User::class, 'user_id', 'id'); // select * from user where 
+    return $this->hasMany(User::class, 'id', 'user_id');
 }
 
-public function getTimeAttribute($value)
-{
-    return Carbon::parse($value)->format('h:i A');
+//has many (kunin yung count ng female)
+public function users_female(){
+    //parameter
+                                        //2nd unique id sa user table 
+                                            //3rd  unique id sa appointmetn table
+    return $this->hasMany(User::class, 'id', 'user_id')->where('gender', 'Female'); // select * from user where 
 }
+
+//has many (kunin yung count ng female)
+public function users_male(){
+    //parameter
+                                        //2nd unique id sa user table 
+                                            //3rd  unique id sa appointmetn table
+    return $this->hasMany(User::class, 'id', 'user_id')->where('gender', 'Male'); // select * from user where 
+}
+
+
 }

@@ -194,7 +194,7 @@
               datatype: "json",
               success: function(response){
                   console.log(response);
-                  window.location.href = response;
+                  // window.location.href = response;
                   }
               });
 

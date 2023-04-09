@@ -41,7 +41,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', true),
+    // 'debug' => (bool) env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -186,6 +186,8 @@ return [
          * Package Service Providers...
          */
         Barryvdh\DomPDF\ServiceProvider::class,
+        // Humans\Semaphore\ServiceProvider::class,
+        // Elibyy\TCPDF\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -212,8 +214,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
-
+        'PDF' => Barryvdh\DomPDF\Facade\PDF::class,
+        // 'PDF' => Elibyy\TCPDF\Facades\TCPDF::class
     ])->toArray(),
 
 ];

@@ -27,6 +27,8 @@ class PatientMiddleware
                 }else{
                     return redirect('/login')->with('message', 'you are not admin');
                 }
-        return $next($request);
+
+
+  
     }
 }

@@ -28,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
       Paginator::useBootstrap();
-        $user =User::all();
-        View::share(['users' => $user]);
+
     }
 }

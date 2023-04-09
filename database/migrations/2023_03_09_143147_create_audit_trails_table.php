@@ -13,8 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('appointments', function (Blueprint $table) {
-         $table->renameColumn('time', 'appointment_time');
+        Schema::create('audit_trails', function (Blueprint $table) {
+            $table->id();
+            $table->string('user_id');
+            $table->string('fullname');
+            $table->string('activity');
+            $table->string('usertype');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('appointments', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('audit_trails');
     }
 };

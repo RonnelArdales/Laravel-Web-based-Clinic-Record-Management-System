@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Appointment;
 use App\Models\Discount;
 use App\Models\Service;
 use App\Models\User;
@@ -19,8 +20,68 @@ class SecretaryController extends Controller
 
     // view urls
     public function dashboard(){
+        
+        $appointments =  DB::table('appointments')->where('status', 'Booked')->whereDate('date', '>', date('Y-m-d'))
+        ->orderBy('date', 'asc')->limit(3)->get();
+        // // $data = Appointment::distinct('service')-> select('service' , DB::raw('count(gender) as gender_count, gender'))->groupBy('gender', 'service')->get();
+        // $data = Appointment:: select('service' , DB::raw('count(*) as gender_count, gender'))->groupBy('gender', 'service')->get();
+
+        // $male = Appointment::where('service', 'Diagnostic')->whereHas('user' , function($query){
+        //     $query->where('gender', 'Female');
+        // })->with('user')->get();
+        // $malecount = $male->count();
+        // $datacount = ['Gender'];
+
+        $gender_records = Appointment::selectRaw('service,
+                COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male",
+                COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female",
+                COUNT(*) as "all"
+        ')->groupBy('service')->get();
+        $service=[];
+        $male=[];
+        $female=[];
+        foreach($gender_records as $gender){
+            $service[]=$gender->service;
+            $male[]=$gender->male;
+            $female[]=$gender->female;
+        }
+        // dd($gender_records[0]->service);
+        // dd([$service, $male, $female]);
+
+        // $array = ['Gender', 'Number', 'Service'];
+        //   foreach ($gender_records as $key=>$value){
+        //         $array[++$key] = [ $value->service, $value->gender, $value->number,];
+        //   }
+ 
+        
+// dd(json_encode ($gender_records));
+        
+        // $data = DB::table('appointments')->select('service' ,DB::raw('gender as gender'),
+        //                                         DB::raw('count(*) as number'))
+        //   ->groupBy('gender', 'service')->get();
+
+        //   $array = ['Gender', 'Number', 'Service'];
+        //   foreach ($data as $key=>$value){
+        //         $array[++$key] = [ $value->service, $value->gender, $value->number,];
+        //   }
+    //   {{$data->service}} {{$data->gender}} {{$data->number}} 
+            
+    // dd(json_encode($array));
+
+
+            $users = User::all()->count();
+            $pending = Appointment::where('status', 'Pending')->count();
             $name= auth()->user()->fname;
-            return view('secretary.dashboard')->with('name', $name);
+            // dd($data);
+            $patient = User::select('fname')->distinct()->get();
+            return view('secretary.dashboard', ['services' => $service, 'males' => $male, 'females' =>$female])->with('name', $name)
+                                          ->with('patients', $patient)
+                                          ->with('users', $users)
+                                          ->with('pending', $pending)
+                                          ->with('datas', $gender_records)
+                                         ->with('appointments', $appointments)
+                                          ;
+     
     }
 
     //profile page

@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('discount')->nullable();
             $table->string('doctors_fee')->nullable();
             $table->string('mode_of_payment')->nullable();
+            $table->string('reference_no')->nullable();
+            $table->string('payment')->nullable();
             $table->string('change')->nullable();
             $table->string('total')->nullable();
             $table->timestamps();

@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Mail\SendVerifycode;
 use App\Models\EmailOtp;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class ClinicuserController extends Controller {
@@ -35,57 +39,83 @@ class ClinicuserController extends Controller {
     //login function   
     public function process(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+      
+      $validator = Validator::make($request->all(), [
+          // "content" => 'bail|required',
+          'email' => 'bail|required',
+          'password' => 'bail|required',
+          ],[
+            'email.required' => 'email is required',
+            'password.required' => 'password is required',
+              ])->stopOnFirstFailure(true);
 
-        $email = $request->input('email');
-        $password = $request->input('password');
-
-        //if user is valid then check if verified if not go to verification page if verify check the user type of the user 
-          $user = User::where('email','=', $email)->first(); 
-          if($user){
-            if(Hash::check($request->password, $user->password)){
-                      if($user->usertype == 'admin'){
-                        auth()->login($user);
-                        return redirect('admin/dashboard');
-                      }elseif($user->usertype == 'patient'){
-                        auth()->login($user);
-                        return redirect('patient/homepage');
-                      }else{
-                        auth()->login($user);
-                        return redirect('secretary/dashboard');
-                      }
-            }else{
-              return redirect()->back()->with('error', 'Password not matches' );
-            }
+          if($validator->fails()){
+            return Redirect::back()->withErrors($validator);
           }else{
-            return redirect()->back()->with('error', 'The email is not registered' );
+
+              $email = $request->input('email');
+              $password = $request->input('password');
+
+              $user = User::where('email','=', $email)->first(); 
+              if($user){
+                if(Hash::check($request->password, $user->password)){
+             
+                  if($user->status == 'active'){
+                    auth()->login($user);
+                        if($user->usertype == 'admin'){
+                          return redirect('admin/dashboard');
+                        }elseif($user->usertype == 'patient'){
+                          return redirect('patient/homepage');
+                        }else{
+                          return redirect('secretary/dashboard');
+                        }
+                  }elseif($user->status == 'not_verified'){
+                    auth()->login($user);
+                      return redirect('/verify-email');
+                  }else{
+                    return redirect('/')->with('error', 'Password not matches' );
+                  }
+                }else{
+                  return redirect()->back()->with('error', 'Password not matches' );
+                }
+              }else{
+                return redirect()->back()->with('error', 'The email is not registered' );
+              }
+
           }
+
+      
       }
 
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             "first_name" => ['required'],
             "mname" => [''],
             "last_name" => ['required',],
             "birthday" => ['required'],
             "address" => ['required'],
-            "address" => ['required'],
             "gender" => ['required'],
             "mobile_number" => ['required'],
-            "email" => ['required', 'email' ],
-            "username" => ['required'],
-            "password" => 'required|confirmed',
-            "usertype" => ['min:4'],
-  
+            "email" => ['required', 'email', Rule::unique('users', 'email') ],
+            "username" => ['required', 'regex:/\w*$/', 'min:8', Rule::unique('users', 'username')],
+            "password" => 'required|confirmed|min:8',
+        ],[
+          'first_name.required' => 'First name is required',
+          'last_name.required' => 'Last name is required',
+          'birthday.required' => 'Birthday is required',
+          'address.required' => 'Address is required',
+          'gender.required' => 'gender is required',
+          'mobile_number.required' => 'Mobile number is required',
+          'email.required' => ' Email is required',
+          'username.required' => 'Username name is required',
+          'password.required' => 'Password is required',
+          'password.confirmed' => 'Password did not match',
+
         ]);
-        //hashing of password
-      $encrypt = bcrypt($request->input('password'));
-      $user = new User();
+
+            $encrypt = bcrypt($request->input('password'));
+            $user = new User();
             $user->fname = $request->input('first_name');
             $user->mname = $request->input('mname');
             $user->lname = $request->input('last_name');
@@ -97,17 +127,20 @@ class ClinicuserController extends Controller {
             $user->username = $request->input('username');
             $user->password = $encrypt;
             $user->usertype = 'patient'; //usertype
+            $user->status = "not_verified";
             $user->save();
-             return redirect('/login');
-        // $userauth = User::where('email','=', $request->input('email'))->first(); 
-        // auth()->login($userauth);
-        // $otp = rand(10, 99999);
-        //      EmailOtp::create([
-        //         'user_id' => Auth::user()->id,
-        //         'email' =>  Auth::user()->email,
-        //         'verifycode' => $otp,
-        //      ]);
-        //      Mail::to(Auth::user()->email)->send(new SendVerifycode($otp));
-        // return redirect('/verify-email');
+        $userauth = User::where('email','=', $request->input('email'))->first(); 
+        auth()->login($userauth);
+        $otp = rand(10, 99999);
+        $time = Carbon::now()->addMinute(5);
+             EmailOtp::create([
+                'user_id' => Auth::user()->id,
+                'email' =>  Auth::user()->email,
+                'verifycode' => $otp,
+                'expire_at' => $time ,
+             ]); 
+             //create ng bagong user account dahil crypt ng nagamit
+             Mail::to('ronnelardales2192@gmail.com')->send(new SendVerifycode($otp));
+        return redirect('/verify-email');
     }
 }

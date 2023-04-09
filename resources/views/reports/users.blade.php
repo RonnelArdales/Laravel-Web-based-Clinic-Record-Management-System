@@ -3,28 +3,51 @@
 @section('content')
 <div class="row m-4">
     <div class="col-md-8 col-md-offset-5">
- <h1>Users Report  </h1>
+ <h1>User Report  </h1>
     </div>
+{{-- 
+    <div style="margin-top: 15px; align-items:center; display:flex; d-flex;  margin-bottom:1%;">
+      <form action="/admin/reports/print_user" method="get">
+        <label for="">full name</label>
+        <input type="text" value="" name="fullname" id="fullname">
+        <label for="">usertype</label>
+        <select name="usertype" class="usertype" id="usertype">
+          <option value="">--select--</option>
+          <option value="patient">patient</option>
+          <option value="secretary">secretary</option>
+          <option value="admin">admin</option>
+        </select>
+      <button type="submit">print</button>
+       </form>
+    </div> --}}
 
- <form action="/admin/reports/print_user" method="get">
-  <label for="">full name</label>
-  <input type="text" value="" name="fullname" id="fullname">
-  <label for="">usertype</label>
-  <select name="usertype" class="usertype" id="usertype">
-    <option value="">--select--</option>
+
+
+ <div style="margin-top: 15px; align-items:center; display:flex; d-flex;  margin-bottom:1%;" >
+
+	<div class="me-auto">
+	{{-- <i class="fa fa-search"></i>
+	  <input type="search" name="appointment_name" id="appointment_name" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" >  --}}
+	</div>
+  <select name="usertype" style="font-family:Poppins;font-size:0.9vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:200px; margin-right:20px ;padding-bottom:5px; padding-top:2px" class="usertypetable" id="usertypetable">
+    <option value="">Select Filter</option>
     <option value="patient">patient</option>
     <option value="secretary">secretary</option>
     <option value="admin">admin</option>
   </select>
-<button type="submit">print</button>
- </form>
+  <form action="/admin/reports/print_user" method="get">
+    <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:0.9vw; color:white; padding-left:20px; padding-right:20px" type="submit" class="btn btn-primary ml-6 show-create" >
+Generate Report
+    </button>
+  </form>
+    </div>
   
   
 
 <div id="success"></div>
-<div class="card table-div">
-    <div class="card-body">
-        <table class="table table-data table-bordered table-striped">
+<div class="card table-div" style="background:#EDDBC0;border:none; ">
+    <div class="card-body" style="width:100%; min-height:64vh; display: flex; overflow-x: auto;  font-size: 15px; ">
+        <table class="table table-data table-bordered table-striped" style="background-color: white" >
           <thead>
             <tr>
                 <th>id</th>
@@ -85,7 +108,7 @@
             }
             });
           $.ajax({
-            url: '/admin/profile/search-name',
+            url: '/report/search-name',
             method:'GET',
             data: {search:search,},
             success:function(response){
@@ -128,14 +151,14 @@
             }
             });
           $.ajax({
-            url: '/admin/profile/search',
+            url: '/profile/search-usertype',
             method:'GET',
             data: {usertype:usertype},
             success:function(response){
               $('#fullname').val('');
-              var users = response.usertype;
+              var users = response.data;
               var html = '';
-              console.log(response);
+              console.log(response.users);
               if(users.length > 0){
                   for(let i = 0; i<users.length; i++){
                     html += '<tr>\

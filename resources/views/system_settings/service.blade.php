@@ -1,26 +1,35 @@
 @extends('layouts.admin_navigation')
 @section('content')
-<div class="row m-4">
+<div class="row " style="margin-bottom: 0px; margin-top:24px; margin-left:24px; margin-right:24px">
     <div class="col-md-8 col-md-offset-5">
-    
-        <h1>Services  <button type="button" class="btn btn-primary ml-20" data-bs-toggle="modal" data-bs-target="#create">
-           create
-         </button></h1>
-       </div>
-       <div>
-        
-       </div>
+        <h1>Services </h1>
+    </div>
+
+    <div style="margin-top: 15px; align-items:center; display:flex; d-flex;  margin-bottom:1%;" >
+        <div class="me-auto">
+        <i class="fa fa-search"></i>
+          <input type="search" name="appointment_name" id="appointment_name" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" > 
+        </div>
+
+        <button type="button" style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" class="btn btn-primary ml-6" data-bs-toggle="modal" data-bs-target="#create">
+            create
+          </button>
+
+        </div>
+
+
  
        <div id="success"></div>
-<div class="card">
-    <div class="card-body">
-        <table class="table table-bordered table-striped">
+<div class="card" style="background:#EDDBC0;border:none; height:500px " >
+    <div class="card-body" style="width:100%; min-height:72vh; display: flex; overflow-x: auto;  font-size: 15px; ">
+        <div class="" style="width:100%; " >
+        <table class="table table-bordered table-striped"  style="background-color: white" >
             <thead>
                 <tr>
                     <th>service code</th>
                     <th>service name</th>
                     <th>price</th>
-                    <th>Actions</th> 
+                    <th style="width: 205px">Actions</th> 
                 </tr>
             </thead>
             <tbody >
@@ -30,8 +39,8 @@
                     <td>{{$service->servicecode}}</td>
                     <td>{{$service->servicename}}</td>
                     <td>{{$service->price}}</td>
-                    <td>
-                    <button type="button" value="{{$service->servicecode}}" class="edit btn btn-primary btn-sm">Edit</button>
+                    <td style="text-align: center">
+                    <button type="button" value="{{$service->servicecode}}" class="edit btn btn-sm btn-primary">Edit</button>
                     <button type="button" value="{{$service->servicecode}}" class="delete btn  btn-danger btn-sm">delete</button></td>
                 </tr>
                 @endforeach
@@ -45,7 +54,7 @@
               
             </tbody>
         </table>
-    
+        </div>
     </div>
  
 </div>
@@ -54,15 +63,15 @@
 {{-- create --}}
 <div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
+      <div class="modal-content" style="background: #EDDBC0;">
+        <div class="modal-header" style="border-bottom-color: gray">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Create Service</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="mb-5 pt-6  ">
                 <div class=" columns-1 sm:columns-2">
-                <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >service name</label>
+                <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Service name</label>
                 <input class=" servicename bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text"> 
                 <br>
                 <div class="mt-0 mb-2">
@@ -77,9 +86,10 @@
                 </div>
         </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class=" add_service p-2 w-30 bg-[#829460]  mt-7 rounded" >Submit</button>
+        <div class="modal-footer" style="border-top-color: gray">
+          <button style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px; height: 37px; " type="button" class=" btn " data-bs-dismiss="modal">Close</button>
+          <button style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " type="button" class="add_service btn " >Create</button>
+      
         </div>
       </div>
     </div>
