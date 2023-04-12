@@ -16,7 +16,7 @@
        </div>
    
        <div class="card table-appointment" style="background:#EDDBC0;border:none; "  >
-           <div class="card-body" style="width:100%; min-height:70vh; display: flex; overflow-x: auto;  font-size: 15px; ">
+           <div class="card-body" style="width:100%; min-height:65vh; display: flex; overflow-x: auto;  font-size: 15px; ">
              <div  style="width:100%; " >
                <table class="table table-bordered table-striped "  style="background-color: white" >
                    <thead>
@@ -29,7 +29,7 @@
                            <th>Service</th>
                            <th>Price</th>
                            <th>Status</th>
-                           <th style="width: 205px">Action</th>
+                           <th >Action</th>
                         
                        </tr>
                    </thead>
@@ -52,7 +52,7 @@
                      @endforeach
                      @else
                      <tr>
-                       <td colspan="4" style="text-align: center;">No appointment Found</td>
+                       <td colspan="9" style="text-align: center;">No appointment </td>
                  
                      </tr>
                      @endif

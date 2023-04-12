@@ -6,19 +6,18 @@
  <h1>Appointment  </h1>
 </div>   
 
+<div id="success" class="success alert alert-success" role="alert" style="display:none">
+  <p id="message-success">sdfsdf</p> 
+</div>
 
-<div id="success" class="error alert alert-success" style="display: none;"></div>
-
-<div id="error" class="error alert alert-danger" style="display: none;"></div>
 
 <div class="main-spinner" style="
-	    	position:fixed;
+	  position:fixed;
 		width:100%;
 		left:0;right:0;top:0;bottom:0;
 		background-color: rgba(255, 255, 255, 0.279);
 		z-index:9999;
-		display:none;
-   	"> 
+		display:none;"> 
 	<div class="spinner">
 		<div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
 		  <span class="visually-hidden">Loading...</span>
@@ -36,10 +35,11 @@
     </button>
     </div>
 
+    
+
 <div class="card"  style="background:#EDDBC0;border:none; " >
-	<div class="table-appointment" >
+	<div class="table-appointment" style="padding: 0%" >
 	  <div class="card-body" style="width:100%; min-height:64vh; display: flex; overflow-x: auto;  font-size: 15px; ">
-	    <div class="" style="width:100%; " >
 		<table class="table table-bordered table-striped "  style="background-color: white" >
 		    <thead>
 			  <tr>
@@ -51,7 +51,7 @@
 				<th>Service</th>
 				<th>Price</th>
 				<th>Status</th>
-				<th style="width: 205px">Action</th>
+				<th style="width: 230px">Action</th>
 			  </tr>
 		    </thead>
 		    <tbody class="error">
@@ -66,7 +66,7 @@
 			     <td>{{$appointment->service}}</td>
 			     <td>{{$appointment->price}}</td>
 			     <td>{{$appointment->status}}</td>
-			    <td>
+			    <td style="text-align: center">
 			    <button type="button" value="{{$appointment->id}}" id="accept" class="accept btn btn-success btn-sm">Accept</button>
 			    <button type="button" value="{{$appointment->id}}" id="cancel" class="cancel btn btn-primary btn-sm">Cancel</button>
 			    <button type="button" value="{{$appointment->id}}" class="delete btn  btn-danger btn-sm">Delete</button></td>
@@ -74,83 +74,23 @@
 			@endforeach
 			@else
 			<tr>
-			  <td colspan="4" style="text-align: center;">No appointment Found</td>
+			  <td colspan="9" style="text-align: center;">No appointment Found</td>
 		  
 			</tr>
 			@endif
 			 
 		    </tbody>
 		</table>
-	    </div>
+	 
 	
 	  </div>
 	  <div class="">
-	    {{-- {!! $appointments->links() !!} --}}
+	    {!! $appointments->links() !!}
 	 </div>
 	</div>
     </div>
 
   
-
-{{-- modal --}}
-{{-- create --}}
-{{-- <div class="modal fade create-form" id="create-form"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Create Appointment</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          <div class="mb-5 pt-6  ">
-              <div class=" columns-1 sm:columns-2">
-                <input type="text" id="modal-status" hidden value="">
-                <input class="userid" id="userid"  type="text" hidden> 
-              <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Name</label><br>
-              <input class=" fullname bg-white rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="fullname" style="width:390px" readonly type="text"> 
-              <button class="patients">Patient</button>
-              <br>
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5   text-danger" id="error_user"></span>
-            </div>
-              <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Address</label>
-              <input class=" address bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="address" readonly type="text"> 
-              <br>
-              <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Email</label>
-              <input class=" email bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="email" readonly type="text"> 
-              <br>
-              <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Mobile no.</label>
-              <input class=" mobile_number bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="mobile_number" readonly type="text"> 
-              <br>
-
-              <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Date</label><br>
-              <input class="date bg-white rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="date" style="width:350px" type="text"> 
-              <button class="calendar">Calendar</button>
-              <br>
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5   text-danger" id="error_date"></span>
-            </div>
-     
-              <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Available time:</label><br>
-             <select class=" time bg-white rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="time" style="width:350px" >
-              <option value="">-- select time --</option>
-              <option value="">No avilable time</option>
-             </select>
-            <br>
-            <div class="mt-0 mb-2">
-              <span  role="alert" class="block mt-5   text-danger" id="error_time"></span>
-          </div>
-
-              </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class=" store_appointment p-2 w-30 bg-[#829460]  mt-7 rounded" >Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div> --}}
 
 {{-- create --}}
 <div class="modal fade create-form" id="create-form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="font-family: Poppins;">
@@ -162,8 +102,10 @@
       </div>
       <div class="modal-body">
           <div class="mb-5 pt-6  ">
-              <div class=" columns-1 sm:columns-2">
-                <input class="userid" id="userid"  type="hidden"> 
+              <div class=" columns-1 sm:columns-2 create-refresh" >
+                <input class="userid" id="userid"  type="text" hidden> 
+                <input class="gender" id="gender"  type="text" hidden > 
+                <input class="modal-status" id="modal-status"  type="text" hidden> 
               <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Name</label><br>
               <input class=" fullname  rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="fullname" style="width:390px" readonly type="text"> 
               <button class="patients btn btn-outline-success" style="border: 1px solid #829460;"><img src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" style="height: 20px ;
@@ -172,18 +114,8 @@
               <div class="mt-0 mb-2">
                 <span  role="alert" class="block mt-5   text-danger" id="error_user"></span>
             </div>
-              <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Address</label>
-              <input class=" address  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="address" readonly type="text"> 
-              <br>
-              <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Email</label>
-              <input class=" email  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="email" readonly type="text"> 
-              <br>
-              <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Mobile no.</label>
-              <input class=" mobile_number rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="mobile_number" readonly type="text"> 
-              <br>
-
               <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Date</label><br>
-              <input class="date rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="date" style="width:350px" type="text"> 
+              <input class="date rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="date" style="width:390px" type="text" readonly> 
               <button class="calendar btn btn-outline-secondary"><img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296625/JG%20marquez/booking_te8ipg.png" style="height: 20px ;
                 width: 20px ;" alt=""></button>
               <br>
@@ -192,7 +124,7 @@
             </div>
      
               <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Available time:</label><br>
-             <select class=" time  rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="time" style="width:350px" >
+             <select class=" available-time  rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="available-time" style="width:435px">
               <option value="">-- select time --</option>
               <option value="">No avilable time</option>
              </select>
@@ -200,12 +132,27 @@
             <div class="mt-0 mb-2">
               <span  role="alert" class="block mt-5   text-danger" id="error_time"></span>
           </div>
+     
+          <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Services</label><br>
+          <input class="servicename" id="servicename"  type="text" hidden > 
+          <select class=" service  rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="service" style="width:435px" >
+            <option value="">-- select services --</option>
+            @foreach ($services as $service)
+                <option value="{{$service->servicecode}}">{{$service->servicename}}</option>
+            @endforeach
+           </select>
+          <br>
+          <div class="mt-0 mb-2">
+            <span  role="alert" class="block mt-5   text-danger" id="error_service"></span>
+        </div>
 
-              </div>
+        <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Price</label><br>
+        <input class="price  rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="price" style="width:435px" readonly type="text"> 
+        </div>
       </div>
       <div class="modal-footer" style="border-top-color: gray">
         <button type="button" class=" close " style=" border-radius: 30px; border: 2px solid #829460;width: 110px;height: 37px; color:#829460;; background:transparent;" data-bs-dismiss="modal">Close</button>
-        <button class=" store_appointment" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Submit</button>
+        <button class=" store_appointment" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Add</button>
       </div>
     </div>
   </div>
@@ -263,30 +210,6 @@
   </div>
 </div>
     
-    {{-- //delete modal
-
-<div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="mb-5 pt-6  ">
-                <div class=" columns-1 sm:columns-2">
-                    <input type="text" id="appointmentid">
-                <h6>Do you want to delete this data?</h6>
-        </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class=" delete_appointment p-2 w-30 bg-[#829460]  mt-7 rounded" >delete</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>  --}}
 
 {{-- //delete modal --}}
 
@@ -316,7 +239,7 @@
 {{--------------- View patients ---------------------}}
 
 <div class="modal fade viewpatients " id="viewpatients" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content viewbody" style="background: #EDDBC0;">
 
       <!-- Modal Header -->
@@ -329,7 +252,8 @@
       <div class="modal-body " >
         <i class="fa fa-search"></i>
         <input type="search" name="fullname_patient" id="fullname_patient" placeholder="search" style="font-family:Poppins;font-size:1.1vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; margin-bottom:10px"> 
-        <div class="patient">
+    
+        <div class="patient overflow-auto container-fluid" style="height:380px" >
           <table class="table table-bordered table-striped" >
   
               <thead>
@@ -338,13 +262,11 @@
                       <th>First name</th>
                       <th>Middle name</th>
                       <th>Last name</th> 
-                      <th>Birthday</th>
                       <th>Address</th>
                       <th>Gender</th>
                       <th>Mobile no.</th>
                       <th>Email</th>
                       <th>Action</th>
-  
                   </tr>
               </thead>
               <tbody class="nofound" >
@@ -356,7 +278,6 @@
                     <td>{{$user->fname}}</td>
                     <td>{{$user->mname}}</td>
                     <td>{{$user->lname}}</td>
-                    <td>{{$user->birthday}}</td>
                     <td>{{$user->address}}</td>
                     <td>{{$user->gender}}</td>
                     <td>{{$user->mobileno}}</td>
@@ -364,6 +285,7 @@
                
                     <td>
                     <button type="button" value="{{$user->id}}" style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " class="select btn2 btn btn-primary ">Select</button>
+                    </td>
                 </tr>
                 @endforeach
                 @else
@@ -392,8 +314,14 @@
 
 {{---------------------- View calendar -----------------------}}
 
+<div class="alert error-calendar alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:9999;">
+  <p id="message-error">sdfsdf</p> 
+</div>
+
+
+
 <div class="modal" id="viewcalendar">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content" style="height: 650px; background:#EDDBC0;">
 
       <!-- Modal Header -->
@@ -412,7 +340,46 @@
 
 
     </div>
-    <div class="modal-footer w-5" style="position:absolute; bottom:1%; width:97% ;border-top-color: gray" >
+    <div class="modal-footer w-5 col-sm" style="position:absolute;justify-content:space-between ; bottom:1%; width:97% ;border-top-color: gray" >
+      <table>
+      <td class="border-end border-dark" style="justify-content: center; padding-right:10px; padding-top:20px"> 
+        <p>
+         <b>Legends:</b> 
+        </p>
+   
+      </td>
+      <td style="text-align: center; "  >
+        <div class="col-sm" style="text-align: center; margin-left:5px; margin-right:5px;" >
+          <p style="margin-bottom: 10px ">Available day</p>
+          <div  style="height: 30px;margin-left:30% ;width:30px; background-color:#829460; " >
+          </div>
+        </div>
+      </td>
+
+      <td >
+        <div class="col-sm  justify-content-center" style="text-align: center; margin-right:5px;" >
+          <p style="margin-bottom: 10px">Not available</p>
+          <div  style="height: 30px;margin-left:30%  ;width:30px; background-color: #DDDDDD;  text-align: center;" >
+
+          </div>
+        </div>
+      </td>
+
+      <td>
+        <div class="col-sm" style="text-align: center; " >
+          <p style="margin-bottom: 10px">Date today</p>
+          <div  style="height: 30px;margin-left:30% ;width:30px; background-color: white ;  text-align: center;" >
+
+          </div>
+        </div>
+      </td>
+    </table>
+        {{-- <div class="col">
+          <div>
+            legends:
+          </div>
+      
+        </div> --}}
       <button type="button" class=" " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal" data-bs-dismiss="modal">Close</button>
     </div>
   </div>
@@ -420,50 +387,6 @@
     </div>
   </div>
 </div>
-
-
-
-{{-- @foreach ($appoints as $appointment)
-<tr>
-  <td>{{$appointment->id}}</td> 
-    <td>{{$appointment->user_id}}</td>
-     <td>{{$appointment->fullname}}</td>
-     <td>{{$appointment->user->first()->gender}}</td> 
-     <td>{{$appointment->service}}</td> <br>
-</tr>    
-@endforeach
-
-<table>
-  <tr>
-    <td>Female</td>
-    <td>male</td>
-  </tr>
-
-<tr>
-     <td>{{$female}}</td>
-     <td>{{$male}}</td>
-</tr>    
-</table> --}}
-
-
-
-
-{{-- @foreach ($appoints as $appointment)
-<tr>
-     <td>{{count($appointment->users_female)}}</td>
-</tr>    
-@endforeach --}}
-{{-- @foreach ($appoints as $count)
-<tr>
-
-  <td>male</td>
-  <td>{{$count->users_male->count()}}</td>
-  
-  <td>female</td>
-  <td>{{$count->users_female_count}}</td>
-</tr>
-    
-@endforeach --}}
 
 </div>
 @endsection
@@ -475,26 +398,66 @@
     $(document).ready(function (){
 
       // $('.pagination').addClass('');
+      setTimeout(function() {
+                                $(".success").fadeOut(500);
+                            }, 3000);
 
+        var day_off = {!! json_encode($day_array) !!} ;
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        $('#available-time').empty()
+        $('#available-time').append('<option value="0" disabled selected></option>');
 
       deleteall();
 
       $('.show-create').on('click', function(e){
         e.preventDefault();
         $('.create-form').modal('show')
-        $('#modal-status').val('show')
+        $('#available-time').empty()
+        $('#available-time').append('<option value="0" disabled selected></option>');
       })
 
       $(".create-form").on("hidden.bs.modal", function(e){
         e.preventDefault();
         $('.create-form').find('input').val("");
+        $('.create-refresh').load(location.href+' .create-refresh');
+        });
+
+        $(".create-form").on("hidden.bs.modal", function(e){
+        e.preventDefault();
+       
+        $('.patient').load(location.href+' .patient');
         });
 
         $(".viewpatients").on("hidden.bs.modal", function(e){
           e.preventDefault();
+          $('.fullname_patient').val();
+          $('.modal-status').val("");
         $('.patient').load(location.href+' .patient');
         });
-
+        
+        // -------------service --------------//
+     
+        $(document).on('change', '.service', function(e){
+          e.preventDefault();
+          var id = $(this).val();
+          $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "Get",
+                url: "/admin/appointment/get_appointment_service/"+id ,
+                datatype: "json",
+                success: function(response){ 
+                    $('.servicename').val(response.service.servicename);
+                    $('.price').val(response.service.price);
+                }
+            });
+        })
         
         function deleteall () {
             if (window.location.href) {
@@ -517,12 +480,14 @@
 
         $(document).on('click', '.patients', function(e){
           $('#viewpatients').modal('show');
+          $('#modal-status').val('show')
         })
 
-
+        $(".viewpatients").on("hidden.bs.modal", function(){
+          $('#modal-status').val('');
+        });
         
-
-        $('.calendar').on('click', function(e){
+        $(document).on('click', '.calendar', function(e){
           $('#viewcalendar').modal('show');
         })
 
@@ -532,13 +497,12 @@
           var data ={
                 'userid' : $('#userid').val(),
                 'fullname': $('#fullname').val(),
-                'email': $('#email').val(),
-                'address': $('#address').val(),
-                'mobileno': $('#mobile_number').val(), 
                 'date': $('#date').val(),
-                'time': $('#time').val(),       
+                'time': $('#available-time').val(),
+                'service' : $('#servicename').val(),  
+                'price': $('#price').val(),
             }
-            console.log(data);
+         
           $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -551,7 +515,6 @@
                 datatype: "json",
                 success: function(response){ 
                   if(response.status == 400){
-                    // console.log(response.errors);
                     $('#error_user, #error_time, #error_time' ).html("");
                         $.each(response.errors.userid, function (key, err_values){
                           $('#error_user').append('<span>'+err_values+'</span>');
@@ -562,14 +525,21 @@
                         $.each(response.errors.time, function (key, err_values){
                             $('#error_time').append('<span>'+err_values+'</span>');
                         })
+                        $.each(response.errors.service, function (key, err_values){
+                            $('#error_service').append('<span>'+err_values+'</span>');
+                        })
                   }else{
-                    console.log(response);
-                        $('#success' ).html("");
-                        $('#success' ).addClass('alert alert-success');
-                        $('#success').text('Created successfully');
+                    
+                        $('#message-success').text(response.message);
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
+                  
                         $('#create-form').modal('hide');
                         $('#create-form').find('input').val("");
                          $('.table-appointment').load(location.href+' .table-appointment');
+                        $('.create-refresh').load(location.href+' .create-refresh');
                   }
                    
               
@@ -727,10 +697,13 @@
                 url: "/admin/appointment/delete/"+ appointmentid,
                 datatype: "json",
                 success: function(response){ 
-                    
-                        $('#success' ).html("");
-                        $('#success' ).addClass('alert alert-success');
-                        $('#success').text('deleted successfully');
+                  $('#message-success').text('');
+                  $('#message-success').text('Deleted successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
+                  
                         $('#delete').modal('hide');
                         $('#delete').find('input').val("");
                         $('.table-appointment').load(location.href+' .table-appointment');
@@ -753,11 +726,9 @@
                 success: function(response){ //return galing sa function sa controller
                   $('#userid').val(response.users[0].id);
                   $('#fullname').val(response.fullname[0].fullname);
-                  $('#address').val(response.users[0].address);
-                  $('#email').val(response.users[0].email);
-                  $('#mobile_number').val(response.users[0].mobileno);
+                  $('#gender').val(response.users[0].gender);
                   $('#viewpatients').modal('hide');
-                  console.log(response);
+            
         }
     });
         });
@@ -778,12 +749,60 @@
             color: 'red',
             contentHeight:"auto",
             selectHelper: true,
-            select:function(start, end, allDay)
-            {
-                // var title = prompt('Event Title:');
-                    var date = $.fullCalendar.formatDate(start, 'MM-DD-YYYY');
+            viewRender: function(view, element,) {
+      if(day_off.includes("0")){
+              $('.fc-day.fc-sun').css('backgroundColor', '#D9D9D9');
+      }else{
+        $('.fc-day.fc-sun').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("1")){
+              $('.fc-day.fc-mon').css('backgroundColor', '#D9D9D9');
+      }else{
+        $('.fc-day.fc-mon').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("2")){
+              $('.fc-day.fc-tue').css('backgroundColor', '#D9D9D9');
+      }else{
+        $('.fc-day.fc-tue').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("3")){
+              $('.fc-day.fc-wed').css('backgroundColor', '#D9D9D9');
+      }else{
+        $('.fc-day.fc-wed').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("4")){
+              $('.fc-day.fc-thu').css('backgroundColor', '#D9D9D9');
+      }else{
+        $('.fc-day.fc-thu').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("5")){
+              $('.fc-day.fc-fri').css('backgroundColor', '#D9D9D9');
+      }else{
+        $('.fc-day.fc-fri').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("6")){
+              $('.fc-day.fc-sat').css('backgroundColor', '#D9D9D9');
+      }else{
+        $('.fc-day.fc-sat').css('backgroundColor', '#829460');
+      }
+
+      $('.fc-day.fc-today').css('backgroundColor', 'white');
+    },
+
+    select:function(start, end, allDay)
+      {
+        var startDate = moment(start);
+                date = startDate.clone();
+           
                     var start = $.fullCalendar.formatDate(start, 'Y-MM-DD');
                     var end = $.fullCalendar.formatDate(end, 'Y-MM-DD HH:mm:ss');
+                    const dayOfWeek = $.fullCalendar.moment(date).day();
                     
         $.ajaxSetup({
             headers:{
@@ -795,24 +814,38 @@
                         type:"Get",
                         datatype: "json",
                         data:{
-                            date: start,
+                            start: start,
+                        },
+                        beforeSend: function(){
+                        $('#accept-confirmation').modal('hide');
+                            $(".main-spinner").show();
+                        },
+                        complete: function(){
+                            $(".main-spinner").hide();
                         },
                         success:function(response)
                         {   
-                          // console.log(response.working_hours);
-                          $('#date').html();
-                          $('#date').val(date);
-                          $('#viewcalendar').modal('hide');
-                          $('#time').html('<option value="">-- select time --</option>')
-                          console.log(response.working_hours.length);
-                          if(response.working_hours.length > 0){
-                            $.each(response.working_hours, function(index, val){
-                            $('#time').append('<option value="'+val.from+'">'+val.from+'</option>')
-                          });
-                          }else{
-                            $('#time').append('<option value="">-- no available time --</option>')
-                          }
-                       
+                         
+                          $('#date').val("");
+                          $('#available-time').empty();
+                          $('#available-time').append('<option value="0" disabled selected></option>');
+                          if(response.status == "405"){
+                                $('#message-error').text(response.message);
+                            $(".error-calendar").show();
+                            setTimeout(function() {
+                                $(".error-calendar").fadeOut(500);
+                            }, 3000);
+                            
+                            }else{
+                           
+                          $('#date').val(start);
+                              $('#viewcalendar').modal('hide');
+                                $('#date').val(response.date);
+                                $('#form-dateselected').val(response.date);
+                                $.each(response.available_time, function(index, val){ 
+                                    $("#available-time").append("<option value='"+val+"'>"+val+"</option>");
+                                } )
+                            }
                         }
                     })
             },
@@ -968,11 +1001,6 @@
               $('.table-appointment').html(response);
               if(response.message == 'Nofound'){
 
-                      //  html += '<tbody class="error" >\
-                      //                         <tr>\
-                      //                           <td colspan="9" style="text-align: center;">No  Found</td>\
-                      //                         </tr>\
-                      //                       </tbody>';
                 $('.table-appointment').append('<div class="card-body" style="width:100%; height:68vh; overflow-x: auto;  font-size: 15px;">\
                                       <div class="" style="width:100%; ">\
                                         <table class="table table-bordered table-striped ">\
@@ -1019,7 +1047,7 @@
               console.log(response);
              
               $('.patient').html(response);
-              if(response.message == 'Nofound'){
+              if(response.message == 'Nofound'){       
                 $('.patient').append('<table class="table table-bordered table-striped" >\
                                                             <thead>\
                                                                 <tr>\

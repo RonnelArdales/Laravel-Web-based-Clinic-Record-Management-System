@@ -377,8 +377,6 @@
                             $.each(response.discount, function(index, val){
                                     $("#discount").append("<option value='"+val.discountcode+"'>"+val.discountname+"</option>");
                                 } );
-                         
-                 
                         }
                     });
         })

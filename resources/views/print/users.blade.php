@@ -8,9 +8,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
-  <div style="text-align: center">
-      <h2>JG Marquez Users</h2>
-  </div>
+  <header  style="width:100%; text-align: center;" >
+    <img class="border border-dark" style="height: 90px; width:530px" src="{{ "data:image/png;base64,".base64_encode(file_get_contents(public_path('logo/report-logo.png'))) }}">
+  <hr style="width:100%; border:solid; margin-top:10px;margin-bottom:10px ;padding:0px" >
+  </header>
     <div class="card">
         <div class="card-body">
             <table class="table table-bordered table-striped">

@@ -98,9 +98,9 @@ class AdminController extends Controller
 
     //profile page
     public function profile(){
-        $patients = DB::table('users')->where('usertype', 'patient')->paginate(9, ['*'], 'patient');
-        $secretaries = DB::table('users')->where('usertype', 'secretary')->paginate(9, ['*'], 'secretary');
-        $admins = DB::table('users')->where('usertype', 'admin')->paginate(9, ['*'], 'admin'); 
+        $patients = DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+        $secretaries = DB::table('users')->where('usertype', 'secretary')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
+        $admins = DB::table('users')->where('usertype', 'admin')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin'); 
         return view('admin.profile', compact('patients', 'secretaries', 'admins'));
     }
 
@@ -282,9 +282,9 @@ class AdminController extends Controller
 
     public function profile_paginate(Request $request){
         $usertype = $request->input('usertypetable');
-        $patients = DB::table('users')->where('usertype', 'patient')->paginate(9, ['*'], 'patient');
-        $secretaries = DB::table('users')->where('usertype', 'secretary')->paginate(9, ['*'], 'secretary');
-        $admins = DB::table('users')->where('usertype', 'admin')->paginate(9, ['*'], 'admin');
+        $patients = DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+        $secretaries = DB::table('users')->where('usertype', 'secretary')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
+        $admins = DB::table('users')->where('usertype', 'admin')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin');
         
         if($usertype == "patient"){
             return view('pagination.pagination_patient', compact('patients'))->render();
@@ -509,7 +509,6 @@ public function fetch_service(){
 
     // ----------------------------- Appointment -------------------------------- //
     public function appointment_show(){
-        $appoints = Appointment::where('service', 'Diagnostic')->with('user')->get();
         $female = Appointment::where('service', 'Diagnostic')->whereHas('user' , function($query){
             $query->where('gender', 'Female');
         })->with('user')->get()->count(); 
@@ -519,13 +518,16 @@ public function fetch_service(){
         $total =     $male = Appointment::select('service')->whereHas('user' , function($query){
             $query->where('gender', 'Male');
         })->get()->count(); 
-        // // $female = Appointment::where('service', 'Diagnostic')->with('users_female')->get()->count();
-        // $male = Appointment::where('service', 'Diagnostic')->withCount('users_male')->get();
-        // dd($count);
-        // $counts = Appointment::where('service', 'Diagnostic')->with('users_male', 'users_female', 'user')->get()->count();
+        $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
+        $day_array = [];
+        foreach($days as $day){
+            $day_array[] = date('w', strtotime($day->day));
+        }
+        $day = BusinessHour::select('day', 'off')->distinct()->get();
         $appointments = DB::table('appointments')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'appointment');
-        $patients =  DB::table('users')->where('usertype', 'patient')->paginate(6, ['*'], 'patient');
-        return view('admin.appointment', compact('appointments', 'patients', 'appoints', 'male', 'female'));
+        $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
+        $services = Service::all();
+        return view('admin.appointment', compact('appointments', 'patients', 'services', 'day', 'days', ))->with('day_array', $day_array);
     }
 
     public function store_appointment(Request $request){
@@ -534,10 +536,12 @@ public function fetch_service(){
             'userid'=>'required',
             'date' => 'required',
             'time' => 'required',
+            'service' => 'required',
         ],[
             'userid.required'=>'Patient information is required',
             'date.required' => 'Appointment date is required',
             'time.required' => 'Appointment time is required',
+            'service.required' => 'service is required', 
         ]);
 
         if($validator->fails()){
@@ -551,18 +555,21 @@ public function fetch_service(){
             $appointment = new Appointment();
             $appointment->user_id = $input['userid'];
             $appointment->fullname = $input['fullname'];
-            $appointment->service = "Psychotherapy Counselling";
+            $appointment->service = $input['service'];
             $appointment->date =  $input['date'];
             $appointment->time = $time;
-            $appointment->price =  "2000";
-            $appointment->status = "Pending";
+            $appointment->price =  $input['price'];
+            $appointment->status = "Booked";
             $appointment->save();
+
+            //send to patient
             // Mail::to('ronnelardales2192@gmail.com')->send(new patientbook);
       
             return response()->json([
                 'status' => 200,
-                'message' => "Successfully created",
+                'message' => "Created Successfully",
                 'time' => $time,
+          
             ]);
         }
 
@@ -600,17 +607,62 @@ public function fetch_service(){
         ]);
     }
 
+    public function get_appointment_service($id){
+        $service = Service::where('servicecode', $id)->first();
+        return response()->json([
+            'service' => $service,
+            // 'users' => $user,
+            // 'fullname' => $fullname,
+        ]);
+    }
+
     public function get_time(Request $request){
         
-        $date = $request->date;
-        
-        $day = date('l', strtotime($date));
-        $workinghours = BusinessHour::where('day', '=', $day)->whereNotIn('from', ['23:59:00'])->select('from')->get();
+        $start = $request->start;
+        $date = date('m-d-Y', strtotime($start));
+        $day = date('l', strtotime($start));
+        $day_numeric = date('w', strtotime($start));
 
-        return response()->json([
-            'day' => $day,
-            'working_hours' => $workinghours,
-        ]);
+        $workinghours = BusinessHour::where('day', $day)->whereNotIn('from', ['23:59:00'])->pluck('from')->toArray();
+        $currentappointment = Appointment::where('date', $start)->pluck('time')->toArray();
+        $availablehours = array_diff($workinghours, $currentappointment);
+        $offday = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
+        $day_array = [];
+        foreach($offday as $day){
+            $day_array[] = date('w', strtotime($day->day));
+        }
+
+        if(in_array($day_numeric, $day_array)){
+
+            return response()->json(['status' => 405, 'message' => 'Sorry, this day is off' ]);
+
+        }else{
+            if( empty($availablehours) ){
+                return response()->json([
+                    'status' => 405,
+                    'message' => "Sorry, this date is full",
+                    'working hours in specific day' => $workinghours,
+                    'available time' => $availablehours
+                ]);
+            }else{
+                return response()->json([
+                    'date' => $date,
+                    'day' => date('l', strtotime($start)),
+                    'working hours in specific day' => $workinghours,
+                    'current appointments in date' => $currentappointment,
+                    'available_time' => $availablehours]);
+            }
+    
+        }
+        
+
+        // $day = date('l', strtotime($date));
+        // $workinghours = BusinessHour::where('day', '=', $day)->whereNotIn('from', ['23:59:00'])->select('from')->get();
+
+        // return response()->json([
+        //     'day' => $day,
+        //     'working_hours' => $workinghours,
+        // ]);
     }
 
     public function delete_appointment($id){
@@ -849,18 +901,21 @@ public function fetch_service(){
 
 
     //--------------------------- billing ----------------------------//
-    public function view_billing(){
-        $appointment = Appointment::all();
-        $addtocarts =  DB::table('addtocartservices')->paginate(5, ['*'], 'addtocart');
+    public function index_billing(){
+        $addtocarts =  DB::table('addtocartservices')->orderBy('created_at', 'desc')->paginate(4, ['*'], 'addtocart');
         $service = Service::all();
         $sum = Addtocartservice::sum('price');
         $discount = Discount::all();
-
-        return view('admin.billing', [  'appointments'=> $appointment, 
+        // $billing = DB::table('billings')->select('billing_no' , DB::raw('SUM(price) as sub_total'))->groupBy('billing_no')->get(); 
+        $billing = Billing::distinct()->select('billing_no', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->get();
+        $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
+        return view('admin.billing', [
                                         'services' => $service, 
                                         'addtocarts'=> $addtocarts, 
                                         'sum'=>$sum, 
-                                        'discounts' =>$discount,]);
+                                        'discounts' =>$discount,
+                                        'billings' => $billing,
+                                        'patients' => $patients]);
     }
 
     public function get_service($id){
@@ -881,14 +936,6 @@ public function fetch_service(){
 
     public function store_addtocart(Request $request){
         $input = $request->all();
-      
-        // $validator = Validator::make($request->all(), [
-        //     'password'=>'confirmed',	
-        //             'pdf' => 'mimes:pdf|max:3000',
-        // ],[
-        //     'password.confirmed' => 'Password did not match',
-        //             'pdf.mimes'=>'the file must be a pdf',
-        // ]);
         $addtocartexist = Addtocartservice::where('servicecode', $input['servicecode'])->first();
        
 
@@ -900,11 +947,8 @@ public function fetch_service(){
         }else{
             $addtocart = new Addtocartservice();
             $addtocart->billing_no = $input['billingno'];
-            $addtocart->billing_date = date('Y-m-d H:i:s');
-            $addtocart->appointment_no = $input['appointment'];
             $addtocart->user_id = $input['userid'];
             $addtocart->fullname = $input['fullname'];
-            $addtocart->consultation_date = $input['consultation'];
             $addtocart->servicecode = $input['servicecode'];
             $addtocart->service = $input['service'];
             $addtocart->price = $input['price'];
@@ -913,8 +957,71 @@ public function fetch_service(){
             return response()->json([
                 'status' => 200,
                 'message' => 'added successfully',
+                'data' => $addtocart,
             ]);
         }
+    }
+    public function store_billing(Request $request){
+        $sum = Addtocartservice::sum('price');
+        // $insert = Addtocartservice::where('billing_no', $request->billingno)->update(['sub_total' => $sum])
+
+        $addtocart = Addtocartservice::all();
+
+        foreach ($addtocart as $data) {
+
+            $billing = new Billing();
+            $billing->billing_no = $data->billing_no;
+            $billing->user_id = $data->user_id;
+            $billing->fullname = $data->fullname;
+            $billing->servicecode = $data->servicecode;
+            $billing->service = $data->service;
+            $billing->price = $data->price;
+            $billing->sub_total = $sum;
+            $billing->total = $sum;
+            $billing->status = 'Pending';
+            $billing->save();
+        }
+        Addtocartservice::truncate();  
+
+        return response()->json([
+           'status' => 200,
+           'message' => 'Saved successfully',
+        ]);
+
+    }
+
+    public function update_payment($id ,Request $request){
+    $validator = Validator::make($request->all(), [
+
+        'mode_of_payment' => 'required'
+        ],[
+            'mode_of_payment.required'=>'Mode of payment is required',
+            ]);
+
+     if($validator->fails()) {
+        return response()->json([
+           'status' => 400,
+           'message' => $validator->errors()
+        ]);
+     }
+     $input = $request->all();
+
+        Billing::where('billing_no', $id)->update([
+                                                    'discount' => $input['discountname'],
+                                                    'total' => $input['total'],
+                                                    'mode_of_payment' => $input['mode_of_payment'],
+                                                    'reference_no' => $input['reference_no'],
+                                                    'payment' => floor($input['payment']),  
+                                                    'change' => floatval(str_replace(',', '', $input['change'])),
+                                                    'status' => "Paid",             
+                                                            ]);
+    return response()->json('updated successfully');
+    }
+
+    public function view_billing($id){
+        $infos = Billing::with('user')->where('billing_no', $id)->first();
+        $services = Billing::where('billing_no', $id)->get();
+        return view('admin.viewBilling', compact('services', 'infos'));
     }
 
     public function deleteall_addtocart(){
@@ -926,26 +1033,29 @@ public function fetch_service(){
 
     public function addtocart_paginate(Request $request){
        
+        // return response()->json([$request->all()]);
         $appointments = Appointment::all();
-        $addtocarts =  DB::table('addtocartservices')->paginate(5, ['*'], 'addtocart');
+        $addtocarts =  DB::table('addtocartservices')->paginate(4, ['*'], 'addtocart');
         $services = Service::all();
         $sum = Addtocartservice::sum('price');
-        return view('pagination.pagination_addtocart', compact('addtocarts'))->render();
+        return view('pagination.pagination_addtocart', compact('addtocarts', 'sum'))->render();
     }
 
-    public function addtocart_getalldata(){
-    $addtocart = Addtocartservice::count();
-    if($addtocart == 0){
-        return response()->json([
-            "status" => '400',
-            "message" => 'Please insert data',
-        ]);
-    }else{
-        return response()->json([
-            "status" => '200',
-            "message" => 'table has data',
-        ]);
-    }
+    public function addtocart_getalldata($id){
+    $billing = Billing::where('billing_no', $id)->first();
+
+    return response()->json(['data' => $billing]);
+    // if($addtocart == 0){
+    //     return response()->json([
+    //         "status" => '400',
+    //         "message" => 'Please insert data',
+    //     ]);
+    // }else{
+    //     return response()->json([
+    //         "status" => '200',
+    //         "message" => 'table has data',
+    //     ]);
+    // }
     }
 
     public function get_discount($id){

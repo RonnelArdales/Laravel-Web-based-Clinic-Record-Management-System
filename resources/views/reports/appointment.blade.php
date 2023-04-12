@@ -62,7 +62,7 @@ Generate Report
           @endforeach
           @else
           <tr>
-            <td colspan="4" style="text-align: center;">No appointment Found</td>
+            <td colspan="8" style="text-align: center;">No appointment Found</td>
       
           </tr>
           @endif

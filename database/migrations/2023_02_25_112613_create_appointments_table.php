@@ -17,13 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('user_id');
             $table->string('fullname');
-            $table->string('address');
-            $table->string('email');
-            $table->string('mobileno');
+            $table->string('gender');
             $table->string('service');
             $table->date('date');
             $table->time('time');
             $table->string('price');
+            $table->string('mode_of_payment')->nullable();
+            $table->string('session')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });

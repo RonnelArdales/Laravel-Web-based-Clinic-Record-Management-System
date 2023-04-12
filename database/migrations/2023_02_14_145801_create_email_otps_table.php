@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('email');
             $table->string('verifycode');
+            $table->string('expire_at');
             $table->timestamps();
         });
     }

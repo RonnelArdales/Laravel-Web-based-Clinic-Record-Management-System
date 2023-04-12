@@ -29,6 +29,27 @@
 </head>
 
 <style>
+/* .nav-tabs .nav-item .nav-link {
+  background-color: #0080FF;
+  color: #FFF;
+} */
+
+/* .nav-tabs .nav-item .nav-link.active {
+  color: #0080FF;
+} */
+/* 
+.tab-content {
+  border: 1px solid #dee2e6;
+  border-top: transparent;
+  padding: 15px;
+} */
+
+.nav-pills > li > a.adopt-tab.active {
+    background-color: #EF476F;
+    color: white;
+    border: none;
+}
+
 
   .fc-mon{
     background-color: red;
@@ -72,11 +93,27 @@
     
     .currency-code{
       position:absolute;
-      top:3px;
+      top:7px;
       padding-left: 10px
     }
     
     .text-currency{
+      padding:2px 22px;
+      border:solid 1px #ccc;
+      border-radius:5px;
+    }
+
+    .currency-wrap-payment{
+      position:relative;
+    }
+    
+    .currency-code-payment{
+      position:absolute;
+      top:3px;
+      padding-left: 10px
+    }
+    
+    .text-currency-payment{
       padding:2px 22px;
       border:solid 1px #ccc;
       border-radius:5px;
@@ -517,7 +554,7 @@
 
                   <li class=" my-1 mx-3 {{Request::is('admin/guestpage') ? 'active-bar' : '';}}">
                        <a href="/admin/guestpage"> 
-                            <img class="icon n" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296805/JG%20marquez/guestpage_zylemm.png" alt=""> 
+                            <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296805/JG%20marquez/guestpage_zylemm.png" alt=""> 
                             <span>Guestpage</span>
                        </a>
                   </li>

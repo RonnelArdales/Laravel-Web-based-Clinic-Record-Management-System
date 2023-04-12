@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class ReportController extends Controller
 {
     public function view_user(){
-        $users = User::all();
+        $users = DB::table('users')->orderBy('created_at', 'desc')->paginate(10, ['*'], 'users');
         return view('reports.users', compact('users'));
     }
 

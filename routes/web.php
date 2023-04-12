@@ -64,7 +64,9 @@ Route::get('/upload/download/{file}', [AdminController::class, 'upload_download'
 
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/profile/search-name', [SearchController::class, 'profile_search_user']);
-    Route::get('/report/search-name', [SearchController::class, 'search_user']);
+    Route::get('/report/user_fullname', [SearchController::class, 'search_user']);
+    Route::get('/report/user_status', [SearchController::class, 'search_user_status']);
+    Route::get('/report/user_usertype', [SearchController::class, 'search_user_usertype']);
     Route::get('/profile/search-usertype', [SearchController::class, 'search_usertype']);
     Route::get('/appointment/search-name', [SearchController::class, 'appointment_search_user']);
     Route::get('/modal_profile/search-name', [SearchController::class, 'modal_profile']);
@@ -72,6 +74,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/getservice/{id}', [AdminController::class, 'get_service']);
     Route::get('/getdiscount/{id}', [AdminController::class, 'get_discount']);
     Route::get('/discount', [AdminController::class, 'index_discount']);
+});
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('/report/users/pagination/paginate-data', [PaginationController::class, 'report_user_paginate']);
+    
 });
 
 Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(function(){
@@ -105,6 +112,7 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::put('/appointment/change_status/{id}', [AdminController::class, 'appointment_change_status']); 
     Route::delete('/appointment/delete/{id}', [AdminController::class, 'delete_appointment']);
     Route::get('/appointment/getuser/{id}', [AdminController::class, 'get_user']); 
+    Route::get('/appointment/get_appointment_service/{id}', [AdminController::class, 'get_appointment_service']); 
     Route::get('/appointment/Calendar-fetch', [AdminController::class, 'get_time']); 
     Route::get('/appointment/pagination/paginate-data', [PaginationController::class, 'appointment_paginate']);
     Route::get('/modal_patient/pagination/paginate-data', [PaginationController::class, 'patient_paginate']);
@@ -117,7 +125,7 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
      Route::get('/reports/appointment', [ReportController::class, 'view_appointment']);
 
     //-----------------------print report---------------------------------//
-     Route::get('/reports/print_user', [PrintController::class, 'print_user']);
+     Route::post('/reports/print_user', [PrintController::class, 'print_user']);
      Route::get('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
      Route::get('/reports/print_appointment', [PrintController::class, 'print_appointment']);  
 
@@ -134,16 +142,18 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
       
 
         //----------------------Billing----------------------------//
-        Route::get('/billing', [AdminController::class, 'view_billing']);
-        Route::get('/billing/getservice/{id}', [AdminController::class, 'get_service']);
+        Route::get('/billing', [AdminController::class, 'index_billing']);
         Route::get('/billing/getdiscount/{id}', [AdminController::class, 'get_discount']);
         Route::get('/billing/getid', [AdminController::class, 'get_id']);
-        Route::put('/appointment/book/{id}', [AdminController::class, 'appointment_book']);
         Route::post('/billing/addtocart/store', [AdminController::class, 'store_addtocart']);
+
+        Route::post('/billing/addtocart/billing_store', [AdminController::class, 'store_billing']);
         Route::post('/billing/addtocart/delete', [AdminController::class, 'store_delete']);
+        Route::put('/billing/update/payment/{id}', [AdminController::class, 'update_payment']);
+        Route::get('/billing/viewBilling/{id}', [AdminController::class, 'view_billing']);
         Route::post('/billing/addtocart/deleteall', [AdminController::class, 'deleteall_addtocart']);
-        Route::get('/billing/pagination/paginate-data', [AdminController::class, 'addtocart_paginate']);
-        Route::get('/billing/addtocart/getdata', [AdminController::class, 'addtocart_getalldata']); //condition if addtocart table has data
+        Route::get('/billing/addtocart/pagination/paginate-data', [AdminController::class, 'addtocart_paginate']);
+        Route::get('/billing/getdata/{id}', [AdminController::class, 'addtocart_getalldata']); //condition if addtocart table has data
         
          //-------------------Queuing---------------------------//
          Route::get('/queuing', [AdminController::class, 'view_queuing']);

@@ -16,20 +16,20 @@ return new class extends Migration
         Schema::create('billings', function (Blueprint $table) {
             $table->id();
             $table->string('billing_no');
-            $table->string('billing_date');
-            $table->string('appointment_no');
             $table->string('user_id');
             $table->string('fullname');
-            $table->string('consultation_date');
             $table->string('servicecode');
             $table->string('service');
             $table->string('price');
-            $table->string('sub-total')->nullable();
+            $table->string('sub_total')->nullable();
             $table->string('discount')->nullable();
-            $table->string('doctors_fee')->nullable();
-            $table->string('mode_of_payment')->nullable();
-            $table->string('change')->nullable();
             $table->string('total')->nullable();
+            $table->string('mode_of_payment')->nullable();
+            $table->string('reference_no')->nullable();
+            $table->string('payment')->nullable();
+            $table->string('change')->nullable();
+            $table->string('status')->nullable();
+           
             $table->timestamps();
         });
     }

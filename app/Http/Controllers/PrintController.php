@@ -20,55 +20,69 @@ use Illuminate\Support\Facades\Response;
 class PrintController extends Controller
 {
     public function print_user(Request $request){
-        $path = public_path('jg.png');
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $image = 'data:image/png'. $type . ';base64,'. base64_encode($data);
-   
-
         if($request->input('fullname')){
             $name =  $request->input('fullname');
-            $users = User::where('fname', 'LIKE', '%'.$name.'%' )->orWhere('mname', 'LIKE', '%'.$name.'%')->orWhere('lname', 'LIKE', '%'.$name.'%')->get();
-            $pdf = Pdf::loadView('print.users', array('userss' => $users))->setPaper('landscape');
-            return $pdf->stream('invoice.pdf');
-        }else if($request->input('usertype')){
+            $users = DB::table('users')->where(DB::raw("CONCAT(`fname`, ' ', `lname`)"), 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.users', array('userss' => $users ))->setPaper('A4','landscape');
+            return $pdf->stream('User report.pdf');
+        }elseif($request->input('status')){
+            $status =  $request->input('status');
+            $users = DB::table('users')->where('status', $status)->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.users', array('userss' => $users ))->setPaper('A4','landscape');
+            return $pdf->stream('User report.pdf');
+        }elseif($request->input('usertype')){
             $usertype =  $request->input('usertype');
-            $users = User::Where('usertype', $usertype)->get();
-            $pdf = Pdf::loadView('print.users', array('userss' => $users))->setPaper('landscape');
-            return $pdf->stream('invoice.pdf');
+            $users = DB::table('users')->where('usertype', $usertype)->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.users', array('userss' => $users ))->setPaper('A4','landscape');
+            return $pdf->stream('User report.pdf');
         }else{
-            $users = User::all();
-            // $options = new Options();
-            // $options->set('isRemoteEnabled',true);      
-            // $dompdf = new Dompdf( $options );
+            $users = DB::table('users')->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.users', array('userss' => $users ))->setPaper('A4','landscape');
+            return $pdf->stream('User report.pdf');
+        }
+        // if($request->input('fullname')){
+        //     $name =  $request->input('fullname');
+        //     $users = User::where('fname', 'LIKE', '%'.$name.'%' )->orWhere('mname', 'LIKE', '%'.$name.'%')->orWhere('lname', 'LIKE', '%'.$name.'%')->get();
+        //     $pdf = Pdf::loadView('print.users', array('userss' => $users))->setPaper('landscape');
+        //     return $pdf->stream('invoice.pdf');
+        // }else if($request->input('usertype')){
+        //     $usertype =  $request->input('usertype');
+        //     $users = User::Where('usertype', $usertype)->get();
+        //     $pdf = Pdf::loadView('print.users', array('userss' => $users))->setPaper('landscape');
+        //     return $pdf->stream('invoice.pdf');
+        // }else{
+        //     $users = User::all();
+        //     // $options = new Options();
+        //     // $options->set('isRemoteEnabled',true);      
+        //     // $dompdf = new Dompdf( $options );
 
-            // $dompdf
+        //     // $dompdf
         
-            // $contxt = stream_context_create([ 
-            //     'ssl' => [
-            //         'verify_peer' => FALSE,
-            //         'verify_peer_name' => FALSE,
-            //         'allow_self_signed'=> TRUE
-            //     ]
-            // ]);
-            // $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
-            // $pdf->getDomPDF()->setHttpContext($contxt);
+        //     // $contxt = stream_context_create([ 
+        //     //     'ssl' => [
+        //     //         'verify_peer' => FALSE,
+        //     //         'verify_peer_name' => FALSE,
+        //     //         'allow_self_signed'=> TRUE
+        //     //     ]
+        //     // ]);
+        //     // $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+        //     // $pdf->getDomPDF()->setHttpContext($contxt);
 
-            // $contxt = stream_context_create([ 
-            //     'ssl' => [
-            //         'verify_peer' => FALSE,
-            //         'verify_peer_name' => FALSE,
-            //         'allow_self_signed'=> TRUE
-            //     ]
-            // ]);
-            // $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
-            // $pdf->getDomPDF()->setHttpContext($contxt);
+        //     // $contxt = stream_context_create([ 
+        //     //     'ssl' => [
+        //     //         'verify_peer' => FALSE,
+        //     //         'verify_peer_name' => FALSE,
+        //     //         'allow_self_signed'=> TRUE
+        //     //     ]
+        //     // ]);
+        //     // $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+        //     // $pdf->getDomPDF()->setHttpContext($contxt);
 
 
            
-            $pdf = Pdf::loadView('print.users', array('userss' => $users ))->setPaper('A4','landscape');
-            return $pdf->stream('invoice.pdf');
-        }
+        //     $pdf = Pdf::loadView('print.users', array('userss' => $users ))->setPaper('A4','landscape');
+        //     return $pdf->stream('invoice.pdf');
+        // }
     }
 
     public function print_auditTrail(Request $request){
