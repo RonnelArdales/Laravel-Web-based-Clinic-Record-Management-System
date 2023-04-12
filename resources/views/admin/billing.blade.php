@@ -189,7 +189,7 @@
                           </table>
                         </div>
                         <div style="">
-                          {{-- {!! $patients->links() !!} --}}
+                          {!! $billings->links() !!}
                        </div>
                       </div>
                    </div>

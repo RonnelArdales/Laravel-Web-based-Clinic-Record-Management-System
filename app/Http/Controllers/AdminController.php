@@ -907,7 +907,7 @@ public function fetch_service(){
         $sum = Addtocartservice::sum('price');
         $discount = Discount::all();
         // $billing = DB::table('billings')->select('billing_no' , DB::raw('SUM(price) as sub_total'))->groupBy('billing_no')->get(); 
-        $billing = Billing::distinct()->select('billing_no', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->get();
+        $billing = Billing::distinct()->select('billing_no', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('created_at', 'desc')->paginate(10, ['*'], 'billing');
         $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
         return view('admin.billing', [
                                         'services' => $service, 
