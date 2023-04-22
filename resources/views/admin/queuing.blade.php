@@ -2,69 +2,78 @@
 
 @section('content')
     <div class="row m-4">
-      <div class="col-md-8 col-md-offset-5">
+      <div style="margin-top: 3px; align-items:center; display:flex; margin-bottom:1%;" >
+        <div class="me-auto col-md-8 col-md-offset-5">
+      
         <h1>Queuing</h1>
-    </div>
-    
-
-       <div id="success"></div>
-       <div style="margin-top: 18px; align-items:center; display:flex; d-flex;  margin-bottom:1%;">
-        <div class="me-auto">
-          <i class="fa fa-search"></i>
-          <input type="text" name="fullname" id="fullname" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;"> 
         </div>
-       </div>
-   
-       <div class="card table-appointment" style="background:#EDDBC0;border:none; "  >
-           <div class="card-body" style="width:100%; min-height:65vh; display: flex; overflow-x: auto;  font-size: 15px; ">
-             <div  style="width:100%; " >
-               <table class="table table-bordered table-striped "  style="background-color: white" >
-                   <thead>
-                       <tr>
-                           <th>id</th>
-                           <th>Patient Id</th>
-                           <th>Fullname</th>
-                           <th>Date</th>
-                           <th>Time</th>
-                           <th>Service</th>
-                           <th>Price</th>
-                           <th>Status</th>
-                           <th >Action</th>
-                        
-                       </tr>
-                   </thead>
-                   <tbody >
-                     @if (count($appointments)> 0 )
-                     @foreach ($appointments as $appointment)
-                     <tr class="overflow-auto">
-                       <td>{{$appointment->id}}</td>
-                         <td>{{$appointment->user_id}}</td>
-                         <td>{{$appointment->fullname}}</td>
-                         <td>{{date('m/d/Y', strtotime($appointment->date))}}</td>
-                         <td>{{date('h:i A', strtotime($appointment->time))}}</td>
-                          <td>{{$appointment->service}}</td>
-                          <td>{{$appointment->price}}</td>
-                          <td>{{$appointment->status}}</td>
-                         <td style="text-align: center;" >
-                         <button type="button" value="{{$appointment->id}}" class="cancel btn btn-primary btn-sm">Cancel</button>
-                         <button type="button" value="{{$appointment->id}}" class="delete btn  btn-danger btn-sm">Delete</button></td>
-                     </tr>
-                     @endforeach
-                     @else
-                     <tr>
-                       <td colspan="9" style="text-align: center;">No appointment </td>
-                 
-                     </tr>
-                     @endif
-                      
-                   </tbody>
-               </table>
-             </div>
-           </div>
-           <div>
-            {!! $appointments->links() !!}
           </div>
-       </div>
+    
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" style="color: black" id="home-tab" data-bs-toggle="tab" data-bs-target="#today-appointment" type="button" role="tab" aria-controls="home" aria-selected="true">Today appointment</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab"  style="color: black" data-bs-toggle="tab" data-bs-target="#upcoming-appointment" type="button" role="tab" aria-controls="profile" aria-selected="false">Upcoming Appointments</button>
+      </li>
+    </ul>
+
+
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="today-appointment" role="tabpanel" aria-labelledby="home-tab">
+
+        <div class="card"  style="background:#EDDBC0;border:none; " >
+          <div class="table-appointment" style="padding: 0%" >
+            <div class="card-body" style="width:100%; min-height:64vh;  font-size: 15px; ">
+            <table class="table table-bordered table-striped  "  id="today" style="background-color: white; width:100%" >
+                <thead>
+                <tr>
+                <th>id</th>
+                <th>Patient Id</th>
+                <th>Fullname</th>
+                <th>Contact no.</th>
+                <th>Email</th>
+                <th>Date</th>
+                <th >Time</th>
+                </tr>
+                </thead>
+                <tbody class="error">
+          
+                </tbody>
+            </table>
+            </div>
+          </div>
+            </div>
+      </div>
+
+      <div class="tab-pane fade " id="upcoming-appointment" role="tabpanel" aria-labelledby="home-tab">
+        <div class="card"  style="background:#EDDBC0;border:none; " >
+          <div class="table-appointment" style="padding: 0%" >
+            <div class="card-body" style="width:100%; min-height:64vh;  font-size: 15px; ">
+            <table class="table table-bordered table-striped  "  id="upcoming" style="background-color: white; width:100%" >
+                <thead>
+                <tr>
+                <th>id</th>
+                <th>Patient Id</th>
+                <th>Fullname</th>
+                <th>Contact no.</th>
+                <th>Email</th>
+                <th>Date</th>
+                <th >Time</th>     
+                </tr>
+                </thead>
+                <tbody class="error">
+          
+                </tbody>
+            </table>
+            </div>
+          </div>
+            </div>
+
+
+      </div>
+    </div>  
+
 
 
        
@@ -76,7 +85,58 @@
     $(document).ready(function (){
 
       deleteall();
-        
+
+
+      var complete = $('#today').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "/admin/queuing",
+	   dom: 'frtp',
+	   pageLength: 10,
+	   responsive: true,
+        columns: [
+		{data: 'id', name: 'id' , orderable: false, searchable: false},
+            {data: 'user_id', name: 'user_id' , orderable: false, searchable: false},
+		  {data: 'fullname', name: 'fullname' , orderable: false},
+		  {data: 'contact_no', name: 'contact_no' , orderable: false, searchable: false},
+		  {data: 'email', name: 'email' , orderable: false, searchable: false},
+		  {data: 'date', name: 'date' , orderable: false, searchable: false},
+		  {data: 'time', name: 'time' , orderable: false, searchable: false},
+        ],
+        initComplete: function() {
+                var api = this.api();
+                var dataCount = api.data().length;
+                if (dataCount < 10) {
+                    $('#today_paginate').hide(); // Hide pagination element
+                }
+            }
+    });
+
+    var upcoming = $('#upcoming').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "/admin/queuing/upcoming",
+	   dom: 'frtp',
+	   pageLength: 10,
+	   responsive: true,
+        columns: [
+		  {data: 'id', name: 'id' , orderable: false, searchable: false},
+      {data: 'user_id', name: 'user_id' , orderable: false, searchable: false},
+		  {data: 'fullname', name: 'fullname' , orderable: false},
+		  {data: 'contact_no', name: 'contact_no' , orderable: false, searchable: false},
+		  {data: 'email', name: 'email' , orderable: false, searchable: false},
+		  {data: 'date', name: 'date' , orderable: false, searchable: false},
+		  {data: 'time', name: 'time' , orderable: false, searchable: false},
+        ], 
+        initComplete: function() {
+                var api = this.api();
+                var dataCount = api.data().length;
+                if (dataCount < 10) {
+                    $('#upcoming_paginate').hide(); // Hide pagination element
+                }
+            }
+    });
+    
         function deleteall () {
             if (window.location.href) {
                 $.ajaxSetup({
@@ -94,77 +154,6 @@
                 
             }
         }
-
-        $(document).on('click',  '.pagination a', function(e){
-            e.preventDefault();
-              let page = $(this).attr('href').split('queuing=')[1]
-              queuing(page);
-        });
-
-        function queuing(page){
-          let data = page;
-          console.log(page);
-           $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-              $.ajax({
-                type: "GET",  
-                url: "/admin/queuing/pagination/paginate-data?queuing="+page ,
-                data: {data: data}, 
-                datatype: "json",
-                success: function(response){
-                  console.log(response);
-                $('.table-appointment').html(response);
-                  }
-              });
-        }
-
-        $('#fullname').on('keyup', function(e){
-          e.preventDefault();
-          let search = $('#fullname').val();
-          $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-          $.ajax({
-            url: '/queuing_fullname/search-name',
-            method:'GET',
-            data: {search:search,},
-            success:function(response){ 
-              $('.table-appointment').html(response);
-              if(response.message == 'Nofound'){                 
-                $('.table-appointment').append('<div class="card-body" style="width:100%; height:68vh; display: flex; overflow-x: auto;  font-size: 15px;">\
-             <div  style="width:100%; ">\
-               <table class="table table-bordered table-striped "  >\
-                   <thead>\
-                       <tr>\
-                           <th>id</th>\
-                           <th>Patient Id</th>\
-                           <th>Fullname</th>\
-                           <th>Date</th>\
-                           <th>Time</th>\
-                           <th>Service</th>\
-                           <th>Price</th>\
-                           <th>Status</th>\
-                           <th style="width: 205px">Action</th>\
-                       </tr>\
-                   </thead>\
-                   <tbody >\
-                     <tr>\
-                       <td colspan="9" style="text-align: center;">No appointment Found</td>\
-                     </tr>\
-                   </tbody>\
-               </table>\
-             </div>\
-           </div>')
-               }
-            }
-          });
-        })
-
 
 
     });

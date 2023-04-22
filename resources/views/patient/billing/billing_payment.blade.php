@@ -13,21 +13,21 @@
     <div class="alert alert-danger">{{ $message }}</div>
 @enderror
 
-    <div class="container">
+    <div class="container" style="margin-bottom: 140px">
         <div class="row"  >
             <p style="margin-bottom:5px"><b>Billing Process</b></p>
-            <div class="rounded border border-dark col-sm-9 row" style=" padding:30px; margin:0px ">  
+            <div class="rounded border border-dark col-sm-9 row" style="padding-left:35px;padding-right:35px;padding-top:100px; padding-bottom:100px; margin:0px ">  
                 <div class="col-sm "> 
                     <form action="/patient/billing/payment/store" method="post">
                         @csrf
                     <div class="form-group">
                         <label for="">Reference code:</label>
-                        <input type="text" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background:#DDDDDD ; width:15vw" name="reference_no" id="date"><br>
+                        <input type="text" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background:#DDDDDD ; width:170px" name="reference_no" id="date"><br>
                       </div>
     
                       <div class="form-group" style="">
                         <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >ID:</label>  
-                        <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="user_id" readonly value="{{Auth::user()->id}}"  type="text">
+                        <input class="view1 bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="user_id" readonly value="{{Auth::user()->id}}"  type="text">
                        
                       </div>
 
@@ -39,30 +39,14 @@
 
                       <div class="form-group" style="">
                         <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Mode of payment:</label>  
-                        <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="mop" readonly value="{{{$info['modeofpayment']}}}"  type="text">
+                        <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="mop" readonly value="gcash"  type="text">
+                      </div>
+
+                      <div class="form-group" style="">
+                        <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Reservation fee:</label>  
+                        <input class="view1 bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="reservation_fee" readonly value="500"  type="text">
                       </div>
                       
-                      <input type="text" value="{{{$info['servicecode']}}}" hidden  name="service_code">
-                      <div class="form-group" style="">
-                        <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Service:</label>  
-                        <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400"  name="service" value="{{{$info['service']}}}"  type="text">
-                      </div>
-
-                      <div class="form-group" style="">
-                        <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Price:</label>  
-                        <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="price" readonly value="{{{$info['price']}}}"  type="text">
-                      </div>
-
-                      <div class="form-group" style="">
-                        <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Discount Type:</label>  
-                        <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="discount" readonly value="{{{$info['discount']}}}"  type="text">
-                      </div>
-                      
-
-                      <div class="form-group" style="">
-                        <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Total:</label>  
-                        <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="total" readonly value="{{{$info['total']}}}"  type="text">
-                      </div>
 
                       <div class="form-group" style="">
                         <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Date:</label>  

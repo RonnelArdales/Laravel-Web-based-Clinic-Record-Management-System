@@ -1,287 +1,221 @@
 @extends('layouts.admin_navigation')
 
 @section('content')
-    <div class="row m-4">
-        <div class="col-md-8 col-md-offset-5">
+<style>
+  label{
+      font-family: 'Poppins';
+  }
+      .addtocart_input, .service_input{
+      background: #D0B894;
+      border-radius: 10px;
+      border:none;
+      margin-bottom: 1%;
+      text-align: center; 
+  }
+
+</style>
+  <div class="row m-3">
+          {{--Show Add to cart tab--}}
+
+          <div class="me-auto col-md-8 col-md-offset-5">
+
             <h1>Transaction</h1>
-           </div>
-           <div id="success"></div>
-           
-           
-<div style="margin-top: 15px; align-items:center; display:flex; d-flex;  margin-bottom:1%;" >
-	<div class="me-auto">
-	<i class="fa fa-search"></i>
-	  <input type="search" name="appointment_name" id="appointment_name" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" > 
-	</div>
-    <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" type="button" class="btn btn-primary ml-6 show-create" data-bs-toggle="modal" data-bs-target="#create" >
-	create
-    </button>
-    </div>
-
-           {{-- <div style="margin-top: 15px; align-items:center; display:flex; d-flex;  margin-bottom:1%;">
-            <div class="me-auto bd-highlight"><form action="/admin/reports/print_user" method="get" style="margin-bottom: 20px">
-                <label for="">full name</label>
-                <input type="text" value="" name="searchname" id="searchname">
-                <label style="margin-left: 30px" for="">from</label>
-                <input type="date" value="" name="from" id="from">
-                <label for="">to</label>
-                <input type="date" value="" name="to" id="to">
-                <a href="" style="margin-bottom: 2px"><img  style="height: 28px; magin-bottom:2px" src="https://cdn-icons-png.flaticon.com/512/9131/9131000.png" alt=""></a>
-               </form>
             </div>
-            <div class="mb-2 bd-highlight"><button type="button" class="btn btn-primary ml-20" data-bs-toggle="modal" data-bs-target="#create">
-                create
-              </button></div>
-          </div> --}}
+                      <div class="alert success alert-success" role="alert" style="width:250px; right:25px; display:none;  position:fixed">
+                          <p id="message-success"></p> 
+                      </div>
+                      <div class="alert error alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed">
+                          <p id="message-error"></p> 
+                      </div>
+                      <div class="loading" style="width:250px; right:25px; display:none; position:fixed">
+                          <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+                          <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+                      </div>
+                      
+                          <div hidden>
+                              <label for="" style="text-align:right">billing no.</label><br>
+                              <input type="text" class="text-center" style="background-color:transparent; text-align:center; width: 100px; " readonly id="getid">
+                          </div>
+                          <form class="row" >
+              
+                          <div class="col-md-6">
 
-        <div class="card"style="background:#EDDBC0;border:none; " >
-          <div class="transaction" style="padding:0%">
-            <div class="card-body" style="height:70vh width:100%; min-height:64vh; display: flex; overflow-x: auto;  font-size: 15px; ">
-        <table  class=" table table-bordered table-striped" style="background-color: white" >
-            <thead>
-                <tr>
-                    <th>Transaction no</th>
-                    <th>Transaction date</th>
-                    <th>userid</th>
-                    <th>fullname</th>
-                    <th>consultation date</th>
-                    <th>file</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody >
-                @if (count($transactions)> 0 )
-                @foreach ($transactions as $transaction)
-                <tr class="overflow-auto">
-                    <td>{{$transaction->id}}</td>
-                    <td>{{$transaction->transaction_date}}</td>
-                    <td>{{$transaction->user_id}}</td>
-                    <td>{{$transaction->fullname}}</td>
-                    <td>{{$transaction->consultation_date}}</td>
-                    <td>{{$transaction->file}}</td>
-                    <td>
-                    <button type="button" value="{{$transaction->id}}" class="view btn btn-primary btn-sm">View</button>
-                    <button type="button" value="{{$transaction->id}}" class="edit btn btn-primary btn-sm">Edit</button>
-                    <button type="button" value="{{$transaction->id}}" class="delete btn  btn-danger btn-sm">delete</button></td>
-                </tr>
-                @endforeach
-                @else
-                <tr>
-                    <td colspan="9" style="text-align: center; height:300px ">No Transaction Found</td>
-                  </tr>
-                @endif
-            </tbody>
-        </table>
-      
-    </div>
-    <div style="">
-      {!! $transactions->links() !!}
-   </div>
-</div>
-</div>
-{{-- create --}}
-<div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content" style="background: #EDDBC0;">
-        <div class="modal-header" style="border-bottom-color: gray">
-          <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Create transaction</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="mb-5 pt-6  ">
-                <div class=" columns-1 sm:columns-2">
-                    <form method="POST" id="store_data" enctype="multipart/form-data">
-                        {{ csrf_field() }}
-                    <label for="">userid</label><br>
-                    <input type="text" style="width: 310px" class="rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="userid" name="userid">
-                    <button style="width: 150px"  class="patient" type="button" id="patient">show appointment</button><br>
-                    <label for="">fullname</label><br>
-                    <input type="text" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 450px" id="fullname" name="fullname">
-                    <label for="">Consultation date</label>
-                    <input type="text" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 450px" id="consultation" name="consultation">
-                    <label for="">upload pdf</label><br>
-                    <input type="file" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 450px" id="pdf" name="pdf"><br>
-                    <label for="">Password</label>
-                    <input type="password" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 450px" id="password" name="password">
-                    <label for="">Confirm password</label>
-                    <input class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="password" style="width: 450px" id="password_confirmation" name="password_confirmation">
-   
-                </div>
-                </div>
-                    <div class="modal-footer" style="border-top-color: gray">
-                    <button type="button" style=" border-radius: 30px; border: 2px solid #829460;width: 110px;height: 37px; color:#829460;; background:transparent;" data-bs-dismiss="modal">Close</button>
-                    <button class=" add_transaction p-2 w-30 bg-[#829460]  mt-7 " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Create</button>
-                    </form>
-                    </div>
-          </div>
-      </div>
-    </div>
-  </div>
+                              <label for="">Trans no:</label>
+                              <input type="text" style="width: 460px;" class="addtocart_input" name="billingno"  id="getbillingno" readonly>
 
-  {{-- edit modal --}}
-  <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Service</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="mb-5 pt-6  ">
-                <div class=" columns-1 sm:columns-2">
-                    <form method="POST" id="update_data" enctype="multipart/form-data">
-                        {{ csrf_field() }}
-                    <label for="">userid</label><br>
-                    <input type="text" style="width: 310px" id="edit_transno" name="transno">
-                    <input type="text" style="width: 450px" id="edit_transactiondate" name="transactiondate">
-                    <input type="text" style="width: 310px" id="edit_userid" name="userid">
-                    <button style="width: 150px" class="patient" type="button" id="patient">show appointment</button><br>
-                    <label for="">fullname</label><br>
-                    <input type="text" style="width: 450px" id="edit_fullname" name="fullname">
-                    <label for="">Consultation date</label>
-                    <input type="text" style="width: 450px" id="edit_consultation" name="consultation">
-                    <label for="">upload pdf</label><br>
-                    <input type="file" style="width: 450px" id="edit_pdf" name="pdf"><br>
-                    <label for="">Password</label>
-                    <input type="password" style="width: 450px" id="edit_password" name="password">
-                    <label for="">Confirm password</label>
-                    <input type="password" style="width: 450px" id="edit_password_confirmation" name="password_confirmation">
-        </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class=" update_transaction p-2 w-30 bg-[#829460]  mt-7 rounded" >Update</button>
-        </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+                              <label for="">User ID:</label>
+                              <input type="text" style="width: 430px;" class="addtocart_input" id="userid" name="userid" readonly>
+                              <button class="getpatient btn btn-outline-success" type="button" style="border: 1px solid #829460;"><img src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" style="height: 15px ;
+                                  width: 15px ;" id="appointment" alt="" ></button>
+                                <br>
+                              <label style="margin-top: 5px" for="">Fullname:</label>
+                              <input type="text" style="width: 460px" class="addtocart_input" id="fullname" name="fullname" readonly>
 
-{{------------------------View transaction-------------------------------}}
-<div class="modal fade" id="view" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">View User</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-5 pt-6  ">
-            <div class=" columns-1 sm:columns-2">
-              <input type="hidden" id="usercode">
-            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Transaction no.</label>  
-            <input class="view1 mname bg-white rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" id="view_transno" readonly  type="text">
-            <br>
-            <label class=" rounded bg-[#EDDBC0] ml-3 fw-bold">Transaction date:</label>
-            <input class=" view1 mname bg-white rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400" id="view_transactiondate"  readonly type="text">
-           <br>
-            <label class="mb-0 rounded bg-[#EDDBC0]  ml-3 fw-bold" >Fullname</label>
-            <input class="view1 lname bg-white rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_fullname" readonly  type="text"> 
-            <br>
-            <label class="mb-0 rounded bg-[#EDDBC0]  ml-3 fw-bold" >Consultation date:</label>
-            <input class="view1 lname bg-white rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_password" readonly  type="text"> 
-    
-            <br>
-            <label class="mb-0 rounded bg-[#EDDBC0]  ml-3 fw-bold" >file:</label>
-            <input class="view1 address bg-white rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_file" readonly  type="text"  > 
-            <br>
-            <div id="fileview">
+                              <div class="mt-0 mb-2">
+                                <span  role="alert" class="block mt-5   text-danger" id="error_fullname"></span>
+                            </div>
+                           
+                          </div>
 
-            </div>
-  
-    </div>
-    </div>
-        <div class="modal-footer">
-          <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
+                          <div style="margin-top: 1px" class="col-md-6">
 
-{{--------------- View Appointments ---------------------}}
-
-                <div class="modal fade" id="viewappointments">
-                    <div class="modal-dialog modal-xl">
-                    <div class="modal-content viewbody">
-                
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                        <h4 class="modal-title">Patients</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                          <label for="">Service: </label>
+                          <input type="text" hidden style="width: 400px" class="addtocart_input servicename" id="servicename" name="servicename" >
+                          <select style="width:470px; height:30px" class="service_input getservice"  name="service"  id="getservice">
+                              <option value="">-- select --</option>
+                              @foreach ($services as $service)
+                              <option value="{{$service->servicecode}}">{{$service->services }}</option>
+                              @endforeach
+                          </select>
+                          <br>
+                          <div class="mt-0 mb-2">
+                            <span  role="alert" class="block mt-5   text-danger" id="error_service"></span>
                         </div>
-                
-                        <!-- Modal body -->
-                        <div class="modal-body ">
-                        <div class="mb-5 pt-6  ">
-                            <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Appointment id</th>
-                                    <th>USer id</th>
-                                    <th>Fullname</th>
-                                    <th>date</th>
-                                    <th>Time</th>                                
-                                </tr>
-                            </thead>
-                            <tbody >
-                            @if (count($appointments) > 0)
-                            @foreach ($appointments as $appointment)
-                            <tr class="overflow-auto" >
-                                <td>{{$appointment->id}}</td>
-                                <td>{{$appointment->user_id}}</td>
-                                <td>{{$appointment->fullname}}</td>
-                                <td>{{$appointment->date}}</td>
-                                <td>{{$appointment->time}}</td>
-                                <td>
-                                    <button class="selectappointment" id="selectappointment" value="{{$appointment->id}}">Select </button>
-                                </td>
-                            @endforeach
-                            @else
-                            <tr>
-                                <td colspan="4" style="text-align: center;">no user Found</td>
-                    
-                            </tr>
-                            @endif
-                            
-                            </tbody>
-                            </table>
-                
-                    </div>
-                    <div class="modal-footer w-5" style="position:absolute; bottom:1%; width:97%" >
-                        <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                
-                    </div>
-                    </div>
-                </div>
 
-                   {{----------delete modal--------------}}
-    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <div class="mb-5 pt-6  ">
-                  <div class=" columns-1 sm:columns-2">
-                      <input type="text" id="transactionid">
-                  <h6>Do you want to delete this data?</h6>
-          </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button class=" delete_transaction p-2 w-30 bg-[#829460]  mt-7 rounded" >delete</button>
-          </div>
-        </div>
-      </div>
-    </div>
+                          <label style="margin-top: 8px" for="">Price: </label>
+                          <input type="number" style="width: 490px" class="addtocart_input price" id="price" name="price" >
+                          <div class="mt-0 mb-2">
+                            <span  role="alert" class="block mt-5   text-danger" id="error_price"></span>
+                        </div>
+                          <div class="float-end text-right d-flex justify-content-end" style="margin-bottom: 2%; margin-top:20px">
+                              <button type="button" class="store_addtocart"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; margin-bottom:2%; " >Add to Cart</button>
+                          </div>
+
+                          </div>
+                          </form>
+
+                          <div class="card " style="background:#EDDBC0;border:none;" id="patient">
+                              <div class="data-table" style="padding:0% ">
+                                <div class="card-body" style="width:100%; min-height:50vh; display: flex; overflow-x: auto;  font-size: 15px; " >
+                                  <table class="table  table-bordered table-striped "  style="background-color: white">
+                                      <thead>
+                                          <tr>
+                                              <th>Patient ID</th>
+                                              <th>Full Name</th>
+                                              <th>Service code</th>
+                                              <th>Service</th>
+                                              <th>Price</th>
+                                              <th>Action</th> 
+                                          </tr>
+                                      </thead>
+                                        <tbody class="patient-error" >
+                                              @if (count($addtocarts)> 0 )
+                                              @foreach ($addtocarts as $addtocart)
+                                              <tr class="overflow-auto">
+                                                  <td> {{$addtocart->user_id}}</td>
+                                                  <td>{{$addtocart->fullname}}</td>
+                                                  <td>{{$addtocart->servicecode}}</td>
+                                                  <td>{{$addtocart->service}}</td>
+                                                  <td>{{$addtocart->price}}</td>
+                                                  <td style="text-align: center;">
+                                                  <button type="button" value="{{$addtocart->id}}" class="delete btn  btn-danger btn-sm">delete</button></td>
+                                              </tr>
+                                              @endforeach
+                                              @else
+                                              <tr>
+                                                  <td colspan="9" style="text-align: center; height:280px ">No Service Found</td>
+                                                </tr>
+                                              @endif
+                                          </tbody>
+                                    </table>
+                                  </div>
+                                  <div class="row">
+                                      <div style="margin-left:20px" class="col">
+                                          {!! $addtocarts->links() !!}
+                                       </div>
+                                       <div id="subtotal" class="subtotal d-flex justify-content-end col " style="margin-bottom:15px; margin-right:20px; justify-content:center">
+                                        <label for="" style="font-weight: 700;Padding-top:2%; font-size:15px;margin-right:10px; justify-content:center">Sub-Total:</label>
+                                        {{-- <input type="text" id="subtotal_value" style="text-align: right;" readonly value="₱ {{number_format("$sum",2)}}" > --}}
+                                        <div class="currency-wrap">
+                                          <span class="currency-code">₱</span>
+                                          <input readonly type="text" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 " placeholder="0.00"  style="background: #D0B894; height:38px" value="{{number_format("$sum",2)}}" />
+                                      </div>
+                                        <button type="button"  class="saveaddtocart" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 180px;height: 40px; margin-left:1%; " >Save</button>
+                                        </div>
+                                  </div>
+                                </div>
+                             </div> 
+
+            {{--------------- View patients ---------------------}}
+
+                  <div class="modal fade viewpatients " id="viewpatients" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-xl">
+                      <div class="modal-content viewbody" style="background: #EDDBC0;">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header" style="border-bottom-color: gray">
+                          <h4 class="modal-title">Patients</h4>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body " >
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="fullname_patient" id="fullname_patient" placeholder="search" style="font-family:Poppins;font-size:1.1vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; margin-bottom:10px"> 
+                    <input type="text" hidden class="modal-status" id="modal-status">
+                        <div class="patient patient-remove overflow-auto container-fluid" style="height:380px" >
+                          <table class="table table-bordered table-striped" >
+
+                              <thead>
+                                  <tr>
+                                      <th>id</th>
+                                      <th>First name</th>
+                                      <th>Middle name</th>
+                                      <th>Last name</th> 
+                                      <th>Address</th>
+                                      <th>Gender</th>
+                                      <th>Mobile no.</th>
+                                      <th>Email</th>
+                                      <th>Action</th>
+                                  </tr>
+                              </thead>
+                              <tbody class="nofound" >
+                                @if (count($patients) > 0)
+                                @foreach ($patients as $user)
+                                <tr class="overflow-auto">
+                            
+                                    <td>{{$user->id}}</td>
+                                    <td>{{$user->fname}}</td>
+                                    <td>{{$user->mname}}</td>
+                                    <td>{{$user->lname}}</td>
+                                    <td>{{$user->address}}</td>
+                                    <td>{{$user->gender}}</td>
+                                    <td>{{$user->mobileno}}</td>
+                                    <td>{{$user->email}}</td>
+                              
+                                    <td>
+                                    <button type="button" value="{{$user->id}}" style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " class="select btn2 btn btn-primary ">Select</button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                @else
+                                <tr>
+                                  <div>
+                                    <td colspan="4" style="text-align: center;">no user Found</td>
+                                  </div>
+                                </tr>
+                                @endif
+                                
+                              </tbody>
+                          </table>
+                          <div style="">
+                            {!! $patients->links() !!}
+                        </div>
+                        </div>
+                    <div class="modal-footer w-5" style="position:absolute; bottom:1%; width:97% ;border-top-color: gray" >
+                      <button type="button" class="  " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                      </div>
+                    </div>
+                  </div>
+                
+
   </div>
-    </div>
 
 @endsection
 
@@ -289,99 +223,16 @@
 <script>
     $(document).ready(function (){
 
-      deleteall();
-        
-        function deleteall () {
-            if(window.location.href) {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "post",
-                url: "/admin/billing/addtocart/deleteall",
-                datatype: "json",
-                success: function(response){ 
-                  // alert('deleted successfully');
-                }
-            });
-                
-            }
-        }
+      get_maxid();
 
-        $(document).on('click', '.patient', function(e){
-          $('#viewappointments').modal('show');
-        })
+      function message_success(){
+        setTimeout(function() {
+                            $(".success").show();
+                        }, 500);
+      }
 
-        $(document).on('click', '.service', function(e){
-          $('#viewservice').modal('show');
-        })
-
-        //--------------- select appointment ------------------//
-
-        $(document).on('click', '.selectappointment', function(e){
-            e.preventDefault();
-            var user = $(this).val();
-
-           $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-           $.ajax({
-                type: "GET",   
-                url: "/admin/transaction/getuser/"+ user, 
-                datatype: "json",
-                success: function(response){ //return galing sa function sa controller
-                    let datetime = ''.concat(response.users[0].date, ' ', response.users[0].time)
-                    $('#consultation, #userid, #fullname, #appointment').html("");
-                    $('#userid,#edit_userid ').val(response.users[0].user_id);
-                    $('#fullname').val(response.users[0].fullname);
-                    $('#consultation').val( datetime);
-                    $('#viewappointments').modal('hide');
-                }
-            });
-                });
-
-        //---------------store data ------------------//
-
-        $('#store_data').on('submit', function(e){
-            e.preventDefault();
-            let formData = new FormData(this);
-        
-           $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-           $.ajax({
-                type: "POST",   
-                url: "/admin/transaction/store/", 
-                data: formData,
-                datatype: "json",
-                contentType:false,
-                cache:false,
-                processData: false,
-                success: function(response){ 
-                    $('#consultation, #userid, #fullname, #appointment').html("");
-                    $('#success' ).html("");
-                $('#success' ).addClass('alert alert-success');
-                $('#success').text(response.status);
-                  $('#create').modal('hide');
-                  $('.transaction').load(location.href+' .transaction');
-                    console.log(response);
-                }
-            });
-                });
-
-            //---------show data in edit form------------------//
-
-            $(document).on('click', '.edit', function(e){
-            e.preventDefault();
-            var transid = $(this).val();
-            $('#edit').modal('show');
-        
+        // ------ get max biling no --------------//
+        function get_maxid(){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -389,129 +240,192 @@
             });
             $.ajax({
                 type: "GET",
-                url: "/admin/transaction/edit/"+ transid,  
+                url: "/admin/transaction/getid",
                 datatype: "json",
-                cache: false,
-                contentType: false,
-                processData: false,
                 success: function(response){ 
                     console.log(response);
-                $('#edit_transno').val(transid);
-                $('#edit_userid').val(response.transaction.user_id);
-               $('#edit_fullname').val(response.transaction.fullname);
-               $('#edit_transactiondate').val(response.transaction.transaction_date);
-               $('#edit_consultation').val(response.transaction.consultation_date);
-            
+                $('#getid, #getbillingno').val(response.id);
+                }
+            });
         }
-    });
-        });
-        //---------------------view ----------------------------//
-        $(document).on('click', '.view', function(e){
+       //------------------ show patient modal -------------------//
+        $(document).on('click', '.getpatient', function(e){
             e.preventDefault();
-            var transno = $(this).val();
-           $('#view').modal('show');
+            $('#modal-status').val('show');
+          $('#viewpatients').modal('show');
+        })
+
+        //------------------ Select patient info -------------------//
+                $(document).on('click', '.select', function(e){
+            e.preventDefault();
+            var id = $(this).val();
+            $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+            $.ajax({
+                type: "GET",   
+                url: "/admin/appointment/getuser/"+ id, 
+                    datatype: "json",
+                    success: function(response){ //return galing sa function sa controller
+                    $(' #userid, #fullname').html("");
+                    $('#userid').val(response.users[0].id);
+                    $('#fullname').val(response.fullname[0].fullname);
+                    $('#viewpatients').modal('hide');
+                }
+            });
+        });
+
+        $(document).on('change', '.getservice', function(e){
+            e.preventDefault();
+            var id = $(this).val();
+
+                    $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
            $.ajax({
                 type: "GET",   
-                url: "/admin/transaction/edit/"+ transno, 
+                url: "/admin/appointment/get_appointment_service/"+id ,
                 datatype: "json",
-                cache: false,
-                contentType: false,
-                processData: false,
                 success: function(response){ 
-                  console.log(response)
-                  $('#fileview').html("");
-               $('#view_transno').val(response.transaction.id);
-               $('#view_transactiondate').val(response.transaction.transaction_date);
-               $('#view_fullname').val(response.transaction.fullname);
-               $('#view_userid').val(response.transaction.user_id);
-               $('#view_consultation').val(response.transaction.consultation_date);
-               $('#view_file').val(response.transaction.file);
-               $('#fileview').append('  <a href="/admin/transaction/download/'+response.transaction.id+'">download</a>\
-               <a href="/admin/transaction/view/'+response.transaction.id+'">view</a>\
-               ');
-              
-                    
-        }
-    });
+                    $('.servicename').val(response.service.services);
+       
+                }
+            });
+
         });
 
-        //-------------------update-----------------------------//
-        $('#update_data').on('submit', function(e){
+        
+        //------------------ store to add to cart -------------------//
+        $(document).on('click','.store_addtocart' ,function(e){
             e.preventDefault();
-            var transaction = $('#edit_transno').val();
-            let formData = new FormData(this);
+            var data ={
+                'transno' : $('#getid').val(),
+                'userid': $('#userid').val(),
+                'fullname': $('#fullname').val(),
+                'servicecode': $('#getservice').val(),
+                'service': $('#servicename').val(),
+                'price': $('#price').val(),
+            }
+            console.log(data);
             $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
             });
-           $.ajax({
-                type: 'POST', 
-                url: "/admin/transaction/update/"+transaction,
-                data: formData,
+
+            $.ajax({
+                type: "POST",   
+                url: "/admin/transaction/addtocart/store", 
+                data: data,
                 datatype: "json",
-                cache: false,
-                contentType: false,
-                processData: false,
+                beforeSend: function(){
+                    $(".loading").show();
+                },
+                complete: function(){
+                    $(".loading").hide();
+                },
                 success: function(response){ 
-                    console.log(response);
-                    // if(response.status == 400){
-                    //     $('#error_servicename, #error_price' ).html("");
-                    //     $.each(response.errors.servicename, function (key, err_values){
-                    //     $('#error_servicename').append('<span>'+err_values+'</span>');
-                    //     });
-                    //     $.each(response.errors.price, function (key, err_values){
-                    //     $('#error_price').append('<span>'+err_values+'</span>');
-                    //     });
+                    $('#error_fullname, #error_service, #error_price' ).html("");
+                        if(response.status == 200){     
+                            $('#sub-total').val(response.subtotal);
+                            $('#message').text(response.message);
+                            $('.subtotal').load(location.href+' .subtotal');
+                            $('.data-table').load(location.href+' .data-table');
+                            $('#servicename').val("");
+                            $('#getservice').val("");
+                            $('#price').val("");
+                            $(".success").show();
+                            $('#message-success').text('Added Successfully');
+                            setTimeout(function() {
+                                $(".success").fadeOut(500);
+                            }, 2000);
+                        }else if(response.status == 401){
+                    
+                        $.each(response.errors.fullname, function (key, err_values){
+                          $('#error_fullname').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.servicecode, function (key, err_values){
+                            $('#error_service').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.price, function (key, err_values){
+                            $('#error_price').append('<span>'+err_values+'</span>');
+                        })
 
-                    // }else{                  
-
-                    //     $('#success' ).html("");
-                    //     $('#success' ).addClass('alert alert-success');
-                    //     $('#success').text('update successfully');
-                        $('#edit').modal('hide');
-                        $('#edit').find('input').val("");
-                        $('.transaction').load(location.href+' .transaction');
-                    // }
-        }
-    });
+                        }else{
+                            $('#message-error').text(response.message);
+                            $(".error").show();
+                            setTimeout(function() {
+                                $(".error").fadeOut(500);
+                            }, 2000);
+                        }
+                        
+                    }
+                });
         });
 
-        //-------------delete transaction----------------------//
-        
+        // ------------------- save to transaction table ----------------//
+        $(document).on('click', '.saveaddtocart', function(e){
+            e.preventDefault();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",   
+                url: "/admin/transaction/addtocart/billing_store", 
+                    datatype: "json",
+                    data: {transno : $('#getid').val() },
+                    success: function(response){ //return galing sa function sa controller
+                        get_maxid();
+                        $('.subtotal').load(location.href+' .subtotal');
+                            $('.data-table').load(location.href+' .data-table');
+                            $('#userid').val("");
+                            $('#fullname').val("");
+                            $('#servicename').val("");
+                            $('#getservice').val("");
+                            $('#price').val("");
+                 
+                }
+            });
+          });
+
+        // ------------------- close patient modal ----------------//
+        $(".viewpatients").on("hidden.bs.modal", function(e){
+          e.preventDefault();
+        $('.patient-remove').load(location.href+' .patient-remove');
+        });
+
         $(document).on('click', '.delete', function(e){
             e.preventDefault();
-            var transaction = $(this).val();
-            $('#delete').modal('show');
-            $('#transactionid').val(transaction);
-        });
-
-        $(document).on('click', '.delete_transaction', function(e){
-            e.preventDefault();
-            var transaction = $('#transactionid').val();
+            id =  $(this).val();
             $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
-           $.ajax({
-                type: 'DELETE', 
-                url: "/admin/transaction/delete/"+ transaction,
-                data: transaction,
-                datatype: "json",
-                success: function(response){ 
-                       console.log(response);
-                        $('#success' ).html("");
-                        $('#success' ).addClass('alert alert-success');
-                        $('#success').text('deleted successfully');
-                        $('#delete').modal('hide');
-                        $('#delete').find('input').val("");
-                        $('.transaction').load(location.href+' .transaction');
-        }
-    });
-        });
+            $.ajax({
+                type: "DELETE",   
+                url: "/admin/transaction/delete/" + id, 
+                    datatype: "json",
+                    success: function(response){ //return galing sa function sa controller
+                        $(".success").show();
+                            $('#message-success').text(response.message);
+                            setTimeout(function() {
+                                $(".success").fadeOut(500);
+                            }, 2000);
+                        $('.subtotal').load(location.href+' .subtotal');
+                        $('.data-table').load(location.href+' .data-table');
+                        
+                 
+                }
+            });
 
-
+        })
         
 });
 </script>

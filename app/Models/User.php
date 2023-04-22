@@ -22,6 +22,7 @@ class User extends Authenticatable
         'mname',
         'lname',
         'birthday',
+        'age',
         'address',
         'gender',
         'mobileno',
@@ -59,5 +60,9 @@ class User extends Authenticatable
 
     public function appointments(){
         return $this->hasMany(Appointment::class, 'user_id', 'id');
+    }
+
+    public function consultation(){
+        return $this->hasMany(Consultation::class, 'user_id', 'id');
     }
 }

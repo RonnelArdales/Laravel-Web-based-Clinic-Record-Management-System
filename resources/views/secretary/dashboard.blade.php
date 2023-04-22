@@ -2,7 +2,10 @@
 @section('content')
     <div class="row m-4" style="font-family: Poppins;">
         <div style="margin-top: 20px; margin-bottom:20px">
-            <h3>GOOD DAY, <b>SECRETARY</b></h3>
+            <h3>GOOD DAY, <b>ADMIN</b></h3>
+
+            <label for="">time</label>
+            <div id="demo"></div>
         </div>
         
         
@@ -86,7 +89,7 @@
                   @endforeach
                   @else
                   <tr>
-                    <td colspan="4" style="text-align: center;">No appointment Found</td>
+                    <td colspan="5" style="text-align: center;">No appointment Found</td>
               
                   </tr>
                   @endif
@@ -99,11 +102,11 @@
           </div>
 
           <div class="d-flex bd-highlight container" style="padding: 0; margin-top:30px">
-            <div class="p-2  bd-highlight" style="border-radius: 25px; background-color:#829460; height:400px; width:70%; margin-right:20px">
+            <div class="p-2  bd-highlight" style="border-radius: 25px; background-color:#829460; height:400px; width:100%; margin-right:20px">
               <div id="highcharts"></div>
             </div>
-
-            <div class="p-2 bd-highlight" style="border-radius: 25px; background-color:#829460; height:400px; width:30%">Flex item</div>
+{{-- 
+            <div class="p-2 bd-highlight" style="border-radius: 25px; background-color:#829460; height:400px; width:30%">Flex item</div> --}}
           </div>
         </div>
         @endsection
@@ -218,7 +221,17 @@
 
 @section('scripts')
 <script>
-
+$(document).ready(function(){
+  function myClock() {         
+  setTimeout(function() {   
+    const d = new Date();
+    const n = d.toLocaleTimeString();
+    document.getElementById("demo").innerHTML = n; 
+    myClock();             
+  }, 1000)
+}
+myClock();  
+})
   $(function(){
       var services = {!! json_encode($services) !!} ;
       var male = {!! json_encode($males) !!} ;
@@ -257,3 +270,5 @@
 </script>
 
 @endsection
+
+

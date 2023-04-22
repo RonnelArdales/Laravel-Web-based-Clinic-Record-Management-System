@@ -69,8 +69,18 @@ class ClinicuserController extends Controller {
                         }else{
                           return redirect('secretary/dashboard');
                         }
-                  }elseif($user->status == 'not_verified'){
+                  }elseif($user->status == 'not verified'){
                     auth()->login($user);
+                    $otp = rand(10, 99999);
+                    $time = Carbon::now()->addMinute(5);
+                         EmailOtp::create([
+                            'user_id' => Auth::user()->id,
+                            'email' =>  Auth::user()->email,
+                            'verifycode' => $otp,
+                            'expire_at' => $time ,
+                         ]); 
+                         //create ng bagong user account dahil crypt ng nagamit
+                         Mail::to('ronnelardales2192@gmail.com')->send(new SendVerifycode($otp));
                       return redirect('/verify-email');
                   }else{
                     return redirect('/')->with('error', 'Password not matches' );
@@ -94,6 +104,7 @@ class ClinicuserController extends Controller {
             "mname" => [''],
             "last_name" => ['required',],
             "birthday" => ['required'],
+            "age" => ['required'],
             "address" => ['required'],
             "gender" => ['required'],
             "mobile_number" => ['required'],
@@ -104,6 +115,7 @@ class ClinicuserController extends Controller {
           'first_name.required' => 'First name is required',
           'last_name.required' => 'Last name is required',
           'birthday.required' => 'Birthday is required',
+          'age.required' => 'Age is required',
           'address.required' => 'Address is required',
           'gender.required' => 'gender is required',
           'mobile_number.required' => 'Mobile number is required',
@@ -120,6 +132,7 @@ class ClinicuserController extends Controller {
             $user->mname = $request->input('mname');
             $user->lname = $request->input('last_name');
             $user->birthday = $request->input('birthday');
+            $user->age = $request->input('age');
             $user->address = $request->input('address');
             $user->gender = $request->input('gender');
             $user->mobileno = $request->input('mobile_number');
@@ -127,7 +140,7 @@ class ClinicuserController extends Controller {
             $user->username = $request->input('username');
             $user->password = $encrypt;
             $user->usertype = 'patient'; //usertype
-            $user->status = "not_verified";
+            $user->status = "not verified";
             $user->save();
         $userauth = User::where('email','=', $request->input('email'))->first(); 
         auth()->login($userauth);

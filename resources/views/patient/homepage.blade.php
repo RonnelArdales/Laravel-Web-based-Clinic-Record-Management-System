@@ -2,11 +2,11 @@
 @section('content')
     
 {{-- <h1 class="text-center text-[30px]">Patient homepage</h1> --}}
-{{-- @if (session('success'))
-<div class="alert success alert-success" role="alert" style="width:250px; right:25px;  position:fixed">
+@if (session('success'))
+<div class="alert success alert-success" role="alert" style="width:250px; right:25px;  position:fixed; z-index:9999; top:90px">
   <p id="message-error"> {{ session('success') }}</p> 
 </div>
-@endif --}}
+@endif
 
 <div style="height:50vw ;background-color: #EDDBC0;">
   <div style="box-shadow: 20px 20px 15px rgba(0, 0, 0, 0.25);height: auto; left: 65%; padding: 0.3rem;padding-bottom:11%; text-align: center; background-color:#829460; width: 33%; top:0px; border-radius:0 0 500px 500px; position: absolute;  " class="collapse dont-collapse-lg"> 

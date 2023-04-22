@@ -34,13 +34,13 @@ class Appointment extends Model
         return Carbon::parse($value)->format('h:i A');
     }
 
-public function user(){
-    //parameter
-                                        //2nd unique id sa appointment table 
-                                            //3rd  unique id sa user table
-    // return $this->belongsTo(User::class, 'user_id', 'id'); // select * from user where 
-    return $this->hasMany(User::class, 'id', 'user_id');
-}
+// public function user(){
+//     //parameter
+//                                         //2nd unique id sa appointment table 
+//                                             //3rd  unique id sa user table
+//     // return $this->belongsTo(User::class, 'user_id', 'id'); // select * from user where 
+//     return $this->hasMany(User::class, 'id', 'user_id');
+// }
 
 //has many (kunin yung count ng female)
 public function users_female(){
@@ -56,6 +56,14 @@ public function users_male(){
                                         //2nd unique id sa user table 
                                             //3rd  unique id sa appointmetn table
     return $this->hasMany(User::class, 'id', 'user_id')->where('gender', 'Male'); // select * from user where 
+}
+
+public function user(){
+    //parameter
+                                        //2nd unique id sa appointment table 
+                                            //3rd  unique id sa user table
+    return $this->belongsTo(User::class, 'user_id', 'id'); // select * from user where 
+    // return $this->hasMany(User::class, 'id', 'user_id');
 }
 
 

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\AuditTrail;
+use App\Models\Billing;
+use App\Models\Consultation;
+use App\Models\Consultationfile;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,6 +18,7 @@ use Dompdf\Dompdf;
 use DOMPDF\Options;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 
 class PrintController extends Controller
@@ -107,6 +111,13 @@ class PrintController extends Controller
         // return $pdf->download('invoice.pdf');
     }
 
+    public function print_billing(Request $request){
+        $billings = Billing::all();
+        $pdf = Pdf::loadView('print.billing', compact('billings'));
+        return $pdf->stream('billing.pdf');
+        
+    }
+
 
     public function upload_download_transaction($id){
 
@@ -140,11 +151,58 @@ class PrintController extends Controller
     }
 
     
-    public function upload_view_transaction($id){
-            $file = Transaction::Where('id', $id)->first();
-            return Response::make(file_get_contents(public_path('consultation/' . $file->file)), 200, [
-                'content-type'=>'application/pdf',
-            ]);
-    
+
+
+    public function print_invoice($id){
+
+        if(Auth::user()->usertype == "patient"){
+            $infos = Transaction::with('user')->where('transno', $id)->first();
+            $services = Transaction::where('transno', $id)->get();
+            $pdf = Pdf::loadView('print.invoice', compact('services', 'infos'));
+            return $pdf->stream('Invoice.pdf');
+        }else{
+            $infos = Transaction::with('user')->where('transno', $id)->first();
+            $services = Transaction::where('transno', $id)->get();
+            $pdf = Pdf::loadView('print.invoice', compact('services', 'infos'));
+            return $pdf->stream('Invoice.pdf');
+        }
+
     }
+    public function print_appointment_trans($id){
+        if(Auth::user()->usertype == "patient"){
+            $appointments = Appointment::Where('id', $id)->first();
+            $pdf = Pdf::loadView('print.appointment_invoice', compact('appointments'));
+            return $pdf->stream('Invoice.pdf');
+        }else{
+            $appointments = Appointment::Where('id', $id)->first();
+            $pdf = Pdf::loadView('print.appointment_invoice', compact('appointments'));
+            return $pdf->stream('Invoice.pdf');
+        }
+    }
+
+    public function print_consultation_result($id, Request $request){
+        $consultations = Consultation::where('id', $id)->first();
+        $userinfo = User::where('id', $consultations->user_id)->first();
+        $filename = $consultations->fullname . "_" . $consultations->date;    
+        if($request->input('type') == 'encrypt'){
+            $userpass = $request->input('userpass');
+            $adminpass = $request->input('adminpass');
+            $pdf = PDF::loadView('print.consultation_result', compact('consultations', 'userinfo'));
+            $pdf->setEncryption($userpass, $adminpass);
+            return $pdf->download($filename . '.pdf');
+        }else{
+            $pdf = PDF::loadView('print.consultation_result', compact('consultations', 'userinfo'));
+             return $pdf->download( $filename . '.pdf');
+        }
+        
+    }
+
+    public function download_transaction($id){
+
+    $file = Consultationfile::where('id', $id)->first();
+
+    return response()->download(public_path('consultation/' . $file->filename));
+
+    }
+
 }

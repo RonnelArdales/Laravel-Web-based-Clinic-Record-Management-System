@@ -86,7 +86,11 @@ class SecretaryController extends Controller
 
     //profile page
     public function profile(){
-        return view('secretary.profile');
+  
+        $patients = DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+        $secretaries = DB::table('users')->where('usertype', 'secretary')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
+        $admins = DB::table('users')->where('usertype', 'admin')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin'); 
+        return view('secretary.profile', compact('patients', 'secretaries', 'admins'));
     }
 
     public function create_user_page(){

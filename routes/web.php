@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicuserController;
 use App\Http\Controllers\FullCalendarController;
@@ -12,7 +13,9 @@ use App\Http\Controllers\PrintController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SecretaryController;
+use App\Http\Controllers\UserController;
 use App\Mail\HelloMail;
+use App\Models\Appointment;
 use App\Models\Clinicuser;
 use App\Models\Service;
 use App\Models\Upload;
@@ -42,26 +45,6 @@ Route::middleware(['guest'])->group(function () {
 
 Route::post('/logout', [ClinicuserController::class, 'logout'])->name('logout');
 
-
-Route::get('/hello', function () {return view('hello');});
-Route::get('/dashboard', function () {return view('dashboard');});
-
-
-
-Route::get('/View_upload', function(){
-    $service = Upload::all();
-    return view('upload')->with('uploads', $service);
-});
-
-Route::post('/upload', [AdminController::class, 'upload_file']);
-
-Route::get('/upload/show/{id}', [AdminController::class, 'upload_show']);
-Route::get('/upload/download/{file}', [AdminController::class, 'upload_download']);
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-// Route::get('/modal', function () {return view('admin.modal.create');});
-
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/profile/search-name', [SearchController::class, 'profile_search_user']);
     Route::get('/report/user_fullname', [SearchController::class, 'search_user']);
@@ -76,6 +59,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/discount', [AdminController::class, 'index_discount']);
 });
 
+Route::get('/previous-page', function () {
+    return redirect()->back();
+})->name('previous.page');
+
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/report/users/pagination/paginate-data', [PaginationController::class, 'report_user_paginate']);
     
@@ -85,12 +72,12 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');//show dashboard page
 
     //----------------------Profile----------------------------//
-    Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile') ;  //display users
-    Route::post('/profile/createuser/store', [AdminController::class, 'store_user']);   //save users in database
-    Route::get('/profile/edit/{id}', [AdminController::class, 'edit_user'])->name('users.show');//show edit user
-    Route::put('/profile/update/{id}', [AdminController::class, 'update_user']); //update user data
-    Route::delete('/profile/delete/{id}', [AdminController::class, 'delete_user']); //delete user data
-    Route::get('/profile/pagination/paginate-data', [AdminController::class, 'profile_paginate']);
+    Route::get('/profile', [UserController::class, 'profile'])->name('admin.profile') ;  //display users
+    Route::post('/profile/createuser/store', [UserController::class, 'store_user']);   //save users in database
+    Route::get('/profile/edit/{id}', [UserController::class, 'edit_user'])->name('users.show');//show edit user
+    Route::put('/profile/update/{id}', [UserController::class, 'update_user']); //update user data
+    Route::delete('/profile/delete/{id}', [UserController::class, 'delete_user']); //delete user data
+    Route::get('/profile/pagination/paginate-data', [UserController::class, 'profile_paginate']);
 
     //----------------------discount----------------------------//
     Route::get('/discount', [AdminController::class, 'discount_show'])->name('discount.show');   //display discount table
@@ -107,9 +94,14 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::delete('/service/delete/{servicecode}', [AdminController::class, 'delete_service']); //delete discount
 
      //----------------------appointment----------------------------//
-    Route::get('/appointment', [AdminController::class, 'appointment_show'])->name('appointment.show'); 
-    Route::post('/appointment/create', [AdminController::class, 'store_appointment']); 
+    Route::get('/appointment', [AppointmentController::class, 'appointment_show'])->name('appointment.show');
+    Route::get('/complete-appointment', [AppointmentController::class, 'complete_appointment_show'])->name('complete-appointment.show'); 
+    Route::get('/cancelled-appointment', [AppointmentController::class, 'cancel_appointment_show'])->name('cancelled-appointment.show'); 
+    Route::get('/transaction-appointment', [AppointmentController::class, 'trans_appointment_show'])->name('trancaction-appointment.show');
+    Route::post('/appointment/create', [AppointmentController::class, 'store_appointment']); 
     Route::put('/appointment/change_status/{id}', [AdminController::class, 'appointment_change_status']); 
+
+
     Route::delete('/appointment/delete/{id}', [AdminController::class, 'delete_appointment']);
     Route::get('/appointment/getuser/{id}', [AdminController::class, 'get_user']); 
     Route::get('/appointment/get_appointment_service/{id}', [AdminController::class, 'get_appointment_service']); 
@@ -118,54 +110,70 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::get('/modal_patient/pagination/paginate-data', [PaginationController::class, 'patient_paginate']);
     Route::get('/appointment/status/{id}', [AdminController::class, 'appointment_status']);
 
-
-     //----------------------reports----------------------------//
-     Route::get('/reports/user', [ReportController::class, 'view_user']);
-     Route::get('/reports/audit_trail', [ReportController::class, 'view_auditTrail']);
-     Route::get('/reports/appointment', [ReportController::class, 'view_appointment']);
-
-    //-----------------------print report---------------------------------//
-     Route::post('/reports/print_user', [PrintController::class, 'print_user']);
-     Route::get('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
-     Route::get('/reports/print_appointment', [PrintController::class, 'print_appointment']);  
-
+    //-------------------Queuing---------------------------//
+    Route::get('/queuing', [AdminController::class, 'view_queuing']);
+    Route::get('/queuing/upcoming', [AdminController::class, 'upcoming_queuing']);
+    Route::get('/transaction/getid', [AdminController::class, 'get_id']);
 
       //----------------------transaction----------------------------//
       Route::get('/transaction', [AdminController::class, 'view_transaction']); 
-      Route::post('/transaction/store', [AdminController::class, 'store_transaction']); 
-      Route::get('/transaction/getuser/{id}', [AdminController::class, 'getappointment_user']);
-      Route::delete('/transaction/delete/{id}', [AdminController::class, 'delete_transaction']);
-      Route::get('/transaction/edit/{id}', [AdminController::class, 'edit_transaction']);
-      Route::post('/transaction/update/{id}', [AdminController::class, 'update_transaction']);
-      Route::get('/transaction/download/{id}', [PrintController::class, 'upload_download_transaction']);
-      Route::get('/transaction/view/{id}', [PrintController::class, 'upload_view_transaction']);
-      
+     Route::get('/transaction/getid', [AdminController::class, 'get_id']);
+     Route::post('/transaction/addtocart/store', [AdminController::class, 'store_addtocart']);
+     Route::post('/transaction/addtocart/billing_store', [AdminController::class, 'store_billing']);
+     Route::delete('/transaction/delete/{id}', [AdminController::class, 'delete_transaction']);
 
         //----------------------Billing----------------------------//
         Route::get('/billing', [AdminController::class, 'index_billing']);
         Route::get('/billing/getdiscount/{id}', [AdminController::class, 'get_discount']);
-        Route::get('/billing/getid', [AdminController::class, 'get_id']);
-        Route::post('/billing/addtocart/store', [AdminController::class, 'store_addtocart']);
+        // Route::get('/billing/getid', [AdminController::class, 'get_id']);
 
-        Route::post('/billing/addtocart/billing_store', [AdminController::class, 'store_billing']);
+        // Route::post('/billing/addtocart/billing_store', [AdminController::class, 'store_billing']);
         Route::post('/billing/addtocart/delete', [AdminController::class, 'store_delete']);
         Route::put('/billing/update/payment/{id}', [AdminController::class, 'update_payment']);
         Route::get('/billing/viewBilling/{id}', [AdminController::class, 'view_billing']);
+        Route::get('/billing/editBilling/{id}', [AdminController::class, 'edit_billing']);
         Route::post('/billing/addtocart/deleteall', [AdminController::class, 'deleteall_addtocart']);
         Route::get('/billing/addtocart/pagination/paginate-data', [AdminController::class, 'addtocart_paginate']);
         Route::get('/billing/getdata/{id}', [AdminController::class, 'addtocart_getalldata']); //condition if addtocart table has data
         
-         //-------------------Queuing---------------------------//
-         Route::get('/queuing', [AdminController::class, 'view_queuing']);
-         Route::get('/queuing/pagination/paginate-data', [PaginationController::class, 'queuing_paginate']);
+
+        //----------------consultation ---------------- //
+
+        Route::get('/consultation', [AdminController::class, 'index_consultation']);
+        Route::get('/consultation/show_appointment', [AdminController::class, 'index_consultation_appointment_show']);
+        Route::get('/consultation/create', [AdminController::class, 'create_consultation']);
+        Route::get('/consultation/getappointment/{id}', [AdminController::class, 'get_consultation_appointment']);
+        Route::post('/consultation/store', [AdminController::class, 'consultation_store']);
+        Route::get('/consultation/viewrecords/{id}', [AdminController::class, 'consultation_view_records'])->name('consultation.show_history');
+        Route::get('/consultation/edit/{id}/{user_id}', [AdminController::class, 'consultation_edit']);
+        Route::get('/consultation/viewconsultation/{id}/{user_id}', [AdminController::class, 'consultation_view'])->name('consultation.viewappointment');
+        Route::put('/consultation/update/{id}', [AdminController::class, 'consultation_update']);
         
-        
-        //-------------------upload---------------------------//
+        //-------------------Documents---------------------------//
+        Route::get('/document', [AdminController::class, 'index_document']);
+        Route::get('/document/show_appointment', [AdminController::class, 'document_show_appointment']);
+        Route::post('/document/store', [AdminController::class, 'store_document']);
+        Route::get('/document/edit/{id}', [AdminController::class, 'edit_document']);
+        Route::post('/document/update/{id}', [AdminController::class, 'update_document']);
+        Route::delete('/document/delete/{id}', [AdminController::class, 'delete_document']);
 
 
+             //----------------------reports----------------------------//
+     Route::get('/reports/user', [ReportController::class, 'view_user']);
+     Route::get('/reports/audit_trail', [ReportController::class, 'view_auditTrail']);
+     Route::get('/reports/appointment', [ReportController::class, 'view_appointment']);
+     Route::get('/reports/billing', [ReportController::class, 'view_billing']);
 
-        //--------------------prescription -----------------------//
-        Route::get('/prescription', [PrescriptionController::class, 'show_prescription']);
+    //-----------------------prints  ---------------------------------//
+     Route::post('/reports/print_user', [PrintController::class, 'print_user']);
+     Route::get('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
+     Route::get('/reports/print_appointment', [PrintController::class, 'print_appointment']); 
+     Route::get('/billing/printinvoice/{id}', [PrintController::class, 'print_invoice']); 
+     Route::get('/reports/print_billing', [PrintController::class, 'print_billing']);
+     Route::get('/appointment/print/{id}', [PrintController::class, 'print_appointment_trans']);
+     Route::get('/consultation/print/{id}', [PrintController::class, 'print_consultation_result']);
+    Route::get('/document/download/{id}', [PrintController::class, 'download_transaction']);
+
 
         //--------------------business Hours -----------------------//
         Route::get('/business_hours', [AdminController::class, 'show_businesshours']);
@@ -189,7 +197,6 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::get('/profile', [SecretaryController::class, 'profile'])->name('secretary.profile') ;  //display users
     Route::get('/profile/createuser', [SecretaryController::class, 'create_user_page']) ;   //create users
     Route::post('/profile/createuser/store', [SecretaryController::class, 'store_user']);   //save users in database
-    // Route::get('/profile/edit/{id}', [AdminController::class, 'show_user']);  
     Route::get('/profile/edit/{id}', [SecretaryController::class, 'edit_user']);//show edit user
     Route::put('/profile/update/{id}', [SecretaryController::class, 'update_user']); //update user data
     Route::delete('/profile/delete/{id}', [SecretaryController::class, 'delete_user']); //delete user data
@@ -230,8 +237,10 @@ Route::prefix('/patient')->middleware('auth','ispatient', 'verify')->group(funct
     Route::get('/profile/edit', [PatientController::class, 'edit_profile']);
     Route::put('/profile/update/{id}', [PatientController::class, 'update_profile']);
     Route::put('/appointment/cancel/{id}', [PatientController::class, 'cancel_appointment']);
-    Route::get('/transaction/view/{id}', [PrintController::class, 'upload_view_transaction']);
-    Route::get('/transaction/download/{id}', [PrintController::class, 'upload_download_transaction']);
+    Route::get('/document/view/{id}', [PatientController::class, 'document_view']);
+
+    
+
    
     // ------------ appointment -------------------//
     Route::get('/appointment', [FullCalendarController::class, 'index']);
@@ -244,6 +253,14 @@ Route::prefix('/patient')->middleware('auth','ispatient', 'verify')->group(funct
     Route::get('/billing', [PatientController::class, 'index_billing']);
     Route::get('/billing/payment', [PatientController::class, 'index_payment']);
     Route::post('/billing/payment/store', [PatientController::class, 'store_payment']);
+
+
+    //----------------Print --------------------//
+    Route::get('/billing/printinvoice/{id}', [PrintController::class, 'print_invoice']);
+    Route::get('/appointment/print/{id}', [PrintController::class, 'print_appointment_trans']); 
+    Route::get('/transaction/download/{id}', [PrintController::class, 'upload_download_transaction']);
+    Route::get('/transaction/view/{id}', [PrintController::class, 'upload_view_transaction']);
+    Route::get('/document/download/{id}', [PrintController::class, 'download_transaction']);
 });
 
 

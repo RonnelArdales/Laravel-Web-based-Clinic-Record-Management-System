@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\Billing;
+use App\Models\Consultationfile;
 use App\Models\Guestpage;
 use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 
@@ -35,9 +37,9 @@ class PatientController extends Controller
         // return response()->download(public_path($filename));
         // $client = new Client('SEMAPHORE API KEY', 'Sender Name');
         // $client->message()->send('0917xxxxxxx', 'Your message here');
-        $transactions = Transaction::where('user_id', Auth::user()->id)->get();
+        $documents = Consultationfile::where('user_id', Auth::user()->id)->get();
         $appointments = Appointment::Where('user_id', Auth::user()->id )->get();
-        return view('patient.profile.profile', compact('transactions', 'appointments'));
+        return view('patient.profile.profile', compact('documents', 'appointments'));
     }
 
     public function edit_profile(){
@@ -93,7 +95,8 @@ class PatientController extends Controller
     }
 
     public function index_billing(){
-        return view('patient.billing.billing');
+        $billings =  DB::table('transactions')->where('user_id' , Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10, ['*'], 'billing');
+        return view('patient.billing.index', compact('billings'));
     }
     public function index_payment(Request $request){   
      
@@ -101,68 +104,16 @@ class PatientController extends Controller
             $time = Carbon::createFromFormat('h:i A', $input['time'])->format('H:i:s');
             $date = Carbon::createFromFormat('m-d-Y', $input['date'])->format('Y-m-d');
             $billin_no = Billing::max('billing_no') + 1;
-         
-            // $appointment = new Appointment();
-            // $appointment->user_id = Auth::user()->id;
-            // $appointment->fullname = Auth::user()->fname . " " . Auth::user()->lname;
-            // $appointment->gender = Auth::user()->gender;
-            // $appointment->service = $input['service'];
-            // $appointment->date = $input['date'];
-            // $appointment->time = $time;
-            // $appointment->price = $input['price'];
-            // $appointment->status = 'Pending';
-            // $appointment->save();
-            
-            // $billing = new Billing();
-            // $billing->billing_no = $billin_no;
-            // // $billing->appointment_no = $appointment->id;
-            // $billing->user_id = Auth::user()->id;
-            // $billing->fullname = Auth::user()->fname . " " . Auth::user()->lname;
-            // $billing->appointment_date = $date . " " . $time;
-            // $billing->servicecode = $input['service_code'];
-            // $billing->service = $input['service'];
-            // $billing->price = $input['price'];
-            // $billing->sub_total = $input['price'];
-            // $billing->discount = $input['discount'];
-            // $billing->total =  $input['total_price'];
-            // $billing->mode_of_payment = $input['mode_of_payment'];
-            // $billing->status = 'Not Paid';
-            // $billing->save();
-            // $billing->reference_no
-            // $billing->payment
-            // $billing->change
-            // $billing->status
     
-            $billinginfo = array('billing_no' => $billin_no,
+            $billinginfo = array(
                                 'fullname' => Auth::user()->fname . " " . Auth::user()->lname,
-                                'modeofpayment' => $request->input('mode_of_payment'),
-                                'servicecode' => $request->input('service_code'),
-                                'service' => $request->input('service'),
-                                'price' => $request->input('price'),
-                                'discount' => $request->input('discount'),
-                                'total' => $request->input('total_price'),
+                                'modeofpayment' => "gcash",
                                 'date' => $request->input('date'),
                                 'time' => $request->input('time'),
                             );
 
-            if($input['mode_of_payment'] == "gcash"){
-                return view('patient.billing.billing_payment')->with('info', $billinginfo);
-            }else{
-                $appointment = new Appointment();
-                $appointment->user_id = Auth::user()->id;
-                $appointment->fullname = Auth::user()->fname . " " . Auth::user()->lname;
-                $appointment->gender = Auth::user()->gender;
-                $appointment->service = $input['service'];
-                $appointment->date = $input['date'];
-                $appointment->time = $time;
-                $appointment->mode_of_payment = $input['mode_of_payment'];
-                $appointment->price = $input['price'];
-                $appointment->status = 'Pending';
-                $appointment->save();
-                //send notification to admin
+            return view('patient.billing.billing_payment')->with('info', $billinginfo);
 
-                return redirect('patient/homepage')->with('message', 'Created Successfully, Please wait for the confirmation that will in your email');
-            } 
     }
 
     public function store_payment(Request $request){
@@ -180,31 +131,16 @@ class PatientController extends Controller
             $appointment = new Appointment();
             $appointment->user_id = Auth::user()->id;
             $appointment->fullname = Auth::user()->fname . " " . Auth::user()->lname;
-            $appointment->gender = Auth::user()->gender;
-            $appointment->service = $input['service'];
+            $appointment->contact_no = Auth::user()->mobileno;
+            $appointment->email = Auth::user()->email;
             $appointment->date = $input['date'];
             $appointment->time = $time;
-            $appointment->price = $input['price'];
+            $appointment->appointment_method = "online";
+            $appointment->reservation_fee = $input['reservation_fee'];
             $appointment->mode_of_payment = $input['mop'];
-            $appointment->status = 'Pending';
-            // $appointment->save();
-
-            $billing = new Billing();
-            $billing->billing_no = $billin_no;
-            $billing->appointment_no = $appointment->id;
-            $billing->user_id = Auth::user()->id;
-            $billing->fullname = Auth::user()->fname . " " . Auth::user()->lname;
-            $billing->appointment_date = $date . " " . $time;
-            $billing->servicecode = $input['service_code'];
-            $billing->service = $input['service'];
-            $billing->price = $input['price'];
-            $billing->sub_total = $input['price'];
-            $billing->discount = $input['discount'];
-            $billing->total =  $input['total'];
-            $billing->mode_of_payment = $input['mop'];
-            $billing->reference_no = $input['reference_no'];
-            $billing->status = 'Paid';
-            // $billing->save();
+            $appointment->reference_no = $input['reference_no'] ;
+            $appointment->status = 'pending';
+            $appointment->save();
 
             //send email to admin
 
@@ -214,5 +150,12 @@ class PatientController extends Controller
     public function cancel_appointment($id){
         $appointment = Appointment::where('id', $id)->update(['status' => 'Cancelled',]);
         return response()->json($appointment);
+    }
+
+    public function document_view($id){
+        $document = Consultationfile::where('id', $id)->first();
+
+        return response()->json(['document' => $document]);
+
     }
 }

@@ -1,159 +1,28 @@
 @extends('layouts.navbar')
 @section('content')
-    
-{{-- 
-<h1 class="text-center text-[30px]">Profile</h1>
-
-
-@if(Session::has('message'))
-<span  role="alert" class="block  text-success">{{Session::get('message')}}</span>
-@endif 
-
-<label for="">profile picture</label>
-
-<h6>first name: <label for="">{{Auth::user()->fname}}</label></h6> 
-
-
-
-<h6>Middle name: <label for="">{{Auth::user()->mname}}</label> </h6> 
-
-
-
-<h6>Last name: <label for="">{{Auth::user()->lname}}</label> </h6> 
-
-
-
-<h6>birthday : <label for="">{{Auth::user()->birthday}}</label> </h6> 
-
-
-
-<h6>address : <label for="">{{Auth::user()->address}}</label> </h6> 
-
-
-
-<h6>gender : <label for="">{{Auth::user()->gender}}</label> </h6> 
-
-
-
-<h6>Mobile No. : <label for="">{{Auth::user()->mobileno}}</label> </h6> 
-
  
+<style>
+label{
+  font-family: 'Poppins';
+}
+  .input, .service_input{
+  background: #D0B894;
+  border-radius: 10px;
+  border:none;
+  margin-bottom: 1%;
+  text-align: center; 
+}
+</style>
 
-<h6>email : <label for="">{{Auth::user()->email}}</label></h6> 
-
-
-
-<h6>username: <label for="">{{Auth::user()->username}}</label> </h6>
-
-<a href="/patient/profile/edit">change profile</a>
-
-<div class="container-fluid">
-
-<div>
-    <h4>History</h4>
-    <p>Here are the history of your finding during your consulation. Click to view</p>
-</div>
-
-<table class="table table-striped table-bordered border border-dark col-sm">
-    <thead style="background-color: burlywood">
-      <tr  style=" position: relative;">
-            <th>Appointment Date</th>
-            <th>file</th>
-      </tr>
-    </thead>
-    <tbody>
-        @foreach ($transactions as $transaction)
-        <tr onclick="document.location = '/patient/transaction/download/{{$transaction->id}}';">
-            <td>{{$transaction->consultation_date}}</td>
-            <td>{{$transaction->file}}</td>
-          </tr>
-        @endforeach
-  
-    </tbody>
-  </table>
-
-    <div>
-        <h4>Appointments</h4>
-        <p>Here are the history of your finding during your consulation. Click to view</p>
-    </div>
-
-    <table class="table table-striped table-bordered border border-dark col-sm">
-        <thead style="background-color: burlywood">
-          <tr  style=" position: relative;">
-                <th>service</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Price</th>
-                <th>Mode of payment</th>
-                <th>status</th>
-                <th>action</th>
-          </tr>
-        </thead>
-        <tbody>
-            @foreach ($appointments as $appointment)
-
-            @if ($appointment->status == "Pending" || $appointment->status == "Booked")
-            <tr>
-                <td>{{$appointment->service}}</td>
-                <td>{{$appointment->date}}</td>
-                <td>{{$appointment->time}}</td>
-                <td>{{$appointment->price}}</td>
-                <td>{{$appointment->mode_of_payment}}</td>
-                <td>{{$appointment->status}}</td>
-                <td>
-                    <button class="cancel-confirmation" type="button" value="{{$appointment->id}}" class="button button-danger">Cancel</button>
-                </td>
-              </tr>
-            @else
-            <tr>
-                <td>{{$appointment->service}}</td>
-                <td>{{$appointment->date}}</td>
-                <td>{{$appointment->time}}</td>
-                <td>{{$appointment->price}}</td>
-                <td>{{$appointment->mode_of_payment}}</td>
-                <td>{{$appointment->status}}</td>
-              </tr>
-            @endif
-        
-            @endforeach
-      
-        </tbody>
-      </table> --}}
-
-         {{----------delete modal--------------}}
-    {{-- <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-5 pt-6  ">
-                    <div class=" columns-1 sm:columns-2">
-                        <input type="text" id="appointment-id">
-                    <h6>Do you want to cancel this appointment?</h6>
-            </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button class=" cancel_appointment p-2 w-30 bg-[#829460]  mt-7 rounded" >delete</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-</div> --}}
-<div class="container ">
+<div class="container" style="margin-bottom:100px">
 
 
-<div class="card w-40" style="box-sizing: border-box;font-family:Poppins; background:#EDDBC0;padding-top:1%; margin-bottom:1%;padding-bottom:1%;margin-top:5%;box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.25);">
+<div class="card w-40" style="box-sizing: border-box;font-family:Poppins; background:#EDDBC0;padding-top:1%; margin-bottom:4%;padding-bottom:1%;margin-top:5%;box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.25);">
   
     <h1 class="text-center text-[30px]" style="font-weight: 700;">Profile</h1>
 <div style=" display:flex; flex-direction:row;flex-wrap:wrap;  padding:5px;justify-content:center;">
 
-    <div style="background:grey; border-radius:100%;height:300px; width:300px;box-shadow: -10px 0px 0px 5px  #829460;">
+    <div style="background:grey; border-radius:100%;height:280px; width:280px;box-shadow: -10px 0px 0px 5px  #829460;">
 
      </div>
     <div style="background: #EDDBC0;margin-left:30px;margin-top:30px;">
@@ -184,22 +53,42 @@
 <table class="table table-striped table-bordered border border-dark col-sm">
   <thead style="background-color: burlywood">
     <tr  style=" position: relative;">
-          <th>Appointment Date</th>
-          <th>file</th>
+          <th style="text-align: center;" >Appointment Date</th>
+          <th style="text-align: center;">file</th>
+          <th style="text-align: center;">action</th>
     </tr>
   </thead>
   <tbody>
-      @foreach ($transactions as $transaction)
+      {{-- @foreach ($transactions as $transaction)
       <tr onclick="document.location = '/patient/transaction/download/{{$transaction->id}}';">
           <td>{{$transaction->consultation_date}}</td>
           <td>{{$transaction->file}}</td>
         </tr>
-      @endforeach
+      @endforeach --}}
+        @if (count($documents) > 0)
+        @foreach ($documents as $document)
+        <tr>
+          <td style="text-align: center;" >{{$document->appointment_date}}</td>
+          <td style="text-align: center;" >{{$document->filename}}</td>
+          <td style="text-align: center;">
+            <button style="text-align: center;" value="{{$document->id}}" class="view btn btn-primary">View</button>
+          </td>
+        </tr>
+  
+            
+        @endforeach
+        @else
+        <tr>
+          <td colspan="3" style="text-align: center;" >No Consultation file found</td>
+        </tr>
+            
+        @endif
+
 
   </tbody>
 </table>
 
-<div>
+<div style="margin-top:3%">
   <h4>Appointments</h4>
   <p>Here are the history of your finding during your consulation. Click to view</p>
 </div>
@@ -207,10 +96,9 @@
 <table class="table table-striped table-bordered border border-dark col-sm">
   <thead style="background-color: burlywood">
     <tr  style=" position: relative;">
-          <th>service</th>
           <th>Date</th>
           <th>Time</th>
-          <th>Price</th>
+          <th>Reservation fee</th>
           <th>Mode of payment</th>
           <th>status</th>
           <th>action</th>
@@ -219,33 +107,115 @@
   <tbody>
       @foreach ($appointments as $appointment)
 
-      @if ($appointment->status == "Pending" || $appointment->status == "Booked")
+      @if ($appointment->status == "pending")
       <tr>
-          <td>{{$appointment->service}}</td>
+   
           <td>{{$appointment->date}}</td>
           <td>{{$appointment->time}}</td>
-          <td>{{$appointment->price}}</td>
+          <td>{{$appointment->reservation_fee}}</td>
           <td>{{$appointment->mode_of_payment}}</td>
           <td>{{$appointment->status}}</td>
           <td>
-              <button class="cancel-confirmation" type="button" value="{{$appointment->id}}" class="button button-danger">Cancel</button>
+              <button class="cancel-confirmation btn btn-danger" type="button" value="{{$appointment->id}}" >Cancel</button>
+              <a style="text-decoration: none" class="btn btn-secondary" href="/patient/appointment/print/{{$appointment->id}}">Print</a>
           </td>
         </tr>
       @else
       <tr>
-          <td>{{$appointment->service}}</td>
+
           <td>{{$appointment->date}}</td>
           <td>{{$appointment->time}}</td>
-          <td>{{$appointment->price}}</td>
+          <td>{{$appointment->reservation_fee}}</td>
           <td>{{$appointment->mode_of_payment}}</td>
           <td>{{$appointment->status}}</td>
+          <td>
+            <a class="btn btn-secondary" style="text-decoration: none" href="/patient/appointment/print/{{$appointment->id}}">Print</a>
+          </td>
         </tr>
       @endif
-  
       @endforeach
 
   </tbody>
 </table> 
+{{-------------------------- cancel Appointment --------------------------------------}}
+<div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="mb-5 pt-6  ">
+              <div class=" columns-1 sm:columns-2">
+                  <input type="text" id="appointment-id">
+              <h6>Do you want to cancel this appointment?</h6>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class=" cancel_appointment p-2 w-30 bg-[#829460]  mt-7 rounded" >Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+{{------------------------------View Document-------------------------}}
+
+<div class="modal fade" id="view" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content" style="background: #EDDBC0;">
+      <div class="modal-header" style="border-bottom-color: gray">
+        <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">View Appoitnment</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="mb-4 pt-6  ">
+              <div class=" columns-1 sm:columns-2">
+                  <div  class="row">
+                      <div class="col-md-6">
+
+                          <label for="">Appointment id</label><br>
+                          <input type="text"  class="input" id="view_appointemntid"  style="width: 300px" name="appointment_id" readonly><br>
+                        
+                          <label style="margin-top:10px" for="">fullname</label><br>
+                          <input type="text" class="input" readonly  style="width: 300px" id="user_id" name="user_id" hidden>
+                          <input type="text" class="input" readonly   style="width: 300px" id="view_fullname" name="fullname">
+                       
+                      </div>
+  
+                      <div  class="col-md-6">
+  
+                      <label style="margin-top: 0px" for="">Appointment date</label><br>
+                      <input type="text" class="input" readonly style="width: 300px" id="view_date" name="date"><br>
+                      <label style="margin-top:13px" for="">Uploaded pdf</label><br>
+                      <input type="text"class="input" readonly   style="width: 300px" id="view_file" name="pdf"><br>
+                      </div>
+
+                      <div class="form-group" >
+                          <label for="message-text" style="margin-top:20px"  class="col-form-label">Note:</label>
+                          <textarea class="input" readonly style="width: 100%;text-align: justify ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; min-height: 100px; height:auto" id="view_note" name="note"></textarea>
+                        </div>
+            
+ 
+              </div>
+              </div>
+
+
+                  <div class="modal-footer" style="border-top-color: gray; padding-bottom:0px">
+                  <button type="button" style=" border-radius: 30px; border: 2px solid #829460;width: 110px;height: 37px; color:#829460;; background:transparent;" data-bs-dismiss="modal">Close</button>
+                  <div id="fileview">
+
+                  </div>
+                  </div>
+             
+                  </div>
+        </div>
+    </div>
+  </div>
+  </div>
+
 </div>
 <script>
     $(document).ready(function(e){
@@ -274,6 +244,37 @@
         }
     });
         });
+
+        $(document).on('click', '.view', function(e) {
+            e.preventDefault();
+          
+            var id = $(this).val();
+            console.log(id);
+           $('#view').modal('show');
+           $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+           $.ajax({
+                type: "GET",   
+                url: "/patient/document/view/"+ id, 
+                datatype: "json",
+                success: function(response){ 
+                  console.log(response)
+              $('#fileview').html("");
+              $('#view').find('input, textarea').html("");
+               $('#view_appointemntid').val(response.document.appointment_id);
+               $('#view_fullname').val(response.document.fullname);
+               $('#view_date').val(response.document.appointment_date);
+               $('#view_file').val(response.document.filename);
+               $('#view_note').val(response.document.note);
+               $('#fileview').append('  <a href="/patient/document/download/' + response.document.id+'" class=" p-2 w-30 bg-[#829460]  mt-7 " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; text-decoration:none; " >Download</a>\
+               ');
+        }
+    });
+        });
+
     })
 </script>
 @endsection

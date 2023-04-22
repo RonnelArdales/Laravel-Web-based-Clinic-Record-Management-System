@@ -164,20 +164,27 @@
       @enderror
     </div>
     <div class="col-md-4">
-     <h4>GENDER</h4>
-      <select name="gender" class="form-control">
-        <option style="text-align:center" value="">--select--</option>
-        <option value="Male" {{old('gender') == "Male" ? 'selected' : ''}}>Male</option>
-        <option value="Female" {{old('gender') == "Female" ? 'selected' : ''}}>Female</option>
-      </select>
-      @error('gender')
+     <h4>Age</h4>
+     <input type="number" style="text-align:center" value="{{old('age')}}" type="age" class="form-control"   name="age" >
+      @error('age')
       <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
       @enderror
     </div>
+    <div class="col-md-4">
+      <h4>GENDER</h4>
+       <select name="gender" class="form-control">
+         <option style="text-align:center" value="">--select--</option>
+         <option value="Male" {{old('gender') == "Male" ? 'selected' : ''}}>Male</option>
+         <option value="Female" {{old('gender') == "Female" ? 'selected' : ''}}>Female</option>
+       </select>
+       @error('gender')
+       <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+       @enderror
+     </div>
     <h4>CONTACTS</h4>
     <div class="col-md-4">
       <label for="inputEmail4" class="form-label">Mobile Number:</label>
-      <input type="text" value="{{old('mobile_number')}}"  class="form-control" name="mobile_number"  >
+      <input type="number" value="{{old('mobile_number')}}"  class="form-control" name="mobile_number"  >
       @error('mobile_number')
       <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
       @enderror

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\AuditTrail;
+use App\Models\Billing;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -28,6 +29,11 @@ class ReportController extends Controller
     public function view_appointment(){
         $appointments = Appointment::all();
         return view('reports.appointment', compact('appointments'));
+    }
+
+    public function view_Billing(){
+        $billings = Billing::all();
+        return view('reports.billing', compact('billings'));
     }
 
 

@@ -71,11 +71,13 @@
 
     </div>
 
-    <div class="container" style=" margin-bottom:20px; margin-top:10px">
+    <div class="container" style=" margin-bottom:60px; margin-top:10px">
         <div class="row">
-            <p style="margin-bottom:5px">Please, complete the appointment details below to continue.</p>
-            <div class="rounded  border border-dark col-sm-9 row" style=" padding:30px; margin:0px ">  
+            <p style="margin-bottom:20px; margin-top:25px">Please, complete the appointment details below to continue.</p>
+            <div class="rounded   col-sm-9 row" style=" padding:30px; margin:0px; background: #EDDBC0;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); ">  
                 <div class="col-sm " >
+                    <label style="color: red; margin-bottom:15px"  for="">Please note: There will be a non-refundable reservation fee of 500.</label>
                     <div class="form-group">
                         <label for="">Date selected:</label><br>
                         <input type="text" class="date rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:20vw" readonly id="date">
@@ -85,76 +87,23 @@
                         <label for="exampleInputEmail1">Time selected:</label><br>
                         <select name="" id="available-time" class="rounded text-gray-700  focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;width:20vw" >
                             <option value="">--select--</option>
-                            
                         </select>
                       </div>
-    
-                      <div class="form-group" style="margin-top:15px">
-                        <label for="exampleInputEmail1">Available services:</label><br>
-                        <select name="" id="services" class="rounded text-gray-700  focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:20vw" >
-                            <option value=""></option>
-                            @foreach ($services as $service)
-                            <option value="{{$service->servicecode}}">{{$service->servicename}}</option>
-                            @endforeach
-                        </select>
-                      </div>
-    
-                      <div class="form-group" style="margin-top:15px">
-                        <label for=""> price:</label><br>
-                        <div class="currency-wrap">
-                            <span class="currency-code">₱</span>
-                            <input readonly type="number" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" placeholder="0.00"  style="background: #D0B894;"  id="price" name="doctorfee"/>
-                        </div>
-                        {{-- <input type="text" class="rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="price"  readonly> --}}
-                      </div>
-                </div>
-
-                <div class="col-sm" >
-                    <div class="form-group" >
-                        <label for="">Mode of payment:</label><br>
-                        <select name="" id="mode-of-payment"  class="rounded text-gray-700  focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:20vw" >
-                            <option value="">--select--</option>
-                            <option value="gcash">gcash</option>
-                            <option value="cash">cash</option>
-                        </select>
-    
-                      <div class="form-group" style="margin-top:15px">
-                        <label for="">Discount:</label><br>
-                  
-                            <select name="" id="discount" class="rounded text-gray-700  focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:20vw" >
-                                <option value="">--select--</option>
-                                @foreach ($discounts as $discount)
-                                <option value="{{$discount->discountcode}}">{{$discount->discountname}}</option>
-                                @endforeach
-                            </select>
-                   
-                      </div>
-    
-                      <div class="form-group" style="margin-top:15px">
-                        <label for="">Total Price</label><br>
-                        <div class="currency-wrap">
-                            <span class="currency-code">₱</span>
-                            <input readonly type="number" style="background: #D0B894;" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" placeholder="0.00" style="background: #D0B894;" id="total-price" />
-                        </div>
-                        {{-- <input type="text" class="rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="total-price"  readonly> --}}
-                      </div>
-
+                        
                       <div class="d-flex justify-content-center row" style="text-align: center; margin-top:20px">
-                        <button  class="appointment-confirm" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px; height: 37px; ">Submit</button>
-                    
-                            <p>    <input type="checkbox" style="margin-right: 10px"  name="" id="agree">I agree to the<button type="button" data-bs-toggle="modal" data-bs-target="#privacy"class="logoutbutton" style="outline: none" ><strong>Terms Condition & Privacy Policy </strong> of the clinic</button></p>
+                      
+                            <p style="margin-bottom: 4px">    <input type="checkbox" style="margin-right: 10px"  name="" id="agree">I agree to the<button type="button" data-bs-toggle="modal" data-bs-target="#privacy"class="logoutbutton" style="outline: none" ><strong>Terms Condition & Privacy Policy </strong> of the clinic</button></p>
                             <x-privacyact/>
                       
+                            <button  class="appointment-confirm" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px; height: 37px; margin-bottom:10px ">Submit</button>
                       </div>
-              
                 </div>
-           
 
-            </div>
+
             
       
         </div>
-        <div class="col-sm  border border-dark" style=" padding:0px">
+        <div class="col-sm  " style=" padding:0px">
 
         </div>
     </div>
@@ -163,9 +112,9 @@
 </div>
 
 <div class="modal fade" id="appointment-confirmation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modalCenter">
-      <div class="modal-content">
-        <div class="modal-header">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: #EDDBC0;">
+        <div class="modal-header" style="border-bottom-color: gray">
           <h1 class="modal-title fs-5" id="exampleModalLabel">HOLD ON!</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -174,23 +123,18 @@
                 <div class=" columns-1 sm:columns-2">
                     <input type="hidden" id="discountcode">
                 <h6>Are you sure you want to continue?</h6>
-         
-              {{-- </form> --}}
+
         </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <div class="modal-footer" style="border-top-color: gray">
+          <button type="button" class=" close " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
           <form action="/patient/billing/payment" method="get">
             @csrf
-            <input type="text" name="date" hidden id="form-dateselected">
-            <input type="text" name="time" hidden id="form-timeselected">
-            <input type="text" name="service_code" hidden  id="form-servicecode">
-            <input type="text" name="service" hidden  id="form-services">
-            <input type="text" name="price" hidden id="form-price">
-            <input type="text" name="mode_of_payment" hidden id="form-modepayment">
-            <input type="text" name="discount" hidden id="form-discount">
-            <input type="text" name="total_price" hidden id="form-totalprice">
-          <button type="submit" class=" p-2 w-30 bg-[#829460]  mt-7 rounded">Yes</button>
+            <input type="text" hidden name="date" id="form-dateselected">
+            <input type="text" hidden name="time"id="form-timeselected">
+            {{-- <input type="text" hidden name="servicecode"  id="form-servicecode">
+            <input type="text" hidden name="servicename"  id="form-servicename"> --}}
+          <button type="submit" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Yes</button>
         </form>
         </div>
       </div>
@@ -324,7 +268,6 @@
                             
                             }else{
                                 $('#date').val(response.date);
-                                $('#form-dateselected').val(response.date);
                                 $.each(response.available_time, function(index, val){ 
                                     $("#available-time").append("<option value='"+val+"'>"+val+"</option>");
                                 } )
@@ -334,19 +277,34 @@
             },
         });
 
-        $('#available-time').on('change', function(){
-            var time = $(this).val();
-            $('#form-timeselected').val(time);
+        // $('#available-time').on('change', function(){
+        //     var time = $(this).val();
+        //     $('#form-timeselected').val(time);
+        // });
+
+        function getdiscount(){
+            $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+            }
         });
 
-        $('#mode-of-payment').on('change', function(){
-            var mode = $(this).val();
-            $('#form-modepayment').val(mode);
-        });
-
+        $.ajax({
+                        url:"/discount",
+                        datatype: "json",
+                        success:function(response){
+                            $('#discount').empty();
+                            $('#discount').append('<option value="none" >--select--</option>');
+                            $.each(response.discount, function(index, val){
+                                    $("#discount").append("<option value='"+val.discountcode+"'>"+val.discountname+"</option>");
+                                } );
+                        }
+                    });
+        }
+ 
         $('#services').on('change', function(){
             var id = $(this).val();
-            
+            $('#servicename').val("");
             $.ajaxSetup({
             headers:{
                 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
@@ -358,77 +316,17 @@
                         data:{
                         },
                         success:function(response){
-                             $('#price').val(response.service.price + '.00' );
-                             $('#total-price').val(response.service.price + '.00');
-
-                             //----form----//
-                             $('#form-servicecode').val(id);
-                             $('#form-services').val(response.service.servicename );
-                             $('#form-price').val(response.service.price);
-
+                            $('#servicename').val("");
+                            $('#servicename').val(response.service.servicename );
                         }
                     });
-                    $.ajax({
-                        url:"/discount",
-                        datatype: "json",
-                        success:function(response){
-                            $('#discount').empty();
-                            $('#discount').append('<option value="" >--select--</option>');
-                            $.each(response.discount, function(index, val){
-                                    $("#discount").append("<option value='"+val.discountcode+"'>"+val.discountname+"</option>");
-                                } );
-                        }
-                    });
+                 
         })
-
-        $('#discount').on('change', function(){
-
-            var id = $(this).val();
-            let price = parseInt($('#price').val(), 10);
-
-            if(id.length === 0 ){
-           
-                $('#total-price').val(price);
-                //-----form--------//
-                $('#form-totalprice').val(price);
-            }else{
-                $.ajaxSetup({
-                headers:{
-                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-                }
-                });
-
-                $.ajax({
-                        url:"/getdiscount/"+id,
-                        datatype: "json",
-                        data:{
-                        },
-                        success:function(response)
-                        {   
-                          
-                            var percentage = response.discount.percentage;
-                            let discount = (percentage/100);
-                            let sub_total = price - (price * discount)
-                            $('#total-price').val(sub_total + '.00');
-
-                            //-----form--------//
-
-                            $('#form-discount').val(response.discount.discountname);
-                            $('#form-totalprice').val(sub_total);
-                            
-                        }
-                    })
-            }
-     
-            
-             
-        });
 
         $('.appointment-confirm').on('click', function(){
             var date = $('.date').val();
             var time = $("#available-time").val();
             var services = $('#services').val();
-            var mop = $('#mode-of-payment').val();
             if($('#agree').is(":checked")){
                   if(date.length === 0 ){
                     $(".error").hide();
@@ -444,28 +342,16 @@
                     setTimeout(function() {
                             $(".error").fadeOut(500);
                     }, 3000); 
-                  }else if(services.length === 0){
-                    $(".error").hide();
-                    $('#message-error').text("Please select services");
-                    $(".error").show();
-                    setTimeout(function() {
-                            $(".error").fadeOut(500);
-                    }, 3000); 
-                  }else if(mop.length === 0){
-                    $(".error").hide();
-                    $('#message-error').text("Please select mode of payment");
-                    $(".error").show();
-                    setTimeout(function() {
-                            $(".error").fadeOut(500);
-                    }, 3000); 
-                  }
-                  else{
+                  }else{
+                    $('#form-dateselected, #form-timeselected').val("");
+                    $('#form-dateselected').val($('#date').val());
+                    $('#form-timeselected').val($('#available-time').val());
                     $('#appointment-confirmation').modal('show');
                   }
             }
             else{
                 $(".error").hide();
-                $('#message-error').text("check the fucking checkbox");
+                $('#message-error').text("Please read and accept the terms and condition to proceed.");
                 $(".error").show();
                 setTimeout(function() {
                         $(".error").fadeOut(500);

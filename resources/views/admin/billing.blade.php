@@ -1,5 +1,4 @@
 @extends('layouts.admin_navigation')
-
 @section('content')
 <style>
     label{
@@ -14,137 +13,11 @@
     }
 </style>
     <div class="row m-3">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" style="color: black" id="home-tab" data-bs-toggle="tab" data-bs-target="#addtocart" type="button" role="tab" aria-controls="home" aria-selected="true">Add to cart</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="profile-tab"  style="color: black" data-bs-toggle="tab" data-bs-target="#billing" type="button" role="tab" aria-controls="profile" aria-selected="false">BIlling</button>
-            </li>
-          </ul>
 
-          <div class="tab-content" id="myTabContent">
-
-            {{--Show Add to cart tab--}}
-            <div class="tab-pane fade show active" id="addtocart" role="tabpanel" aria-labelledby="home-tab">
-                <h2 style="margin-top:15px; margin-bottom:10px">Add to cart</h2>
-                        <div class="alert success alert-success" role="alert" style="width:250px; right:25px; display:none;  position:fixed">
-                            <p id="message"></p> 
-                        </div>
-                        <div class="alert error alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed">
-                            <p id="message-error"></p> 
-                        </div>
-                        <div class="loading" style="width:250px; right:25px; display:none; position:fixed">
-                            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        
-                            <div hidden>
-                                <label for="" style="text-align:right">billing no.</label><br>
-                                <input type="text" class="text-center" style="background-color:transparent; text-align:center; width: 100px; " readonly id="getid">
-                            </div>
-                            <form class="row" >
-                
-                            <div class="col-md-6">
-
-                                <label for="">Billing no:</label>
-                                <input type="text" style="width: 460px;" class="addtocart_input" name="billingno"  id="getbillingno" readonly>
-
-                                <label for="">User ID:</label>
-                                <input type="text" style="width: 430px;" class="addtocart_input" id="userid" name="userid" readonly>
-                                <button class="getpatient btn btn-outline-success" type="button" style="border: 1px solid #829460;"><img src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" style="height: 15px ;
-                                    width: 15px ;" id="appointment" alt="" ></button>
-                                  <br>
-                                <label style="margin-top: 5px" for="">Fullname:</label>
-                                <input type="text" style="width: 460px" class="addtocart_input" id="fullname" name="fullname" readonly>
-                             
-                            </div>
-
-                            <div style="margin-top: 1px" class="col-md-6">
-
-                            <label for="">Service: </label>
-                            <input type="text" hidden style="width: 400px" class="addtocart_input servicename" id="servicename" name="servicename" >
-                            <select style="width:470px; height:30px" class="service_input getservice"  name="service"  id="getservice">
-                                <option value="">-- select --</option>
-                                @foreach ($services as $service)
-                                <option value="{{$service->servicecode}}">{{$service->servicename }}</option>
-                                @endforeach
-                            </select>
-                            <br>
-
-                            <label style="margin-top: 8px" for="">Price: </label>
-                            <input type="text" style="width: 490px" class="addtocart_input price" id="price" name="price" readonly>
-
-                            <div class="float-end text-right d-flex justify-content-end" style="margin-bottom: 2%; margin-top:20px">
-                                <button type="button" class="store_addtocart"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; margin-bottom:2%; " >Add to Cart</button>
-                            </div>
-
-                            </div>
-                            </form>
-
-                            <div class="card " style="background:#EDDBC0;border:none;" id="patient">
-                                <div class="data-table" style="padding:0% ">
-                                  <div class="card-body" style="width:100%; min-height:50vh; display: flex; overflow-x: auto;  font-size: 15px; " >
-                                    <table class="table  table-bordered table-striped "  style="background-color: white">
-                                        <thead>
-                                            <tr>
-                                                <th>Patient ID</th>
-                                                <th>Full Name</th>
-                                                <th>Service code</th>
-                                                <th>Service</th>
-                                                <th>Price</th>
-                                                <th>Action</th> 
-                                            </tr>
-                                        </thead>
-                                          <tbody class="patient-error" >
-                                                @if (count($addtocarts)> 0 )
-                                                @foreach ($addtocarts as $addtocart)
-                                                <tr class="overflow-auto">
-                                                    <td>{{$addtocart->user_id}}</td>
-                                                    <td>{{$addtocart->fullname}}</td>
-                                                    <td>{{$addtocart->servicecode}}</td>
-                                                    <td>{{$addtocart->service}}</td>
-                                                    <td>{{$addtocart->price}}</td>
-                                                    <td style="text-align: center;">
-                                                    <button type="button" value="{{$addtocart->id}}" class="delete btn  btn-danger btn-sm">delete</button></td>
-                                                </tr>
-                                                @endforeach
-                                                @else
-                                                <tr>
-                                                    <td colspan="9" style="text-align: center; height:280px ">No Service Found</td>
-                                                  </tr>
-                                                @endif
-                                            </tbody>
-                                         
-                                      </table>
-                                    </div>
-                                    <div class="row">
-                                        <div style="margin-left:20px" class="col">
-                                            {!! $addtocarts->links() !!}
-                                         </div>
-                                         <div id="subtotal" class="subtotal d-flex justify-content-end col " style="margin-bottom:15px; margin-right:20px; justify-content:center">
-                                          <label for="" style="font-weight: 700;Padding-top:2%; font-size:15px;margin-right:10px; justify-content:center">Sub-Total:</label>
-                                          {{-- <input type="text" id="subtotal_value" style="text-align: right;" readonly value="₱ {{number_format("$sum",2)}}" > --}}
-                                          <div class="currency-wrap">
-                                            <span class="currency-code">₱</span>
-                                            <input readonly type="text" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 " placeholder="0.00"  style="background: #D0B894; height:38px" value="{{number_format("$sum",2)}}" />
-                                        </div>
-                                          <button type="button"  class="saveaddtocart" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 180px;height: 40px; margin-left:1%; " >Save</button>
-                                          </div>
-                                    </div>
-                              
-                                   
-                                  </div>
-                               </div>
-                  
-            </div>
+      
 
 {{----------- Billing tab ---------------}}
-            <div class="tab-pane fade" id="billing" role="tabpanel" aria-labelledby="profile-tab">
+
                 <div class="col-md-8 col-md-offset-5">
                     <h2>Billing</h2>
                 </div>
@@ -156,28 +29,36 @@
                   
                             <thead>
                                 <tr>
-                                    <th>Billing no.</th>
+                                    <th>Trans no.</th>
                                     <th >User ID</th>
                                     <th>Fullname</th>
                                     <th>Sub-total</th>
                                     <th>Status</th>
-                                    <th style="width: 200px">Action</th>
+                                    <th style="width: 230px">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="patient-error" >
                                 @if (count($billings)> 0 )
                                 @foreach ($billings as $billing)
                                 <tr class="overflow-auto">
-                                    <td>{{$billing->billing_no}}</td>
-                                    <td>{{$billing->user_id}}</td>
-                                    <td>{{$billing->fullname}}</td>
-                                    <td>{{$billing->total}}</td>
-                                    <td>{{$billing->status}}</td>
+                                    <td style="text-align: center">{{$billing->transno}}</td>
+                                    <td style="text-align: center">{{$billing->user_id}}</td>
+                                    <td style="text-align: center">{{$billing->fullname}}</td>
+                                    <td style="text-align: center">{{$billing->total}}</td>
+                                    <td style="text-align: center">{{$billing->status}}</td>
                       
-                                    <td style="text-align: center;">
-                                        <button type="button" value="{{$billing->billing_no}}" class="payment btn  btn-success btn-sm">Payment</button>
-                                        <a href="/admin/billing/viewBilling/{{$billing->billing_no}}" class="btn btn-primary btn-sm">View</a>
-                                    <button type="button" value="{{$billing->billing_no}}" class="deletebilling btn  btn-danger btn-sm">delete</button></td>
+                                    <td>
+                                        @if ($billing->status == "Pending")
+                                            <button type="button" value="{{$billing->transno}}" class="payment btn  btn-success btn-sm">Pay now</button>
+                                            <a href="/admin/billing/viewBilling/{{$billing->transno}}" class="btn btn-primary btn-sm">View</a>
+                                            {{-- <a href="/admin/billing/editBilling/{{$billing->billing_no}}" class="btn btn-info btn-sm">Edit</a> --}}
+                                            <a href="/admin/billing/editBilling/{{$billing->transno}}" class="btn btn-danger btn-sm">Delete</a>
+                                            {{-- <button type="button" value="{{$billing->billing_no}}" class="deletebilling btn  btn-info btn-sm">Edit</button> --}}
+                                        @else
+                                            <a href="/admin/billing/viewBilling/{{$billing->transno}}" class="btn btn-primary btn-sm">View</a>
+                                            <a href="/admin/billing/editBilling/{{$billing->transno}}" class="btn btn-danger btn-sm">Delete</a>
+                                        @endif
+                              </td>
                                 </tr>
                                 @endforeach
                                 @else
@@ -191,85 +72,11 @@
                         <div style="">
                           {!! $billings->links() !!}
                        </div>
+                          
+             
                       </div>
                    </div>
-            </div>
-          </div>
-        
-
-{{--------------- View patients ---------------------}}
-
-<div class="modal fade viewpatients " id="viewpatients" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-      <div class="modal-content viewbody" style="background: #EDDBC0;">
-  
-        <!-- Modal Header -->
-        <div class="modal-header" style="border-bottom-color: gray">
-          <h4 class="modal-title">Patients</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-  
-      <!-- Modal body -->
-      <div class="modal-body " >
-        <i class="fa fa-search"></i>
-        <input type="text" name="fullname_patient" id="fullname_patient" placeholder="search" style="font-family:Poppins;font-size:1.1vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; margin-bottom:10px"> 
-    <input type="text" hidden class="modal-status" id="modal-status">
-        <div class="patient patient-remove overflow-auto container-fluid" style="height:380px" >
-          <table class="table table-bordered table-striped" >
-  
-              <thead>
-                  <tr>
-                      <th>id</th>
-                      <th>First name</th>
-                      <th>Middle name</th>
-                      <th>Last name</th> 
-                      <th>Address</th>
-                      <th>Gender</th>
-                      <th>Mobile no.</th>
-                      <th>Email</th>
-                      <th>Action</th>
-                  </tr>
-              </thead>
-              <tbody class="nofound" >
-                @if (count($patients) > 0)
-                @foreach ($patients as $user)
-                <tr class="overflow-auto">
-             
-                    <td>{{$user->id}}</td>
-                    <td>{{$user->fname}}</td>
-                    <td>{{$user->mname}}</td>
-                    <td>{{$user->lname}}</td>
-                    <td>{{$user->address}}</td>
-                    <td>{{$user->gender}}</td>
-                    <td>{{$user->mobileno}}</td>
-                    <td>{{$user->email}}</td>
-               
-                    <td>
-                    <button type="button" value="{{$user->id}}" style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " class="select btn2 btn btn-primary ">Select</button>
-                    </td>
-                </tr>
-                @endforeach
-                @else
-                <tr>
-                  <div>
-                    <td colspan="4" style="text-align: center;">no user Found</td>
-                  </div>
-                </tr>
-                @endif
-                 
-              </tbody>
-          </table>
-          <div style="">
-            {!! $patients->links() !!}
-         </div>
-        </div>
-    <div class="modal-footer w-5" style="position:absolute; bottom:1%; width:97% ;border-top-color: gray" >
-      <button type="button" class="  " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
-    </div>
-  </div>
-      </div>
-    </div>
-  </div>
+     
 
 
                        {{-- ------------- PAyment view ---------------------}}
@@ -320,8 +127,8 @@
                            
                                 <input type="text" readonly id="total_price" name="total_price"><br> 
                                 <input hidden type="text" id="totalprice_nosymbol" name="totalprice_nosymbol" >
-                                <label style="margin-top: 10px" for=""><b>Status: </b> </label>
-                                <input type="text" class="view1 rounded" id="status"><br>                               
+                                {{-- <label style="margin-top: 10px" for=""><b>Status: </b> </label>
+                                <input type="text" class="view1 rounded" id="status"><br>                                --}}
                                  
                                 <label style="margin-top: 10px" for=""><b>Mode of payment:</b> </label>
                                 <select name="mode_payment" id="mode_payment">
@@ -373,7 +180,7 @@
             this.value = parseFloat(this.value).toFixed(2);
     });
 
-    get_maxid();
+    
       function message_success(){
         setTimeout(function() {
                             $(".success").show();
@@ -398,22 +205,6 @@
             }
         }
 
-        // ------ get max biling no --------------//
-        function get_maxid(){
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "GET",
-                url: "/admin/billing/getid/",
-                datatype: "json",
-                success: function(response){ 
-                $('#getid, #getbillingno ').val(response.id);
-                }
-            });
-        }
 
         // -------- show patient modal -------------- //
 
@@ -489,14 +280,17 @@
                 datatype: "json",
                 success: function(response){ 
                    
-                                $('#payment_billingno').val(response.data.billing_no);
+                                $('#payment_billingno').val(response.data.transno);
                                 $('#payment_userid').val(response.data.user_id);
                                 $('#payment_fullname').val(response.data.fullname);
                                 $('#compute_subtotal').val(response.data.sub_total); //dito cocompute
                                 $('#payment_subtotal').val( "₱" + response.data.sub_total + ".00");
                                 $('#total_price').val("₱" + response.data.sub_total + ".00");
                                 $('#totalprice_nosymbol').val(response.data.sub_total);
-                                $('#status').val(response.data.status);
+                                $('#payment_discount').val("");
+                                $('#mode_payment').val("");
+                                $('#change').val("")
+                                $('#reference_no').val("")
                                 $('#payment').modal('show');      
                 }
                 
@@ -531,7 +325,16 @@
                     datatype: "json",
                     data: data ,
                     success: function(response){
-                        console.log(response);
+                        $('#payment_billingno').val("");
+                        $('#payment_userid').val("");
+                        $('#payment_fullname').val("");
+                        $('#compute_subtotal').val(""); //dito cocompute
+                        $('#payment_subtotal').val("");
+                        $('#total_price').val("");
+                        $('#totalprice_nosymbol').val("");
+                        $('#status').val("");
+                    $('.billing').load(location.href+' .billing');
+                    $('#payment').modal('hide');     
                     }
 
             });
@@ -551,6 +354,7 @@
                     datatype: "json",
                     data: {billingno : $('#getid').val() },
                     success: function(response){ //return galing sa function sa controller
+                        get_maxid();
                         $('.subtotal').load(location.href+' .subtotal');
                             $('.data-table').load(location.href+' .data-table');
                             $('#userid').val("");
@@ -559,7 +363,7 @@
                             $('#getservice').val("");
                             $('#price').val("");
                             $('.billing').load(location.href+' .billing');
-                    get_maxid();
+                 
                 }
             });
         });
@@ -675,6 +479,7 @@ console.log(id);
                             $('#message').text(response.message);
                             $('.subtotal').load(location.href+' .subtotal');
                             $('.data-table').load(location.href+' .data-table');
+                            $('.billing').load(location.href+' .billing');
                             $('#servicename').val("");
                             $('#getservice').val("");
                             $('#price').val("");
@@ -823,57 +628,57 @@ console.log(id);
           });
         })
 
-        $(document).on('click',  '.pagination a', function(e){
-            e.preventDefault();
-            let status = $('#modal-status').val()
+    //     $(document).on('click',  '.pagination a', function(e){
+    //         e.preventDefault();
+    //         let status = $('#modal-status').val()
 
-            if( status == "show" ){
-              let page = $(this).attr('href').split('patient=')[1]
-              patient(page);
-            }else{
-                let page = $(this).attr('href').split('addtocart=')[1]
-            addtocart(page);
-            }
-        });
+    //         if( status == "show" ){
+    //           let page = $(this).attr('href').split('patient=')[1]
+    //           patient(page);
+    //         }else{
+    //             let page = $(this).attr('href').split('addtocart=')[1]
+    //         addtocart(page);
+    //         }
+    //     });
 
-        function patient(page){
-          let data = page;
-           $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-              $.ajax({
-                type: "GET",  
-                url: "/admin/modal_patient/pagination/paginate-data?patient="+page ,
-                data: {data: data}, 
-                datatype: "json",
-                success: function(response){
-                  console.log(response);
-                $('.patient').html(response);
-                  }
-              });
-        }
+    //     function patient(page){
+    //       let data = page;
+    //        $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         }
+    //         });
+    //           $.ajax({
+    //             type: "GET",  
+    //             url: "/admin/modal_patient/pagination/paginate-data?patient="+page ,
+    //             data: {data: data}, 
+    //             datatype: "json",
+    //             success: function(response){
+    //               console.log(response);
+    //             $('.patient').html(response);
+    //               }
+    //           });
+    //     }
 
-        function addtocart(page){
-            let data = page;
-            console.log(data);
-           $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-           $.ajax({
-                type: "GET", 
-                data: {data:data},  
-                url: "/admin/billing/addtocart/pagination/paginate-data?addtocart="+ page , 
-                datatype: "json",
-                success: function(response){ 
+    //     function addtocart(page){
+    //         let data = page;
+    //         console.log(data);
+    //        $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         }
+    //         });
+    //        $.ajax({
+    //             type: "GET", 
+    //             data: {data:data},  
+    //             url: "/admin/billing/addtocart/pagination/paginate-data?addtocart="+ page , 
+    //             datatype: "json",
+    //             success: function(response){ 
                 
-                $('.data-table').html(response);
-        }
-    });
-        }
+    //             $('.data-table').html(response);
+    //     }
+    // });
+    //     }
 });
 </script>
 

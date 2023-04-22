@@ -10,6 +10,8 @@ use App\Models\Appointment;
 use App\Models\AuditTrail;
 use App\Models\Billing;
 use App\Models\BusinessHour;
+use App\Models\Consultation;
+use App\Models\Consultationfile;
 use App\Models\Discount;
 use App\Models\Guestpage;
 use App\Models\Service;
@@ -27,6 +29,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use PDO;
+use DataTables;
 
 class AdminController extends Controller
 {
@@ -45,19 +48,6 @@ class AdminController extends Controller
         // $malecount = $male->count();
         // $datacount = ['Gender'];
 
-        $gender_records = Appointment::selectRaw('service,
-                COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male",
-                COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female",
-                COUNT(*) as "all"
-        ')->groupBy('service')->get();
-        $service=[];
-        $male=[];
-        $female=[];
-        foreach($gender_records as $gender){
-            $service[]=$gender->service;
-            $male[]=$gender->male;
-            $female[]=$gender->female;
-        }
         // dd($gender_records[0]->service);
         // dd([$service, $male, $female]);
 
@@ -84,217 +74,50 @@ class AdminController extends Controller
 
             $users = User::all()->count();
             $pending = Appointment::where('status', 'Pending')->count();
+            $transaction = Transaction::sum('total');
             $name= auth()->user()->fname;
-            // dd($data);
-            $patient = User::select('fname')->distinct()->get();
-            return view('admin.dashboard', ['services' => $service, 'males' => $male, 'females' =>$female])->with('name', $name)
-                                          ->with('patients', $patient)
+    
+            // $patient = User::select('fname')->distinct()->get();
+            return view('admin.dashboard') ->with('name', $name)
+                                        //   ->with('patients', $patient)
                                           ->with('users', $users)
                                           ->with('pending', $pending)
-                                          ->with('datas', $gender_records)
-                                         ->with('appointments', $appointments)
+                                          ->with('transaction', $transaction)
+                                        //   ->with('datas', $gender_records)
+                                        //  ->with('appointments', $appointments)
                                           ;
     }
 
-    //profile page
-    public function profile(){
-        $patients = DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
-        $secretaries = DB::table('users')->where('usertype', 'secretary')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
-        $admins = DB::table('users')->where('usertype', 'admin')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin'); 
-        return view('admin.profile', compact('patients', 'secretaries', 'admins'));
-    }
 
-    public function store_user(Request $request){
-
-        $validator = Validator::make($request->all(), [
-            "first_name" => ['required'],
-            "mname" => [''],
-            "last_name" => ['required',],
-            "birthday" => ['required'],
-            "address" => ['required'],
-            "gender" => ['required'],
-            "mobile_number" =>'required|numeric',
-            "email" => ['required', 'email', Rule::unique('users', 'email') ],
-            "username" => ['required', 'regex:/\w*$/', 'min:8', Rule::unique('users', 'username')],
-            "password" => 'required|confirmed|min:8',
-            "usertype" => ['required'],
-            "status" => ['required'],
-        ],[
-            'first_name.required' => 'First name is required',
-            'last_name.required' => 'Last name is required',
-            'birthday.required' => 'Birthday is required',
-            'address.required' => 'Address is required',
-            'gender.required' => 'gender is required',
-            'mobile_number.required' => 'Mobile number is required',
-            'email.required' => ' Email is required',
-            'username.required' => 'Username name is required',
-            'password.required' => 'Password is required',
-            'password.confirmed' => 'Password did not match',
-            'usertype.required' => 'Usertype is required',
-            'status.required' => 'status is required',
-          ]);
-
-        
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'=>400,
-                'errors'=> $validator->messages(),
-            ]);
-        }else{
-            $encrypt = bcrypt($request->input('password'));
-            $user = new User();
-            $user->fname = $request->input('first_name');
-            $user->mname = $request->input('mname');
-            $user->lname = $request->input('last_name');
-            $user->birthday = $request->input('birthday');
-            $user->address = $request->input('address');
-            $user->gender = $request->input('gender');
-            $user->mobileno = $request->input('mobile_number');
-            $user->email = $request->input('email');
-            $user->username = $request->input('username');
-            $user->password = $encrypt;
-            $user->status = $request->input('status');
-            $user->usertype = $request->input('usertype');
-            $user->save();
-
-            // $audit_trail = new AuditTrail();
-            // $audit_trail->user_id = Auth::user()->id;
-            // $audit_trail->username = Auth::user()->username;
-            // $audit_trail->activity = 'Create new account ';
-            // $audit_trail->usertype = Auth::user()->usertype;
-
-        // $audit_trail->save();
-        //     return response()->json([
-        //         'status'=>200,
-        //         'message' => 'audit trail',
-        //     ]);
-        }
-      
-    }
-
-    public function update_user($id, Request $request){
-        $validator = Validator::make($request->all(), [
-            "first_name" => ['required'],
-            "last_name" => ['required'],
-            "birthday" => ['required'],
-            "address" => ['required'],
-            "gender" => ['required'],
-            "mobile_number" => ['required', 'min:4'],
-            "email" => ['required', 'email' ],
-            "password" => ['confirmed'],
-            "usertype" => ['required'],
-            "status" => ['required'],
-        ],[
-            'first_name.required' => 'First name is required',
-            'last_name.required' => 'Last name is required',
-            'birthday.required' => 'Birthday is required',
-            'address.required' => 'Address is required',
-            'gender.required' => 'gender is required',
-            'mobile_number.required' => 'Mobile number is required',
-            'email.required' => ' Email is required',
-            'username.required' => 'Username name is required',
-            'password.confirmed' => 'Password did not match',
-            'usertype.required' => 'Usertype is required',
-            'status.required' => 'status is required',
-          ]);
-
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'=>400,
-                'errors'=> $validator->messages(),
-            ]);
-        }else
-        {
-            if($request->input('password') == null){
-                $arrItem = array(
-                    'fname' =>$request->get('first_name'),
-                    'mname' => $request->get('mname'),
-                    'lname' => $request->get('last_name'),
-                    'birthday' => $request->get('birthday'),
-                    'address' => $request->get('address'),
-                    'gender' => $request->get('gender'),
-                    'mobileno' => $request->get('mobile_number'),
-                    'email' => $request->get('email'),
-                    'usertype' => $request->get('usertype'),
-                    'status' => $request->get('status'),
-                );
-                DB::table('users')->where('id', $id)->update($arrItem);
-                return response()->json([
-                    'status'=>200,
-                        'message' => 'discount updated successfully without updated password',
-                    
-                ]);
-
-            }else{
-                 $encrypt = bcrypt($request->input('password'));
-                    $arrItem = array(
-                        'fname' =>$request->get('first_name'),
-                        'mname' => $request->get('mname'),
-                        'lname' => $request->get('last_name'),
-                        'birthday' => $request->get('birthday'),
-                        'address' => $request->get('address'),
-                        'gender' => $request->get('gender'),
-                        'mobileno' => $request->get('mobile_number'),
-                        'email' => $request->get('email'),
-                        'password' => $encrypt,
-                        'usertype' => $request->get('usertype'),
-                        'status' => $request->get('status'),
-                    );
-                    DB::table('users')->where('id', $id)->update($arrItem);
-                    return response()->json([
-                        'status'=>200,
-                        'message' => 'discount updated successfully with  updated password',
-                        
-                    ]);
-               
-            }
-        }
-    }
-
-    //delete user 
-    public function delete_user($id)
-    {
-        DB::table('users')->where('id', $id)->delete();
-        return response()->json([
-            'status'=>200,
-                'message' => 'deleted successfully',
-        ]);
-    }
+    
+//     $gender_records = Appointment::selectRaw('service,
+//     COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male",
+//     COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female",
+//     COUNT(*) as "all"
+// ')->groupBy('service')->get();
+// $service=[];
+// $male=[];
+// $female=[];
+// foreach($gender_records as $gender){
+// $service[]=$gender->service;
+// $male[]=$gender->male;
+// $female[]=$gender->female;
+// }
 
 
-    //show user data in edit page
-    public function edit_user($id){
-        $user = User::where('id', $id )->get();
-           if($user){
-            return response()->json([
-                'status'=>200,
-                'user' => $user,
-            ]);
-           }else{
-            return response()->json([
-                'status'=>404,
-                'message' => 'discount not found',
-            ]);
-           }
-    }
+// $users = User::all()->count();
+// $pending = Appointment::where('status', 'Pending')->count();
+// $name= auth()->user()->fname;
+// // dd($data);
+// $patient = User::select('fname')->distinct()->get();
+// return view('admin.dashboard', ['services' => $service, 'males' => $male, 'females' =>$female])->with('name', $name)
+//                               ->with('patients', $patient)
+//                               ->with('users', $users)
+//                               ->with('pending', $pending)
+//                               ->with('datas', $gender_records)
+//                              ->with('appointments', $appointments)
+//                               ;
 
-    public function profile_paginate(Request $request){
-        $usertype = $request->input('usertypetable');
-        $patients = DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
-        $secretaries = DB::table('users')->where('usertype', 'secretary')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
-        $admins = DB::table('users')->where('usertype', 'admin')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin');
-        
-        if($usertype == "patient"){
-            return view('pagination.pagination_patient', compact('patients'))->render();
-        }elseif ($usertype == "secretary") {
-            return view('pagination.pagination_secretary', compact('secretaries'))->render();
-        }else{
-            return view('pagination.pagination_admin', compact('admins' ))->render();
-        }
-       
-    }
 
 
     //------------------- discount ---------------------------//
@@ -508,93 +331,29 @@ public function fetch_service(){
     }
 
     // ----------------------------- Appointment -------------------------------- //
-    public function appointment_show(){
-        $female = Appointment::where('service', 'Diagnostic')->whereHas('user' , function($query){
-            $query->where('gender', 'Female');
-        })->with('user')->get()->count(); 
-        $male = Appointment::where('service', 'Diagnostic')->whereHas('user' , function($query){
-            $query->where('gender', 'Male');
-        })->with('user')->get()->count(); 
-        $total =     $male = Appointment::select('service')->whereHas('user' , function($query){
-            $query->where('gender', 'Male');
-        })->get()->count(); 
-        $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
-        $day_array = [];
-        foreach($days as $day){
-            $day_array[] = date('w', strtotime($day->day));
-        }
-        $day = BusinessHour::select('day', 'off')->distinct()->get();
-        $appointments = DB::table('appointments')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'appointment');
-        $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
-        $services = Service::all();
-        return view('admin.appointment', compact('appointments', 'patients', 'services', 'day', 'days', ))->with('day_array', $day_array);
-    }
 
-    public function store_appointment(Request $request){
 
-        $validator = Validator::make($request->all(), [
-            'userid'=>'required',
-            'date' => 'required',
-            'time' => 'required',
-            'service' => 'required',
-        ],[
-            'userid.required'=>'Patient information is required',
-            'date.required' => 'Appointment date is required',
-            'time.required' => 'Appointment time is required',
-            'service.required' => 'service is required', 
-        ]);
 
-        if($validator->fails()){
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->messages(),
-            ]);
-        }else{
-            $input = $request->all();
-           $time = Carbon::createFromFormat('h:i A', $input['time'])->format('H:i:s') ;
-            $appointment = new Appointment();
-            $appointment->user_id = $input['userid'];
-            $appointment->fullname = $input['fullname'];
-            $appointment->service = $input['service'];
-            $appointment->date =  $input['date'];
-            $appointment->time = $time;
-            $appointment->price =  $input['price'];
-            $appointment->status = "Booked";
-            $appointment->save();
-
-            //send to patient
-            // Mail::to('ronnelardales2192@gmail.com')->send(new patientbook);
-      
-            return response()->json([
-                'status' => 200,
-                'message' => "Created Successfully",
-                'time' => $time,
-          
-            ]);
-        }
-
- 
-    }
 
     public function appointment_change_status($id, Request $request){
 
-    if($request->status == "Booked"){
-        $upadted = DB::table('appointments')->where('id', $id)->update(['status' =>  'Booked']);
+    if($request->status == "Success"){
+        $upadted = DB::table('appointments')->where('id', $id)->update(['status' =>  'success']);
         // Mail::to('ronnelardales2192@gmail.com')->send(new bookconfirmation);
         return response()->json([
         'staus' => $id,
-]);
- }elseif($request->status == "Cancelled"){
-    $upadted = DB::table('appointments')->where('id', $id)->update(['status' =>  'Cancelled']);
-    // Mail::to('ronnelardales2192@gmail.com')->send(new Cancelappointment);
-    return response()->json([
-    'staus' => $id,
-]);
- }else{
-    return response()->json([
+    ]);
+    }elseif($request->status == "Cancel"){
+        $upadted = DB::table('appointments')->where('id', $id)->update(['status' =>  'cancel']);
+        // Mail::to('ronnelardales2192@gmail.com')->send(new Cancelappointment);
+        return response()->json([
         'staus' => $id,
     ]);
- }
+    }else{
+        return response()->json([
+            'staus' => $id,
+        ]);
+    }
 
     }
 
@@ -669,33 +428,25 @@ public function fetch_service(){
         DB::table('appointments')->where('id', $id)->delete();
     }
 
-    public function appointment_status($id, Request $request){
-        $appointment = Appointment::where('id', $id)->first();
-        
-        
-        if($request->status == "Booked"){
-              if($appointment->status === "Booked" ){
-            return response()->json(['status' => 400,
-                                    'data' => 'tangina',
-                                                    ]);
-        }else{
-            return response()->json(['status' => 300,  'data' => $appointment->status,]);
-        }
-        }else{
-            if($appointment->status === "Cancelled" ){
-                return response()->json(['status' => 400  ]);
-            }else{
-                return response()->json(['status' => 300]);
-            }
-        }
-    }
+
 
 
   //-------------------------------- transaction --------------------------------//
     public function view_transaction(){
-        $appointment = Appointment::all();
-        $transaction = DB::table('transactions')->paginate(2) ;
-        return view('admin.transaction', [ 'appointments'=> $appointment, 'transactions' => $transaction]);
+
+        $addtocarts =  DB::table('addtocartservices')->orderBy('created_at', 'desc')->paginate(4, ['*'], 'addtocart');
+        $service = Service::all();
+        $sum = Addtocartservice::sum('price');
+        $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
+        return view('admin.transaction', [
+                                        'services' => $service, 
+                                        'addtocarts'=> $addtocarts, 
+                                        'sum'=>$sum,
+                                        'patients'=>$patients, 
+                                      ]);
+        // $appointment = Appointment::all();
+        // $transaction = DB::table('transactions')->paginate(2) ;
+        // return view('admin.transaction', [ 'appointments'=> $appointment, 'transactions' => $transaction]);
     }
 
     public function store_transaction(Request $request){
@@ -874,48 +625,18 @@ public function fetch_service(){
     // // dd($file);
     // }
 
-    public function getappointment_user($id){
-        $appointment = Appointment::where('id', $id)->get();
-        $fullname = Appointment::select( DB::raw("CONCAT(date, ' ', time) as appointmentDate"))->where('id', $id)->get();
-       return response()->json([
-
-        'users' => $appointment,
-        'appointment' => $fullname,
-       ]);
-    }
-
-    public function delete_transaction($id){
-        $transaction = Transaction::where('id', $id)->first();
-        $path = public_path('consultation/'.$transaction->file) ;
-        DB::table('transactions')->where('id', $id)->delete();
-        if(File::exists($path)){
-                File::delete($path);
-            }
-        return response()->json([
-            'status'=>200,
-                'message' => 'deleted successfully',
-                // 'filename' => $filename->getClientOriginalExtension(),
-            
-        ]);
-    }
 
 
     //--------------------------- billing ----------------------------//
     public function index_billing(){
-        $addtocarts =  DB::table('addtocartservices')->orderBy('created_at', 'desc')->paginate(4, ['*'], 'addtocart');
-        $service = Service::all();
-        $sum = Addtocartservice::sum('price');
+       $billing =  DB::table('transactions')->distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc')->paginate(10, ['*'], 'addtocart');
         $discount = Discount::all();
-        // $billing = DB::table('billings')->select('billing_no' , DB::raw('SUM(price) as sub_total'))->groupBy('billing_no')->get(); 
-        $billing = Billing::distinct()->select('billing_no', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('created_at', 'desc')->paginate(10, ['*'], 'billing');
-        $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
+        // $billing = Transaction::distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc')->get();
+
         return view('admin.billing', [
-                                        'services' => $service, 
-                                        'addtocarts'=> $addtocarts, 
-                                        'sum'=>$sum, 
                                         'discounts' =>$discount,
                                         'billings' => $billing,
-                                        'patients' => $patients]);
+                                      ]);
     }
 
     public function get_service($id){
@@ -928,38 +649,59 @@ public function fetch_service(){
     }
 
     public function get_id(){
-        $appointment = Billing::max('billing_no') + 1;
+        $appointment = Transaction::max('transno');
+        $total = intval( $appointment) + 1;
         return response()->json([
-            'id' => $appointment,
+            'id' => $total ,
            ]);
     }
 
     public function store_addtocart(Request $request){
-        $input = $request->all();
-        $addtocartexist = Addtocartservice::where('servicecode', $input['servicecode'])->first();
-       
+        $validator = Validator::make($request->all(), [
+            'fullname'=>'required',
+            'servicecode'=>'required',
+            'price'=>'required',
+        ],[
+            'fullname.required'=>'Please select user',
+            'servicecode.required'=>'Service is required',
+            'price.required'=>'Price is required',
+        ]);
 
-        if($addtocartexist){
+        if($validator->fails())
+        {
             return response()->json([
-                'status' => 400,
-                'message' => 'The service is already added',
+                'status'=>401,
+                'errors'=> $validator->messages(),
             ]);
+
         }else{
-            $addtocart = new Addtocartservice();
-            $addtocart->billing_no = $input['billingno'];
-            $addtocart->user_id = $input['userid'];
-            $addtocart->fullname = $input['fullname'];
-            $addtocart->servicecode = $input['servicecode'];
-            $addtocart->service = $input['service'];
-            $addtocart->price = $input['price'];
-            $addtocart->save();
-    
-            return response()->json([
-                'status' => 200,
-                'message' => 'added successfully',
-                'data' => $addtocart,
-            ]);
+                    $input = $request->all();
+                    $addtocartexist = Addtocartservice::where('servicecode', $input['servicecode'])->first();
+                
+                    if($addtocartexist){
+                        return response()->json([
+                            'status' => 400,
+                            'message' => 'The service is already added',
+                        ]);
+                    }else{
+                        $addtocart = new Addtocartservice();
+                        $addtocart->transno = $input['transno'];
+                        $addtocart->user_id = $input['userid'];
+                        $addtocart->fullname = $input['fullname'];
+                        $addtocart->servicecode = $input['servicecode'];
+                        $addtocart->service = $input['service'];
+                        $addtocart->price = $input['price'];
+                        $addtocart->save();
+                
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'Added successfully',
+                            'data' => $addtocart,
+                        ]);
+                    }
         }
+        
+   
     }
     public function store_billing(Request $request){
         $sum = Addtocartservice::sum('price');
@@ -969,8 +711,8 @@ public function fetch_service(){
 
         foreach ($addtocart as $data) {
 
-            $billing = new Billing();
-            $billing->billing_no = $data->billing_no;
+            $billing = new Transaction();
+            $billing->transno = $data->transno;
             $billing->user_id = $data->user_id;
             $billing->fullname = $data->fullname;
             $billing->servicecode = $data->servicecode;
@@ -991,6 +733,7 @@ public function fetch_service(){
     }
 
     public function update_payment($id ,Request $request){
+
     $validator = Validator::make($request->all(), [
 
         'mode_of_payment' => 'required'
@@ -1005,8 +748,7 @@ public function fetch_service(){
         ]);
      }
      $input = $request->all();
-
-        Billing::where('billing_no', $id)->update([
+        Transaction::where('transno', $id)->update([
                                                     'discount' => $input['discountname'],
                                                     'total' => $input['total'],
                                                     'mode_of_payment' => $input['mode_of_payment'],
@@ -1018,10 +760,58 @@ public function fetch_service(){
     return response()->json('updated successfully');
     }
 
+
+    public function delete_transaction($id){
+
+        Addtocartservice::where('id', $id)->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Deleted successfully',
+        ]);
+
+    }
+
     public function view_billing($id){
+        $infos = Transaction::with('user')->where('transno', $id)->first();
+
+        $services = Transaction::where('transno', $id)->get();
+      
+        return view('admin.viewBilling', compact('services', 'infos'));
+    }
+    public function edit_billing($id){
         $infos = Billing::with('user')->where('billing_no', $id)->first();
         $services = Billing::where('billing_no', $id)->get();
-        return view('admin.viewBilling', compact('services', 'infos'));
+
+        //
+        
+        // $sum = Addtocartservice::sum('price');
+        // // $insert = Addtocartservice::where('billing_no', $request->billingno)->update(['sub_total' => $sum])
+
+        // $addtocart = Addtocartservice::all();
+
+        // foreach ($addtocart as $data) {
+
+        //     $billing = new Billing();
+        //     $billing->billing_no = $data->billing_no;
+        //     $billing->user_id = $data->user_id;
+        //     $billing->fullname = $data->fullname;
+        //     $billing->servicecode = $data->servicecode;
+        //     $billing->service = $data->service;
+        //     $billing->price = $data->price;
+        //     $billing->sub_total = $sum;
+        //     $billing->total = $sum;
+        //     $billing->status = 'Pending';
+        //     $billing->save();
+        // }
+        // Addtocartservice::truncate();  
+
+        // return response()->json([
+        //    'status' => 200,
+        //    'message' => 'Saved successfully',
+        // ]);
+
+        return view('admin.editBilling', compact('services', 'infos'));
     }
 
     public function deleteall_addtocart(){
@@ -1042,7 +832,7 @@ public function fetch_service(){
     }
 
     public function addtocart_getalldata($id){
-    $billing = Billing::where('billing_no', $id)->first();
+    $billing = Transaction::where('transno', $id)->first();
 
     return response()->json(['data' => $billing]);
     // if($addtocart == 0){
@@ -1080,16 +870,70 @@ public function index_discount(){
 
 
 //----------------------quueing ------------------------//
- public function view_queuing(){
-    $appointments =  DB::table('appointments')->where('status', 'Booked')->whereDate('date', '>', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
-    ->orderBy('date', 'asc')->paginate(5, ['*'], 'queuing');
-   
+ public function view_queuing(Request $request){
 
-           
-            
-    // $appointments = Appointment::where('status', 'Booked')->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
-    return view('admin.queuing', compact('appointments'));
+    if(Auth::user()->usertype == 'admin'){
+        if ($request->ajax()) {
+            $data = DB::table('appointments')->whereDate('date', '=', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
+            ->orderBy('time', 'asc');
+            return Datatables::of($data)
+            ->addColumn('time', function ($event) {
+                // Convert the start_time to a Carbon instance
+                $time = Carbon::parse($event->time);
+    
+                // Format the time as desired, e.g. "h:i A" for 12-hour time format
+                return $time->format('h:i A');
+            })
+            ->addColumn('date', function ($event) {
+                // Convert the start_time to a Carbon instance
+                $date = Carbon::parse($event->date);
+    
+                // Format the time as desired, e.g. "h:i A" for 12-hour time format
+                return $date->format('M d, Y');
+            })
+                    ->make(true);
+        }
+        return view('admin.queuing');
+
+    }else{
+
+        //secretary side
+
+    }
+
  }
+
+ public function upcoming_queuing(Request $request){
+    if(Auth::user()->usertype == 'admin'){
+        if ($request->ajax()) {
+            $data = DB::table('appointments')->whereDate('date', '>', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
+            ->orderBy('date', 'asc');
+            return Datatables::of($data)
+            ->addColumn('time', function ($event) {
+                // Convert the start_time to a Carbon instance
+                $time = Carbon::parse($event->time);
+    
+                // Format the time as desired, e.g. "h:i A" for 12-hour time format
+                return $time->format('h:i A');
+            })
+            ->addColumn('date', function ($event) {
+                // Convert the start_time to a Carbon instance
+                $date = Carbon::parse($event->date);
+    
+                // Format the time as desired, e.g. "h:i A" for 12-hour time format
+                return $date->format('M d, Y');
+            })
+                    ->make(true);
+        }
+        return view('secretary.queuing');
+
+    }else{
+
+        //secretary side
+
+    }
+ }
+
 
  // ---------------- business hours ---------------------------//
  public function show_businesshours(){
@@ -1168,7 +1012,7 @@ public function store_businesshours(Request $request){
  {
     $validator = Validator::make($request->all(), [
         // "content" => 'bail|required',
-        'image' => 'bail|mimes:img,jpg,png|max:3000'
+        'image' => 'c|mimes:img,jpg,png|max:3000'
         ],[
             'image.mimes'=>'the file must be a image',
             ])->stopOnFirstFailure(true);
@@ -1208,4 +1052,319 @@ public function store_businesshours(Request $request){
     }
 
  }
+
+
+ //------------consultation --------------------------------//
+ public function index_consultation(Request $request){
+    if ($request->ajax()) {
+        $data = DB::table('consultations')->select('user_id', 'fullname', 'age' ,'gender' )->oldest('created_at')->distinct()->orderby('created_at','desc');
+        return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+
+                    $btn = ' <a href="/admin/consultation/viewrecords/' . $row->user_id . '" class=" btn btn-sm btn-primary">View</a>';          
+                        return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+    }
+    return view('admin.consultation.index');
+ }
+
+ public function index_consultation_appointment_show(Request $request){
+    
+    // dd($data);
+    if ($request->ajax()) {
+        $data = DB::table('appointments')->where('status', 'success')->orderby('created_at', 'desc');
+        return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('time', function ($event) {
+                    // Convert the start_time to a Carbon instance
+                    $time = Carbon::parse($event->time);
+        
+                    // Format the time as desired, e.g. "h:i A" for 12-hour time format
+                    return $time->format('h:i A');
+                })
+                ->addColumn('date', function ($event) {
+                    // Convert the start_time to a Carbon instance
+                    $date = Carbon::parse($event->date);
+        
+                    // Format the time as desired, e.g. "h:i A" for 12-hour time format
+                    return $date->format('M d, Y');
+                })
+             
+                ->addColumn('action', function($row){
+                    $btn = '<button style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 30px; " class=" select btn btn-sm btn-danger" id="select"  data-id="' . $row->id . '">Select</button>';         
+                        return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+    }
+
+    return view('admin.consultation.create');
+ }
+
+ public function create_consultation(){
+    $services = Service::all();
+
+    
+    return view('admin.consultation.create', compact('services'));
+ }
+
+ public function get_consultation_appointment($id){
+    $appointment = Appointment::with('user')->where('id', $id)->first();
+    return response()->json(['appointment' => $appointment,
+                              'gender' => $appointment->user->gender,
+                              'age' => $appointment->user->age,
+                                        ] );
+ }
+
+ public function consultation_store(Request $request){
+
+    $validator = Validator::make($request->all(), [
+        "appoint_id" => ['required'],
+        "service" => ['required'],
+        ],[
+            'appoint_id.required' => 'Please select patient appointment',
+            'service.required' => 'please insert service',
+            ])->stopOnFirstFailure(true);
+
+     if($validator->fails()) {
+        
+        return Redirect::back()->withErrors($validator);
+    }else{
+        $input = $request->all();
+    
+        $date = Carbon::createFromFormat('m/d/Y',$input['date'])->format('Y-m-d');
+        $time = Carbon::createFromFormat('h:i A', $input['time'])->format('H:i:s');
+        $consultation = new Consultation();
+        $consultation->appointment_id = $input['appoint_id'];
+        $consultation->user_id = $input['userid'];
+        $consultation->fullname = $input['fullname'];
+        $consultation->gender = $input['gender'];
+        $consultation->age = $input['age'];
+        $consultation->date = $date;
+        $consultation->time = $time;
+        $consultation->service = $input['service'];
+        $consultation->behavioral_observation = $input['observation'];
+        $consultation->brief_summary_encounter = $input['summary'];
+        $consultation->clinical_impression = $input['impression'];
+        $consultation->treatment_given = $input['treatment'];
+        $consultation->recommendation = $input['recommendation'];
+        $consultation->save();
+    }
+ }
+
+ public function consultation_view_records($id, Request $request){
+    $userinfo = User::where('id', $id)->first();
+    $consultations =  DB::table('consultations')->where('user_id', $id)->orderby('created_at', 'desc')->get();
+    $last = Consultation::where('user_id', $id)->latest()->first();
+
+
+    return view('admin.consultation.patienthistory', compact('userinfo', 'consultations', 'last'));
+ }
+
+ public function consultation_view($id, $user_id){
+
+    $userinfo = User::where('id', $user_id)->first();
+    $last = Consultation::where('user_id', $user_id)->latest()->first();
+    $consultations = Consultation::where('id', $id)->first();
+
+    return view('admin.consultation.view', compact('userinfo', 'consultations', 'last'));
+ }
+
+ 
+ public function consultation_edit($id, $user_id){
+
+    $userinfo = User::where('id', $user_id)->first();
+    $last = Consultation::where('user_id', $user_id)->latest()->first();
+    $consultations = Consultation::where('id', $id)->first();
+    return view('admin.consultation.edit', compact('userinfo', 'consultations', 'last'));
+ }
+
+ public function consultation_update($id, Request $request){
+    
+
+
+    $consultation = Consultation::where('id', $id)->update([ 'behavioral_observation' => $request->input('observation') ?? 'n/a',
+                                                             'brief_summary_encounter' => $request->input('summary') ?? 'n/a',
+                                                             'clinical_impression' => $request->input('impression') ?? 'n/a' ,
+                                                             'treatment_given' => $request->input('treatment') ?? 'n/a' ,
+                                                             'recommendation' => $request->input('recommendation') ?? 'n/a' ,
+                                                                ]);
+
+
+    return redirect('/admin/consultation/viewrecords/'. $request->input('user_id'));                                                            
+ }
+
+ public function index_document(Request $request) {
+    if ($request->ajax()) {
+        $data = DB::table('consultationfiles')->orderby('created_at','desc');
+        return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $btn = '<button class="view btn btn-sm btn-primary" data-id="' . $row->id . '">View</button>';
+                    $btn = $btn.'<button class="edit btn btn-sm btn-primary" style="margin-left: 5px; margin-right: 5px;" data-id="' . $row->id . '">Edit</button>';
+                    $btn = $btn.'<button class="delete btn btn-sm btn-danger" data-id="' . $row->id . '">Delete</button>';
+                    $size = '<div style="width: 200px">' . $btn . '</div>';                
+                        return $size;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+    }
+    return view('admin.document');
+ }
+
+ public function document_show_appointment(Request $request){
+       // dd($data);
+       if ($request->ajax()) {
+        $data = DB::table('appointments')->where('status', 'success')->orderby('created_at', 'desc');
+        return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('time', function ($event) {
+                    // Convert the start_time to a Carbon instance
+                    $time = Carbon::parse($event->time);
+        
+                    // Format the time as desired, e.g. "h:i A" for 12-hour time format
+                    return $time->format('h:i A');
+                })
+                ->addColumn('date', function ($event) {
+                    // Convert the start_time to a Carbon instance
+                    $date = Carbon::parse($event->date);
+        
+                    // Format the time as desired, e.g. "h:i A" for 12-hour time format
+                    return $date->format('M d, Y');
+                })->setColumnStyle([
+                    'time' => 'width: 150px;',
+                    'date' => 'width: 200px;',
+                ])
+                ->addColumn('action', function($row){
+                    $btn = '<button style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 30px; " class=" select btn  " id="select"  data-id="' . $row->id . '">Select</button>';   
+                    $size = '<div style="width: 150px">' . $btn . '</div>';          
+                        return $size;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+    }
+    
+ }
+
+ public function store_document(Request $request){
+
+
+    $validator = Validator::make($request->all(), [
+        'fullname'=>'required',
+        'pdf' => 'mimes:pdf|max:3000|required',
+    ],[
+        'pdf.mimes'=>'the file must be a pdf',
+        'pdf.required' => 'pdf file is required',
+        'fullname.required' => 'Please select an appointment',
+    ]);
+
+    if($validator->fails())
+    {
+        return response()->json([
+            'status'=>400,
+            'errors'=> $validator->messages(),
+        ]);
+
+    }else{
+            $input = $request->all();
+            $filename = date('YmdHis'). '.' . $input['pdf']->getClientOriginalExtension();
+            $input['pdf']->move(public_path('consultation/'), $filename);
+            $input['pdf'] = $filename;
+
+            $date = Carbon::createFromFormat('m/d/Y', $input['date'])->format('Y-m-d');
+            $documents = new Consultationfile();
+            $documents->appointment_id = $input['appointment_id'];
+            $documents->appointment_date = $date;
+            $documents->user_id = $input['user_id'];
+            $documents->fullname = $input['fullname'];
+            $documents->filename = $input['pdf'];
+            $documents->note = $input['note'];
+            $documents->save();
+        
+            return response()->json([
+               'status' =>'success',
+                'data' => $documents,
+            ]);
+    }
+ }
+
+    public function edit_document($id){
+        $document = Consultationfile::where('id', $id)->first();
+        return response()->json([
+            'document' => $document,
+        ]);
+    }
+
+    public function update_document($id, Request $request){
+
+        
+
+        $validator = Validator::make($request->all(), [
+                    'pdf' => 'mimes:pdf|max:3000',
+        ],[
+
+                    'pdf.mimes'=>'the file must be a pdf',
+        ]);
+    
+        if($validator->fails()){
+                return response()->json([
+                    'status'=>400,
+                    'errors'=> $validator->messages(),
+                ]);
+            }else{
+                    $input = $request->all();
+                    $document = Consultationfile::where('id', $id)->first();
+                    $path = public_path('consultation/'.$document->filename) ;
+                  
+
+                    if($document){
+                        $document->note = $input['note'];
+                        // return response()->json($document);
+                            if($request->file('pdf')){
+                         
+                                    if(File::exists($path)){
+                                        // return response()->json('file exist');
+                                        File::delete($path);
+                                    }
+                                    $filename = date('YmdHis'). '.' . $input['pdf']->getClientOriginalExtension();
+                                    $input['pdf']->move(public_path('consultation/'), $filename);
+                                    $input['pdf'] = $filename;
+                                    $document->filename = $filename;
+    
+                            }
+                            
+                            $document->save();
+                            return response()->json([
+                                    'status'=> 200,
+                                    'message'=> 'updated successfully',
+                            ]);
+                            
+                    }else{
+                            return response()->json([
+                                    'status'=>404,
+                                    'errors'=> 'no file found',
+                                ]);
+                    }
+            }
+
+        }
+
+        public function delete_document($id){
+            $document = Consultationfile::where('id', $id)->first();
+            $path = public_path('consultation/'.$document->filename) ;
+            DB::table('consultationfiles')->where('id', $id)->delete();
+            if(File::exists($path)){
+                    File::delete($path);
+                }
+            return response()->json([
+                'status'=>200,
+                    'message' => 'Deleted successfully',
+                
+            ]);
+        }
+
+
 }
