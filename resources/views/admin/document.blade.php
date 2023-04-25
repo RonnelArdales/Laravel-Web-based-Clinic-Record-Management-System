@@ -60,7 +60,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content" style="background: #EDDBC0;">
         <div class="modal-header" style="border-bottom-color: gray">
-          <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">New document</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Create document</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -127,9 +127,9 @@
                     </div>
               
                     <!-- Modal body -->
-                    <div class="modal-body " >
-                      <div class="patient patient-remove overflow-auto " style="height:380px" >
-                        <table class="table table-bordered appointment table-striped"  style="background-color: white; width:100%" >
+                           <div class="modal-body " >
+          <div class="patient patient-remove overflow-auto container-fluid" style="height:380px" >
+            <table class="table table-bordered appointment table-striped"  style="background-color: white; width:100%" >
                 
                             <thead>
                                 <tr>

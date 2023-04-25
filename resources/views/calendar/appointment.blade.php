@@ -128,7 +128,7 @@
         </div>
         <div class="modal-footer" style="border-top-color: gray">
           <button type="button" class=" close " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
-          <form action="/patient/billing/payment" method="get">
+          <form action="/patient/billing/payment" method="GET">
             @csrf
             <input type="text" hidden name="date" id="form-dateselected">
             <input type="text" hidden name="time"id="form-timeselected">
@@ -257,6 +257,7 @@
                         },
                         success:function(response)
                         {   
+                            $('#date').val("");
                             $('#available-time').empty()
                             $('#available-time').append('<option value="0" disabled selected></option>')
                             if(response.status == "405"){
@@ -267,6 +268,7 @@
                             }, 3000);
                             
                             }else{
+                            
                                 $('#date').val(response.date);
                                 $.each(response.available_time, function(index, val){ 
                                     $("#available-time").append("<option value='"+val+"'>"+val+"</option>");

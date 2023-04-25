@@ -74,8 +74,8 @@
             </select> --}}
        
             <br>
-            <label style="margin-top: 5px" for="">Primary diagnosis:</label>
-                <input type="text" style="width: 410px" class="addtocart_input" value="eme" id="findings" name="">
+            {{-- <label style="margin-top: 5px" for="">Primary diagnosis:</label>
+                <input type="text" style="width: 410px" class="addtocart_input" value="eme" id="findings" name=""> --}}
             </div>
         </div>
            
@@ -102,43 +102,46 @@
             </div>
 
         </form>
-<div class="modal fade viewappointments " id="viewappointments" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-      <div class="modal-content viewbody" style="background: #EDDBC0;">
-  
-        <!-- Modal Header -->
-        <div class="modal-header" style="border-bottom-color: gray">
-          <h4 class="modal-title">Appointments</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-  
-        <!-- Modal body -->
-        <div class="modal-body " >
-          <div class="patient patient-remove overflow-auto container-fluid" style="height:380px" >
-            <table class="table table-bordered appointment table-striped"  style="background-color: white; width:100%" >
-    
-                <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>fullname</th>
-                        <th>date</th>
-                        <th>time</th> 
-                        <th style="width: 55px">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="nofound" >
-                
-                </tbody>
-            </table>
-       
+
+
+        <div class="modal fade viewappointments " id="viewappointments" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-xl ">
+            <div class="modal-content viewbody" style="background: #EDDBC0;">
+        
+              <!-- Modal Header -->
+              <div class="modal-header" style="border-bottom-color: gray">
+                <h4 class="modal-title">Appointments</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+        
+              <!-- Modal body -->
+                     <div class="modal-body " >
+    <div class="patient patient-remove overflow-auto container-fluid" style="height:380px" >
+      <table class="table table-bordered appointments table-striped"  style="background-color: white; width:100%" >
+          
+                      <thead>
+                          <tr>
+                              <th>id</th>
+                              <th>fullname</th>
+                              <th>date</th>
+                              <th>time</th> 
+                              <th >Action</th>
+                          </tr>
+                      </thead>
+                      <tbody class="nofound" >
+                      
+                      </tbody>
+                  </table>
+             
+                </div>
+            <div class="modal-footer w-5" style="position:absolute; bottom:1%; width:97% ;border-top-color: gray" >
+              <button type="button" class="  " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
+            </div>
           </div>
-      <div class="modal-footer w-5" style="position:absolute; bottom:1%; width:97% ;border-top-color: gray" >
-        <button type="button" class="  " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-      </div>
-    </div>
-  </div>
+            </div>
+          </div>
+        </div>
+        
     </div>
                    
 
@@ -155,28 +158,29 @@
                     $('#viewappointments').modal('show');
                   })     
 
-                  var appointment = $('.appointment').DataTable({
-                        processing: true,
-                        serverSide: true,
-                        ajax: "/admin/consultation/show_appointment",
-                        dom: 'frtp',
-                        pageLength: 10,
-                        responsive: true,
-                            columns: [
-                          {data: 'id', name: 'id' , orderable: false, searchable: false},
-                        //   {data: 'user_id', name: 'user_id' , orderable: false, searchable: false},
+                  $('#viewappointments').on('shown.bs.modal', function() {
+                $('.appointments').DataTable({
+                "ajax": "/admin/consultation/show_appointment",
+                processing: true,
+                serverSide: true,
+                dom: 'frtp',
+                pageLength: 6,
+                responsive: true,
+                "columns": [
+                  {data: 'id', name: 'id' , orderable: false, searchable: false},
                           {data: 'fullname', name: 'fullname' , orderable: false},
                           {data: 'date', name: 'date' , orderable: false, searchable: false},
                           {data: 'time', name: 'time' , orderable: false, searchable: false},
-                          {width: "10%", data: 'action', name: 'action', orderable: false, searchable: false},
-                            ]
-                    });
+                          { width: "10%",data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+          });
 
                     $('.viewappointments').on('hidden.bs.modal', function () {
                         appointment.search('').draw();
                         });
 
-                        $('.appointment').on('click', '.select', function(e) {
+                        $('.appointments').on('click', '.select', function(e) {
                         e.preventDefault();
                         var id = $(this).data('id');
                             

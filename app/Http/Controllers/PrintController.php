@@ -112,8 +112,8 @@ class PrintController extends Controller
     }
 
     public function print_billing(Request $request){
-        $billings = Billing::all();
-        $pdf = Pdf::loadView('print.billing', compact('billings'));
+        $billings = Transaction::all();
+        $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
         return $pdf->stream('billing.pdf');
         
     }

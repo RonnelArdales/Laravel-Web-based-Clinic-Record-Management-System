@@ -39,6 +39,37 @@
     margin-right:20px
 
   } */
+
+  /* Default font sizes */
+/* body {
+  font-size: 16px;
+}
+
+h1 {
+  font-size: 32px;
+} */
+
+/* Media query for smaller screens */
+/* @media only screen and (max-width: 767px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+} */
+
+/* Media query for larger screens */
+/* @media only screen and (min-width: 1200px) {
+  body {
+    font-size: 18px;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
+} */
     body{
         margin: 0%;
         padding: 0%;
@@ -221,17 +252,24 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/patient/homepage">HOME</a>
                   </li> 
+                  <li class="nav-item">
+                    <a class="nav-link active" href="/patient/about_us">ABOUT US</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="/contactus">CONTACT US</a>
+                  </li>
                   @else
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/">HOME</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/about_us">ABOUT US</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/contactus">CONTACT US</a>
+              </li>
               @endif
-              <li class="nav-item">
-                <a class="nav-link active" href="#">ABOUT US</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="#">CONTACT US</a>
-              </li>
+    
       
                   
               @if (Auth::check())      
@@ -329,9 +367,9 @@
       <!-- Grid column -->
       <div class="col-md-4 col-lg-3 col-xl-3 mb-md-2 mx-auto mt-3 mb-2" style="text-align:center">
         <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
-        <a href="https://www.facebook.com/jgmarquezpsych"> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_6_et05wg.png" alt=""> </a>
-        <a href="https://www.instagram.com/jgmarquezpsych/?igshid=YmMyMTA2M2Y%3D&fbclid=IwAR2e7HVw8Gctwx_ctM0Tkhue3PqgGg-UJuEY8e7ssLyEbtip0Y3YSeqIgWA"> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_4_dicjnk.png" alt=""> </a>
-        <a href=""> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_5_gjmers.png" alt=""> </a>
+        <a href="https://www.facebook.com/jgmarquezpsych"> <img style="height: 5vw;width:5vw; margin-bottom:10px" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_6_et05wg.png" alt=""> </a>
+        {{-- <a href="https://www.instagram.com/jgmarquezpsych/?igshid=YmMyMTA2M2Y%3D&fbclid=IwAR2e7HVw8Gctwx_ctM0Tkhue3PqgGg-UJuEY8e7ssLyEbtip0Y3YSeqIgWA"> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_4_dicjnk.png" alt=""> </a>
+        <a href=""> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_5_gjmers.png" alt=""> </a> --}}
       </div>
       <!-- Grid column -->
     </div>

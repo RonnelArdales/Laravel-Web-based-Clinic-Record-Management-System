@@ -178,7 +178,7 @@
 
 {{-- create --}}
 <div class="modal fade create-form" id="create-form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="font-family: Poppins;">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content" style="background: #EDDBC0;">
       <div class="modal-header" style="border-bottom-color: gray">
         <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Create Appointment</h1>
@@ -265,8 +265,8 @@
         </div>
       </div>
       <div class="modal-footer" style="border-top-color: gray">
-        <button type="button" class=" close " style=" border-radius: 30px; border: 2px solid #829460;width: 110px;height: 37px; color:#829460;; background:transparent;" data-bs-dismiss="modal">Close</button>
-        <button class=" store_appointment" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Add</button>
+        <button type="button" class=" " style=" border-radius: 30px; border: 2px solid #829460;width: 110px;height: 37px; color:#829460;; background:transparent;" data-bs-dismiss="modal">Close</button>
+        <button class=" store_appointment" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Create</button>
       </div>
     </div>
   </div>
@@ -275,17 +275,17 @@
 
   {{-- accept confirmation --}}
   <div class="modal fade" id="complete-confirmation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered ">
       <div class="modal-content" style="background: #EDDBC0;"> 
         <div class="modal-header" style="border-bottom-color: gray">
-          <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Accept Confirmation </h1>
+          {{-- <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Accept Confirmation </h1> --}}
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="mb-5 pt-6  ">
                 <div class=" columns-1 sm:columns-2">
-                    <input type="text" id="appointmentcode">
-                <h5>Are you sure you want to confirm appointment?</h5>
+                    <input type="text" hidden id="appointmentcode">
+                <h5 style="font-size:19px">Are you sure you want to confirm this appointment?</h5>
         </div>
         </div>
         <div class="modal-footer" style="border-top-color: gray">
@@ -301,17 +301,17 @@
 
   {{-- cancel confirmation --}}
   <div class="modal fade" id="cancel-confirmation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="background: #EDDBC0;">
         <div class="modal-header" style="border-bottom-color: gray">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Book </h1>
+          {{-- <h1 class="modal-title fs-5" id="exampleModalLabel">Book </h1> --}}
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="mb-5 pt-6  ">
                 <div class=" columns-1 sm:columns-2">
-                    <input type="text" id="cancel_id">
-                <h5>Do you want to cancel this appointnment?</h5>
+                    <input type="text" hidden id="cancel_id">
+                <h5 style="font-size:19px"  >Are you sure you want to cancel this appointnment?</h5>
         </div>
         </div>
         <div class="modal-footer" style="border-top-color: gray">

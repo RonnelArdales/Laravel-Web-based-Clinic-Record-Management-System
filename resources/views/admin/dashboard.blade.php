@@ -1,11 +1,16 @@
 @extends('layouts.admin_navigation')
 @section('content')
     <div class="row m-4" style="font-family: Poppins;">
-        <div style="margin-top: 20px; margin-bottom:20px">
+        <div style="margin-top: 20px; margin-bottom:30px" class="d-flex justify-content-between">
             <h3>GOOD DAY, <b>ADMIN</b></h3>
 
-            <label for="">time</label>
-            <div id="demo"></div>
+          <div >
+            <div>
+              {{ now()->format('M d, Y') }}
+            </div>
+            <div style="text-align: right;" id="demo"></div>
+          </div>
+            
         </div>
         
         
@@ -16,6 +21,7 @@
               <div >
 
               </div>
+              
                 <div class="p-1" style="color: aliceblue">
                     Total
                     <h5 >USERS:</h5>
@@ -48,6 +54,46 @@
               </div>
 
               
+            </div>
+          </div>
+              <div class="container" style="margin-top: 20px" style="background: #EDDBC0;">
+            <div class="row " >
+              <div class="col-sm " style=" border-radius: 10px;  height:450px; padding-top:25px" >
+                <h3 >Latest User</h3>
+                <table style="width:100%; margin-top:10px; " class=" table table-bordered table-striped" >
+                  <thead style="background-color: burlywood" >
+                    <tr>
+                        <th>id</th>
+                        <th>fullname</th>
+                        <th>Username</th>
+                        <th>Usertype</th>
+                        <th>Date created</th>       
+                    </tr>
+                </thead>
+                <tbody style="text-align: center" >
+                  @if (count($latests)> 0 )
+                  @foreach ($latests as $latest)
+                  <tr class="overflow-auto">
+                      <td>{{$latest->id}}</td>
+                      <td>{{$latest->fname}} {{$latest->lname}} </td>
+                      <td>{{$latest->username}}</td>
+                      <td>{{$latest->usertype}}</td>
+                      <td>{{date('M d, Y h:i A', strtotime($latest->created_at))}}</td>
+         
+                       
+                  </tr>
+                  @endforeach
+                  @else
+                  <tr>
+                    <td colspan="4" style="text-align: center;">No appointment Found</td>
+              
+                  </tr>
+                  @endif
+                   
+                </tbody>
+                </table>
+              </div>
+             
             </div>
           </div>
 
@@ -176,8 +222,9 @@ $(document).ready(function(){
   function myClock() {         
   setTimeout(function() {   
     const d = new Date();
+    const date = d.toLocaleDateString();
     const n = d.toLocaleTimeString();
-    document.getElementById("demo").innerHTML = n; 
+    document.getElementById("demo").innerHTML = n ; 
     myClock();             
   }, 1000)
 }

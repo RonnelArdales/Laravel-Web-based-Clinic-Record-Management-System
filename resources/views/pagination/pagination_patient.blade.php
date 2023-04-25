@@ -8,10 +8,11 @@
               <th>Middle name</th>
               <th>Last name</th> 
               <th>Birthday</th>
+              <th>Age</th>
               <th>Address</th>
               <th>Gender</th>
               <th>Mobile no.</th>
-              <th >Email</th>
+         
               <th style="width: 205px">Action</th>
 
           </tr>
@@ -25,10 +26,11 @@
             <td>{{$user->mname}}</td>
             <td>{{$user->lname}}</td>
             <td>{{$user->birthday}}</td>
+            <td>{{$user->age}}</td>
             <td>{{$user->address}}</td>
             <td>{{$user->gender}}</td>
             <td>{{$user->mobileno}}</td>
-            <td>{{$user->email}}</td>
+     
             
             <td style="text-align: center">
             <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>

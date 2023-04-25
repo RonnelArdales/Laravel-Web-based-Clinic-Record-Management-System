@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PDF;
+use Illuminate\Support\Facades\File;
 
 
 class PatientController extends Controller
@@ -38,8 +39,32 @@ class PatientController extends Controller
         // $client = new Client('SEMAPHORE API KEY', 'Sender Name');
         // $client->message()->send('0917xxxxxxx', 'Your message here');
         $documents = Consultationfile::where('user_id', Auth::user()->id)->get();
-        $appointments = Appointment::Where('user_id', Auth::user()->id )->get();
+        $appointments = DB::table('appointments')->where('user_id',  Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
         return view('patient.profile.profile', compact('documents', 'appointments'));
+    }
+
+    public function image_profile_update($id, Request $request){
+        $input = $request->all();
+        $validated = $request->validate([
+            "profilepic" => 'required|mimes:png,jpg,jpeg',
+ 
+        ],[
+            "profilepic" =>'The picture must be a file of type: png, jpg, jpeg.'
+        ]);
+
+        $user = User::where('id', Auth::user()->id)->first();
+        $path = public_path('profilepic/'.$user->profile_pic);
+
+        if(File::exists($path)){
+            File::delete($path);
+        }
+        $filename = date('YmdHis'). '.' . $input['profilepic']->getClientOriginalExtension();
+        $input['profilepic']->move(public_path('profilepic/'), $filename) ;
+        $input['profilepic'] = $filename;
+        $user->profile_pic = $filename;
+
+        $user->save();
+       return redirect()->back();
     }
 
     public function edit_profile(){
@@ -58,7 +83,9 @@ class PatientController extends Controller
             "gender" => ['required'],
             "mobileno" => ['required', 'min:4'],
             "email" => ['required', 'email' ],
-        ]);
+        ], [
+            "fname.required" => "First name is required",
+        ] );
         $input = $request->all();
         $user = User::where('id', $id)->first();
 
@@ -95,19 +122,21 @@ class PatientController extends Controller
     }
 
     public function index_billing(){
-        $billings =  DB::table('transactions')->where('user_id' , Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10, ['*'], 'billing');
+        $billings =  DB::table('transactions')->where('user_id' , Auth::user()->id)->orderBy('created_at', 'desc')->paginate(8, ['*'], 'billing');
         return view('patient.billing.index', compact('billings'));
     }
     public function index_payment(Request $request){   
      
             $input = $request->all();
+ 
             $time = Carbon::createFromFormat('h:i A', $input['time'])->format('H:i:s');
             $date = Carbon::createFromFormat('m-d-Y', $input['date'])->format('Y-m-d');
-            $billin_no = Billing::max('billing_no') + 1;
+            $billin_no = Transaction::max('transno') + 1;
+
     
             $billinginfo = array(
                                 'fullname' => Auth::user()->fname . " " . Auth::user()->lname,
-                                'modeofpayment' => "gcash",
+                                'modeofpayment' => "Gcash",
                                 'date' => $request->input('date'),
                                 'time' => $request->input('time'),
                             );
@@ -127,7 +156,7 @@ class PatientController extends Controller
         $input = $request->all();
         $time = Carbon::createFromFormat('h:i A', $input['time'])->format('H:i:s');
         $date = Carbon::createFromFormat('m-d-Y', $input['date'])->format('Y-m-d');
-        $billin_no = Billing::max('billing_no') + 1;
+
             $appointment = new Appointment();
             $appointment->user_id = Auth::user()->id;
             $appointment->fullname = Auth::user()->fname . " " . Auth::user()->lname;
@@ -137,7 +166,7 @@ class PatientController extends Controller
             $appointment->time = $time;
             $appointment->appointment_method = "online";
             $appointment->reservation_fee = $input['reservation_fee'];
-            $appointment->mode_of_payment = $input['mop'];
+            $appointment->mode_of_payment = "Gcash";
             $appointment->reference_no = $input['reference_no'] ;
             $appointment->status = 'pending';
             $appointment->save();
@@ -148,7 +177,7 @@ class PatientController extends Controller
     }
 
     public function cancel_appointment($id){
-        $appointment = Appointment::where('id', $id)->update(['status' => 'Cancelled',]);
+        $appointment = Appointment::where('id', $id)->update(['status' => 'cancel',]);
         return response()->json($appointment);
     }
 

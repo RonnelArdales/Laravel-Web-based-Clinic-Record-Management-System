@@ -90,7 +90,7 @@
 
 {{-- create business modal --}}
 <div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="background: #EDDBC0;">
         <div class="modal-header" style="border-bottom-color: gray">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Create Business Hours</h1>

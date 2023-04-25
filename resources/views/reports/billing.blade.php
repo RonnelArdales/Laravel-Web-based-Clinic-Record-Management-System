@@ -31,7 +31,7 @@ Generate Report
           <thead>
             <tr>
        
-                <th>Billing no</th>
+                <th>Transaction no</th>
                 <th>Fullname</th>
                 <th>Service</th> 
                 <th>Total</th>
@@ -43,7 +43,7 @@ Generate Report
           @if (count($billings) > 0)
           @foreach ($billings as $billing)
           <tr class="overflow-auto" id="nouser">
-              <td>{{$billing->billing_no}}</td>
+              <td>{{$billing->transno}}</td>
               <td>{{$billing->fullname}}</td>
               <td>{{$billing->service}}</td>
               <td>{{$billing->total}}</td>

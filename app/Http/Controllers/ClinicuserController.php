@@ -123,7 +123,6 @@ class ClinicuserController extends Controller {
           'username.required' => 'Username name is required',
           'password.required' => 'Password is required',
           'password.confirmed' => 'Password did not match',
-
         ]);
 
             $encrypt = bcrypt($request->input('password'));

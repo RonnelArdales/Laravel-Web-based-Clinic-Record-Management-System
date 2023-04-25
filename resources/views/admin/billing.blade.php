@@ -22,10 +22,11 @@
                     <h2>Billing</h2>
                 </div>
 
-                <div class="card " style="background:#EDDBC0;border:none;" id="patient">
-                    <div class="billing" style="padding:0% ">
-                      <div class="card-body" style="width:100%; min-height:65vh; display: flex; overflow-x: auto;  font-size: 15px; " >
-                        <table class="table  table-bordered table-striped "  style="background-color: white">
+
+                        <div class="card"  style="background:#EDDBC0;border:none; " >
+                            <div class="table-appointment" style="padding: 0%" >
+                              <div class="card-body" style="width:100%; min-height:64vh;  font-size: 15px; ">
+                        <table class="table  table-bordered table-striped " id="billingtable" style="background-color: white; width:100%">
                   
                             <thead>
                                 <tr>
@@ -38,41 +39,11 @@
                                 </tr>
                             </thead>
                             <tbody class="patient-error" >
-                                @if (count($billings)> 0 )
-                                @foreach ($billings as $billing)
-                                <tr class="overflow-auto">
-                                    <td style="text-align: center">{{$billing->transno}}</td>
-                                    <td style="text-align: center">{{$billing->user_id}}</td>
-                                    <td style="text-align: center">{{$billing->fullname}}</td>
-                                    <td style="text-align: center">{{$billing->total}}</td>
-                                    <td style="text-align: center">{{$billing->status}}</td>
-                      
-                                    <td>
-                                        @if ($billing->status == "Pending")
-                                            <button type="button" value="{{$billing->transno}}" class="payment btn  btn-success btn-sm">Pay now</button>
-                                            <a href="/admin/billing/viewBilling/{{$billing->transno}}" class="btn btn-primary btn-sm">View</a>
-                                            {{-- <a href="/admin/billing/editBilling/{{$billing->billing_no}}" class="btn btn-info btn-sm">Edit</a> --}}
-                                            <a href="/admin/billing/editBilling/{{$billing->transno}}" class="btn btn-danger btn-sm">Delete</a>
-                                            {{-- <button type="button" value="{{$billing->billing_no}}" class="deletebilling btn  btn-info btn-sm">Edit</button> --}}
-                                        @else
-                                            <a href="/admin/billing/viewBilling/{{$billing->transno}}" class="btn btn-primary btn-sm">View</a>
-                                            <a href="/admin/billing/editBilling/{{$billing->transno}}" class="btn btn-danger btn-sm">Delete</a>
-                                        @endif
-                              </td>
-                                </tr>
-                                @endforeach
-                                @else
-                                <tr>
-                                    <td colspan="9" style="text-align: center; height:280px ">No Service Found</td>
-                                  </tr>
-                                @endif
+                     
                             </tbody>
                           </table>
                         </div>
-                        <div style="">
-                          {!! $billings->links() !!}
-                       </div>
-                          
+
              
                       </div>
                    </div>
@@ -82,7 +53,7 @@
                        {{-- ------------- PAyment view ---------------------}}
 
                        <div class="modal fade" id="payment">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content viewbody " style="background: #EDDBC0;">
                     
                             <!-- Modal Header -->
@@ -114,6 +85,7 @@
                                 <div class="d-flex bd-highlight" style="margin-top: 10px">
                                     <label for=""> <b>Discount: </b> </label>
                                     <input type="text" id="discount_name" hidden>
+                                    <input type="text" hidden id="discount_price">
                                     <select name="discount" id="payment_discount" class="payment_discount rounded" style="height:30px; width:100px">
                                         <option value="">--select--</option>
                                         <option value="None">none</option>  
@@ -174,6 +146,31 @@
 @section('scripts')
 <script>
     $(document).ready(function (){
+
+        var billing = $('#billingtable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "/admin/billing",
+	   dom: 'frtp',
+	   pageLength: 10,
+	   responsive: true,
+        columns: [
+		{data: 'transno', name: 'transno' , orderable: false, searchable: false},
+            {data: 'user_id', name: 'user_id' , orderable: false, searchable: false},
+		  {data: 'fullname', name: 'fullname' , orderable: false},
+		  {data: 'sub_total', name: 'sub_total' , orderable: false, searchable: false},
+		  {data: 'status', name: 'status' , orderable: false, searchable: false},
+          {data: 'action', name: 'action', orderable: false, searchable: false},
+
+        ]
+    });
+
+    // <th>Trans no.</th>
+    //                                 <th >User ID</th>
+    //                                 <th>Fullname</th>
+    //                                 <th>Sub-total</th>
+    //                                 <th>Status</th>
+    //                                 <th style="width: 230px">Action</th>
  
     $("#payment_cash").on('change', function(e){
         e.preventDefault();
@@ -268,7 +265,8 @@
 
              // //---------------------Show payment modal---------------------//
         $(document).on('click', '.payment', function(e){
-            var id = $(this).val();
+       
+            var id = $(this).data('id');
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -306,6 +304,7 @@
                 'subtotal' : $('#compute_subtotal').val(),
                 'discountcode' : $('#payment_discount').val(),
                 'discountname' : $('#discount_name').val(),
+                'discountprice' : $('#discount_price').val(),
                 'total' : $('#totalprice_nosymbol').val(),
                 'mode_of_payment' : $('#mode_payment').val(),
                 'payment' : $('#payment_cash').val(),
@@ -333,7 +332,7 @@
                         $('#total_price').val("");
                         $('#totalprice_nosymbol').val("");
                         $('#status').val("");
-                    $('.billing').load(location.href+' .billing');
+     billing.draw();
                     $('#payment').modal('hide');     
                     }
 
@@ -532,6 +531,7 @@ console.log(id);
                       $('#total_price').html("");
                         $('#total_price').val(subtotal);
                         $('#totalprice_nosymbol').val(total_price);
+                        $('#discount_price').val("");
             }else{
     
                         $.ajax({
@@ -543,7 +543,8 @@ console.log(id);
                     let total_price = $('#compute_subtotal').val();
                   var divide = response.discount.percentage;
                   let discount = (divide/100);
-                  let total = total_price - (total_price * discount)
+                  let discountprice = total_price * discount;
+                  let total = total_price - discountprice;
                   let number_total = Number(parseFloat(total).toFixed(2)).toLocaleString('en', {minimumFractionDigits: 2});
                   const cars = [total_price, discount, total];
                   $('#change').val("");
@@ -552,6 +553,7 @@ console.log(id);
                   $('#total_price').val('₱ '+ number_total);
                   $('#totalprice_nosymbol').val(total);
                 $('#discount_name').val(response.discount.discountname);
+                $('#discount_price').val(discountprice);
                 }
 
             }); 

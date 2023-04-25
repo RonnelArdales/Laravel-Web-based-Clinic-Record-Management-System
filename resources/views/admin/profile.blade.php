@@ -6,7 +6,8 @@
         <h1>User </h1>
     </div>
 
-    <div id="success" class="error alert alert-success" style="display: none;"></div>
+    <div id="success" class="error alert alert-success" style="display: none;">
+    </div>
 
     <div class="main-spinner" style="
             position:fixed;
@@ -57,10 +58,11 @@
                         <th>Middle name</th>
                         <th>Last name</th> 
                         <th>Birthday</th>
+                        <th>Age</th>
                         <th>Address</th>
                         <th>Gender</th>
                         <th>Mobile no.</th>
-                        <th>Email</th>
+                   
                         <th>Action</th>
       
                     </tr>
@@ -74,10 +76,11 @@
                         <td>{{$user->mname}}</td>
                         <td>{{$user->lname}}</td>
                         <td>{{$user->birthday}}</td>
+                        <td>{{$user->age}}</td>
                         <td>{{$user->address}}</td>
                         <td>{{$user->gender}}</td>
                         <td>{{$user->mobileno}}</td>
-                        <td>{{$user->email}}</td>
+                
                         
                         <td style="text-align: center">
                         <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
@@ -114,10 +117,11 @@
                         <th>Middle name</th>
                         <th>Last name</th> 
                         <th>Birthday</th>
+                        <th>Age</th>
                         <th>Address</th>
                         <th>Gender</th>
                         <th>Mobile no.</th>
-                        <th>Email</th>
+               
                         <th>Action</th>
       
                     </tr>
@@ -131,10 +135,11 @@
                       <td>{{$user->mname}}</td>
                       <td>{{$user->lname}}</td>
                       <td>{{$user->birthday}}</td>
+                      <td>{{$user->age}}</td>
                       <td>{{$user->address}}</td>
                       <td>{{$user->gender}}</td>
                       <td>{{$user->mobileno}}</td>
-                      <td>{{$user->email}}</td>
+                
                       
                       <td style="text-align: center">
                         <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
@@ -175,10 +180,11 @@
                         <th>Middle name</th>
                         <th>Last name</th> 
                         <th>Birthday</th>
+                        <th>Age</th>
                         <th>Address</th>
                         <th>Gender</th>
                         <th>Mobile no.</th>
-                        <th>Email</th>
+                  
                         <th>Action</th>
       
                     </tr>
@@ -192,10 +198,11 @@
                       <td>{{$user->mname}}</td>
                       <td>{{$user->lname}}</td>
                       <td>{{$user->birthday}}</td>
+                      <td>{{$user->age}}</td>
                       <td>{{$user->address}}</td>
                       <td>{{$user->gender}}</td>
                       <td>{{$user->mobileno}}</td>
-                      <td>{{$user->email}}</td>
+               
                       
                       <td style="text-align: center">
                         <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
@@ -258,6 +265,13 @@
               <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="date"> 
               <div class="mt-0 mb-2">
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="birthday"></span>
+              </div>
+
+              
+              <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Age</label>
+              <input class=" age rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="number"> 
+              <div class="mt-0 mb-2">
+                <span  role="alert" class="block mt-5 pb-4 text-danger" id="age"></span>
               </div>
               
               <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Address</label>
@@ -335,7 +349,7 @@
       <div class="modal-footer" style="border-top-color: black"> 
         <button type="button" data-bs-dismiss="modal" style="background: #829460;
         border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Close</button>
-        <button  class=" add_user " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Submit</button>
+        <button  class=" add_user " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Create</button>
       </div>
     </div>
   </div>
@@ -376,6 +390,12 @@
                 <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_birthday" style="background: #D0B894;text-decoration:aliceblue;" type="date"> 
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_birthday"></span>
+                </div>
+
+                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Age</label>
+                <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_age" style="background: #D0B894;" type="text"> 
+                <div class="mt-0 mb-2">
+                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_age"></span>
                 </div>
                 
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Address</label>
@@ -476,6 +496,11 @@
 
           <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Birthday:</label>
           <input class="view1 lname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_birthday" readonly  type="text"> 
+     
+          <br>
+
+          <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Age:</label>
+          <input class="view1 lname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_age" readonly  type="text"> 
      
           <br>
 
@@ -641,6 +666,7 @@
                 'mname': $('.mname').val(), 
                 'last_name': $('.lname').val(),
                 'birthday': $('.birthday').val(),
+                'age': $('.age').val(),
                 'address': $('.address').val(),
                 'gender': $('.gender').val(),
                 'mobile_number': $('.mobileno').val(), 
@@ -673,7 +699,7 @@
                 },
                 success: function(response){
                     if(response.status == 400){
-                      $('#fname, #mname, #lname,#gender, #usertype, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password, #status '  ).html("");
+                      $('#fname, #mname, #lname,#gender, #usertype, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password, #status, #age '  ).html("");
                         $.each(response.errors.first_name, function (key, err_values){
                         $('#fname').append('<span>'+err_values+'</span>');
                         })
@@ -682,6 +708,9 @@
                         })
                         $.each(response.errors.birthday, function (key, err_values){
                         $('#birthday').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.age, function (key, err_values){
+                        $('#age').append('<span>'+err_values+'</span>');
                         })
                         $.each(response.errors.address, function (key, err_values){
                         $('#address').append('<span>'+err_values+'</span>');
@@ -750,6 +779,7 @@
                $('#view_mname').val(response.user[0].mname);
                $('#view_lname').val(response.user[0].lname);
                $('#view_birthday').val(response.user[0].birthday);
+               $('#view_age').val(response.user[0].age);
                $('#view_address').val(response.user[0].address);
                $('#view_gender').val(response.user[0].gender); 
                $('#view_mobileno').val(response.user[0].mobileno);
@@ -786,6 +816,7 @@
                $('#edit_mname').val(response.user[0].mname);
                $('#edit_lname').val(response.user[0].lname);
                $('#edit_birthday').val(response.user[0].birthday);
+               $('#edit_age').val(response.user[0].age);
                $('#edit_address').val(response.user[0].address);
                $('#edit_gender').val(response.user[0].gender); 
                $('#edit_username').val(response.user[0].username);
@@ -809,6 +840,7 @@
                 'mname': $('#edit_mname').val(), 
                 'last_name': $('#edit_lname').val(),
                 'birthday': $('#edit_birthday').val(),
+                'age': $('#edit_age').val(),
                 'address': $('#edit_address').val(),
                 'gender': $('#edit_gender').val(),
                 'mobile_number': $('#edit_mobileno').val(), 
@@ -849,6 +881,9 @@
                         })
                         $.each(response.errors.birthday, function (key, err_values){
                         $('#error_birthday').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.age, function (key, err_values){
+                        $('#error_age').append('<span>'+err_values+'</span>');
                         })
                         $.each(response.errors.address, function (key, err_values){
                         $('#error_address').append('<span>'+err_values+'</span>');

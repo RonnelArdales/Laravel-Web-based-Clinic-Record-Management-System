@@ -41,6 +41,7 @@ class UserController extends Controller
                   "mname" => [''],
                   "last_name" => ['required',],
                   "birthday" => ['required'],
+                  "age" => ['required'],
                   "address" => ['required'],
                   "gender" => ['required'],
                   "mobile_number" =>'required|numeric',
@@ -53,6 +54,7 @@ class UserController extends Controller
                   'first_name.required' => 'First name is required',
                   'last_name.required' => 'Last name is required',
                   'birthday.required' => 'Birthday is required',
+                  'age.required' => 'Age is required',
                   'address.required' => 'Address is required',
                   'gender.required' => 'gender is required',
                   'mobile_number.required' => 'Mobile number is required',
@@ -77,6 +79,7 @@ class UserController extends Controller
                   $user->mname = $request->input('mname');
                   $user->lname = $request->input('last_name');
                   $user->birthday = $request->input('birthday');
+                  $user->age = $request->input('age');
                   $user->address = $request->input('address');
                   $user->gender = $request->input('gender');
                   $user->mobileno = $request->input('mobile_number');
@@ -104,6 +107,75 @@ class UserController extends Controller
 
 
 
+            $validator = Validator::make($request->all(), [
+                "first_name" => ['required'],
+                "mname" => [''],
+                "last_name" => ['required',],
+                "birthday" => ['required'],
+                "address" => ['required'],
+                "age" => ['required'],
+                "gender" => ['required'],
+                "mobile_number" =>'required|numeric',
+                "email" => ['required', 'email', Rule::unique('users', 'email') ],
+                "username" => ['required', 'regex:/\w*$/', 'min:8', Rule::unique('users', 'username')],
+                "password" => 'required|confirmed|min:8',
+                "status" => ['required'],
+            ],[
+                'first_name.required' => 'First name is required',
+                'last_name.required' => 'Last name is required',
+                'birthday.required' => 'Birthday is required',
+                'address.required' => 'Address is required',
+                'gender.required' => 'gender is required',
+                'age.required' => ' Age is required',
+                'mobile_number.required' => 'Mobile number is required',
+                'email.required' => ' Email is required',
+                'username.required' => 'Username name is required',
+                'password.required' => 'Password is required',
+                'password.confirmed' => 'Password did not match',
+                'status.required' => 'status is required',
+              ]);
+    
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status'=>400,
+                    'errors'=> $validator->messages(),
+                ]);
+            }else{
+         
+                $encrypt = bcrypt($request->input('password'));
+                $user = new User();
+                $user->fname = $request->input('first_name');
+                $user->mname = $request->input('mname');
+                $user->lname = $request->input('last_name');
+                $user->birthday = $request->input('birthday');
+                $user->age = $request->input('age');
+                $user->address = $request->input('address');
+                $user->gender = $request->input('gender');
+                $user->mobileno = $request->input('mobile_number');
+                $user->email = $request->input('email');
+                $user->username = $request->input('username');
+                $user->password = $encrypt;
+                $user->status = $request->input('status');
+                $user->usertype = "patient";
+                $user->save();
+    
+                $audit_trail = new AuditTrail();
+                $audit_trail->user_id = Auth::user()->id;
+                $audit_trail->username = Auth::user()->username;
+                $audit_trail->activity = 'Create new account ';
+                $audit_trail->usertype = Auth::user()->usertype;
+    
+                $audit_trail->save();
+                
+                return response()->json([
+                    'status'=>200,
+                    'message' => 'audit trail',
+                ]);
+            }
+
+
+
         }
 
      
@@ -118,6 +190,7 @@ class UserController extends Controller
                   "first_name" => ['required'],
                   "last_name" => ['required'],
                   "birthday" => ['required'],
+                  "age" => ['required'],
                   "address" => ['required'],
                   "gender" => ['required'],
                   "mobile_number" => ['required', 'min:4'],
@@ -129,6 +202,7 @@ class UserController extends Controller
                   'first_name.required' => 'First name is required',
                   'last_name.required' => 'Last name is required',
                   'birthday.required' => 'Birthday is required',
+                  'age.required' => 'Age is required',
                   'address.required' => 'Address is required',
                   'gender.required' => 'gender is required',
                   'mobile_number.required' => 'Mobile number is required',
@@ -153,6 +227,7 @@ class UserController extends Controller
                           'mname' => $request->get('mname'),
                           'lname' => $request->get('last_name'),
                           'birthday' => $request->get('birthday'),
+                          'age' => $request->get('age'),
                           'address' => $request->get('address'),
                           'gender' => $request->get('gender'),
                           'mobileno' => $request->get('mobile_number'),
@@ -174,6 +249,7 @@ class UserController extends Controller
                               'mname' => $request->get('mname'),
                               'lname' => $request->get('last_name'),
                               'birthday' => $request->get('birthday'),
+                              'age' => $request->get('age'),
                               'address' => $request->get('address'),
                               'gender' => $request->get('gender'),
                               'mobileno' => $request->get('mobile_number'),
@@ -193,6 +269,88 @@ class UserController extends Controller
               }
 
         }else{
+
+            $validator = Validator::make($request->all(), [
+                "first_name" => ['required'],
+                "last_name" => ['required'],
+                "birthday" => ['required'],
+                "age" => ['required'],
+                "address" => ['required'],
+                "gender" => ['required'],
+                "mobile_number" => ['required', 'min:4'],
+                "email" => ['required', 'email' ],
+                "password" => ['confirmed'],
+                "usertype" => ['required'],
+                "status" => ['required'],
+            ],[
+                'first_name.required' => 'First name is required',
+                'last_name.required' => 'Last name is required',
+                'birthday.required' => 'Birthday is required',
+                'age.required' => 'Age is required',
+                'address.required' => 'Address is required',
+                'gender.required' => 'gender is required',
+                'mobile_number.required' => 'Mobile number is required',
+                'email.required' => ' Email is required',
+                'username.required' => 'Username name is required',
+                'password.confirmed' => 'Password did not match',
+                'usertype.required' => 'Usertype is required',
+                'status.required' => 'status is required',
+              ]);
+    
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status'=>400,
+                    'errors'=> $validator->messages(),
+                ]);
+            }else
+            {
+                if($request->input('password') == null){
+                    $arrItem = array(
+                        'fname' =>$request->get('first_name'),
+                        'mname' => $request->get('mname'),
+                        'lname' => $request->get('last_name'),
+                        'birthday' => $request->get('birthday'),
+                        'age' => $request->get('age'),
+                        'address' => $request->get('address'),
+                        'gender' => $request->get('gender'),
+                        'mobileno' => $request->get('mobile_number'),
+                        'email' => $request->get('email'),
+                        'usertype' => $request->get('usertype'),
+                        'status' => $request->get('status'),
+                    );
+                    DB::table('users')->where('id', $id)->update($arrItem);
+                    return response()->json([
+                        'status'=>200,
+                            'message' => 'discount updated successfully without updated password',
+                        
+                    ]);
+    
+                }else{
+                     $encrypt = bcrypt($request->input('password'));
+                        $arrItem = array(
+                            'fname' =>$request->get('first_name'),
+                            'mname' => $request->get('mname'),
+                            'lname' => $request->get('last_name'),
+                            'birthday' => $request->get('birthday'),
+                            'age' => $request->get('age'),
+                            'address' => $request->get('address'),
+                            'gender' => $request->get('gender'),
+                            'mobileno' => $request->get('mobile_number'),
+                            'email' => $request->get('email'),
+                            'password' => $encrypt,
+                            'usertype' => $request->get('usertype'),
+                            'status' => $request->get('status'),
+                        );
+                        DB::table('users')->where('id', $id)->update($arrItem);
+                        return response()->json([
+                            'status'=>200,
+                            'message' => 'discount updated successfully with  updated password',
+                            
+                        ]);
+                   
+                }
+            }
             
         }
       
@@ -212,6 +370,12 @@ class UserController extends Controller
             ]);
 
         }else{
+
+            DB::table('users')->where('id', $id)->delete();
+            return response()->json([
+                'status'=>200,
+                    'message' => 'deleted successfully',
+            ]);
             
         }
    
@@ -238,6 +402,20 @@ class UserController extends Controller
             }
 
         }else{
+
+            
+            $user = User::where('id', $id )->get();
+            if($user){
+             return response()->json([
+                 'status'=>200,
+                 'user' => $user,
+             ]);
+            }else{
+             return response()->json([
+                 'status'=>404,
+                 'message' => 'user not found',
+             ]);
+            }
             
         }
 

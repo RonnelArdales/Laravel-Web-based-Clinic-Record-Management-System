@@ -12,19 +12,45 @@ label{
   margin-bottom: 1%;
   text-align: center; 
 }
+
+th, td{
+  text-align: center; 
+}
 </style>
+
+<div class="main-spinner" style="
+	  position:fixed;
+		width:100%;
+		left:0;right:0;top:0;bottom:0;
+		background-color: rgba(255, 255, 255, 0.279);
+		z-index:9999;
+		display:none;"> 
+	<div class="spinner">
+		<div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
+		  <span class="visually-hidden">Loading...</span>
+		</div>
+	    </div>
+</div>	
+
+<div class="alert success alert-success" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:9999 ">
+  <p id="message-success"></p> 
+</div>
+
 
 <div class="container" style="margin-bottom:100px">
 
 
-<div class="card w-40" style="box-sizing: border-box;font-family:Poppins; background:#EDDBC0;padding-top:1%; margin-bottom:4%;padding-bottom:1%;margin-top:5%;box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.25);">
+<div class="card w-40 " style="box-sizing: border-box;font-family:Poppins; background:#EDDBC0;padding-top:1%; margin-bottom:4%;padding-bottom:1%;margin-top:5%;box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.25);">
   
     <h1 class="text-center text-[30px]" style="font-weight: 700;">Profile</h1>
-<div style=" display:flex; flex-direction:row;flex-wrap:wrap;  padding:5px;justify-content:center;">
+<div style=" display:flex; flex-direction:row;flex-wrap:wrap;  padding:5px; margin-left:5%; ">
 
-    <div style="background:grey; border-radius:100%;height:280px; width:280px;box-shadow: -10px 0px 0px 5px  #829460;">
+@if (Auth::user()->profile_pic == null)
+    <img style="border-radius:100%;height:280px; width:280px;box-shadow: -10px 0px 0px 5px  #829460;" src="{{url('profilepic/defaultprofile.png')}}" alt="">
+@else
+    <img style=" border-radius:100%;height:280px; width:280px;box-shadow: -10px 0px 0px 5px  #829460;"  src="{{url('profilepic/' . Auth::user()->profile_pic )}}" alt="">
+@endif
 
-     </div>
     <div style="background: #EDDBC0;margin-left:30px;margin-top:30px;">
         <div style="display:flex;flex-direction:row;">
             <h3 style="font-weight: 700;"> <label for="">{{Auth::user()->fname}}</label></h3>
@@ -37,25 +63,43 @@ label{
         <h6> <label for="">{{Auth::user()->email}}</label></h6> 
         <h6> <label for="">{{Auth::user()->mobileno}}</label> </h6> 
         <h6> <label for="">{{Auth::user()->birthday}}</label> </h6> 
-        <h6><label for="">{{Auth::user()->gender}}</label> </h6> 
-        
-        <a href="/patient/profile/edit">change profile</a> 
+        <h6><label for="">{{Auth::user()->gender}}</label> </h6>
+        <form  action="/patient/profile/picture/update/{{Auth::user()->id}}" method="POST" enctype="multipart/form-data">
+          @csrf
+    
+        <input type="file" name="profilepic"  style="width:180px ; "  >  
+        <button style="border-radius:3px; padding-left:7px;padding-right:7px ; padding-bottom:3px; padding-top:3px;background-color: #829460; border:none; color:white" type="submit">Change</button>
+        </form> 
+        @error('profilepic')
+        <span  role="alert" class="block mt-3 pb-5 text-danger">{{$message}}</span><br>
+        @enderror
+        <div style="margin-top:10px">
+          <a style="text-decoration:none;background-color: #829460;  padding-left:7px;padding-right:7px ; padding-bottom:3px; padding-top:3px;color:white" href="/patient/profile/edit">Change profile</a> 
+        </div>
+  
     </div>
 </div>
  
 </div>
+
+
+
 
 <div>
   <h4>History</h4>
   <p>Here are the history of your finding during your consulation. Click to view</p>
 </div>
 
+
+<div class="card" style="background:#EDDBC0;border:none;">
+  <div class="" style="padding:0%; ">
+    <div class="card-body " style="width:100%;  display: flex; overflow-x: auto;  font-size: 15px; padding:0px " >
 <table class="table table-striped table-bordered border border-dark col-sm">
   <thead style="background-color: burlywood">
     <tr  style=" position: relative;">
           <th style="text-align: center;" >Appointment Date</th>
-          <th style="text-align: center;">file</th>
-          <th style="text-align: center;">action</th>
+          <th style="text-align: center;">File</th>
+          <th style="text-align: center;">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -88,20 +132,27 @@ label{
   </tbody>
 </table>
 
+</div>
+  </div>
+</div>
+
 <div style="margin-top:3%">
   <h4>Appointments</h4>
   <p>Here are the history of your finding during your consulation. Click to view</p>
 </div>
 
+<div class="card" style="background:#EDDBC0;border:none;">
+  <div class="appointment" style="padding:0%; ">
+    <div class="card-body " style="width:100%;  display: flex; overflow-x: auto;  font-size: 15px; padding:0px " >
 <table class="table table-striped table-bordered border border-dark col-sm">
   <thead style="background-color: burlywood">
     <tr  style=" position: relative;">
-          <th>Date</th>
+          <th >Date</th>
           <th>Time</th>
           <th>Reservation fee</th>
           <th>Mode of payment</th>
-          <th>status</th>
-          <th>action</th>
+          <th>Status</th>
+          <th>Action</th>
     </tr>
   </thead>
   <tbody>
@@ -137,28 +188,36 @@ label{
 
   </tbody>
 </table> 
+    </div>
+    <div style="">
+      {!! $appointments->links() !!}
+   </div>
+  </div>
+</div>
+
 {{-------------------------- cancel Appointment --------------------------------------}}
-<div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          <div class="mb-5 pt-6  ">
-              <div class=" columns-1 sm:columns-2">
-                  <input type="text" id="appointment-id">
-              <h6>Do you want to cancel this appointment?</h6>
-      </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class=" cancel_appointment p-2 w-30 bg-[#829460]  mt-7 rounded" >Cancel</button>
+  <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="background: #EDDBC0;">
+        <div class="modal-header" style="border-bottom-color: gray">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-5 pt-6  ">
+                <div class=" columns-1 sm:columns-2">
+                  <input type="text" id="appointment-id" hidden>
+                <h5>Do you want to cancel this appointnment?</h5>
+        </div>
+        </div>
+        <div class="modal-footer" style="border-top-color: gray">
+          <button type="button" class=" close btn btn-secondary"  style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
+          {{-- <button class=" cancel_appointment p-2 w-30 bg-[#829460]  mt-7 rounded" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; "  >Cancel</button> --}}
+          <button class="cancel_appointment "style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Yes</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
 
 {{------------------------------View Document-------------------------}}
@@ -239,8 +298,22 @@ label{
                 type: 'PUT', 
                 url: "/patient/appointment/cancel/"+ id,
                 datatype: "json",
+                beforeSend: function(){
+                 
+                            $(".main-spinner").show();
+                        },
+                        complete: function(){
+                          $('#delete').modal('hide');
+                            $(".main-spinner").hide();
+                        },
                 success: function(response){ 
-                             console.log( response);
+                            $(".success").show();
+                            $('#message-success').text('Cancel Successfully');
+                            setTimeout(function() {
+                                $(".success").fadeOut(500);
+                            }, 2000);
+                            $('.appointment').load(location.href+' .appointment');
+                             
         }
     });
         });

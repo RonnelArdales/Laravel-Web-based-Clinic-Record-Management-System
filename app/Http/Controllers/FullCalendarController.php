@@ -7,6 +7,7 @@ use App\Models\Appointment;
 use App\Models\Appointmentnew;
 use App\Models\BusinessHour;
 use App\Models\Discount;
+use App\Models\Reservationfee;
 use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,6 +22,8 @@ class FullCalendarController extends Controller
         $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
         $services = Service::all();
         $discounts = Discount::all();
+        // $reservationfee = Reservationfee::first();
+        // dd($reservationfee);
         $day_array = [];
         foreach($days as $day){
             $day_array[] = date('w', strtotime($day->day));

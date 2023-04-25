@@ -49,10 +49,11 @@
                         <th>Middle name</th>
                         <th>Last name</th> 
                         <th>Birthday</th>
+                        <th>Age</th>
                         <th>Address</th>
                         <th>Gender</th>
                         <th>Mobile no.</th>
-                        <th>Email</th>
+                      
                         <th>Action</th>
       
                     </tr>
@@ -66,10 +67,11 @@
                         <td>{{$user->mname}}</td>
                         <td>{{$user->lname}}</td>
                         <td>{{$user->birthday}}</td>
+                        <td>{{$user->age}}</td>
                         <td>{{$user->address}}</td>
                         <td>{{$user->gender}}</td>
                         <td>{{$user->mobileno}}</td>
-                        <td>{{$user->email}}</td>
+                     
                         
                         <td style="text-align: center">
                         <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
@@ -132,6 +134,12 @@
               <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="date"> 
               <div class="mt-0 mb-2">
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="birthday"></span>
+              </div>
+
+              <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Age</label>
+              <input class=" age rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="number"> 
+              <div class="mt-0 mb-2">
+                <span  role="alert" class="block mt-5 pb-4 text-danger" id="age"></span>
               </div>
               
               <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Address</label>
@@ -245,12 +253,20 @@
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_birthday"></span>
                 </div>
+
+                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Age</label>
+                <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_age" style="background: #D0B894;" type="text"> 
+                <div class="mt-0 mb-2">
+                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_age"></span>
+                </div>
                 
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Address</label>
                 <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_address" style="background: #D0B894;" type="text"> 
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_address"></span>
                 </div>
+
+      
         
                 
                 <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Gender:</label>
@@ -347,6 +363,12 @@
      
           <br>
 
+          
+          <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Age:</label>
+          <input class="view1 lname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_age" readonly  type="text"> 
+
+          <br>
+
           <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Address:</label>
           <input class="view1 lname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_address" readonly  type="text"> 
      
@@ -430,75 +452,47 @@
 <script>
     $(document).ready(function (){
 
-      refresh_table();
-      deleteall();
+      // deleteall();
         
-        function deleteall () {
-            if (window.location.href) {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "post",
-                url: "/admin/billing/addtocart/deleteall",
-                datatype: "json",
-                success: function(response){ 
-                }
-            });
+        // function deleteall () {
+        //     if (window.location.href) {
+        //         $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
+        //     $.ajax({
+        //         type: "post",
+        //         url: "/admin/billing/addtocart/deleteall",
+        //         datatype: "json",
+        //         success: function(response){ 
+        //         }
+        //     });
                 
-            }
-        }
+        //     }
+        // }
   
-      function refresh_table(){
-        var usertype = $('#usertypetable').val()
-        if( usertype == 'secretary' ){
-          $('#fullname').val("");
-                $('.secretary').load(location.href+' .secretary');
-               } else if (usertype == 'patient') {
-                $('#fullname').val("");
-                $('.patient').load(location.href+' .patient');
-               } else {
-                $('#fullname').val("");
-                $('.admin').load(location.href+' .admin');
-               }
-      }
+      // function refresh_table(){
+      //   var usertype = $('#usertypetable').val()
+      //   if( usertype == 'secretary' ){
+      //     $('#fullname').val("");
+      //           $('.secretary').load(location.href+' .secretary');
+      //          } else if (usertype == 'patient') {
+      //           $('#fullname').val("");
+      //           $('.patient').load(location.href+' .patient');
+      //          } else {
+      //           $('#fullname').val("");
+      //           $('.admin').load(location.href+' .admin');
+      //          }
+      // }
 
         $(".modal").on("hidden.bs.modal", function(){
             $('#create, #edit, #delete').find('input').val("");
             $('.modal-create').load(location.href+' .modal-create');
             $('.modal-update').load(location.href+' .modal-update');
-            // $('#error_fname, #error_lname, #error_gender, #error_usertype, #error_birthday, #error_address, #error_mobileno, #error_email, #error_password, #fname, #mname, #lname, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password ').html("");
         });
 
         //show and hide table
-
-        $('#usertypetable').on('change', function(e){
-                e.preventDefault();
-                var usertype = $(this).val();
-               if( usertype == 'secretary' ){
-                    $('#patient').attr("hidden",true);
-                    $('#admin').attr("hidden",true);
-                    $("#secretary").attr("hidden",false);
-                    refresh_table();
-                      //  alert(usertype);
-               } else if (usertype == 'patient') {
-                $('#patient').attr("hidden",false);
-                    $('#admin').attr("hidden",true);
-                    $("#secretary").attr("hidden",true);
-                    refresh_table();
-               } else {
-                $('#patient').attr("hidden",true);
-                    $('#admin').attr("hidden",false);
-                    $("#secretary").attr("hidden",true);
-                    refresh_table();
-               }
-            })
-            $('#search').on('keyup', function(e){
-              var search = $(this).val();
-              alert(search);
-            })
 
         //store data
         $(document).on('click', '.add_user', function(e){
@@ -510,6 +504,7 @@
                 'last_name': $('.lname').val(),
                 'birthday': $('.birthday').val(),
                 'address': $('.address').val(),
+                'age': $('.age').val(),
                 'gender': $('.gender').val(),
                 'mobile_number': $('.mobileno').val(), 
                 'email': $('.email').val(),
@@ -517,7 +512,6 @@
                 'address': $('.address').val(),
                 'password': $('.password').val(),
                 'password_confirmation': $('.password_confirmation').val(),
-                'usertype': $('.usertype').val(),
                 'status': $('.status').val(),
             }
             // console.log(data);
@@ -529,7 +523,7 @@
             });
             $.ajax({
                 type: "POST",
-                url: "/admin/profile/createuser/store",
+                url: "/secretary/profile/createuser/store",
                 data: data,
                 datatype: "json",
                 beforeSend: function(){
@@ -540,8 +534,9 @@
                     $(".main-spinner").hide();
                 },
                 success: function(response){
+                  console.log(response);
                     if(response.status == 400){
-                      $('#fname, #mname, #lname,#gender, #usertype, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password, #status '  ).html("");
+                      $('#fname, #mname, #lname,#gender, #usertype, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password, #status,#age '  ).html("");
                         $.each(response.errors.first_name, function (key, err_values){
                         $('#fname').append('<span>'+err_values+'</span>');
                         })
@@ -556,6 +551,9 @@
                         })
                         $.each(response.errors.mobile_number, function (key, err_values){
                         $('#mobileno').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.age, function (key, err_values){
+                        $('#age').append('<span>'+err_values+'</span>');
                         })
                         $.each(response.errors.email, function (key, err_values){
                         $('#email').append('<span>'+err_values+'</span>');
@@ -575,9 +573,6 @@
                         $.each(response.errors.status, function (key, err_values){
                         $('#status').append('<span>'+err_values+'</span>');
                         })
-                        $.each(response.errors.usertype, function (key, err_values){
-                        $('#usertype').append('<span>'+err_values+'</span>');
-                        })
                     }else{
                       $('#success').html();
                     $('#success').text('Created successfully');
@@ -587,7 +582,7 @@
                             }, 2000);
                         $('#create').modal('hide');
                         $('.modal-create').load(location.href+' .modal-create');
-                        refresh_table();
+                        $('.patient').load(location.href+' .patient');
                     }
                 }
             });
@@ -602,7 +597,7 @@
            $('#view').modal('show');
            $.ajax({
                 type: "GET",   
-                url: "/admin/profile/edit/"+ id, 
+                url: "/secretary/profile/edit/"+ id, 
                 datatype: "json",
                 success: function(response){ 
                   // console.log(response)
@@ -618,6 +613,7 @@
                $('#view_mname').val(response.user[0].mname);
                $('#view_lname').val(response.user[0].lname);
                $('#view_birthday').val(response.user[0].birthday);
+               $('#view_age').val(response.user[0].age);
                $('#view_address').val(response.user[0].address);
                $('#view_gender').val(response.user[0].gender); 
                $('#view_mobileno').val(response.user[0].mobileno);
@@ -639,10 +635,10 @@
            $('#edit').modal('show');
            $.ajax({
                 type: "GET",   
-                url: "/admin/profile/edit/"+ id,
+                url: "/secretary/profile/edit/"+ id,
                 datatype: "json",
                 success: function(response){ 
-              
+              console.log(response);
                     if(response.status == 400){
                       $('#update_errform' ).html("");
                         $('#update_errform' ).addClass('alert alert-danger');
@@ -655,6 +651,7 @@
                $('#edit_lname').val(response.user[0].lname);
                $('#edit_birthday').val(response.user[0].birthday);
                $('#edit_address').val(response.user[0].address);
+               $('#edit_age').val(response.user[0].age);
                $('#edit_gender').val(response.user[0].gender); 
                $('#edit_username').val(response.user[0].username);
                $('#edit_mobileno').val(response.user[0].mobileno);
@@ -677,6 +674,7 @@
                 'mname': $('#edit_mname').val(), 
                 'last_name': $('#edit_lname').val(),
                 'birthday': $('#edit_birthday').val(),
+                'age': $('#edit_age').val(),
                 'address': $('#edit_address').val(),
                 'gender': $('#edit_gender').val(),
                 'mobile_number': $('#edit_mobileno').val(), 
@@ -695,7 +693,7 @@
            
            $.ajax({
                 type: 'POST', 
-                url: "/admin/profile/update/"+ id,
+                url: "/secretary/profile/update/"+ id,
                 data: data,
                 datatype: "json",
                 beforeSend: function(){
@@ -706,7 +704,7 @@
                     $(".main-spinner").hide();
                 },
                 success: function(response){ 
-                    console.log(response);
+                console.log(response);
                     if(response.status == 400){
                       $('#error_fname, #error_lname, #error_gender, #error_usertype, #error_birthday, #error_address, #error_mobileno, #error_email, #error_password, #error_status'  ).html("");
                         $.each(response.errors.first_name, function (key, err_values){
@@ -717,6 +715,9 @@
                         })
                         $.each(response.errors.birthday, function (key, err_values){
                         $('#error_birthday').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.age, function (key, err_values){
+                        $('#error_age').append('<span>'+err_values+'</span>');
                         })
                         $.each(response.errors.address, function (key, err_values){
                         $('#error_address').append('<span>'+err_values+'</span>');
@@ -747,7 +748,7 @@
                             }, 2000);
                         $('#edit').modal('hide');
             $('.modal-update').load(location.href+' .modal-update');
-                        refresh_table();
+            $('.patient').load(location.href+' .patient');
                     }
         }
     });
@@ -771,7 +772,7 @@
             });
            $.ajax({
                 type: 'DELETE', 
-                url: "/admin/profile/delete/"+ id,
+                url: "/secretary/profile/delete/"+ id,
                 datatype: "json",
                 beforeSend: function(){
                   $('#accept-confirmation').modal('hide');
@@ -779,8 +780,10 @@
                 },
                 complete: function(){
                     $(".main-spinner").hide();
+               
                 },
                 success: function(response){ 
+                  $('.patient').load(location.href+' .patient');
                   $('#success').html();
                     $('#success').text('Deleted successfully');
                       $('#success').show();
@@ -789,7 +792,7 @@
                             }, 2000);
                         $('#delete').modal('hide');
                         $('#delete').find('input').val("");
-                       refresh_table();
+                    
         }
     });
         });

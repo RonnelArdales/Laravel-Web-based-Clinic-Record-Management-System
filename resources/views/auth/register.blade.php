@@ -217,9 +217,9 @@
       <input type="password" class="form-control" name="password_confirmation"  >
     </div>
     
-    <div>
-      <h4 style="text-align: center;">UPLOAD VALID ID</h4>
-      <button class="btn btn-primary mb-3 mt-2">Upload Photo</button>
+    <div class=" mb-3 mt-2">
+      {{-- <h4 style="text-align: center;">UPLOAD VALID ID</h4>
+      <button class="btn btn-primary mb-3 mt-2">Upload Photo</button> --}}
     </div>
 
     <p>By clicking <strong>Sign Up</strong> , you agree to our <button type="button" data-bs-toggle="modal" data-bs-target="#privacy" class="logoutbutton" style="outline: none" ><strong>Terms and Privacy Policy.</strong></button> You may receive Email Notifications from us for the verification code to successfully sign in.</p>

@@ -16,14 +16,14 @@
 	{{-- <i class="fa fa-search"></i>
 	  <input type="search" name="appointment_name" id="appointment_name" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" >  --}}
 	</div>
-  <select name="usertype" style="font-family:Poppins;font-size:0.9vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:200px; margin-right:20px ;padding-bottom:5px; padding-top:2px" class="usertypetable" id="usertypetable">
+  <select name="usertype" style="font-family:Poppins;font-size:1vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:200px; margin-right:20px ;padding-bottom:5px; padding-top:2px" class="usertypetable" id="usertypetable">
     <option value="">Select Filter</option>
     <option value="patient">patient</option>
     <option value="secretary">secretary</option>
     <option value="admin">admin</option>
   </select>
   <form action="/admin/reports/print_audit_trail" method="get">
-    <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:0.9vw; color:white; padding-left:20px; padding-right:20px" type="submit" class="btn btn-primary ml-6 show-create" >
+    <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1vw; color:white; padding-left:20px; padding-right:20px" type="submit" class="btn btn-primary ml-6 show-create" >
 Generate Report
     </button>
   </form>

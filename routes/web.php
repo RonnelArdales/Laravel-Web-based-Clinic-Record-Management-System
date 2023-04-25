@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/', [GuestpageController::class, 'index_guestpage']);
+    Route::get('/about_us', [GuestpageController::class, 'aboutus']);
     Route::get('/login', function () {return view('auth.login');})->name('login');
     Route::get('/register', function () {return view('auth.register');});
     Route::post('/store', [ClinicuserController::class, 'store']);
@@ -187,19 +188,30 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
         Route::get('/guestpage/edit/{id}', [AdminController::class, 'edit_guestpage_setting']);
         Route::put('/guestpage/update/{id}', [AdminController::class, 'update_guestpage_setting']);
 
-
+        //------------------reservation fee-------------------//
+        Route::get('/reservationfee', [AdminController::class, 'index_reservationfee_setting']);
+        Route::put('/reservationfee/update/{id}', [AdminController::class, 'update_reservationfee_setting']);
+        
+        //------------------profile-------------------//
+        Route::get('/myprofile', [AdminController::class, 'index_myprofile']);
+        Route::get('/myprofile/edit', [AdminController::class, 'edit_myprofile']);
+        Route::post('/myprofile/update', [AdminController::class, 'update_myprofile']);
+        Route::get('/myprofile/changepassword', [AdminController::class, 'index_changepass']);
+        Route::post('/myprofile/changepassword/update', [AdminController::class, 'update_changepass']);
+        Route::post('/myprofile/picture/update/{id}', [AdminController::class, 'update_profile_pic']);
+        // Route::post('/profile/picture/update/{id}', [PatientController::class, 'image_profile_update']);
 
 });
 
     Route::prefix('/secretary')->middleware('auth', 'verify' ,'issecretary' )->group(function(){
     Route::get('/dashboard',  [SecretaryController::class, 'dashboard'] );
-
-    Route::get('/profile', [SecretaryController::class, 'profile'])->name('secretary.profile') ;  //display users
-    Route::get('/profile/createuser', [SecretaryController::class, 'create_user_page']) ;   //create users
-    Route::post('/profile/createuser/store', [SecretaryController::class, 'store_user']);   //save users in database
-    Route::get('/profile/edit/{id}', [SecretaryController::class, 'edit_user']);//show edit user
-    Route::put('/profile/update/{id}', [SecretaryController::class, 'update_user']); //update user data
-    Route::delete('/profile/delete/{id}', [SecretaryController::class, 'delete_user']); //delete user data
+    [SecretaryController::class, 'edit_user'];
+    Route::get('/profile', [SecretaryController::class, 'profile'])->name('secretary.profile') ;  //display users  //create users
+    Route::post('/profile/createuser/store', [UserController::class, 'store_user']);   //save users in database
+    Route::get('/profile/edit/{id}', [UserController::class, 'edit_user'])->name('users.show');//show edit user
+    Route::put('/profile/update/{id}', [UserController::class, 'update_user']); //update user data
+    Route::delete('/profile/delete/{id}', [UserController::class, 'delete_user']); //delete user data
+    Route::get('/profile/pagination/paginate-data', [UserController::class, 'profile_paginate']);
 
     //discount(done)
     Route::get('/discount', [SecretaryController::class, 'discount_show']);   //display discount table
@@ -209,22 +221,88 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::put('/discount/update/{discountcode}', [SecretaryController::class, 'update_discount']);  //store updated discount  
     Route::delete('/discount/delete/{discountcode}', [SecretaryController::class, 'delete_discount']); //delete discount
 
-    //service
-    Route::get('/fetch-service', [SecretaryController::class, 'fetch_service']); 
-    Route::get('/service', [SecretaryController::class, 'service_show']); 
-    //display
-    // Route::get('/service/createservice', [AdminController::class, 'create_service']) ; 
-    //create discount
-    Route::post('/service/createservice/store', [SecretaryController::class, 'store_service']) ; 
-    //display editable discount
-    Route::get('/service/edit/{servicecode}', [SecretaryController::class, 'edit_service']);
-    //store updated discount
-    Route::put('/service/update/{servicecode}', [SecretaryController::class, 'update_service']);   
-    //delete discount
-    Route::delete('/service/delete/{servicecode}', [SecretaryController::class, 'delete_service']); //delete discount
+    //----------------------appointment----------------------------//
+    Route::get('/appointment', [AppointmentController::class, 'appointment_show'])->name('appointment.show');
+    Route::get('/complete-appointment', [AppointmentController::class, 'complete_appointment_show'])->name('complete-appointment.show'); 
+    Route::get('/cancelled-appointment', [AppointmentController::class, 'cancel_appointment_show'])->name('cancelled-appointment.show'); 
+    Route::get('/transaction-appointment', [AppointmentController::class, 'trans_appointment_show'])->name('trancaction-appointment.show');
+    Route::post('/appointment/create', [AppointmentController::class, 'store_appointment']); 
+    Route::put('/appointment/change_status/{id}', [AdminController::class, 'appointment_change_status']); 
 
-    //appointment page
-    Route::get('/appointment', [SecretaryControllerr::class, 'appointment_show']); 
+
+    //-----------------queuing ------------------------//
+    Route::get('/queuing', [SecretaryController::class, 'view_queuing']);
+    Route::get('/queuing/upcoming', [SecretaryController::class, 'upcoming_queuing']);
+    Route::get('/transaction/getid', [AdminController::class, 'get_id']);
+
+    //-----------------Transaction ------------------------//
+    Route::get('/transaction', [SecretaryController::class, 'view_transaction']); 
+    Route::get('/transaction/getid', [SecretaryController::class, 'get_id']);
+    Route::post('/transaction/addtocart/store', [SecretaryController::class, 'store_addtocart']);
+    Route::post('/transaction/addtocart/billing_store', [SecretaryController::class, 'store_billing']);
+    Route::delete('/transaction/delete/{id}', [SecretaryController::class, 'delete_transaction']);
+
+    //----------------------Billing----------------------------//
+    Route::get('/billing',[SecretaryController::class, 'index_billing']);
+    Route::get('/billing/getdiscount/{id}', [SecretaryController::class, 'get_discount']);
+    Route::get('/billing/getdata/{id}', [SecretaryController::class, 'addtocart_getalldata']); 
+
+               //----------------------reports----------------------------//
+               Route::get('/reports/user', [ReportController::class, 'view_user']);
+               Route::get('/reports/audit_trail', [ReportController::class, 'view_auditTrail']);
+               Route::get('/reports/appointment', [ReportController::class, 'view_appointment']);
+               Route::get('/reports/billing', [ReportController::class, 'view_billing']);
+          
+              //-----------------------prints  ---------------------------------//
+               Route::post('/reports/print_user', [PrintController::class, 'print_user']);
+               Route::get('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
+               Route::get('/reports/print_appointment', [PrintController::class, 'print_appointment']); 
+               Route::get('/billing/printinvoice/{id}', [PrintController::class, 'print_invoice']); 
+               Route::get('/reports/print_billing', [PrintController::class, 'print_billing']);
+               Route::get('/appointment/print/{id}', [PrintController::class, 'print_appointment_trans']);
+               Route::get('/consultation/print/{id}', [PrintController::class, 'print_consultation_result']);
+              Route::get('/document/download/{id}', [PrintController::class, 'download_transaction']);
+    
+
+    //----------------------discount----------------------------//
+    Route::get('/discount', [SecretaryController::class, 'discount_show'])->name('discount.show');   //display discount table
+    Route::post('/discount/creatediscount/store', [SecretaryController::class, 'store_discount']) ;  //create discount
+    Route::get('/discount/edit/{discountcode}', [SecretaryController::class, 'edit_discount']); //display editable discount
+    Route::put('/discount/update/{discountcode}', [SecretaryController::class, 'update_discount']);  //store updated discount  
+    Route::delete('/discount/delete/{discountcode}', [SecretaryController::class, 'delete_discount']); //delete discount
+
+    //----------------------service----------------------------//
+    Route::get('/service', [AdminController::class, 'service_show'])->name('service.show'); //display service table
+    Route::post('/service/createservice/store', [AdminController::class, 'store_service']) ;    //create service
+    Route::get('/service/edit/{servicecode}', [AdminController::class, 'edit_service']);    //display editable discount
+    Route::put('/service/update/{servicecode}', [AdminController::class, 'update_service']);    //store updated discount
+    Route::delete('/service/delete/{servicecode}', [AdminController::class, 'delete_service']); //delete discount
+
+    
+        //--------------------business Hours -----------------------//
+        Route::get('/business_hours', [AdminController::class, 'show_businesshours']);
+        Route::post('/business_hours/store', [AdminController::class, 'store_businesshours']);
+        Route::post('/business_hours/delete', [AdminController::class, 'delete_businesshours']);
+        Route::get('/business_hours/get_hours', [AdminController::class, 'get_hours']);
+        Route::put('/business_hours/off_status', [AdminController::class, 'off_status']);
+
+        //--------------------Guest page -----------------------//
+        Route::get('/guestpage', [AdminController::class, 'show_guestpage_setting']);
+        Route::get('/guestpage/edit/{id}', [AdminController::class, 'edit_guestpage_setting']);
+        Route::put('/guestpage/update/{id}', [AdminController::class, 'update_guestpage_setting']);
+
+        //------------------reservation fee-------------------//
+        Route::get('/reservationfee', [AdminController::class, 'index_reservationfee_setting']);
+        Route::put('/reservationfee/update/{id}', [AdminController::class, 'update_reservationfee_setting']);
+        
+        //------------------profile-------------------//
+        Route::get('/myprofile', [AdminController::class, 'index_myprofile']);
+        Route::get('/myprofile/edit', [AdminController::class, 'edit_myprofile']);
+        Route::post('/myprofile/update', [AdminController::class, 'update_myprofile']);
+        Route::get('/myprofile/changepassword', [AdminController::class, 'index_changepass']);
+        Route::post('/myprofile/changepassword/update', [AdminController::class, 'update_changepass']);
+        Route::post('/myprofile/picture/update/{id}', [AdminController::class, 'update_profile_pic']);
+
 
 
 });
@@ -232,13 +310,14 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
 Route::prefix('/patient')->middleware('auth','ispatient', 'verify')->group(function(){
 
     Route::get('/homepage', [PatientController::class, 'homepage'])->name('patient.homepage');
+    Route::get('/about_us', [GuestpageController::class, 'aboutus']);
     //--------------profile-------------------------//
     Route::get('/profile', [PatientController::class, 'profileshow'])->name('patient.profile') ;
     Route::get('/profile/edit', [PatientController::class, 'edit_profile']);
     Route::put('/profile/update/{id}', [PatientController::class, 'update_profile']);
     Route::put('/appointment/cancel/{id}', [PatientController::class, 'cancel_appointment']);
     Route::get('/document/view/{id}', [PatientController::class, 'document_view']);
-
+    Route::post('/profile/picture/update/{id}', [PatientController::class, 'image_profile_update']);
     
 
    

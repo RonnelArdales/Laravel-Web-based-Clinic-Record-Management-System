@@ -286,15 +286,22 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
             });
-           $.ajax({
+
+            if(id.length > 0){
+                $.ajax({
                 type: "GET",   
                 url: "/admin/appointment/get_appointment_service/"+id ,
                 datatype: "json",
                 success: function(response){ 
+                    $('.price, .servicename').val("");
                     $('.servicename').val(response.service.services);
-       
+                    $('.price').val(response.service.price);
                 }
             });
+            }else{
+                $('.price, .servicename').val("");
+            }
+
 
         });
 
@@ -389,6 +396,11 @@
                             $('#servicename').val("");
                             $('#getservice').val("");
                             $('#price').val("");
+                            $(".success").show();
+                            $('#message-success').text('Saved Successfully');
+                            setTimeout(function() {
+                                $(".success").fadeOut(500);
+                            }, 2000);
                  
                 }
             });

@@ -14,6 +14,7 @@ use App\Models\Consultation;
 use App\Models\Consultationfile;
 use App\Models\Discount;
 use App\Models\Guestpage;
+use App\Models\Reservationfee;
 use App\Models\Service;
 use App\Models\Transaction;
 use App\Models\User;
@@ -39,6 +40,7 @@ class AdminController extends Controller
 
         $appointments =  DB::table('appointments')->where('status', 'Booked')->whereDate('date', '>', date('Y-m-d'))
         ->orderBy('date', 'asc')->limit(3)->get();
+        $latestuser = User::orderBy('created_at', 'desc')->take(7)->get();
         // // $data = Appointment::distinct('service')-> select('service' , DB::raw('count(gender) as gender_count, gender'))->groupBy('gender', 'service')->get();
         // $data = Appointment:: select('service' , DB::raw('count(*) as gender_count, gender'))->groupBy('gender', 'service')->get();
 
@@ -83,6 +85,7 @@ class AdminController extends Controller
                                           ->with('users', $users)
                                           ->with('pending', $pending)
                                           ->with('transaction', $transaction)
+                                          ->with('latests', $latestuser)
                                         //   ->with('datas', $gender_records)
                                         //  ->with('appointments', $appointments)
                                           ;
@@ -224,7 +227,7 @@ class AdminController extends Controller
 
     //service
     public function service_show(){
-        $service = Service::all();
+        $service = DB::table('services')->paginate(8);
         return view('system_settings.service', ['services' => $service]);
     }
 
@@ -241,7 +244,7 @@ public function fetch_service(){
 
         $validator = Validator::make($request->all(), [
             'servicename'=>'required',
-            'price' => 'required|numeric'
+            'price' =>'required',
         ]);
 
         if($validator->fails())
@@ -255,12 +258,12 @@ public function fetch_service(){
         {
 
             $service = new Service;
-            $service->servicename = $request->input('servicename');
+            $service->services = $request->input('servicename');
             $service->price = $request->input('price');
             $service->save();
             return response()->json([
                 'status'=>200,
-                'message' => 'discount added successfully',
+                'message' => 'Added successfully',
             ]);
         }
     }
@@ -286,7 +289,7 @@ public function fetch_service(){
     public function update_service($servicecode ,Request $request){
         $validator = Validator::make($request->all(), [
             'servicename'=>'required',
-            'price' => 'required|numeric'
+            'price'=>'required',
         ]);
 
         if($validator->fails())
@@ -299,7 +302,7 @@ public function fetch_service(){
         else
         {
             $arrItem = array(
-                'servicename' =>$request->get('servicename'),
+                'services' =>$request->get('servicename'),
                 'price' => $request->get('price'),
             );
 
@@ -576,7 +579,7 @@ public function fetch_service(){
                                     File::delete($path);
                                 }
                                 $filename = date('YmdHis'). '.' . $input['pdf']->getClientOriginalExtension();
-                                $input['pdf']->move(public_path('consultation/'), $filename);
+                                $input['pdf']->move(public_path('consultation/'), $filename) ;
                                 $input['pdf'] = $filename;
                                 $transaction->file = $filename;
 
@@ -628,14 +631,44 @@ public function fetch_service(){
 
 
     //--------------------------- billing ----------------------------//
-    public function index_billing(){
-       $billing =  DB::table('transactions')->distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc')->paginate(10, ['*'], 'addtocart');
+    public function index_billing(Request $request){
+
+        if ($request->ajax()) {
+            $data = DB::table('transactions')->distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc');
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+
+                        if($row->status == "Pending"){
+                            
+                             $btn = '<button type="button" data-id="' . $row->transno . '" class="payment btn  btn-success btn-sm">Pay now</button>';
+                            $btn = $btn.'<a href="/admin/billing/viewBilling/ ' . $row->transno . ' " class="btn btn-primary btn-sm" style="margin-left:5px"    >View</a>';
+                            $btn = $btn.' <a href="/admin/billing/editBilling/' . $row->transno . '" class="btn btn-danger btn-sm">Delete</a>';
+                            $size = '<div style="width: 200px">' . $btn . '</div>';                
+                            return $size;
+                           
+                        }else{
+
+                            $btn = ' <a href="/admin/billing/viewBilling/' . $row->transno . '" class="btn btn-primary btn-sm">View</a>';
+                            $btn = $btn.'  <a href="/admin/billing/editBilling/' . $row->transno . '" class="btn btn-danger btn-sm">Delete</a>';
+                    $size = '<div style="width: 200px">' . $btn . '</div>';                
+                            return $size;
+
+                           
+                          
+                        }
+
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+    //    $billing =  DB::table('transactions')->distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc')->paginate(10, ['*'], 'addtocart');
         $discount = Discount::all();
         // $billing = Transaction::distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc')->get();
 
         return view('admin.billing', [
                                         'discounts' =>$discount,
-                                        'billings' => $billing,
+                              
                                       ]);
     }
 
@@ -750,6 +783,7 @@ public function fetch_service(){
      $input = $request->all();
         Transaction::where('transno', $id)->update([
                                                     'discount' => $input['discountname'],
+                                                    'discount_price' => $input['discountprice'],
                                                     'total' => $input['total'],
                                                     'mode_of_payment' => $input['mode_of_payment'],
                                                     'reference_no' => $input['reference_no'],
@@ -872,7 +906,7 @@ public function index_discount(){
 //----------------------quueing ------------------------//
  public function view_queuing(Request $request){
 
-    if(Auth::user()->usertype == 'admin'){
+
         if ($request->ajax()) {
             $data = DB::table('appointments')->whereDate('date', '=', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
             ->orderBy('time', 'asc');
@@ -895,16 +929,12 @@ public function index_discount(){
         }
         return view('admin.queuing');
 
-    }else{
 
-        //secretary side
-
-    }
 
  }
 
  public function upcoming_queuing(Request $request){
-    if(Auth::user()->usertype == 'admin'){
+
         if ($request->ajax()) {
             $data = DB::table('appointments')->whereDate('date', '>', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
             ->orderBy('date', 'asc');
@@ -927,11 +957,7 @@ public function index_discount(){
         }
         return view('secretary.queuing');
 
-    }else{
 
-        //secretary side
-
-    }
  }
 
 
@@ -1152,6 +1178,8 @@ public function store_businesshours(Request $request){
         $consultation->treatment_given = $input['treatment'];
         $consultation->recommendation = $input['recommendation'];
         $consultation->save();
+
+        return redirect('/admin/consultation');
     }
  }
 
@@ -1365,6 +1393,116 @@ public function store_businesshours(Request $request){
                 
             ]);
         }
+
+        public function index_reservationfee_setting(){
+            $reservationfee = Reservationfee::first();
+            return view('system_settings.reservationfee', compact('reservationfee'));
+        }
+
+        public function update_reservationfee_setting($id, Request $request){
+
+            $reservationfee = Reservationfee::where('id', $id)->update(['reservationfee' => $request->input('newfee')]);
+            return redirect()->back();
+        }
+
+        public function index_myprofile(){
+            return view('admin.profile.index');
+        }
+
+        public function edit_myprofile(){
+            return view('admin.profile.edit');
+        }
+
+        public function update_myprofile(Request $request){
+            $validated = $request->validate([
+                "first_name" => ['required'],
+                "mname" => [''],
+                "last_name" => ['required',],
+                "birthday" => ['required'],
+                "age" => ['required'],
+                "address" => ['required'],
+                "gender" => ['required'],
+            ],[
+              'first_name.required' => 'First name is required',
+              'last_name.required' => 'Last name is required',
+              'birthday.required' => 'Birthday is required',
+              'age.required' => 'Age is required',
+              'address.required' => 'Address is required',
+              'gender.required' => 'gender is required',
+            ]);
+
+        $user = User::where('id', Auth::user()->id)->first();
+        $input = $request->all();
+        
+        $user->fname = $input['first_name'];
+        $user->mname = $input['mname'];
+        $user->lname = $input['last_name'];
+        $user->birthday = $input['birthday'];
+        $user->address = $input['address'];
+        $user->age= $input['age'];
+        $user->gender = $input['gender'];
+
+        $user->save();
+
+        return redirect('/admin/myprofile')->with('success', 'Updated successfully');
+
+        }
+
+        public function update_profile_pic($id, Request $request){
+            $input = $request->all();
+            $validated = $request->validate([
+                "profilepic" => 'required|mimes:png,jpg,jpeg',
+     
+            ],[
+                "profilepic" =>'The picture must be a file of type: png, jpg, jpeg.'
+            ]);
+    
+            $user = User::where('id', Auth::user()->id)->first();
+            $path = public_path('profilepic/'.$user->profile_pic);
+    
+            if(File::exists($path)){
+                File::delete($path);
+            }
+            $filename = date('YmdHis'). '.' . $input['profilepic']->getClientOriginalExtension();
+            $input['profilepic']->move(public_path('profilepic/'), $filename) ;
+            $input['profilepic'] = $filename;
+            $user->profile_pic = $filename;
+    
+            $user->save();
+           return redirect()->back();
+        }
+
+        public function index_changepass(){
+            return view('admin.profile.changepass');
+        }
+
+        public function update_changepass(Request $request){
+
+       $input = $request->all();
+            
+        if(password_verify($input['oldpassword'], Auth::user()->password)){
+            $validated = $request->validate([
+                "password" => 'required|confirmed|min:8',
+            ],[
+              'password.required' => 'Password is required',
+              'password.confirmed' => 'Password did not match',
+            ]);
+
+            $user = User::where('id', Auth::user()->id)->first();
+            $encrypt = bcrypt($request->input('password'));
+            $user->password = $encrypt;
+            return redirect()->back()->with('success', 'Updated successfully');
+             
+        }else{
+            return redirect()->back()->with('oldpassword', 'The password did not match with the current password.');
+        }
+
+           
+
+    
+  
+
+    }
 
 
 }

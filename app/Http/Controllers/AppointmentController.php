@@ -56,7 +56,21 @@ class AppointmentController extends Controller
             return view('admin.appointment', compact('appointments', 'patients', 'services', 'day', 'days', ))->with('day_array', $day_array);
         }else{
 
-            //secretary side
+            if ($request->ajax()) {
+                $data = Appointment::where('status', 'pending')->orderby('created_at', 'desc');
+                return Datatables::of($data)
+                        ->addIndexColumn()
+                        ->addColumn('action', function($row){
+
+                                $btn = '<button style="margin-right:5px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
+                                $btn = $btn.'<button class="cancel btn btn-sm btn-danger" data-id="' . $row->id . '">Cancel</button>';
+                                $size = '<div style="width: 150px">' . $btn . '</div>';                
+                                    return $size;
+                        })
+                        ->rawColumns(['action'])
+                        ->make(true);
+            }
+            return view('secretary.appointment', compact('appointments', 'patients', 'services', 'day', 'days', ))->with('day_array', $day_array);
   
         }
     }
@@ -82,6 +96,11 @@ class AppointmentController extends Controller
 
 
         }else{
+            if ($request->ajax()) {
+                $data = Appointment::where('status', 'success')->orderby('created_at', 'desc');
+                return Datatables::of($data)
+                        ->make(true);
+            }
 
             //secretary side
   
@@ -110,7 +129,11 @@ class AppointmentController extends Controller
 
         }else{
 
-            //secretary side
+            if ($request->ajax()) {
+                $data = Appointment::where('status', 'cancel')->orderby('created_at', 'desc');
+                return Datatables::of($data)
+                        ->make(true);
+            }
   
         }
     }
@@ -140,7 +163,17 @@ class AppointmentController extends Controller
             }
         }else{
 
-            //secretary side
+            if ($request->ajax()) {
+                $data = Appointment::all();
+                return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $btn = ' <a href="/admin/appointment/print/' . $row->id . '" class=" btn btn-sm btn-primary">Print</a>';          
+                        return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+            }
   
         }
     }

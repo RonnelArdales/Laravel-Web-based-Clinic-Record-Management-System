@@ -263,15 +263,20 @@
     height: 13% ;
     width: 13% ;
   }
+
+  .icon-dropdown{
+    height: 13% ;
+    width: 13% ;
+  }
   
   .main{
     background-color: bisque;
       border-radius: 25px;
       /* width: 82vw; */
-    min-height: 94vh;
-      margin-top: 20px;
+    min-height: 95vh;
+      margin-top: 18px;
       margin-right: 20px;
-      margin-bottom: 20px
+      margin-bottom: 18px
   }
   .add-left{
      margin-left: 20px;
@@ -346,8 +351,23 @@
     
 }
 
+/* button.btn.dropdown-toggle.show::after {
+    display:none !important ;
+} */
+/* .dropdown-toggle.show::before {
+    display:none !important ;
+} */
+
 /*   dashboard  */
 
+.dropup:hover{
+     background-color: bisque;
+     color:black;
+}
+
+.dropup label:hover{
+     color:black;
+}
 
 .side-navbar {
      width: 260px;
@@ -368,7 +388,7 @@
 }
 
 .active-cont {
-  margin-left: 270px;
+  margin-left: 265px;
 }
 
 #menu-btn {
@@ -393,17 +413,20 @@
    margin-bottom: 10px;
    background: #EDDBC0;
           }
+
+          
 </style>
 
 <body>
 
 
 <body >                                    {{--d-flex--}}
-     <div class="side-navbar active-nav justify-content-between flex-wrap flex-column" id="sidebar">
-          <div class="p-2.5 mt-1 d-flex  justify-content-center" style="margin-bottom: 20px">
-               <img style="border-radius: 100%; height:9.5vw; width: 9.5vw;   " src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt="JGRPSYlogo">
+     <div class="side-navbar active-nav justify-content-between flex-wrap flex-column" style="z-index:9" id="sidebar">
+          <div class="p-2.5 mt-1 d-flex  justify-content-center" style="padding-bottom: 20px;  border-bottom: 2px solid gray ">
+               <img style="border-radius: 100%; height:100px; width: 100px;   " src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt="JGRPSYlogo">
              </div>
-             <div class="overflow-auto" style="height: 70vh"> 
+        
+             <div class="overflow-auto" style="height: 70vh; border-bottom: 2px solid gray "> 
           @if (Auth::user()->usertype == 'admin')
                <ul class="nav flex-column text-white w-100">
 
@@ -437,7 +460,7 @@
 
                <li class=" my-1 mx-3 {{Request::is('admin/transaction') ? 'active-bar' : '';}}">
                     <a href="/admin/transaction"> 
-                         <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/consult_las4n9.png" alt="">
+                         <img class="icon" src="{{url('logo/transaction.png')}}" alt="">
                          <span>Transaction</span> 
                     </a>
                </li> 
@@ -451,14 +474,14 @@
 
                <li class=" my-1 mx-3 {{Request::is('admin/consultation') ? 'active-bar' : '';}}">
                     <a href="/admin/consultation"> 
-                         <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
+                         <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/consult_las4n9.png" alt=""> 
                          <span>Consultation</span>
                     </a>
                </li>
 
                <li class=" my-1 mx-3 {{Request::is('admin/document') ? 'active-bar' : '';}}">
                     <a href="/admin/document"> 
-                         <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
+                         <img class="icon" src="{{url('logo/documents.png')}}" alt=""> 
                          <span>Documents</span>
                     </a>
                </li>
@@ -510,33 +533,20 @@
 
                     <li class="my-1 mx-3  {{Request::is('admin/reports/audit_trail') ? 'active-bar' : '';}}">
                          <a href="/admin/reports/audit_trail"> 
-                              <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
+                              <img class="icon dropdown" src="{{url('logo/audittrail.png')}}" alt=""> 
                               <span>Audit Trail</span>
                          </a>
                     </li>
-
-                    {{-- <li class=" my-1 mx-3 {{Request::is('') ? 'active-bar' : '';}}">
-                         <a href="#"> 
-                              <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
-                              <span>Service</span>
-                         </a>
-                    </li> --}}
-                    
-                    {{-- <li class=" my-1 mx-3 {{Request::is('') ? 'active-bar' : '';}}">
-                         <a href="#"> 
-                              <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
-                              <span>Discount</span>
-                         </a>
-                    </li> --}}
                   
 
                 </ul> 
-
+ 
                 
                 <li class=" my-1 mx-3 {{Request::is('admin/service') ||
                 Request::is('admin/discount') ||
                 Request::is('admin/business_hours') ||
-                Request::is('admin/guestpage')
+                Request::is('admin/guestpage') ||
+                Request::is('admin/reservationfee') 
                  ? 'active-bar' : '';}}">
                   <a href="#setting" data-bs-toggle="collapse" >
                        <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/settings_ttbpof.png" alt=""> 
@@ -547,7 +557,8 @@
              <ul class="{{Request::is('admin/service') ||
                           Request::is('admin/discount') ||
                           Request::is('admin/business_hours') ||
-                          Request::is('admin/guestpage')
+                          Request::is('admin/guestpage') ||
+                          Request::is('admin/reservationfee') 
              ? 'show' : 'collapse';}} flex-column list-unstyled" id="setting" data-bs-parent="#menu">
                   
                   <li class=" my-1 mx-3  {{Request::is('admin/service') ? 'active-bar' : '';}}">
@@ -578,26 +589,27 @@
                        </a>
                   </li>
 
-                  <li class=" my-1 mx-3 {{Request::is('admin/guestpage') ? 'active-bar' : '';}}">
-                    <a href="/admin/guestpage"> 
-                         <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296805/JG%20marquez/guestpage_zylemm.png" alt=""> 
+                  <li class=" my-1 mx-3 {{Request::is('admin/reservationfee') ? 'active-bar' : '';}}">
+                    <a href="/admin/reservationfee"> 
+                         <img class="icon dropdown" src="{{url('logo/reservationsettings.png')}}" alt=""> 
                          <span>Reservation Fee</span>
                     </a>
                     </li>
 
               </ul>  
        
-               <form class="" action="/logout" method="POST" >
+               {{-- <form class="" action="/logout" method="POST" >
                     @csrf
                     <li class="my-1 mx-3">
                         <button type="submit" class="btn dropdown-btn rounded">
                           <img class="icon" src="{{url('/logo/businesshours.png')}}" alt=""> 
                           Logout</button>
                     </li>
-                    </form>
+                    </form> --}}
           
           </ul>
           @else
+
           {{--navigation bar for secretary--}}
           <ul class="nav flex-column text-white w-100">
 
@@ -615,35 +627,39 @@
               </a>
          </li>
 
-         <li class="  my-1 mx-3  {{Request::is('admin/appointment') ? 'active-bar' : '';}}">
-              <a href="/admin/appointment"> 
+         <li class="  my-1 mx-3  {{Request::is('secretary/appointment') ? 'active-bar' : '';}}">
+              <a href="/secretary/appointment"> 
                    <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296625/JG%20marquez/booking_te8ipg.png" alt="">
                    <span>Appointment</span>
               </a>
          </li> 
 
-         <li class="  my-1 mx-3  {{Request::is('admin/queuing') ? 'active-bar' : '';}}">
-              <a href="/admin/queuing"> 
+         <li class="  my-1 mx-3  {{Request::is('secretary/queuing') ? 'active-bar' : '';}}">
+              <a href="/secretary/queuing"> 
                    <img class="icon" src="{{url('/logo/queuing.png')}}" alt="">
                    <span>Queuing</span> 
               </a>
          </li>
+
+         <li class=" my-1 mx-3 {{Request::is('secretary/transaction') ? 'active-bar' : '';}}">
+          <a href="/secretary/transaction"> 
+               <img class="icon" src="{{url('logo/transaction.png')}}" alt="">
+               <span>Transaction</span> 
+          </a>
+     </li> 
          
          
-         <li class=" my-1 mx-3 {{Request::is('admin/billing') ? 'active-bar' : '';}}">
-          <a href="/admin/billing"> 
+         <li class=" my-1 mx-3 {{Request::is('secretary/billing') ? 'active-bar' : '';}}">
+          <a href="/secretary/billing"> 
                <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
                <span>Billing</span>
           </a>
      </li>
 
-     <li class=" my-1 mx-3 {{Request::is('admin/reports/user') ||
-                             Request::is('admin/reports/appointment') ||
-                             Request::is('admin/reports/audit_trail') ||
-                             Request::is('admin/reports/user') ||
-                             Request::is('admin/reports/user') ||
-                             Request::is('admin/reports/user') ||
-                             Request::is('admin/reports/user') 
+     <li class=" my-1 mx-3 {{Request::is('secretary/reports/user') ||
+                             Request::is('secretary/reports/appointment') ||
+                             Request::is('secretary/reports/billing') 
+               
                               ? 'active-bar' : '';}}">
                                    <a href="#report" data-bs-toggle="collapse" >
                                         <img class="icon" src="{{url('/logo/report.png')}}" alt=""> 
@@ -651,112 +667,144 @@
                               </a>
      </li>
 
-     <ul class="{{Request::is('admin/reports/user') ||
-                    Request::is('admin/reports/appointment') ||
-                    Request::is('admin/reports/audit_trail') ||
-                    Request::is('admin/reports/billing')
+     <ul class="{{Request::is('secretary/reports/user') ||
+                    Request::is('secretary/reports/appointment') ||
+                    Request::is('secretary/reports/audit_trail') ||
+                    Request::is('secretary/reports/billing')
                               ? 'show' : 'collapse';}} flex-column list-unstyled" id="report" data-bs-parent="#menu">
 
-          <li class="my-1 mx-3 {{Request::is('admin/reports/user') ? 'active-bar' : '';}}">
-               <a  href="/admin/reports/user"> 
+          <li class="my-1 mx-3 {{Request::is('secretary/reports/user') ? 'active-bar' : '';}}">
+               <a  href="/secretary/reports/user"> 
                     <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" alt=""> 
                     <span>Users</span>
                </a>
           </li>
 
-          <li class=" my-1 mx-3 {{Request::is('admin/reports/appointment') ? 'active-bar' : '';}}">
-               <a href="/admin/reports/appointment"> 
+          <li class=" my-1 mx-3 {{Request::is('secretary/reports/appointment') ? 'active-bar' : '';}}">
+               <a href="/secretary/reports/appointment"> 
                     <img class="icon dropdown " src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296625/JG%20marquez/booking_te8ipg.png" alt=""> 
                     <span>Appointment</span>
                </a>
           </li>
 
-          {{-- <li class="my-1 mx-3  {{Request::is('') ? 'active-bar' : '';}}">
-               <a href="#"> 
-                    <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/consult_las4n9.png" alt=""> 
-                    <span>Transaction</span>
-               </a>
-          </li> --}}
 
-          <li class="my-1 mx-3  {{Request::is('admin/reports/billing') ? 'active-bar' : '';}}">
-               <a href="/admin/reports/billing"> 
+          <li class="my-1 mx-3  {{Request::is('secretary/reports/billing') ? 'active-bar' : '';}}">
+               <a href="/secretary/reports/billing"> 
                     <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
                     <span>Billing</span>
                </a>
           </li>
 
-          {{-- <li class="my-1 mx-3  {{Request::is('admin/reports/audit_trail') ? 'active-bar' : '';}}">
-               <a href="/admin/reports/audit_trail"> 
-                    <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
-                    <span>Audit Trail</span>
-               </a>
-          </li> --}}
-
-
-          
-
-        
-
       </ul> 
 
       
-            <li class=" my-1 mx-3 {{Request::is('admin/service') ||
-            Request::is('admin/discount') ||
-            Request::is('admin/business_hours') ||
-            Request::is('admin/guestpage')
-            ? 'active-bar' : '';}}">
-              <a href="#setting" data-bs-toggle="collapse" >
-                  <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/settings_ttbpof.png" alt=""> 
-                  <span>Settings</span>  <i style="padding-top:5px" class="fa fa-caret-down"></i>
-            </a>
-        </li>
+      <li class=" my-1 mx-3 {{Request::is('secretary/service') ||
+                    Request::is('secretary/discount') ||
+                    Request::is('secretary/business_hours') ||
+                    Request::is('secretary/guestpage') ||
+                    Request::is('secretary/reservationfee') 
+                    ? 'active-bar' : '';}}">
+        <a href="#setting" data-bs-toggle="collapse" >
+             <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/settings_ttbpof.png" alt=""> 
+             <span>Settings</span>  <i style="padding-top:5px" class="fa fa-caret-down"></i>
+       </a>
+   </li>
 
-        <ul class="{{Request::is('admin/service') ||
-                      Request::is('admin/discount') ||
-                      Request::is('admin/business_hours') ||
-                      Request::is('admin/guestpage')
-        ? 'show' : 'collapse';}} flex-column list-unstyled" id="setting" data-bs-parent="#menu">
+        <ul class="{{Request::is('secretary/service') ||
+                    Request::is('secretary/discount') ||
+                    Request::is('secretary/business_hours') ||
+                    Request::is('secretary/guestpage') ||
+                    Request::is('secretary/reservationfee') 
+                    ? 'show' : 'collapse';}} flex-column list-unstyled" id="setting" data-bs-parent="#menu">
               
-              <li class=" my-1 mx-3  {{Request::is('admin/service') ? 'active-bar' : '';}}">
-                  <a href="/admin/service"> 
+              <li class=" my-1 mx-3  {{Request::is('secretary/service') ? 'active-bar' : '';}}">
+                  <a href="/secretary/service"> 
                         <img class="icon dropdown" src="{{url('/logo/service.png')}}" alt=""> 
                         <span>Service</span>
                   </a>
               </li>
 
-              <li class=" my-1 mx-3 {{Request::is('admin/discount') ? 'active-bar' : '';}}">
-                  <a href="/admin/discount"> 
+              <li class=" my-1 mx-3 {{Request::is('secretary/discount') ? 'active-bar' : '';}}">
+                  <a href="/secretary/discount"> 
                         <img class="icon dropdown" src="{{url('/logo/discount2.png')}}" alt=""> 
                         <span>Discount</span>
                   </a>
               </li>
 
-              <li class="my-1 mx-3  {{Request::is('admin/business_hours') ? 'active-bar' : '';}}">
-                  <a href="/admin/business_hours"> 
+              <li class="my-1 mx-3  {{Request::is('secretary/business_hours') ? 'active-bar' : '';}}">
+                  <a href="/secretary/business_hours"> 
                         <img class="icon dropdown" src="{{url('/logo/businesshours.png')}}" alt=""> 
                         <span>Business Hours</span>
                   </a>
               </li>
 
-              <li class=" my-1 mx-3 {{Request::is('admin/guestpage') ? 'active-bar' : '';}}">
-                  <a href="/admin/guestpage"> 
+              <li class=" my-1 mx-3 {{Request::is('secretary/guestpage') ? 'active-bar' : '';}}">
+                  <a href="/secretary/guestpage"> 
                         <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296805/JG%20marquez/guestpage_zylemm.png" alt=""> 
                         <span>Guestpage</span>
                   </a>
               </li>
           </ul>  
 
-          <form class="" action="/logout" method="POST" >
-                @csrf
-                <li class="my-1 mx-3">
-                    <button type="submit" class="btn dropdown-btn rounded">
-                      <img class="icon" src="{{url('/logo/businesshours.png')}}" alt=""> 
-                      Logout</button>
-                </li>
-                </form>
+   
           </ul>
           @endif
+
         </div>
+
+        <div class="btn-group dropup" style="width: 100%; margin-top:10px; margin-left:1px">
+          <button type="button" style="text-align: start ;  display: flex;
+          align-items: center;
+          "  class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+            @if (Auth::user()->profile_pic == null ) 
+                <img class=" dropdown" src="{{url('profilepic/defaultprofile.png')}}" width="35" height="35" style="border-radius: 100%"  alt="">
+            @else
+            <img class=" dropdown" src="{{url('profilepic/' . Auth::user()->profile_pic )}} " width="35" height="35"  alt="" style="border-radius: 100%">
+            @endif
+            <label style="margin-left:10px; color:white" for="">    {{Auth::user()->username}}</label>
+        <img style="margin-left:80px" src="{{url('logo/dropup.png')}}" width="10" height="10" alt="" >
+          </button>
+          <ul class="dropdown-menu"  style="width: 100%; background-color:#7a875c">
+               <form class="" action="/logout" method="POST" >
+                    @csrf
+                    <li class="my-1 mx-3">
+                        <button type="submit" class="btn dropdown-btn rounded">
+                          <img class="icon" src="{{url('/logo/businesshours.png')}}" alt=""> 
+                          Logout</button>
+                    </li>
+                    </form>
+
+                    @if (Auth::user()->usertype == "admin")
+                    <li class="my-1 mx-3">
+                         <a href="/admin/myprofile">My Profile</a>
+                    </li>
+                    <li class="my-1 mx-3">
+                         <a href="/admin/myprofile/changepassword">Change password</a>
+                    </li>
+                        
+                    @else
+
+                    <li class="my-1 mx-3">
+                         <a href="/secretary/myprofile">My Profile</a>
+                    </li>
+                    <li class="my-1 mx-3">
+                         <a href="/secretary/myprofile/changepassword">Change password</a>
+                    </li>
+                        
+                    @endif
+                 
+                    {{-- <li class="my-1 mx-3" >
+                         <a href=""></a>
+                    </li> --}}
+                    {{-- <li class=" my-1 mx-3 {{Request::is('admin/guestpage') ? 'active-bar' : '';}}">
+                         <a href="/admin/guestpage"> 
+                               <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296805/JG%20marquez/guestpage_zylemm.png" alt=""> 
+                               <span>Guestpage</span>
+                         </a>
+                     </li> --}}
+          </ul>
+        </div>
+ 
 
      </div>  
         <div class=" my-container active-cont">

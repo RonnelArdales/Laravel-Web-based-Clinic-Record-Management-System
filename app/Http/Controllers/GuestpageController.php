@@ -11,4 +11,8 @@ class GuestpageController extends Controller
         $speak_with_you = Guestpage::where('title', 'speak with you')->select('content')->first() ;
         return view('Guest_homepage', ['speakwithyou' => $speak_with_you]);
     }
+
+    public function aboutus(){
+        return view('patient.about_us');
+    }
 }

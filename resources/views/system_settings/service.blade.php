@@ -1,44 +1,47 @@
 @extends('layouts.admin_navigation')
 @section('content')
 <div class="row " style="margin-bottom: 0px; margin-top:24px; margin-left:24px; margin-right:24px">
-    <div class="col-md-8 col-md-offset-5">
-        <h1>Services </h1>
-    </div>
+
 
     <div style="margin-top: 15px; align-items:center; display:flex; d-flex;  margin-bottom:1%;" >
         <div class="me-auto">
-        <i class="fa fa-search"></i>
-          <input type="search" name="appointment_name" id="appointment_name" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" > 
+        {{-- <i class="fa fa-search"></i>
+          <input type="search" name="appointment_name" id="appointment_name" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" >  --}}
+          <div class="col-md-8 col-md-offset-5">
+            <h1>Services </h1>
         </div>
+        </div>
+       
 
         <button type="button" style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" class="btn btn-primary ml-6" data-bs-toggle="modal" data-bs-target="#create">
-            create
+            Create
           </button>
 
         </div>
 
+        <div id="success" class="success alert alert-success" role="alert" style="display:none">
+            <p style="margin-bottom: 0px;" id="message-success"></p> 
+          </div>
 
- 
-       <div id="success"></div>
 <div class="card" style="background:#EDDBC0;border:none; height:500px " >
-    <div class="card-body" style="width:100%; min-height:72vh; display: flex; overflow-x: auto;  font-size: 15px; ">
-        <div class="" style="width:100%; " >
-        <table class="table table-bordered table-striped"  style="background-color: white" >
+    <div class="" style="padding:0% " >
+        <div class="card-body" style="width:100%; min-height:63vh; display: flex; overflow-x: auto;  font-size: 15px; " >
+        <table class="table table-bordered table-striped"  style="background-color: white; margin-bottom:0px" >
             <thead>
                 <tr>
-                    <th>service code</th>
-                    <th>service name</th>
-                    <th>price</th>
-                    <th style="width: 205px">Actions</th> 
+                    <th style="text-align: center;" >Id</th>
+                    <th style="text-align: center;" >Service name</th>
+                    <th style="text-align: center;" >price</th>
+                    <th  style="width: 205px; text-align: center;">Actions</th> 
                 </tr>
             </thead>
             <tbody >
                 @if (count($services)> 0 )
                 @foreach ($services as $service)
-                <tr class="overflow-auto">
-                    <td>{{$service->servicecode}}</td>
-                    <td>{{$service->servicename}}</td>
-                    <td>{{$service->price}}</td>
+                <tr>
+                    <td style="text-align: center;" >{{$service->servicecode}}</td>
+                    <td style="text-align: center;" >{{$service->services}}</td>
+                    <td style="text-align: center;" >{{$service->price}}</td>
                     <td style="text-align: center">
                     <button type="button" value="{{$service->servicecode}}" class="edit btn btn-sm btn-primary">Edit</button>
                     <button type="button" value="{{$service->servicecode}}" class="delete btn  btn-danger btn-sm">delete</button></td>
@@ -55,16 +58,20 @@
             </tbody>
         </table>
         </div>
+        <div style="">
+            {!! $services->links() !!}
+         </div>
     </div>
+
  
 </div>
 
 {{-- modal --}}
 {{-- create --}}
 <div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content" style="background: #EDDBC0;">
-        <div class="modal-header" style="border-bottom-color: gray">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content"  style="background: #EDDBC0;">
+          <div class="modal-header" style="border-bottom-color: gray">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Create Service</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -78,7 +85,7 @@
                     <span  role="alert" class="block mt-5 pb-4 text-danger" id="name"></span>
                 </div>
                 <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Price</label>
-                <input class="price bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" type="text">
+                <input class="price bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" type="number">
                 <span  role="alert" class="block mt-5   text-danger" id="price"></span>
                 <br>
                 <div class="mt-0 mb-2">
@@ -100,9 +107,9 @@
 
   {{-- edit modal --}}
   <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
+    <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content"  style="background: #EDDBC0;">
+          <div class="modal-header" style="border-bottom-color: gray">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Service</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -116,8 +123,9 @@
                 <div class="mt-0 mb-2">
                     <span  role="alert" class="block mt-5   text-danger" id="error_servicename"></span>
                 </div>
+
                 <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Price</label>
-                <input class="price bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" id="edit_price" type="text">
+                <input class="price bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" id="edit_price" type="number">
                 <br>           
                 <div class="mt-0 mb-2">
                     <span  role="alert" class="block mt-5   text-danger" id="error_price"></span>
@@ -125,9 +133,9 @@
               {{-- </form> --}}
         </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class=" update_service p-2 w-30 bg-[#829460]  mt-7 rounded" >Update</button>
+        <div class="modal-footer" style="border-top-color: gray">
+            <button style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px; height: 37px; " type="button" class=" btn " data-bs-dismiss="modal">Close</button>
+          <button style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " type="button"  class=" update_service btn" >Update</button>
         </div>
       </div>
     </div>
@@ -202,6 +210,8 @@
                 'price': $('.price').val(), 
             }
             //always add csrf token
+
+            console.log(data);
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -215,7 +225,7 @@
                 success: function(response){
                     console.log(response);
                     if(response.status == 400){
-                        $('#price, #name' ).html("");
+                        $('#name' ).html("");
                         // $('#price, #name' ).addClass('alert alert-danger');
                         $.each(response.errors.servicename, function (key, err_values){
                             $('#name').append('<span>'+err_values+'</span>');
@@ -224,9 +234,11 @@
                             $('#price').append('<span>'+err_values+'</span>');
                         })
                     }else{
-                        $('#success' ).html("");
-                        $('#success' ).addClass('alert alert-success');
-                        $('#success').text('success');
+                        $('#message-success').text('Created successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                         $('#create').modal('hide');
                         $('#create').find('input').val("");
                         $('.table').load(location.href+' .table');
@@ -253,9 +265,10 @@
                     $('#price, #name' ).addClass('alert alert-danger');
                     $('#message' ).text(response.messages);
                     }else{
-               $('#edit_servicename').val(response.service[0].servicename);
+               $('#edit_servicename').val(response.service[0].services);
                $('#edit_price').val(response.service[0].price);
                $('#servicecode').val(sercode);
+             
                     }
         }
     });
@@ -294,9 +307,11 @@
 
                     }else{                  
 
-                        $('#success' ).html("");
-                        $('#success' ).addClass('alert alert-success');
-                        $('#success').text('update successfully');
+                        $('#message-success').text('Updated successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                         $('#edit').modal('hide');
                         $('#edit').find('input').val("");
                         $('.table').load(location.href+' .table');
@@ -327,9 +342,11 @@
                 datatype: "json",
                 success: function(response){ 
                        
-                        $('#success' ).html("");
-                        $('#success' ).addClass('alert alert-success');
-                        $('#success').text('deleted successfully');
+                    $('#message-success').text('Deleted successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                         $('#delete').modal('hide');
                         $('#delete').find('input').val("");
                         $('.table').load(location.href+' .table');

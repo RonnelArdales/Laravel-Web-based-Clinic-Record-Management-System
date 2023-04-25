@@ -1,21 +1,25 @@
 @extends('layouts.admin_navigation')
 @section('content')
 <div class="row m-4">
-    <div class="col-md-8 col-md-offset-5">
-    
- <h1>Discount</h1>
-</div>   
+
 
 <div style="margin-top: 15px; align-items:center; display:flex; d-flex;  margin-bottom:1%;" >
   <div class="me-auto">
-  <i class="fa fa-search"></i>
-    <input type="search" name="appointment_name" id="appointment_name" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" > 
+  {{-- <i class="fa fa-search"></i>
+    <input type="search" name="appointment_name" id="appointment_name" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" >  --}}
+    <div class="col-md-8 col-md-offset-5">
+      <h1>Discount</h1>
+  </div>
+  </div>
+ 
+
+  <button type="button"  style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" class="btn btn-primary ml-20" data-bs-toggle="modal" data-bs-target="#create">
+    Create
+  </button>
+
   </div>
 
-    <button type="button"  style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" class="btn btn-primary ml-20" data-bs-toggle="modal" data-bs-target="#create">
-      Create
-    </button>
-  </div>
+
 
 
 <div id="success"></div>
@@ -60,7 +64,7 @@
 
 {{-- create user modal --}}
 <div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content"  style="background: #EDDBC0;">
         <div class="modal-header" style="border-bottom-color: gray">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Create Discount</h1>
@@ -86,8 +90,8 @@
         </div>
         </div>
         <div class="modal-footer" style="border-top-color: gray">
-          <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class=" add_discount p-2 w-30 bg-[#829460]  mt-7 rounded" >Submit</button>
+          <button style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px; height: 37px; " type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " class=" add_discount " >Create</button>
         </div>
 
   

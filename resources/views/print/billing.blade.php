@@ -24,9 +24,10 @@
                 <thead>
                   <tr>
              
-                      <th>Billing no</th>
+                      <th>Trans no</th>
                       <th>Fullname</th>
                       <th>Service</th> 
+                      <th>Discount Amount</th>
                       <th>Total</th>
                       <th>Mode of payment</th>
                       <th>Status</th>
@@ -36,9 +37,10 @@
                 @if (count($billings) > 0)
                 @foreach ($billings as $billing)
                 <tr class="overflow-auto" id="nouser">
-                    <td>{{$billing->billing_no}}</td>
+                    <td>{{$billing->transno}}</td>
                     <td>{{$billing->fullname}}</td>
                     <td>{{$billing->service}}</td>
+                    <td>{{$billing->discount_price}}</td>
                     <td>{{$billing->total}}</td>
                     <td>{{$billing->mode_of_payment}}</td>
                     <td>{{$billing->status}}</td>

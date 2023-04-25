@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Addtocartservice;
 use App\Models\Admin;
 use App\Models\Appointment;
 use App\Models\Discount;
 use App\Models\Service;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use DataTables;
+
 
 class SecretaryController extends Controller
 {
@@ -23,6 +28,8 @@ class SecretaryController extends Controller
         
         $appointments =  DB::table('appointments')->where('status', 'Booked')->whereDate('date', '>', date('Y-m-d'))
         ->orderBy('date', 'asc')->limit(3)->get();
+        $latestuser = User::orderBy('created_at', 'desc')->take(7)->get();
+
         // // $data = Appointment::distinct('service')-> select('service' , DB::raw('count(gender) as gender_count, gender'))->groupBy('gender', 'service')->get();
         // $data = Appointment:: select('service' , DB::raw('count(*) as gender_count, gender'))->groupBy('gender', 'service')->get();
 
@@ -32,19 +39,19 @@ class SecretaryController extends Controller
         // $malecount = $male->count();
         // $datacount = ['Gender'];
 
-        $gender_records = Appointment::selectRaw('service,
-                COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male",
-                COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female",
-                COUNT(*) as "all"
-        ')->groupBy('service')->get();
-        $service=[];
-        $male=[];
-        $female=[];
-        foreach($gender_records as $gender){
-            $service[]=$gender->service;
-            $male[]=$gender->male;
-            $female[]=$gender->female;
-        }
+        // $gender_records = Appointment::selectRaw('service,
+        //         COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male",
+        //         COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female",
+        //         COUNT(*) as "all"
+        // ')->groupBy('service')->get();
+        // $service=[];
+        // $male=[];
+        // $female=[];
+        // foreach($gender_records as $gender){
+        //     $service[]=$gender->service;
+        //     $male[]=$gender->male;
+        //     $female[]=$gender->female;
+        // }
         // dd($gender_records[0]->service);
         // dd([$service, $male, $female]);
 
@@ -69,96 +76,52 @@ class SecretaryController extends Controller
     // dd(json_encode($array));
 
 
+            // $users = User::all()->count();
+            // $pending = Appointment::where('status', 'Pending')->count();
+            // $name= auth()->user()->fname;
+            // // dd($data);
+            // $patient = User::select('fname')->distinct()->get();
+            // return view('secretary.dashboard', ['services' => $service, 'males' => $male, 'females' =>$female])->with('name', $name)
+            //                               ->with('patients', $patient)
+            //                               ->with('users', $users)
+            //                               ->with('pending', $pending)
+            //                               ->with('datas', $gender_records)
+            //                              ->with('appointments', $appointments)
+            //                               ;
+     
             $users = User::all()->count();
             $pending = Appointment::where('status', 'Pending')->count();
+            $transaction = Transaction::sum('total');
             $name= auth()->user()->fname;
-            // dd($data);
-            $patient = User::select('fname')->distinct()->get();
-            return view('secretary.dashboard', ['services' => $service, 'males' => $male, 'females' =>$female])->with('name', $name)
-                                          ->with('patients', $patient)
+    
+            // $patient = User::select('fname')->distinct()->get();
+            return view('secretary.dashboard') ->with('name', $name)
+                                        //   ->with('patients', $patient)
                                           ->with('users', $users)
                                           ->with('pending', $pending)
-                                          ->with('datas', $gender_records)
-                                         ->with('appointments', $appointments)
+                                          ->with('transaction', $transaction)
+                                          ->with('latests', $latestuser)
+                                        //   ->with('datas', $gender_records)
+                                        //  ->with('appointments', $appointments)
                                           ;
-     
+
     }
 
     //profile page
     public function profile(){
   
         $patients = DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
-        $secretaries = DB::table('users')->where('usertype', 'secretary')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
-        $admins = DB::table('users')->where('usertype', 'admin')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin'); 
-        return view('secretary.profile', compact('patients', 'secretaries', 'admins'));
+
+        return view('secretary.profile', compact('patients'));
     }
 
-    public function create_user_page(){
-        return view('secretary.profile.createuser');
-    }
-
-    public function store_user(Request $request){
-
-        $validator = Validator::make($request->all(), [
-            "first_name" => ['required'],
-            "mname" => [''],
-            "last_name" => ['required',],
-            "birthday" => ['required'],
-            "address" => ['required'],
-            "gender" => ['required'],
-            "mobile_number" =>'required|numeric',
-            "email" => ['required', 'email' ],
-            "username" => ['required'],
-            "password" => 'required|confirmed|',
-            "usertype" => ['required'],
-        ]);
-
-        
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'=>400,
-                'errors'=> $validator->messages(),
-            ]);
-        }else{
-             $encrypt = bcrypt($request->input('password'));
-            $user = new User();
-            $user->fname = $request->input('fname');
-            $user->mname = $request->input('mname');
-            $user->lname = $request->input('lname');
-            $user->birthday = $request->input('birthday');
-            $user->address = $request->input('address');
-            $user->gender = $request->input('gender');
-            $user->mobileno = $request->input('mobileno');
-            $user->email = $request->input('email');
-            $user->username = $request->input('username');
-            $user->password = $encrypt;
-            $user->usertype = $request->input('usertype');
-            $user->save();
-            return response()->json([
-                'status'=>200,
-                'message' => 'discount added successfully',
-            ]);
-        }
-      
-
-
-
-        //hashing of password
-        // $validated['password'] = bcrypt($validated['password']);
-        // //kunin yung data galing model ("Clinicusers")
-        // User::create($validated);
-        // return redirect('/admin/profile');
-        //$email = $request->input('email');
-        // return redirect('/verify')->with('email', $email);
-        // auth()->login($clinicuser);
-    }
 
     public function update_user($id, Request $request){
         
         $validator = Validator::make($request->all(), [
             "first_name" => ['required'],
             "last_name" => ['required'],
+            "birthday" => ['required'],
             "birthday" => ['required'],
             "address" => ['required'],
             "gender" => ['required'],
@@ -254,106 +217,7 @@ class SecretaryController extends Controller
         // $user = User::findOrFail($id);
         // return view('admin.profile.updateuser', ['user' => $user]);
     }
-
-    // discount
-    public function discount_show(){
-        $data = Discount::all();
-        return view('secretary.discount', ['discounts' => $data]);
-    }
-
-    public function fetch_discount(){
-        $data = Discount::all();
-        return response()->json([
-            'discounts'=> $data,
-        ]);
-    }
-
-    //show discount create form
-
-
-    public function store_discount(Request $request){
-
-        $validator = Validator::make($request->all(), [
-            'discountname'=>'required',
-            'percentage' => 'required|numeric'
-        ]);
-
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'=>400,
-                'errors'=> $validator->messages(),
-            ]);
-        }
-        else
-        {
-
-            $discount = new Discount;
-            $discount->discountname = $request->input('discountname');
-            $discount->percentage = $request->input('percentage');
-            $discount->save();
-            return response()->json([
-                'status'=>200,
-                'message' => 'discount added successfully',
-            ]);
-        }
-    }
-    public function edit_discount($discountcode){
-           $discount = Discount::where('discountcode', $discountcode )->get();
-           if($discount){
-            return response()->json([
-                'status'=>200,
-                'discount' => $discount,
-            ]);
-           }else{
-            return response()->json([
-                'status'=>404,
-                'message' => 'discount not found',
-            ]);
-           }
-    }
-    public function update_discount($discountcode ,Request $request){
-
-        $validator = Validator::make($request->all(), [
-            'discountname'=>'required',
-            'percentage' => 'required|numeric'
-        ]);
-
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'=>400,
-                'errors'=> $validator->messages(),
-            ]);
-        }
-        else
-        {
-            $arrItem = array(
-                'discountname' =>$request->get('discountname'),
-                'percentage' => $request->get('percentage'),
-            );
-
-            DB::table('discounts')->where('discountcode', $discountcode)->update($arrItem);
-
-            return response()->json([
-                'status'=>200,
-                    'message' => 'discount updated successfully',
-                
-            ]);
-
-        }
-    }
     
-    public function delete_discount($discountcode)
-    {   
-        DB::table('discounts')->where('discountcode', $discountcode)->delete();
-
-        return response()->json([
-            'status'=>200,
-                'message' => 'deleted successfully',
-            
-        ]);
-    }
 
     //service
     public function service_show(){
@@ -465,8 +329,325 @@ public function fetch_service(){
 
     //appointment
     public function appointment_show(){
-        return view('secretary.appointment');
+        return view('welcome');
     }
+
+//--------------queuing --------------//
+
+public function view_queuing(Request $request){
+
+
+    if ($request->ajax()) {
+        $data = DB::table('appointments')->whereDate('date', '=', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
+        ->orderBy('time', 'asc');
+        return Datatables::of($data)
+        ->addColumn('time', function ($event) {
+            // Convert the start_time to a Carbon instance
+            $time = Carbon::parse($event->time);
+
+            // Format the time as desired, e.g. "h:i A" for 12-hour time format
+            return $time->format('h:i A');
+        })
+        ->addColumn('date', function ($event) {
+            // Convert the start_time to a Carbon instance
+            $date = Carbon::parse($event->date);
+
+            // Format the time as desired, e.g. "h:i A" for 12-hour time format
+            return $date->format('M d, Y');
+        })
+                ->make(true);
+    }
+    return view('secretary.queuing');
+
+
+
+}
+
+public function upcoming_queuing(Request $request){
+
+    if ($request->ajax()) {
+        $data = DB::table('appointments')->whereDate('date', '>', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
+        ->orderBy('date', 'asc');
+        return Datatables::of($data)
+        ->addColumn('time', function ($event) {
+            // Convert the start_time to a Carbon instance
+            $time = Carbon::parse($event->time);
+
+            // Format the time as desired, e.g. "h:i A" for 12-hour time format
+            return $time->format('h:i A');
+        })
+        ->addColumn('date', function ($event) {
+            // Convert the start_time to a Carbon instance
+            $date = Carbon::parse($event->date);
+
+            // Format the time as desired, e.g. "h:i A" for 12-hour time format
+            return $date->format('M d, Y');
+        })
+                ->make(true);
+    }
+    return view('secretary.queuing');
+}
+
+
+
+public function view_transaction(){
+
+    $addtocarts =  DB::table('addtocartservices')->orderBy('created_at', 'desc')->paginate(4, ['*'], 'addtocart');
+    $service = Service::all();
+    $sum = Addtocartservice::sum('price');
+    $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
+    return view('secretary.transaction', [
+                                    'services' => $service, 
+                                    'addtocarts'=> $addtocarts, 
+                                    'sum'=>$sum,
+                                    'patients'=>$patients, 
+                                  ]);
+    // $appointment = Appointment::all();
+    // $transaction = DB::table('transactions')->paginate(2) ;
+    // return view('admin.transaction', [ 'appointments'=> $appointment, 'transactions' => $transaction]);
+}
+
+public function store_addtocart(Request $request){
+    $validator = Validator::make($request->all(), [
+        'fullname'=>'required',
+        'servicecode'=>'required',
+        'price'=>'required',
+    ],[
+        'fullname.required'=>'Please select user',
+        'servicecode.required'=>'Service is required',
+        'price.required'=>'Price is required',
+    ]);
+
+    if($validator->fails())
+    {
+        return response()->json([
+            'status'=>401,
+            'errors'=> $validator->messages(),
+        ]);
+
+    }else{
+                $input = $request->all();
+                $addtocartexist = Addtocartservice::where('servicecode', $input['servicecode'])->first();
+            
+                if($addtocartexist){
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'The service is already added',
+                    ]);
+                }else{
+                    $addtocart = new Addtocartservice();
+                    $addtocart->transno = $input['transno'];
+                    $addtocart->user_id = $input['userid'];
+                    $addtocart->fullname = $input['fullname'];
+                    $addtocart->servicecode = $input['servicecode'];
+                    $addtocart->service = $input['service'];
+                    $addtocart->price = $input['price'];
+                    $addtocart->save();
+            
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Added successfully',
+                        'data' => $addtocart,
+                    ]);
+                }
+    }
+    
+
+}
+public function store_billing(Request $request){
+    $sum = Addtocartservice::sum('price');
+    // $insert = Addtocartservice::where('billing_no', $request->billingno)->update(['sub_total' => $sum])
+
+    $addtocart = Addtocartservice::all();
+
+    foreach ($addtocart as $data) {
+
+        $billing = new Transaction();
+        $billing->transno = $data->transno;
+        $billing->user_id = $data->user_id;
+        $billing->fullname = $data->fullname;
+        $billing->servicecode = $data->servicecode;
+        $billing->service = $data->service;
+        $billing->price = $data->price;
+        $billing->sub_total = $sum;
+        $billing->total = $sum;
+        $billing->status = 'Pending';
+        $billing->save();
+    }
+    Addtocartservice::truncate();  
+
+    return response()->json([
+       'status' => 200,
+       'message' => 'Saved successfully',
+    ]);
+
+}
+
+public function get_id(){
+    $appointment = Transaction::max('transno');
+    $total = intval( $appointment) + 1;
+    return response()->json([
+        'id' => $total ,
+       ]);
+}
+
+public function index_billing(Request $request){
+
+    if ($request->ajax()) {
+        $data = DB::table('transactions')->distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc');
+        return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+
+                    if($row->status == "Pending"){
+                        
+                         $btn = '<button type="button" data-id="' . $row->transno . '" class="payment btn  btn-success btn-sm">Pay now</button>';
+                        $btn = $btn.'<a href="/admin/billing/viewBilling/ ' . $row->transno . ' " class="btn btn-primary btn-sm" style="margin-left:5px"    >View</a>';
+                        $btn = $btn.' <a href="/admin/billing/editBilling/' . $row->transno . '" class="btn btn-danger btn-sm">Delete</a>';
+                        $size = '<div style="width: 200px">' . $btn . '</div>';                
+                        return $size;
+                       
+                    }else{
+
+                        $btn = ' <a href="/admin/billing/viewBilling/' . $row->transno . '" class="btn btn-primary btn-sm">View</a>';
+                        $btn = $btn.'  <a href="/admin/billing/editBilling/' . $row->transno . '" class="btn btn-danger btn-sm">Delete</a>';
+                $size = '<div style="width: 200px">' . $btn . '</div>';                
+                        return $size;
+
+  
+                    }
+
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+    }
+//    $billing =  DB::table('transactions')->distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc')->paginate(10, ['*'], 'addtocart');
+    $discount = Discount::all();
+    // $billing = Transaction::distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc')->get();
+
+    return view('secretary.billing', [
+                                    'discounts' =>$discount,
+                          
+                                  ]);
+}
+
+public function get_discount($id){
+    $discount = Discount::where('discountcode', $id)->first();
+
+    return response()->json([
+        "status" => '200',
+        "discount" => $discount,
+    ]);
+
+}
+
+public function addtocart_getalldata($id){
+    $billing = Transaction::where('transno', $id)->first();
+
+    return response()->json(['data' => $billing]);
+    }
+
+        //------------------- discount ---------------------------//
+        public function discount_show(){
+            $data = Discount::all();
+            return view('system_settings.discount', ['discounts' => $data]);
+        }
+    
+        public function fetch_discount(){
+            $data = Discount::all();
+            return response()->json([
+                'discounts'=> $data,
+            ]);
+        }
+    
+        //show discount create form
+        public function create_discount(){
+            return view('admin.discount.creatediscount');
+        }
+    
+        public function store_discount(Request $request){
+    
+            $validator = Validator::make($request->all(), [
+                'discountname'=>'required',
+                'percentage' => 'required|numeric'
+            ]);
+    
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status'=>400,
+                    'errors'=> $validator->messages(),
+                ]);
+            }
+            else
+            {
+    
+                $discount = new Discount;
+                $discount->discountname = $request->input('discountname');
+                $discount->percentage = $request->input('percentage');
+                $discount->save();
+                return response()->json([
+                    'status'=>200,
+                    'message' => 'discount added successfully',
+                ]);
+            }
+        }
+        public function edit_discount($discountcode){
+               $discount = Discount::where('discountcode', $discountcode )->get();
+               if($discount){
+                return response()->json([
+                    'status'=>200,
+                    'discount' => $discount,
+                ]);
+               }else{
+                return response()->json([
+                    'status'=>404,
+                    'message' => 'discount not found',
+                ]);
+               }
+        }
+        public function update_discount($discountcode ,Request $request){
+    
+            $validator = Validator::make($request->all(), [
+                'discountname'=>'required',
+                'percentage' => 'required|numeric'
+            ]);
+    
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status'=>400,
+                    'errors'=> $validator->messages(),
+                ]);
+            }
+            else
+            {
+                $arrItem = array(
+                    'discountname' =>$request->get('discountname'),
+                    'percentage' => $request->get('percentage'),
+                );
+    
+                DB::table('discounts')->where('discountcode', $discountcode)->update($arrItem);
+    
+                return response()->json([
+                    'status'=>200,
+                        'message' => 'discount updated successfully',
+                    
+                ]);
+    
+            }
+        }
+        
+        public function delete_discount($discountcode)
+        {   
+            DB::table('discounts')->where('discountcode', $discountcode)->delete();
+    
+            return response()->json([
+                'status'=>200,
+                    'message' => 'deleted successfully',
+                
+            ]);
+        }
 
 
 }

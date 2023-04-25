@@ -16,7 +16,8 @@
     <div class="container" style="margin-bottom: 140px">
         <div class="row"  >
             <p style="margin-bottom:5px"><b>Billing Process</b></p>
-            <div class="rounded border border-dark col-sm-9 row" style="padding-left:35px;padding-right:35px;padding-top:100px; padding-bottom:100px; margin:0px ">  
+            {{-- box-sizing: border-box;font-family:Poppins; background:#EDDBC0; margin-bottom:4%;padding-bottom:1%;margin-top:5%;box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.25); --}}
+            <div class="rounded  col-sm-9 row" style="padding-left:35px;padding-right:35px;padding-top:100px; padding-bottom:100px; margin:0px; box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.25); ">  
                 <div class="col-sm "> 
                     <form action="/patient/billing/payment/store" method="post">
                         @csrf
@@ -73,7 +74,7 @@
             
       
         </div>   
-            <div class="col-sm border border-dark" style="margin-left: 20px"  >
+            <div class="col-sm " style="margin-left: 20px"  >
               
             
             </div>

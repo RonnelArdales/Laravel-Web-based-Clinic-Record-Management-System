@@ -137,21 +137,19 @@ table, td, th {
         <div class="column column2" >
             <div style="margin-left:140px">
                 <label for="">Discount:</label> 
-                <label for=""> {{$infos->discount}}</label>
+                <label for=""> {{$infos->discount_price}}</label>
                <br> 
                <label style="margin-top: 2px" for="">Total:</label>
                <label for="">{{number_format("$infos->total",2)}}</label>
-               <br> 
                <label style="margin-top: 2px" for="">Mode of payment:</label>
                <label for="">{{$infos->mode_of_payment}}</label> 
-               <br>
+           
                @if ($infos->mode_of_payment == "Cash")
                 <label style="margin-top: 2px" for="">Payment:</label>
                <label for="">PHP {{number_format("$infos->payment",2)}}</label> 
                <br>
                <label style="margin-top: 2px" for="">Change:</label>
                <label for="">PHP {{number_format("$infos->change",2)}}</label>
-            
                @else
                <br> <label style="margin-top: 2px" for="">Reference no.:</label>
                <label for="">{{$infos->reference_no}}</label>
