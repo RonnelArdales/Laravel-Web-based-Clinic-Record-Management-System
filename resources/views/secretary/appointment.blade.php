@@ -218,7 +218,7 @@
           </div>
      
           <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Reservation fee</label><br>
-          <input readonly class="reservationfee  refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="reservationfee"  type="text" value="500" > 
+          <input readonly class="reservationfee  refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="reservationfee"  type="text" value="{{$fee->reservationfee}}" > 
           <br>
 		<div class="mt-0 mb-2">
 	
@@ -228,7 +228,9 @@
 	   <select name="mode_payment" id="mode_payment" class="  refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 210px">
 		  <option value="">--select--</option>
 		  <option value="Cash">Cash</option>
-		  <option value="Gcash">Gcash</option>
+		  @foreach ($mops as $mop)
+      <option value="{{$mop->modeofpayment}}">{{$mop->modeofpayment}}</option>
+      @endforeach
 	   </select><br>
 	   <div class="mt-0 mb-2">
 		<span  role="alert" class="block mt-5   text-danger" id="error_modepayment"></span>
@@ -650,7 +652,7 @@
         $(".viewpatients").on("hidden.bs.modal", function(e){
           e.preventDefault();
           // $('#fullname_patient').val("");
-		$('.patient-remove').load(location.href+'. patient-remove');
+		$('.patient-remove').load(location.href+' .patient-remove');
           $('.modal-status').val("");
 		
         });

@@ -91,7 +91,11 @@ class SecretaryController extends Controller
      
             $users = User::all()->count();
             $pending = Appointment::where('status', 'Pending')->count();
-            $transaction = Transaction::sum('total');
+            $transaction = Transaction::whereDate('created_at', Carbon::today())->get();
+            $appointment = Appointment::whereDate('created_at', Carbon::today())->get();
+            $totalappointment = $appointment->sum('reservation_fee');
+            $totalbilling = $transaction->sum('total');
+            $totalsales = intval($totalappointment) + intval($totalbilling);
             $name= auth()->user()->fname;
     
             // $patient = User::select('fname')->distinct()->get();
@@ -99,7 +103,7 @@ class SecretaryController extends Controller
                                         //   ->with('patients', $patient)
                                           ->with('users', $users)
                                           ->with('pending', $pending)
-                                          ->with('transaction', $transaction)
+                                          ->with('transaction', $totalsales)
                                           ->with('latests', $latestuser)
                                         //   ->with('datas', $gender_records)
                                         //  ->with('appointments', $appointments)
@@ -338,7 +342,7 @@ public function view_queuing(Request $request){
 
 
     if ($request->ajax()) {
-        $data = DB::table('appointments')->whereDate('date', '=', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
+        $data = DB::table('appointments')->where('status', 'pending')->whereDate('date', '=', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
         ->orderBy('time', 'asc');
         return Datatables::of($data)
         ->addColumn('time', function ($event) {
@@ -366,7 +370,7 @@ public function view_queuing(Request $request){
 public function upcoming_queuing(Request $request){
 
     if ($request->ajax()) {
-        $data = DB::table('appointments')->whereDate('date', '>', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
+        $data = DB::table('appointments')->where('status', 'pending')->whereDate('date', '>', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
         ->orderBy('date', 'asc');
         return Datatables::of($data)
         ->addColumn('time', function ($event) {

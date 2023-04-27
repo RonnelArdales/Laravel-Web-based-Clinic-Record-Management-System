@@ -10,7 +10,8 @@
       border-radius: 10px;
       border:none;
       margin-bottom: 1%;
-      text-align: center; 
+      text-align: left; 
+      padding-left:30px;
   }
 
 </style>
@@ -36,51 +37,61 @@
                           </div>
                       </div>
                       
-                          <div hidden>
-                              <label for="" style="text-align:right">billing no.</label><br>
-                              <input type="text" class="text-center" style="background-color:transparent; text-align:center; width: 100px; " readonly id="getid">
-                          </div>
                           <form class="row" >
-              
+                            <div hidden>
+                                <label for="" style="text-align:right">billing no.</label><br>
+                                <input type="text" class="text-center" style="background-color:transparent; text-align:center; width: 100px; " readonly id="getid">
+                            </div>
                           <div class="col-md-6">
+                            <div  >
+                                <label style="width:90px" for="">Trans no:</label>
+                                <input type="text" style="width: 470px;" class="addtocart_input" name="billingno"  id="getbillingno" readonly>
+                            </div>
 
-                              <label for="">Trans no:</label>
-                              <input type="text" style="width: 460px;" class="addtocart_input" name="billingno"  id="getbillingno" readonly>
+                            <div style="margin-bottom: 3px; margin-top: 3px">
+                                <label  style="width:90px"  for="">User ID:</label>
+                                <input type="text" style="width: 425px;" class="addtocart_input" id="userid" name="userid" readonly>
+                                <button class="getpatient btn btn-outline-success" type="button" style="border: 1px solid #829460;  "><img src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" style="height: 15px ;
+                                    width: 15px ;" id="appointment" alt="" ></button>
+                                  <br>
+                            </div>
 
-                              <label for="">User ID:</label>
-                              <input type="text" style="width: 430px;" class="addtocart_input" id="userid" name="userid" readonly>
-                              <button class="getpatient btn btn-outline-success" type="button" style="border: 1px solid #829460;"><img src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" style="height: 15px ;
-                                  width: 15px ;" id="appointment" alt="" ></button>
-                                <br>
-                              <label style="margin-top: 5px" for="">Fullname:</label>
-                              <input type="text" style="width: 460px" class="addtocart_input" id="fullname" name="fullname" readonly>
+                            <div>
+                                <label  style="width:90px"  style="margin-top: 5px" for="">Fullname:</label>
+                                <input type="text" style="width: 470px;" class="addtocart_input" id="fullname" name="fullname" readonly>
+                            </div>
 
                               <div class="mt-0 mb-2">
                                 <span  role="alert" class="block mt-5   text-danger" id="error_fullname"></span>
                             </div>
-                           
+                        
                           </div>
 
-                          <div style="margin-top: 1px" class="col-md-6">
+                          <div  class="col-md-6">
 
-                          <label for="">Service: </label>
-                          <input type="text" hidden style="width: 400px" class="addtocart_input servicename" id="servicename" name="servicename" >
-                          <select style="width:470px; height:30px" class="service_input getservice"  name="service"  id="getservice">
-                              <option value="">-- select --</option>
-                              @foreach ($services as $service)
-                              <option value="{{$service->servicecode}}">{{$service->services }}</option>
-                              @endforeach
-                          </select>
-                          <br>
-                          <div class="mt-0 mb-2">
-                            <span  role="alert" class="block mt-5   text-danger" id="error_service"></span>
+                        <div>
+                            <label style="width:80px" for="">Service: </label>
+                            <input type="text" hidden class="addtocart_input servicename" id="servicename" name="servicename" >
+                            <select style="width:470px; height:28px" class="service_input getservice"  name="service"  id="getservice">
+                                <option style="text-align:center" value="">-- select --</option>
+                                @foreach ($services as $service)
+                                <option value="{{$service->servicecode}}">{{$service->services }}</option>
+                                @endforeach
+                            </select>
+                            <br>
+                            <div class="">
+                              <span  role="alert" class="block mt-5   text-danger" id="error_service"></span>
+                          </div>
                         </div>
-
-                          <label style="margin-top: 8px" for="">Price: </label>
-                          <input type="number" style="width: 490px" class="addtocart_input price" id="price" name="price" >
-                          <div class="mt-0 mb-2">
-                            <span  role="alert" class="block mt-5   text-danger" id="error_price"></span>
+                  
+                        <div style="margin-top: 3px ">
+                            <label style="width:80px" for="">Price: </label>
+                            <input type="number" readonly style="width: 470px" class="addtocart_input price" id="price" name="price" >
+                            <div class="mt-0 mb-2" >
+                              <span  role="alert" class="block mt-5   text-danger" id="error_price"></span>
+                          </div>
                         </div>
+                  
                           <div class="float-end text-right d-flex justify-content-end" style="margin-bottom: 2%; margin-top:20px">
                               <button type="button" class="store_addtocart"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; margin-bottom:2%; " >Add to Cart</button>
                           </div>

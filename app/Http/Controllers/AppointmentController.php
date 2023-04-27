@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\BusinessHour;
+use App\Models\Modeofpayment;
+use App\Models\Reservationfee;
 use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,6 +38,8 @@ class AppointmentController extends Controller
         $appointments = DB::table('appointments')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'appointment');
         $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
         $services = Service::all();
+        $mops = Modeofpayment::all();
+        $fee = Reservationfee::select('reservationfee')->first();
 
         if(Auth::user()->usertype == 'admin'){
             if ($request->ajax()) {
@@ -53,7 +57,7 @@ class AppointmentController extends Controller
                         ->make(true);
             }
 
-            return view('admin.appointment', compact('appointments', 'patients', 'services', 'day', 'days', ))->with('day_array', $day_array);
+            return view('admin.appointment', compact('appointments', 'patients', 'services', 'day', 'days', 'mops', 'fee'))->with('day_array', $day_array);
         }else{
 
             if ($request->ajax()) {
@@ -70,7 +74,7 @@ class AppointmentController extends Controller
                         ->rawColumns(['action'])
                         ->make(true);
             }
-            return view('secretary.appointment', compact('appointments', 'patients', 'services', 'day', 'days', ))->with('day_array', $day_array);
+            return view('secretary.appointment', compact('appointments', 'patients', 'services', 'day', 'days', 'mops', 'fee' ))->with('day_array', $day_array);
   
         }
     }
@@ -168,7 +172,7 @@ class AppointmentController extends Controller
                 return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $btn = ' <a href="/admin/appointment/print/' . $row->id . '" class=" btn btn-sm btn-primary">Print</a>';          
+                    $btn = ' <a href="/secretary/appointment/print/' . $row->id . '" class=" btn btn-sm btn-primary">Print</a>';          
                         return $btn;
                 })
                 ->rawColumns(['action'])
@@ -184,6 +188,7 @@ class AppointmentController extends Controller
             'date' => 'required',
             'time' => 'required',
             'modepayment' => 'required',
+            
         ],[
             'userid.required'=>'Patient information is required',
             'date.required' => 'Appointment date is required',

@@ -106,7 +106,9 @@
                                 <select name="mode_payment" id="mode_payment">
                                     <option value="">--select--</option>
                                     <option value="Cash">Cash</option>
-                                    <option value="Gcash">Gcash</option>
+                                    @foreach ($mops as $mop)
+                                    <option value="{{$mop->modeofpayment}}">{{$mop->modeofpayment}}</option>
+                                    @endforeach
                                 </select><br>
                                 <div id="cash" style="display: none; margin-top: 10px">
                                     <label for=""><b>payment:</b></label>
@@ -502,16 +504,14 @@ console.log(id);
 
         $('#mode_payment').on('change', function(e){
             var payment = $(this).val();
-
-            if(payment == "Gcash"){
-                $('#cash').hide();
-                $('#gcash').show();
-            }else if (payment == "Cash"){
+            $('#payment_cash, #change, #reference_no').val(" ");
+      
+            if(payment == "Cash"){
                 $('#cash').show();
                 $('#gcash').hide();
             }else{
                 $('#cash').hide();
-                $('#gcash').hide();
+                $('#gcash').show();
             }
         });
 

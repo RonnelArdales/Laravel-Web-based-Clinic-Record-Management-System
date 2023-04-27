@@ -218,7 +218,7 @@
           </div>
      
           <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Reservation fee</label><br>
-          <input readonly class="reservationfee  refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="reservationfee"  type="text" value="500" > 
+          <input readonly class="reservationfee  rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="reservationfee"  type="text" value="{{$fee->reservationfee}}" > 
           <br>
 		<div class="mt-0 mb-2">
 	
@@ -228,7 +228,9 @@
 	   <select name="mode_payment" id="mode_payment" class="  refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 210px">
 		  <option value="">--select--</option>
 		  <option value="Cash">Cash</option>
-		  <option value="Gcash">Gcash</option>
+      @foreach ($mops as $mop)
+      <option value="{{$mop->modeofpayment}}">{{$mop->modeofpayment}}</option>
+      @endforeach
 	   </select><br>
 	   <div class="mt-0 mb-2">
 		<span  role="alert" class="block mt-5   text-danger" id="error_modepayment"></span>
@@ -692,15 +694,15 @@
           var data ={
                 'userid' : $('#userid').val(),
                 'fullname': $('#fullname').val(),
-			 'contactno' : $('#contactno').val(),
-			 'email' : $('#email').val(),
+                'contactno' : $('#contactno').val(),
+                'email' : $('#email').val(),
                 'date': $('#date').val(),
                 'time': $('#available-time').val(),
                 'reservation_fee' : $('#reservationfee').val(),  
                 'modepayment': $('#mode_payment').val(),
-			 'payment': $('#payment_cash').val(),
-			 'change': $('#change').val(),
-			 'reference_no': $('#reference_no').val(),
+			          'payment': $('#payment_cash').val(),
+                'change': $('#change').val(),
+                'reference_no': $('#reference_no').val(),
             }
          console.log(data);
           $.ajaxSetup({
@@ -1095,16 +1097,14 @@
 	   
         $('#mode_payment').on('change', function(e){
             var payment = $(this).val();
+          $('#payment_cash, #change, #reference_no').val(" ");
 
-            if(payment == "Gcash"){
-                $('#cash').hide();
-                $('#gcash').show();
-            }else if (payment == "Cash"){
+            if(payment == "Cash"){
                 $('#cash').show();
                 $('#gcash').hide();
             }else{
                 $('#cash').hide();
-                $('#gcash').hide();
+                $('#gcash').show();
             }
         });
 
@@ -1236,6 +1236,31 @@
             }
           });
         })
+
+
+        $('#payment_cash').on('keyup', function(e){
+          e.preventDefault();
+          let total = $('#reservationfee').val();
+          let payment = $(this).val();
+
+          let change =  parseInt(payment) - parseInt(total);
+          // let change_replace =Number(parseFloat(change).toFixed(2)).toLocaleString('en', {minimumFractionDigits: 2});
+
+   
+     
+          if(parseFloat(payment) < parseFloat(total)){
+            // console.log('werwe');
+            console.log('payment is lower than total');
+                $('#change').val('');
+            }else if(payment == ""){
+                console.log('null inputs')
+                $('#change').val('');
+            }else{
+                // alert('higher');
+                  console.log('payment is greater than total');
+                            $('#change').val(change);
+            }
+        });
 
 
 });

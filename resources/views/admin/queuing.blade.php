@@ -92,8 +92,11 @@
         serverSide: true,
         ajax: "/admin/queuing",
 	   dom: 'frtp',
+
 	   pageLength: 10,
 	   responsive: true,
+        
+
         columns: [
 		{data: 'id', name: 'id' , orderable: false, searchable: false},
             {data: 'user_id', name: 'user_id' , orderable: false, searchable: false},
@@ -110,6 +113,7 @@
                     $('#today_paginate').hide(); // Hide pagination element
                 }
             }
+            
     });
 
     var upcoming = $('#upcoming').DataTable({

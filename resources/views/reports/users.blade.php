@@ -8,6 +8,9 @@
 
  <div style="margin-top: 15px; align-items:center;margin-bottom:1%;" >
 
+
+  @if (Auth::user()->usertype == 'admin')
+
   <form action="/admin/reports/print_user" method="post">
     @csrf
      <div class=" row">
@@ -16,26 +19,24 @@
           <input type="text" name="fullname" id="fullname" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" class="fullname" > 
      </div>
      <div class="col search_usertype" style="display: none;">
-          <label for="">Usertype</label>
-          <select name="usertype" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:180px; margin-right:10px"class="usertype" id="usertype">
+          <select name="usertype" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:180px; margin-right:10px; height:100%"class="usertype" id="usertype">
                <option value="">Select usertype</option>
                <option value="active">Active</option>
                <option value="inactive">Inactive</option>
                <option value="not verified">Not verified</option>
              </select>
      </div>
-     <div class="col search_status" style="display: none;">
-         <label for="">Status</label>
-         <select name="status" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:180px; margin-right:10px" class="status" id="status">
-          <option value="">Select usertype</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="not verified">Not verified</option>
+     <div class="col search_status " style="display: none; ">
+         <select name="status" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; height:100%; background:#EDDBC0; width:180px; margin-right:10px" class="status" id="status">
+          <option value="" >Select usertype</option>
+          <option value="admin">Admin</option>
+          <option value="patient">Patient</option>
+          <option value="secretary">Secretary</option>
         </select>
      </div>
       
 <div class="col  d-flex justify-content-end" style="width: 600px">
-    <select name="filters" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:160px; margin-right:10px" class="filters" id="filters">
+    <select name="filters" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:160px; margin-right:10px; " class="filters" id="filters">
       <option value="">Select Filter</option>
       <option value="fullname">Fullname</option>
       <option value="usertype">Usertype</option>
@@ -47,6 +48,49 @@
 </div>
 </div>
   </form>
+      
+  @else
+
+  <form action="/secretary/reports/print_user" method="post">
+    @csrf
+     <div class=" row">
+     <div class="col search_fullname" style="display: none;">
+          <i class="fa fa-search"></i>
+          <input type="text" name="fullname" id="fullname" placeholder="search" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0;" class="fullname" > 
+     </div>
+     <div class="col search_usertype" style="display: none;">
+          <select name="usertype" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:180px; margin-right:10px; height:100%"class="usertype" id="usertype">
+               <option value="">Select usertype</option>
+               <option value="active">Active</option>
+               <option value="inactive">Inactive</option>
+               <option value="not verified">Not verified</option>
+             </select>
+     </div>
+     <div class="col search_status " style="display: none; ">
+         <select name="status" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; height:100%; background:#EDDBC0; width:180px; margin-right:10px" class="status" id="status">
+          <option value="" >Select usertype</option>
+          <option value="admin">Admin</option>
+          <option value="patient">Patient</option>
+          <option value="secretary">Secretary</option>
+        </select>
+     </div>
+      
+<div class="col  d-flex justify-content-end" style="width: 600px">
+    <select name="filters" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:160px; margin-right:10px; " class="filters" id="filters">
+      <option value="">Select Filter</option>
+      <option value="fullname">Fullname</option>
+      <option value="usertype">Usertype</option>
+      <option value="status">Status</option>
+    </select>
+    <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1vw; color:white; padding-left:20px; padding-right:20px" type="submit" class="btn btn-primary ml-6 show-create" >
+      Generate Report
+    </button>
+</div>
+</div>
+  </form>
+      
+  @endif
+
     </div>
 
     <div class="card " style="background:#EDDBC0;border:none; ">
@@ -60,11 +104,10 @@
                    <th>First name</th>
                    <th>Middle name</th>
                    <th>Last name</th> 
-                   <th>Birthday</th>
-                   <th>Address</th>
                    <th>Gender</th>
-                   <th>Mobile no.</th>
-                   <th>Email</th>
+                   <th>Age</th>
+                   <th>Status</th>
+                   <th>Usertype</th>
                 
  
                </tr>
@@ -77,16 +120,15 @@
                  <td>{{$user->fname}}</td>
                  <td>{{$user->mname}}</td>
                  <td>{{$user->lname}}</td>
-                 <td>{{$user->birthday}}</td>
-                 <td>{{$user->address}}</td>
                  <td>{{$user->gender}}</td>
-                 <td>{{$user->mobileno}}</td>
-                 <td>{{$user->email}}</td>
+                 <td>{{$user->age}}</td>
+                 <td>{{$user->status}}</td>
+                 <td>{{$user->usertype}}</td>
              </tr>
              @endforeach
              @else
              <tr>
-               <td colspan="10" style="text-align: center;">no user Found</td>
+               <td colspan="8" style="text-align: center;">no user Found</td>
    
              </tr>
              @endif
@@ -140,25 +182,23 @@
             method:'GET',
             data: {search:search,},
             success:function(response){
-              console.log(response);
+           
               $('.users').html(response);
               if(response.message == 'Nofound'){       
                 $('.users').append('<div class="card-body "style="width:100%; min-height:65vh;display: flex; overflow-x: auto;         font-size: 15px; " >\
                                       <table class="table table-bordered table-striped" style="background-color: white" >\
-                                                            <thead>\
-                                                                <tr>\
-                                                                    <th>id</th>\
-                                                                    <th>First name</th>\
-                                                                    <th>Middle name</th>\
-                                                                    <th>Last name</th> \
-                                                                    <th>Birthday</th>\
-                                                                    <th>Address</th>\
-                                                                    <th>Gender</th>\
-                                                                    <th>Mobile no.</th>\
-                                                                    <th>Email</th>\
-                                                                    <th>Action</th>\
-                                                                </tr>\
-                                                            </thead>\
+                                                             <thead>\
+                                                                  <tr>\
+                                                                      <th>id</th>\
+                                                                      <th>First name</th>\
+                                                                      <th>Middle name</th>\
+                                                                      <th>Last name</th> \
+                                                                      <th>Gender</th>\
+                                                                      <th>Age</th>\
+                                                                      <th>Status</th>\
+                                                                      <th>Usertype</th>\
+                                                                  </tr>\
+                                                              </thead>\
                                                             <tbody class="nofound" >\
                                                               <tr>\
                                                                 <td colspan="10" style="text-align: center;">no user Found</td>\
@@ -233,22 +273,20 @@
                 $('.users').append('<div class="card-body "style="width:100%; min-height:65vh;display: flex; overflow-x: auto;         font-size: 15px; " >\
                                       <table class="table table-bordered table-striped" style="background-color: white" >\
                                                             <thead>\
-                                                                <tr>\
-                                                                    <th>id</th>\
-                                                                    <th>First name</th>\
-                                                                    <th>Middle name</th>\
-                                                                    <th>Last name</th> \
-                                                                    <th>Birthday</th>\
-                                                                    <th>Address</th>\
-                                                                    <th>Gender</th>\
-                                                                    <th>Mobile no.</th>\
-                                                                    <th>Email</th>\
-                                                                    <th>Action</th>\
-                                                                </tr>\
-                                                            </thead>\
+                                                                  <tr>\
+                                                                      <th>id</th>\
+                                                                      <th>First name</th>\
+                                                                      <th>Middle name</th>\
+                                                                      <th>Last name</th> \
+                                                                      <th>Gender</th>\
+                                                                      <th>Age</th>\
+                                                                      <th>Status</th>\
+                                                                      <th>Usertype</th>\
+                                                                  </tr>\
+                                                              </thead>\
                                                             <tbody class="nofound" >\
                                                               <tr>\
-                                                                <td colspan="10" style="text-align: center;">no user Found</td>\
+                                                                <td colspan="8" style="text-align: center;">no user Found</td>\
                                                                 </tr>\
                                                             </tbody>\
                                                           </table>\
@@ -283,23 +321,21 @@
               if(response.message == 'Nofound'){       
                 $('.users').append('<div class="card-body "style="width:100%; min-height:65vh;display: flex; overflow-x: auto;         font-size: 15px; " >\
                                       <table class="table table-bordered table-striped" style="background-color: white" >\
-                                                            <thead>\
-                                                                <tr>\
-                                                                    <th>id</th>\
-                                                                    <th>First name</th>\
-                                                                    <th>Middle name</th>\
-                                                                    <th>Last name</th> \
-                                                                    <th>Birthday</th>\
-                                                                    <th>Address</th>\
-                                                                    <th>Gender</th>\
-                                                                    <th>Mobile no.</th>\
-                                                                    <th>Email</th>\
-                                                                    <th>Action</th>\
-                                                                </tr>\
-                                                            </thead>\
+                                                           <thead>\
+                                                                  <tr>\
+                                                                      <th>id</th>\
+                                                                      <th>First name</th>\
+                                                                      <th>Middle name</th>\
+                                                                      <th>Last name</th> \
+                                                                      <th>Gender</th>\
+                                                                      <th>Age</th>\
+                                                                      <th>Status</th>\
+                                                                      <th>Usertype</th>\
+                                                                  </tr>\
+                                                              </thead>\
                                                             <tbody class="nofound" >\
                                                               <tr>\
-                                                                <td colspan="10" style="text-align: center;">no user Found</td>\
+                                                                <td colspan="8" style="text-align: center;">no user Found</td>\
                                                                 </tr>\
                                                             </tbody>\
                                                           </table>\
@@ -313,10 +349,62 @@
          
         })
 
+        // $(document).on('click',  '.pagination a', function(e){
+        //     e.preventDefault();
+        //    let name = $('#fullname').val();
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        //     });
+        //     if(name){
+        //         var url = $(this).attr('href');
+        //         console.log('filter');
+        //         $.ajax({
+        //             url: url,
+        //             type: 'GET',
+        //             success: function(response) {
+        //             $('.appointments').html(response);
+        //             },
+        //             error: function(xhr) {
+        //                 alert('Error: ' + xhr.statusText);
+        //             }
+        //         });
+        //     }else{
+        //         let page = $(this).attr('href').split('appointments=')[1]
+        //       appointment(page);
+        //     }
+   
+              
+        // });
+
+
             $(document).on('click',  '.pagination a', function(e){
             e.preventDefault();
-              let page = $(this).attr('href').split('users=')[1]
+   
+              let fullname = $('#fullname').val();
+              let usertype = $('#usertype').val();
+              let status = $('status').val();
+   
+
+              if(fullname || usertype || status){
+                var url = $(this).attr('href');
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                    $('.users').html(response);
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + xhr.statusText);
+                    }
+                });
+              }else{
+           let page = $(this).attr('href').split('users=')[1]
               user(page);
+              }
+       
               
         });
 

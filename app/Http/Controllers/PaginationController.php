@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,4 +29,22 @@ class PaginationController extends Controller
         $users =  DB::table('users')->orderBy('created_at', 'desc')->paginate(10, ['*'], 'users');
         return view('pagination.report.user', compact('users'))->render();
     }
+
+    public function report_appointment_paginate(){
+        $appointments = Appointment::orderBy('created_at', 'desc')->paginate(10, ['*'], 'appointments');
+        return view('pagination.report.appointment', compact('appointments'))->render();
+    }
+
+    public function report_billing_paginate(){
+        $billings = Transaction::orderBy('created_at', 'desc')->paginate(10, ['*'], 'billings');
+        return view('pagination.report.billing', compact('billings'))->render();
+    }
+
+    public function report_audits_paginate(){
+        $audits = DB::table('audit_trails')->orderBy('created_at', 'desc')->paginate(3, ['*'], 'audits');
+
+        return view('pagination.report.audittrail', compact('audits'))->render();
+    }
+
+    
 }

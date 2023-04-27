@@ -14,6 +14,7 @@ use App\Models\Consultation;
 use App\Models\Consultationfile;
 use App\Models\Discount;
 use App\Models\Guestpage;
+use App\Models\Modeofpayment;
 use App\Models\Reservationfee;
 use App\Models\Service;
 use App\Models\Transaction;
@@ -76,7 +77,11 @@ class AdminController extends Controller
 
             $users = User::all()->count();
             $pending = Appointment::where('status', 'Pending')->count();
-            $transaction = Transaction::sum('total');
+            $transaction = Transaction::whereDate('created_at', Carbon::today())->get();
+            $appointment = Appointment::whereDate('created_at', Carbon::today())->get();
+            $totalappointment = $appointment->sum('reservation_fee');
+            $totalbilling = $transaction->sum('total');
+            $totalsales = intval($totalappointment) + intval($totalbilling);
             $name= auth()->user()->fname;
     
             // $patient = User::select('fname')->distinct()->get();
@@ -84,7 +89,7 @@ class AdminController extends Controller
                                         //   ->with('patients', $patient)
                                           ->with('users', $users)
                                           ->with('pending', $pending)
-                                          ->with('transaction', $transaction)
+                                          ->with('transaction', $totalsales)
                                           ->with('latests', $latestuser)
                                         //   ->with('datas', $gender_records)
                                         //  ->with('appointments', $appointments)
@@ -634,7 +639,7 @@ public function fetch_service(){
     public function index_billing(Request $request){
 
         if ($request->ajax()) {
-            $data = DB::table('transactions')->distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc');
+            $data = DB::table('transactions')->distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('created_at', 'desc');
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -664,11 +669,12 @@ public function fetch_service(){
         }
     //    $billing =  DB::table('transactions')->distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc')->paginate(10, ['*'], 'addtocart');
         $discount = Discount::all();
+        $mops = Modeofpayment::all();
         // $billing = Transaction::distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->orderBy('transno', 'desc')->get();
 
         return view('admin.billing', [
                                         'discounts' =>$discount,
-                              
+                                        'mops' =>$mops,
                                       ]);
     }
 
@@ -683,7 +689,7 @@ public function fetch_service(){
 
     public function get_id(){
         $appointment = Transaction::max('transno');
-        $total = intval( $appointment) + 1;
+        $total =  $appointment + 1;
         return response()->json([
             'id' => $total ,
            ]);
@@ -908,7 +914,7 @@ public function index_discount(){
 
 
         if ($request->ajax()) {
-            $data = DB::table('appointments')->whereDate('date', '=', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
+            $data = DB::table('appointments')->where('status', 'pending')->whereDate('date', '=', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
             ->orderBy('time', 'asc');
             return Datatables::of($data)
             ->addColumn('time', function ($event) {
@@ -936,7 +942,7 @@ public function index_discount(){
  public function upcoming_queuing(Request $request){
 
         if ($request->ajax()) {
-            $data = DB::table('appointments')->whereDate('date', '>', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
+            $data = DB::table('appointments')->where('status', 'pending')->whereDate('date', '>', date('Y-m-d'))->whereDate('time', '>', date('H:i:s'))
             ->orderBy('date', 'asc');
             return Datatables::of($data)
             ->addColumn('time', function ($event) {
@@ -1497,12 +1503,132 @@ public function store_businesshours(Request $request){
             return redirect()->back()->with('oldpassword', 'The password did not match with the current password.');
         }
 
-           
-
-    
-  
-
     }
 
+    public function index_modeofpayment(){
+        $mops = DB::table('modeofpayments')->orderBy('created_at', 'desc')->paginate(5);
+
+        return view('system_settings.modeofpayment', compact('mops'));
+    }
+
+    public function store_modeofpayment(Request $request){
+        
+    $validator = Validator::make($request->all(), [
+        'mop'=>'required',
+        'image' => 'mimes:png,jpeg,jpg|max:3000',
+    ],[
+        'mop.required' => 'Name is required',
+    ]);
+
+    if($validator->fails())
+    {
+        return response()->json([
+            'status'=>400,
+            'errors'=> $validator->messages(),
+        ]);
+
+    }else{
+            $input = $request->all();
+            $mop = new Modeofpayment();
+            if($request->file()){
+                        $filename = date('YmdHis'). '.' . $input['image']->getClientOriginalExtension();
+            $input['image']->move(public_path('modeofpayment/'), $filename);
+            $input['image'] = $filename;
+            $mop->image = $input['image'];
+            }
+            $mop->modeofpayment = $input['mop'];
+            $mop->save();
+        
+            return response()->json([
+               'status' =>'success',
+                'data' => $request->all(),
+            ]);
+    }
+    }
+
+    public function edit_modeofpayment($id){
+        $mop = Modeofpayment::where('id', $id)->first();
+        return response()->json([
+            'mop' => $mop,
+        ]);
+    }
+
+    public function update_modeofpayment($id, Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'mop'=>'required',
+            'image' => 'mimes:png,jpeg,jpg|max:3000',
+        ],[
+            'mop.required' => 'Name is required',
+        ]);
+
+
+        if($validator->fails()){
+            return response()->json([
+                'status'=>400,
+                'errors'=> $validator->messages(),
+            ]);
+        }else{
+                $input = $request->all();
+                $mop = Modeofpayment::where('id', $id)->first();
+                $path = public_path('mofeofpayment/'.$mop->image) ;
+              
+
+                if($mop){
+                    $mop->modeofpayment = $input['mop'];
+                    // return response()->json($document);
+                        if($request->file('image')){
+                     
+                                if(File::exists($path)){
+                                    // return response()->json('file exist');
+                                    File::delete($path);
+                                }
+                                $filename = date('YmdHis'). '.' . $input['image']->getClientOriginalExtension();
+                                $input['image']->move(public_path('modeofpayment/'), $filename);
+                                $input['image'] = $filename;
+                                $mop->image = $filename;
+
+                        }
+                        
+                        $mop->save();
+                        return response()->json([
+                                'status'=> 200,
+                                'message'=> 'updated successfully',
+                        ]);
+                        
+                }else{
+                        return response()->json([
+                                'status'=>404,
+                                'errors'=> 'no file found',
+                            ]);
+                }
+        }
+        
+    }
+
+    public function delete_modeofpayment($id){
+            Modeofpayment::where('id', $id)->delete();
+        return response()->json([
+            'status'=> 200,
+            'message'=> 'updated successfully',
+    ]);
+        
+    }
+
+    public function get_filterdata(Request $request){
+
+        $query = Appointment::query();
+
+        if ($request->has('name')) {
+            $query->where('fullname', 'like', '%' . $request->input('name') . '%');
+        }
+
+        $appointments = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('reports.searchresult.appointment_result', compact('appointments'))->render();
+    }
+
+    
+    
 
 }

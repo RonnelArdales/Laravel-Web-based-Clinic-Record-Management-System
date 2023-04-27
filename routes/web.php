@@ -46,11 +46,16 @@ Route::middleware(['guest'])->group(function () {
 
 Route::post('/logout', [ClinicuserController::class, 'logout'])->name('logout');
 
+Route::get('/previous-page', function () {
+    return redirect()->back();
+})->name('previous.page');
+
 Route::group(['middleware' => ['auth']], function() {
+
+    //-----------search------------//
+
     Route::get('/profile/search-name', [SearchController::class, 'profile_search_user']);
-    Route::get('/report/user_fullname', [SearchController::class, 'search_user']);
-    Route::get('/report/user_status', [SearchController::class, 'search_user_status']);
-    Route::get('/report/user_usertype', [SearchController::class, 'search_user_usertype']);
+
     Route::get('/profile/search-usertype', [SearchController::class, 'search_usertype']);
     Route::get('/appointment/search-name', [SearchController::class, 'appointment_search_user']);
     Route::get('/modal_profile/search-name', [SearchController::class, 'modal_profile']);
@@ -58,15 +63,38 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/getservice/{id}', [AdminController::class, 'get_service']);
     Route::get('/getdiscount/{id}', [AdminController::class, 'get_discount']);
     Route::get('/discount', [AdminController::class, 'index_discount']);
-});
 
-Route::get('/previous-page', function () {
-    return redirect()->back();
-})->name('previous.page');
+    //----------filter report -----------//
 
-Route::group(['middleware' => ['auth']], function() {
-    Route::get('/report/users/pagination/paginate-data', [PaginationController::class, 'report_user_paginate']);
+    //-----user----//
+    Route::get('/report/user_fullname', [SearchController::class, 'search_user']);
+    Route::get('/report/user_status', [SearchController::class, 'search_user_status']);
+    Route::get('/report/user_usertype', [SearchController::class, 'search_user_usertype']);
     
+    //----appointment----//
+    Route::get('/report/appointment/fullname', [SearchController::class, 'search_appointment_user']);
+    Route::get('/report/appointment/date', [SearchController::class, 'search_appointment_date']);
+    Route::get('/report/appointment/status', [SearchController::class, 'search_appointment_status']);
+    
+    // -------billing -----------//
+    Route::get('/report/billing/fullname', [SearchController::class, 'search_billing_user']);
+    Route::get('/report/billing/date', [SearchController::class, 'search_billing_date']);
+    Route::get('/report/billing/status', [SearchController::class, 'search_billing_status']);
+    Route::get('/report/billing/mop', [SearchController::class, 'search_billing_mop']);
+
+    // -------Audit trail -----------//
+    Route::get('/report/audittrail/username', [SearchController::class, 'search_audittrail_user']);
+    Route::get('/report/audittrail/date', [SearchController::class, 'search_audittrail_date']);
+    Route::get('/report/audittrail/usertype', [SearchController::class, 'search_audittrail_usertype']);
+
+
+
+
+    //--------- paginate report --------- //
+    Route::get('/report/users/pagination/paginate-data', [PaginationController::class, 'report_user_paginate']);
+    Route::get('/report/appointments/pagination/paginate-data', [PaginationController::class, 'report_appointment_paginate']);
+    Route::get('/report/billings/pagination/paginate-data', [PaginationController::class, 'report_billing_paginate']);
+    Route::get('/report/audits/pagination/paginate-data', [PaginationController::class, 'report_audits_paginate']);
 });
 
 Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(function(){
@@ -114,7 +142,6 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     //-------------------Queuing---------------------------//
     Route::get('/queuing', [AdminController::class, 'view_queuing']);
     Route::get('/queuing/upcoming', [AdminController::class, 'upcoming_queuing']);
-    Route::get('/transaction/getid', [AdminController::class, 'get_id']);
 
       //----------------------transaction----------------------------//
       Route::get('/transaction', [AdminController::class, 'view_transaction']); 
@@ -167,13 +194,15 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
 
     //-----------------------prints  ---------------------------------//
      Route::post('/reports/print_user', [PrintController::class, 'print_user']);
-     Route::get('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
-     Route::get('/reports/print_appointment', [PrintController::class, 'print_appointment']); 
+     Route::post('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
+     Route::post('/reports/print_appointment', [PrintController::class, 'print_appointment']); 
      Route::get('/billing/printinvoice/{id}', [PrintController::class, 'print_invoice']); 
-     Route::get('/reports/print_billing', [PrintController::class, 'print_billing']);
+     Route::post('/reports/print_billing', [PrintController::class, 'print_billing']);
      Route::get('/appointment/print/{id}', [PrintController::class, 'print_appointment_trans']);
      Route::get('/consultation/print/{id}', [PrintController::class, 'print_consultation_result']);
     Route::get('/document/download/{id}', [PrintController::class, 'download_transaction']);
+
+
 
 
         //--------------------business Hours -----------------------//
@@ -182,6 +211,14 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
         Route::post('/business_hours/delete', [AdminController::class, 'delete_businesshours']);
         Route::get('/business_hours/get_hours', [AdminController::class, 'get_hours']);
         Route::put('/business_hours/off_status', [AdminController::class, 'off_status']);
+
+        
+        //--------------------mode of payment-----------------------//
+        Route::get('/modeofpayment', [AdminController::class, 'index_modeofpayment']);
+        Route::post('/modeofpayment/store', [AdminController::class, 'store_modeofpayment']);
+        Route::get('/modeofpayment/edit/{id}', [AdminController::class, 'edit_modeofpayment']);
+        Route::post('/modeofpayment/update/{id}', [AdminController::class, 'update_modeofpayment']);
+        Route::delete('/modeofpayment/delete/{id}', [AdminController::class, 'delete_modeofpayment']);
 
         //--------------------Guest page -----------------------//
         Route::get('/guestpage', [AdminController::class, 'show_guestpage_setting']);
@@ -200,6 +237,9 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
         Route::post('/myprofile/changepassword/update', [AdminController::class, 'update_changepass']);
         Route::post('/myprofile/picture/update/{id}', [AdminController::class, 'update_profile_pic']);
         // Route::post('/profile/picture/update/{id}', [PatientController::class, 'image_profile_update']);
+
+
+        Route::get('/data/get', [AdminController::class, 'get_filterdata']);
 
 });
 
@@ -229,6 +269,16 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::post('/appointment/create', [AppointmentController::class, 'store_appointment']); 
     Route::put('/appointment/change_status/{id}', [AdminController::class, 'appointment_change_status']); 
 
+    
+    Route::delete('/appointment/delete/{id}', [AdminController::class, 'delete_appointment']);
+    Route::get('/appointment/getuser/{id}', [AdminController::class, 'get_user']); 
+    Route::get('/appointment/get_appointment_service/{id}', [AdminController::class, 'get_appointment_service']); 
+    Route::get('/appointment/Calendar-fetch', [AdminController::class, 'get_time']); 
+    Route::get('/appointment/pagination/paginate-data', [PaginationController::class, 'appointment_paginate']);
+    Route::get('/modal_patient/pagination/paginate-data', [PaginationController::class, 'patient_paginate']);
+    Route::get('/appointment/status/{id}', [AdminController::class, 'appointment_status']);
+
+
 
     //-----------------queuing ------------------------//
     Route::get('/queuing', [SecretaryController::class, 'view_queuing']);
@@ -254,15 +304,19 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
                Route::get('/reports/billing', [ReportController::class, 'view_billing']);
           
               //-----------------------prints  ---------------------------------//
-               Route::post('/reports/print_user', [PrintController::class, 'print_user']);
-               Route::get('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
-               Route::get('/reports/print_appointment', [PrintController::class, 'print_appointment']); 
-               Route::get('/billing/printinvoice/{id}', [PrintController::class, 'print_invoice']); 
-               Route::get('/reports/print_billing', [PrintController::class, 'print_billing']);
-               Route::get('/appointment/print/{id}', [PrintController::class, 'print_appointment_trans']);
-               Route::get('/consultation/print/{id}', [PrintController::class, 'print_consultation_result']);
-              Route::get('/document/download/{id}', [PrintController::class, 'download_transaction']);
+            //    Route::post('/reports/print_user', [PrintController::class, 'print_user']);
+            //    Route::get('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
+            //    Route::get('/reports/print_appointment', [PrintController::class, 'print_appointment']); 
+            //    Route::get('/billing/printinvoice/{id}', [PrintController::class, 'print_invoice']); 
+            //    Route::get('/reports/print_billing', [PrintController::class, 'print_billing']);
+            Route::get('/appointment/print/{id}', [PrintController::class, 'print_appointment_trans']);
+            //    Route::get('/consultation/print/{id}', [PrintController::class, 'print_consultation_result']);
+            //   Route::get('/document/download/{id}', [PrintController::class, 'download_transaction']);
     
+                Route::post('/reports/print_user', [PrintController::class, 'print_user']);
+    Route::post('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
+    Route::post('/reports/print_appointment', [PrintController::class, 'print_appointment']); 
+    Route::post('/reports/print_billing', [PrintController::class, 'print_billing']);
 
     //----------------------discount----------------------------//
     Route::get('/discount', [SecretaryController::class, 'discount_show'])->name('discount.show');   //display discount table

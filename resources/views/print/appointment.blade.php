@@ -23,13 +23,15 @@
             <table class="table table-bordered table-striped "  >
                 <thead>
                     <tr style="text-align: center">
-                        <th>Patient Id</th>
+                        <th>Id</th>
                         <th>Fullname</th>
                         <th>Date</th>
                         <th>Time</th>
-                        <th>Service</th>
-                        <th>Price</th>
+                        <th>Reservation Fee</th>
+                        <th>Mode of payment</th>
+                        <th>Method</th>
                         <th>Status</th>
+                        <th>Date Created </th>
                     </tr>
                 </thead>
                 <tbody >
@@ -40,15 +42,17 @@
                       <td>{{$appointment->fullname}}</td>
                        <td>{{$appointment->date}}</td>
                        <td>{{$appointment->time}}</td>
-                       <td>{{$appointment->service}}</td>
-                       <td>{{$appointment->price}}</td>
+                       <td>{{$appointment->reservation_fee}}</td>
+                       <td>{{$appointment->mode_of_payment}}</td>
+                       <td>{{$appointment->appointment_method}}</td>
                        <td>{{$appointment->status}}</td>
+                       <td>{{ date('m/d/Y h:i A', strtotime($appointment->created_at))}}</td>
            
                   </tr>
                   @endforeach
                   @else
                   <tr>
-                    <td colspan="4" style="text-align: center;">No appointment Found</td>
+                    <td colspan="8" style="text-align: center;">No appointment Found</td>
               
                   </tr>
                   @endif

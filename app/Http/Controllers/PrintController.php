@@ -90,16 +90,66 @@ class PrintController extends Controller
     }
 
     public function print_auditTrail(Request $request){
-        $audits = DB::table('audit_trails')->orderby('created_at', 'DESC')->get();
-        $pdf = Pdf::loadView('print.audittrail', array('audits' => $audits));
-        return $pdf->stream('invoice.pdf');
+
+        if($request->input('fullname')){
+            $username =  $request->input('fullname');
+            $audits = AuditTrail::where('username', 'LIKE', "%".$username."%")->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.audittrail', array('audits' => $audits));
+            return $pdf->stream('Audit_trail.pdf');
+        }elseif($request->input('status')){
+            $status =  $request->input('status');
+            $audits = AuditTrail::where('usertype', $status)->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.audittrail', array('audits' => $audits));
+            return $pdf->stream('Audit_trail.pdf');
+        }elseif($request->input('start_date') && $request->input('end_date')){
+            $startDate = $request->input('start_date');
+            $concatStart = $startDate . " " . "00:00:00";
+          $endDate = $request->input('end_date');
+          $concatEnd = $endDate . " " . "23:59:59";
+            $audits =  AuditTrail::whereBetween('created_at', [$concatStart, $concatEnd])->get();
+            $pdf = Pdf::loadView('print.audittrail', array('audits' => $audits));
+            return $pdf->stream('Audit_trail.pdf');
+        }else{
+            $audits = DB::table('audit_trails')->orderby('created_at', 'DESC')->get();
+            $pdf = Pdf::loadView('print.audittrail', array('audits' => $audits));
+            return $pdf->stream('Audit_trail.pdf');
+        }
+
+
+     
     }
 
     public function print_appointment(Request $request){
-        $appointments = Appointment::all();
-        $image = base64_encode(file_get_contents(public_path('gcash.png')));
-        $pdf = Pdf::loadView('print.appointment', compact('image', 'appointments'));
-        return $pdf->stream('appointment.pdf');
+       
+
+        if($request->input('fullname')){
+            $name =  $request->input('fullname');
+            $appointments =  $appointments = Appointment::where('fullname', 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.appointment', compact( 'appointments'))->setPaper('A4','landscape');
+            return $pdf->stream('appointment.pdf');
+        }elseif($request->input('status')){
+            $status =  $request->input('status');
+            $appointments = Appointment::where('status', $status)->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.appointment', compact( 'appointments'))->setPaper('A4','landscape');
+            return $pdf->stream('appointment.pdf');
+        }elseif($request->input('start_date') && $request->input('end_date')){
+            $startDate = $request->input('start_date');
+            $concatStart = $startDate . " " . "00:00:00";
+          $endDate = $request->input('end_date');
+          $concatEnd = $endDate . " " . "23:59:59";
+            $appointments =  Appointment::whereBetween('created_at', [$concatStart, $concatEnd])->get();
+            $pdf = Pdf::loadView('print.appointment', compact( 'appointments'))->setPaper('A4','landscape');
+            return $pdf->stream('appointment.pdf');
+        }else{
+            $appointments = DB::table('appointments')->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.appointment', compact( 'appointments'))->setPaper('A4','landscape');
+            return $pdf->stream('appointment.pdf');
+        }
+
+
+  
+
+
         // $pdf->setEncryption('123' );
         // $pdf->adminUsername('123' );
         // return $pdf->download('invoice.pdf');
@@ -112,10 +162,47 @@ class PrintController extends Controller
     }
 
     public function print_billing(Request $request){
-        $billings = Transaction::all();
-        $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
-        return $pdf->stream('billing.pdf');
-        
+    
+        if($request->input('fullname')){
+
+            $name =  $request->input('fullname');
+            $billings = Transaction::where('fullname', 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
+            return $pdf->stream('billing.pdf');
+        }elseif($request->input('status')){
+            $status =  $request->input('status');
+            $billings = Transaction::where('status', $status)->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
+            return $pdf->stream('billing.pdf');
+        }elseif($request->input('start_date') && $request->input('end_date')){
+            $startDate = $request->input('start_date');
+            $concatStart = $startDate . " " . "00:00:00";
+          $endDate = $request->input('end_date');
+          $concatEnd = $endDate . " " . "23:59:59";
+           $billings =  Transaction::whereBetween('created_at', [$concatStart, $concatEnd])->get();
+            $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
+            return $pdf->stream('billing.pdf');
+        }elseif($request->input('mop')){
+            $mop =  $request->input('mop');
+            $billings = Transaction::where('mode_of_payment', $mop)->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
+            return $pdf->stream('billing.pdf');
+        }else{
+
+            
+            $billings = DB::table('transactions')->orderBy('created_at', 'desc')->get();
+            $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
+            // $pdf->setOptions(['isPhpEnabled' => true]);
+            // set options for Dompdf
+            // $options = $pdf->getOptions();
+            // $options['isRemoteEnabled'] = true;
+            // $options['isHtml5ParserEnabled'] = true;
+            // $pdf->setOptions($options);
+
+            // set the header content
+       
+            return $pdf->stream('billing.pdf');
+        }
     }
 
 

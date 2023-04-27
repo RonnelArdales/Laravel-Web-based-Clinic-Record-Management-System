@@ -150,7 +150,7 @@
   }
   
     .active-bar{
-     padding: 1px ;
+
     color:black;
     border-radius: 25px;
     background-color: #EDDBC0;
@@ -246,7 +246,7 @@
     cursor: pointer;
     outline: none;
     text-align: left;
-    padding-left: 23px;
+    padding-left: 17px;
   }
   /* On mouse-over */
   .side-navbar a:hover, .dropdown-btn:hover {
@@ -574,6 +574,12 @@
                             <span>Discount</span>
                        </a>
                   </li>
+                  <li class=" my-1 mx-3 {{Request::is('admin/modeofpayment') ? 'active-bar' : '';}}">
+                         <a href="/admin/modeofpayment"> 
+                              <img class="icon dropdown" src="{{url('/logo/discount2.png')}}" alt=""> 
+                              <span style="font-size: 17.5px" >Mode of Payment</span>
+                         </a>
+                    </li>
 
                   <li class="my-1 mx-3  {{Request::is('admin/business_hours') ? 'active-bar' : '';}}">
                        <a href="/admin/business_hours"> 
@@ -610,7 +616,8 @@
           </ul>
           @else
 
-          {{--navigation bar for secretary--}}
+          {{--navigation bar for secretary--}} 
+
           <ul class="nav flex-column text-white w-100">
 
             <li class="  my-1 mx-3 {{Request::is('secretary/dashboard') ? 'active-bar' : '';}}">
@@ -753,7 +760,7 @@
         </div>
 
         <div class="btn-group dropup" style="width: 100%; margin-top:10px; margin-left:1px">
-          <button type="button" style="text-align: start ;  display: flex;
+          <button type="button" style="text-align: start ;  display: flex; border:none;
           align-items: center;
           "  class="btn" data-bs-toggle="dropdown" aria-expanded="false">
             @if (Auth::user()->profile_pic == null ) 
@@ -768,9 +775,9 @@
                <form class="" action="/logout" method="POST" >
                     @csrf
                     <li class="my-1 mx-3">
-                        <button type="submit" class="btn dropdown-btn rounded">
-                          <img class="icon" src="{{url('/logo/businesshours.png')}}" alt=""> 
-                          Logout</button>
+                        <button type="submit" class="dropdown-btn">
+                          Logout
+                         </button>
                     </li>
                     </form>
 

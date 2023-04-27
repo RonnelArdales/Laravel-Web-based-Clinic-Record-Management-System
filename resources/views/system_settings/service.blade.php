@@ -145,10 +145,10 @@
     {{-- //delete modal --}}
 
 <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+    <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content"  style="background: #EDDBC0;">
+          <div class="modal-header" style="border-bottom-color: gray">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Hold on!</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -160,9 +160,9 @@
               {{-- </form> --}}
         </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class=" delete_service p-2 w-30 bg-[#829460]  mt-7 rounded" >delete</button>
+        <div class="modal-footer" style="border-top-color: gray">
+          <button type="button" style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px; height: 37px;" class="btn" data-bs-dismiss="modal">Close</button>
+          <button class=" delete_service" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; "  >delete</button>
         </div>
       </div>
     </div>

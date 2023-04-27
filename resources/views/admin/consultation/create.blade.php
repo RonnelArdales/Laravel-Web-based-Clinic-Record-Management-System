@@ -159,7 +159,8 @@
                   })     
 
                   $('#viewappointments').on('shown.bs.modal', function() {
-                $('.appointments').DataTable({
+                    
+               appointments =  $('.appointments').DataTable({
                 "ajax": "/admin/consultation/show_appointment",
                 processing: true,
                 serverSide: true,
@@ -177,7 +178,8 @@
           });
 
                     $('.viewappointments').on('hidden.bs.modal', function () {
-                        appointment.search('').draw();
+                        appointments.search('').draw();
+                        appointments.draw();
                         });
 
                         $('.appointments').on('click', '.select', function(e) {

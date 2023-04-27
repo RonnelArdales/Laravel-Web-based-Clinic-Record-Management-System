@@ -36,7 +36,7 @@
               height: 135px;" >
                 <div class="p-1" style="color: aliceblue">
                     Total
-                    <h5 >SALES:</h5>
+                    <h5 >TODAY SALES:</h5>
                 </div>
                 <div class="d-flex justify-content-center"  style="color: white; font-size:40px;">
                   <h1 style="font-size: 45px" >₱ {{ number_format($transaction, 2) }}</h1>
@@ -46,7 +46,7 @@
               <div class="col-sm" style=" border-radius: 10px; border-left:12px solid white;background-color:#829460; height:135px">
                 <div class="p-1" style="color: aliceblue">
                     Total
-                    <h5 >PENDING:</h5>
+                    <h5 >PENDING APPOINTMENTS:</h5>
                 </div>
                 <div class="d-flex justify-content-center"  style="color: aliceblue; font-size:40px">
                   <h1 style="font-size: 45px" >{{$pending}}</h1>
