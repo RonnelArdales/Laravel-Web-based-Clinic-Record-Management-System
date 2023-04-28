@@ -72,34 +72,40 @@
                                           <label style="font-size:  20px" for=""><b> Appointment History</b></label>
                                         
                                 </div>
-                                <table class="table table-bordered table-striped"  id="consultation" style="background-color: white; width:100%; " >
-                                    <thead>
-                                      <tr>
-                                        <th>id</th>
-                                        <th>Service</th>
-                                        <th>Date</th>
-                                        <th style="min-width: 55px">Action</th>
-                                    
-                                      </tr>
-                                    </thead>
-                                    <tbody class="error">
-                                        @foreach ($consultations as $consult)
-                                        <tr class="overflow-auto">
-                                            <td>{{$consult->id}}</td>
-                                          <td>{{$consult->service}}</td>
-                                            <td>{{$consult->date}}</td>
-                                            <td>{{$consult->time}}</td>
-                                 
-                
-                                            <td style="text-align: center">
-                                                <a href="/admin/consultation/viewconsultation/{{$consult->id}}/{{$consult->user_id}}" class=" btn btn-sm btn-info">View</a>
-                                                <a href="/admin/consultation/edit/{{$consult->id}}/{{$consult->user_id}}" class=" btn btn-sm btn-primary">Edit</a>
-                                                <a href="/admin/consultation/delete/{{$consult->id}}" class=" btn btn-sm btn-danger">Delete</a>
-                                    </td> 
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                <div>
+                                    <table class="table table-bordered table-striped"  id="consultation" style="background-color: white; width:100%; " >
+                                        <thead>
+                                          <tr>
+                                            <th>id</th>
+                                            <th>Service</th>
+                                            <th>Date</th>
+                                            <th style="min-width: 55px">Action</th>
+                                        
+                                          </tr>
+                                        </thead>
+                                        <tbody class="error">
+                                            @foreach ($consultations as $consult)
+                                            <tr class="overflow-auto">
+                                                <td>{{$consult->id}}</td>
+                                              <td>{{$consult->service}}</td>
+                                                <td>{{$consult->date}}</td>
+                                                <td>{{$consult->time}}</td>
+                                     
+                    
+                                                <td style="text-align: center">
+                                                    <a href="/admin/consultation/viewconsultation/{{$consult->id}}/{{$consult->user_id}}" class=" btn btn-sm btn-info">View</a>
+                                                    <a href="/admin/consultation/edit/{{$consult->id}}/{{$consult->user_id}}" class=" btn btn-sm btn-primary">Edit</a>
+                                                    <a href="/admin/consultation/delete/{{$consult->id}}" class=" btn btn-sm btn-danger">Delete</a>
+                                        </td> 
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <div>
+                                        {!! $consultations->links() !!}
+                                    </div>
+                                </div>
+                               
                             </div>
                         </div>
                     

@@ -22,10 +22,10 @@
 
             <h1>Transaction</h1>
             </div>
-                      <div class="alert success alert-success" role="alert" style="width:250px; right:25px; display:none;  position:fixed">
+                      <div class="alert success alert-success" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:9999">
                           <p id="message-success"></p> 
                       </div>
-                      <div class="alert error alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed">
+                      <div class="alert error alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:9999">
                           <p id="message-error"></p> 
                       </div>
                       <div class="loading" style="width:250px; right:25px; display:none; position:fixed">
@@ -398,8 +398,19 @@
                 url: "/admin/transaction/addtocart/billing_store", 
                     datatype: "json",
                     data: {transno : $('#getid').val() },
-                    success: function(response){ //return galing sa function sa controller
-                        get_maxid();
+                    success: function(response){ 
+                        if(response.status == "400"){
+
+                            $('#message-error').text("");
+                            $('#message-error').text("Please add service");
+                            $(".error").show();
+                            setTimeout(function() {
+                                $(".error").fadeOut(500);
+                            }, 2000);
+                            
+                        }else{
+
+                            get_maxid();
                         $('.subtotal').load(location.href+' .subtotal');
                             $('.data-table').load(location.href+' .data-table');
                             $('#userid').val("");
@@ -412,6 +423,7 @@
                             setTimeout(function() {
                                 $(".success").fadeOut(500);
                             }, 2000);
+                        }
                  
                 }
             });

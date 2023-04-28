@@ -61,9 +61,6 @@
                 <option value="{{$service->services}}">{{$service->services }}</option>
                 @endforeach
             </select>
-            <br>
-
-
             {{-- <label for="">Type of service: </label>
             <input type="text" hidden style="width: 400px" class="addtocart_input servicename" id="servicename" name="servicename" >
             <select style="width:420px; height:30px" class="service_input getservice"  name="typeofservice"  id="typeservice">
@@ -74,8 +71,8 @@
             </select> --}}
        
             <br>
-            {{-- <label style="margin-top: 5px" for="">Primary diagnosis:</label>
-                <input type="text" style="width: 410px" class="addtocart_input" value="eme" id="findings" name=""> --}}
+            <label style="margin-top: 5px" for="">Primary diagnosis:</label>
+                <input type="text" style="width: 410px" class="addtocart_input" value="eme" id="findings" name="">
             </div>
         </div>
            
@@ -116,7 +113,7 @@
         
               <!-- Modal body -->
                      <div class="modal-body " >
-    <div class="patient patient-remove overflow-auto container-fluid" style="height:380px" >
+    <div class="patient patient-remove overflow-auto container-fluid" style="height:420px" >
       <table class="table table-bordered appointments table-striped"  style="background-color: white; width:100%" >
           
                       <thead>
@@ -158,9 +155,11 @@
                     $('#viewappointments').modal('show');
                   })     
 
-                  $('#viewappointments').on('shown.bs.modal', function() {
-                    
-               appointments =  $('.appointments').DataTable({
+                  var appointmentsTable = null;
+  
+  $('.viewappointments').on('shown.bs.modal', function() {
+    if (!appointmentsTable) {
+              appointmentsTable =  $('.appointments').DataTable({
                 "ajax": "/admin/consultation/show_appointment",
                 processing: true,
                 serverSide: true,
@@ -175,12 +174,19 @@
                           { width: "10%",data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });
+          }else{
+          
+      appointmentsTable.ajax.reload();
+ 
+          }
           });
 
-                    $('.viewappointments').on('hidden.bs.modal', function () {
-                        appointments.search('').draw();
-                        appointments.draw();
-                        });
+          $('.viewappointments').on('hidden.bs.modal', function() {
+    if (appointmentsTable) {
+      appointmentsTable.destroy();
+      appointmentsTable = null;
+    }
+  });
 
                         $('.appointments').on('click', '.select', function(e) {
                         e.preventDefault();

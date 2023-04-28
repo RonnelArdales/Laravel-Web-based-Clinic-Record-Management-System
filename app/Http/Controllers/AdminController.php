@@ -648,14 +648,14 @@ public function fetch_service(){
                             
                              $btn = '<button type="button" data-id="' . $row->transno . '" class="payment btn  btn-success btn-sm">Pay now</button>';
                             $btn = $btn.'<a href="/admin/billing/viewBilling/ ' . $row->transno . ' " class="btn btn-primary btn-sm" style="margin-left:5px"    >View</a>';
-                            $btn = $btn.' <a href="/admin/billing/editBilling/' . $row->transno . '" class="btn btn-danger btn-sm">Delete</a>';
+                            $btn = $btn.'<button  style="margin-left:5px" class="delete btn btn-sm btn-danger" data-id="' . $row->transno . '">Delete</button>';
                             $size = '<div style="width: 200px">' . $btn . '</div>';                
                             return $size;
                            
                         }else{
 
                             $btn = ' <a href="/admin/billing/viewBilling/' . $row->transno . '" class="btn btn-primary btn-sm">View</a>';
-                            $btn = $btn.'  <a href="/admin/billing/editBilling/' . $row->transno . '" class="btn btn-danger btn-sm">Delete</a>';
+                            $btn = $btn.'<button  style="margin-left:5px" class="delete btn btn-sm btn-danger" data-id="' . $row->transno . '">Delete</button>';
                     $size = '<div style="width: 200px">' . $btn . '</div>';                
                             return $size;
 
@@ -743,38 +743,44 @@ public function fetch_service(){
    
     }
     public function store_billing(Request $request){
-        $sum = Addtocartservice::sum('price');
-        // $insert = Addtocartservice::where('billing_no', $request->billingno)->update(['sub_total' => $sum])
 
-        $addtocart = Addtocartservice::all();
+        if (Addtocartservice::count() == 0) {
+            return response()->json(['status' => '400']);
+        }else{
+            $sum = Addtocartservice::sum('price');
+            // $insert = Addtocartservice::where('billing_no', $request->billingno)->update(['sub_total' => $sum])
+            $addtocart = Addtocartservice::all();
+            foreach ($addtocart as $data) {
+    
+                $billing = new Transaction();
+                $billing->transno = $data->transno;
+                $billing->user_id = $data->user_id;
+                $billing->fullname = $data->fullname;
+                $billing->servicecode = $data->servicecode;
+                $billing->service = $data->service;
+                $billing->price = $data->price;
+                $billing->sub_total = $sum;
+                $billing->total = $sum;
+                $billing->status = 'Pending';
+                $billing->save();
+            }
+            Addtocartservice::truncate();  
+    
+            return response()->json([
+               'status' => 200,
+               'message' => 'Saved successfully',
+            ]);
 
-        foreach ($addtocart as $data) {
-
-            $billing = new Transaction();
-            $billing->transno = $data->transno;
-            $billing->user_id = $data->user_id;
-            $billing->fullname = $data->fullname;
-            $billing->servicecode = $data->servicecode;
-            $billing->service = $data->service;
-            $billing->price = $data->price;
-            $billing->sub_total = $sum;
-            $billing->total = $sum;
-            $billing->status = 'Pending';
-            $billing->save();
         }
-        Addtocartservice::truncate();  
 
-        return response()->json([
-           'status' => 200,
-           'message' => 'Saved successfully',
-        ]);
+
 
     }
 
     public function update_payment($id ,Request $request){
+        
 
     $validator = Validator::make($request->all(), [
-
         'mode_of_payment' => 'required'
         ],[
             'mode_of_payment.required'=>'Mode of payment is required',
@@ -783,11 +789,25 @@ public function fetch_service(){
      if($validator->fails()) {
         return response()->json([
            'status' => 400,
-           'message' => $validator->errors()
+           'errors' => $validator->errors()
         ]);
-     }
-     $input = $request->all();
-        Transaction::where('transno', $id)->update([
+     }else{
+$input = $request->all();
+        if($input['mode_of_payment'] == "Cash"){
+            $validator = Validator::make($request->all(), [
+                'payment'=>'required',
+            ],[
+                'payment.required'=> 'Payment  is required',
+            ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    'status' => 400,
+                    'errors' => $validator->errors(),
+                ]);
+            }else{
+
+                        Transaction::where('transno', $id)->update([
                                                     'discount' => $input['discountname'],
                                                     'discount_price' => $input['discountprice'],
                                                     'total' => $input['total'],
@@ -797,7 +817,43 @@ public function fetch_service(){
                                                     'change' => floatval(str_replace(',', '', $input['change'])),
                                                     'status' => "Paid",             
                                                             ]);
-    return response()->json('updated successfully');
+          
+            }
+        }else{
+            $validator = Validator::make($request->all(), [
+                'reference_no'=>'required',
+            ],[
+                'reference_no.required'=> 'Reference no is required',
+            ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    'status' => 400,
+                    'errors' => $validator->messages(),
+                ]);
+            }else{
+
+                        Transaction::where('transno', $id)->update([
+                                                    'discount' => $input['discountname'],
+                                                    'discount_price' => $input['discountprice'],
+                                                    'total' => $input['total'],
+                                                    'mode_of_payment' => $input['mode_of_payment'],
+                                                    'reference_no' => $input['reference_no'],
+                                                    'payment' => floor($input['payment']),  
+                                                    'change' => floatval(str_replace(',', '', $input['change'])),
+                                                    'status' => "Paid",             
+                                                            ]);
+            }
+        }
+
+
+
+
+     }
+
+
+
+
     }
 
 
@@ -1191,7 +1247,7 @@ public function store_businesshours(Request $request){
 
  public function consultation_view_records($id, Request $request){
     $userinfo = User::where('id', $id)->first();
-    $consultations =  DB::table('consultations')->where('user_id', $id)->orderby('created_at', 'desc')->get();
+    $consultations =  DB::table('consultations')->where('user_id', $id)->orderby('created_at', 'desc')->paginate(5);
     $last = Consultation::where('user_id', $id)->latest()->first();
 
 
@@ -1289,10 +1345,12 @@ public function store_businesshours(Request $request){
     $validator = Validator::make($request->all(), [
         'fullname'=>'required',
         'pdf' => 'mimes:pdf|max:3000|required',
+        'doc_type' => 'required',
     ],[
         'pdf.mimes'=>'the file must be a pdf',
         'pdf.required' => 'pdf file is required',
         'fullname.required' => 'Please select an appointment',
+        'doc_type.required' => 'Document type is required',
     ]);
 
     if($validator->fails())
@@ -1314,6 +1372,7 @@ public function store_businesshours(Request $request){
             $documents->appointment_date = $date;
             $documents->user_id = $input['user_id'];
             $documents->fullname = $input['fullname'];
+            $documents->documenttype = $input['doc_type'];
             $documents->filename = $input['pdf'];
             $documents->note = $input['note'];
             $documents->save();
@@ -1337,10 +1396,12 @@ public function store_businesshours(Request $request){
         
 
         $validator = Validator::make($request->all(), [
+                    'doc_type' => 'required',
                     'pdf' => 'mimes:pdf|max:3000',
         ],[
 
                     'pdf.mimes'=>'the file must be a pdf',
+                    'doc_type.required'=>'Document type is required',
         ]);
     
         if($validator->fails()){
@@ -1356,6 +1417,7 @@ public function store_businesshours(Request $request){
 
                     if($document){
                         $document->note = $input['note'];
+                        $document->documenttype = $input['doc_type'];
                         // return response()->json($document);
                             if($request->file('pdf')){
                          

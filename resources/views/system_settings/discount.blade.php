@@ -19,14 +19,16 @@
 
   </div>
 
-
+  <div id="success" class="success alert alert-success" role="alert" style="display:none">
+    <p style="margin-bottom: 0px;" id="message-success"></p> 
+  </div>
 
 
 <div id="success"></div>
 <div class="card" style="background:#EDDBC0;border:none; height:500px " >
   <div class="card-body" style="width:100%; min-height:72vh; display: flex; overflow-x: auto;  font-size: 15px; ">
       <div class="" style="width:100%; " >
-      <table class="table table-bordered table-striped"  style="background-color: white" >
+      <table class="table table-bordered table-striped"  style="background-color: white ; margin-bottom:0px" >
             <thead>
                 <tr>
                     <th>discount code</th>
@@ -102,10 +104,10 @@
 
   {{-- edit modal --}}
   <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal edit</h1>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content"  style="background: #EDDBC0;">
+        <div class="modal-header" style="border-bottom-color: gray">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit discount</h1>
           <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -127,9 +129,9 @@
               {{-- </form> --}}
         </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class=" update_discount p-2 w-30 bg-[#829460]  mt-7 rounded" >Update</button>
+        <div class="modal-footer" style="border-top-color: gray">
+          <button  style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px; height: 37px; " type="button"  data-bs-dismiss="modal">Close</button>
+          <button style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; "  class=" update_discount " >Update</button>
         </div>
       </div>
     </div>
@@ -140,9 +142,9 @@
 {{-- //delete modal --}}
 
 <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content"  style="background: #EDDBC0;">
+      <div class="modal-header" style="border-bottom-color: gray">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -155,9 +157,9 @@
               {{-- </form> --}}
         </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class=" delete_discount p-2 w-30 bg-[#829460]  mt-7 rounded" >delete</button>
+        <div class="modal-footer" style="border-top-color: gray">
+          <button type="button"style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px; height: 37px; " data-bs-dismiss="modal">Close</button>
+          <button class=" delete_discount" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >delete</button>
         </div>
       </div>
     </div>
@@ -231,9 +233,11 @@
                             $('#percent').append('<span>'+err_values+'</span>');
                         })
                     }else{
-                        $('#success' ).html("");
-                        $('#success' ).addClass('alert alert-success');
-                        $('#success').text('success');
+                      $('#message-success').text('Created successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                         $('#create').modal('hide');
                         $('#create').find('input').val("");
                         $('.table').load(location.href+' .table');
@@ -303,9 +307,11 @@
 
                     }else{
                                              
-                        $('#success' ).html("");
-                        $('#success' ).addClass('alert alert-success');
-                        $('#success').text('update successfully');
+                      $('#message-success').text('Updated successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                         $('#edit').modal('hide');
                         $('#edit').find('input').val("");
                         $('.table').load(location.href+' .table');
@@ -340,9 +346,11 @@
                 data: discode,
                 datatype: "json",
                 success: function(response){ 
-                        $('#success' ).html("");
-                        $('#success' ).addClass('alert alert-success');
-                        $('#success').text('deleted successfully');
+                               $('#message-success').text('Deleted successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                         $('#delete').modal('hide');
                         $('#delete').find('input').val("");
                         $('.table').load(location.href+' .table');

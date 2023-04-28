@@ -225,6 +225,17 @@
     //     // alert();
     //     // }
     // },
+
+    dayRender: function (date, cell) {
+    // Get the current date
+    var currentDate = moment();
+
+    // Compare the current date to the date of the cell
+    if (date.isSameOrBefore(currentDate, 'day')) {
+      // Apply a disabled style to the cell representing the current or previous date
+      cell.addClass('fc-state-disabled');
+    }
+  },
     
     select:function(start, end, allDay)
             {
@@ -233,8 +244,27 @@
                 var start = $.fullCalendar.formatDate(start, 'Y-MM-DD');
                 var end = $.fullCalendar.formatDate(end, 'Y-MM-DD HH:mm:ss'); 
                 const dayOfWeek = $.fullCalendar.moment(date).day();
-  
-        $.ajaxSetup({
+
+                let currentDate = new Date(Date.now());
+let year = currentDate.getFullYear();
+let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
+let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
+
+let formattedDate = `${year}-${month}-${day}`;
+
+
+
+           if(formattedDate >= start){
+            // $('#message-error').text("Sorry you cannot book this date");
+            //                 $(".error").show();
+            //                 setTimeout(function() {
+            //                     $(".error").fadeOut(500);
+            //                 }, 3000);
+
+            return false;
+           }else{
+
+            $.ajaxSetup({
             headers:{
                 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
             }
@@ -276,13 +306,17 @@
                             }
                         }
                     })
+           
+           }
+  
+     
             },
         });
 
-        // $('#available-time').on('change', function(){
-        //     var time = $(this).val();
-        //     $('#form-timeselected').val(time);
-        // });
+        $('#available-time').on('change', function(){
+            var time = $(this).val();
+            $('#form-timeselected').val(time);
+        });
 
         function getdiscount(){
             $.ajaxSetup({

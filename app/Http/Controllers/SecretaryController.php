@@ -495,6 +495,17 @@ public function get_id(){
        ]);
 }
 
+public function delete_transaction($id){
+
+    Addtocartservice::where('id', $id)->delete();
+
+    return response()->json([
+        'status' => 200,
+        'message' => 'Deleted successfully',
+    ]);
+
+}
+
 public function index_billing(Request $request){
 
     if ($request->ajax()) {

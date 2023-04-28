@@ -205,6 +205,10 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #555; 
   }
+
+  .fc-content-skeleton .fc-day-top .fc-day-number {
+    font-size: 20px;
+}
 </style>
 <body>
     <nav class="navbar navbar-expand-md flex" style="background-color: #EDDBC0; margin-left:2%;">

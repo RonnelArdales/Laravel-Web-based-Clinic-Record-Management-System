@@ -160,8 +160,6 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
         Route::put('/billing/update/payment/{id}', [AdminController::class, 'update_payment']);
         Route::get('/billing/viewBilling/{id}', [AdminController::class, 'view_billing']);
         Route::get('/billing/editBilling/{id}', [AdminController::class, 'edit_billing']);
-        Route::post('/billing/addtocart/deleteall', [AdminController::class, 'deleteall_addtocart']);
-        Route::get('/billing/addtocart/pagination/paginate-data', [AdminController::class, 'addtocart_paginate']);
         Route::get('/billing/getdata/{id}', [AdminController::class, 'addtocart_getalldata']); //condition if addtocart table has data
         
 

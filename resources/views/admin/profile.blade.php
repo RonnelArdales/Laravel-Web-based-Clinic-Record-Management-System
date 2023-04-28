@@ -608,10 +608,10 @@
       }
 
         $(".modal").on("hidden.bs.modal", function(){
+          alert();
             $('#create, #edit, #delete').find('input').val("");
-            $('.modal-create').load(location.href+' .modal-create');
-            $('.modal-update').load(location.href+' .modal-update');
-            // $('#error_fname, #error_lname, #error_gender, #error_usertype, #error_birthday, #error_address, #error_mobileno, #error_email, #error_password, #fname, #mname, #lname, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password ').html("");
+            // $('.modal-create').load(location.href+' .modal-create');
+            // $('.modal-update').load(location.href+' .modal-update');
         });
 
         //show and hide table

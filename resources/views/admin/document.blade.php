@@ -41,6 +41,7 @@
 						<th>id</th>
 						<th>Appointment date</th>
 						<th>Fullname</th>
+            <th>Document Type</th>
 						<th style="min-width: 55px">Action</th>
 					
 					  </tr>
@@ -56,7 +57,7 @@
 
 {{--------------------------- Create modal -------------------------------------}}
 
-<div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade create " id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content" style="background: #EDDBC0;">
         <div class="modal-header" style="border-bottom-color: gray">
@@ -74,21 +75,30 @@
                             <input type="text"  class="input" id="appointment_id"  style="width: 300px" name="appointment_id" readonly>
                             <button class="getappointment btn btn-outline-success" type="button" style="border: 1px solid #829460;"><img src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" style="height: 15px ;
                                 width: 15px ;" id="appointment" alt="" ></button><br>
-                            <label style="margin-top:10px" for="">fullname</label><br>
+                            <label style="margin-top:10px" for="">Fullname</label><br>
                             <input type="text" class="input" readonly  style="width: 300px" id="user_id" name="user_id" hidden>
                             <input type="text" class="input" readonly  style="width: 300px" id="fullname" name="fullname">
+                            <label style="margin-top:10px" for="">Appointment date</label><br>
+                            <input type="text" class="input"  style="width: 300px" id="date" name="date"><br>
                             <div class="mt-0 mb-2">
                               <span  role="alert" class="block mt-5   text-danger" id="error_userid"></span>
                         </div>
                         </div>
     
-                        <div style="margin-top: 1px" class="col-md-6">
-    
-                        <label style="margin-top: 4px" for="">Appointment date</label><br>
-                        <input type="text" class="input"  style="width: 300px" id="date" name="date"><br>
-                        <label style="margin-top:13px" for="">upload pdf</label><br>
-                        <input type="file" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  id="pdf" name="pdf"><br>
+                        <div class="col-md-6">
 
+                          <label style="margin-bottom: 5px;" for="">Document type</label><br>
+                          <select class="input"  style="width: 300px; height:27px" name="doc_type" id="">
+                            <option value="">-- select --</option>
+                            <option value="Consultation">Consultation file</option>
+                          </select>
+                          <br>
+                          <div class="mt-0 mb-2">
+                                <span  role="alert" class="block mt-5   text-danger" id="error_doc_type"></span>
+                          </div>
+    
+                        <label style="margin-top:5px" for="">Upload pdf</label><br>
+                        <input type="file" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  id="pdf" name="pdf"><br>
                         <div class="mt-0 mb-2">
                               <span  role="alert" class="block mt-5   text-danger" id="error_file"></span>
                         </div>
@@ -96,14 +106,13 @@
                         
 
                         <div class="form-group" >
-                            <label for="message-text" style="margin-top:20px"  class="col-form-label">Note:</label>
+                            <label for="message-text"    class="col-form-label">Note:</label>
                             <textarea class="input" style="width: 100%;text-align: justify ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; min-height: 100px; height:auto" id="note" name="note"></textarea>
                           </div>
               
    
                 </div>
                 </div>
-
 
                     <div class="modal-footer" style="border-top-color: gray">
                     <button type="button" style=" border-radius: 30px; border: 2px solid #829460;width: 110px;height: 37px; color:#829460;; background:transparent;" data-bs-dismiss="modal">Close</button>
@@ -166,21 +175,26 @@
           <div class="mb-4 pt-6  ">
               <div class=" columns-1 sm:columns-2">
                   <div  class="row">
+
                       <div class="col-md-6">
 
                           <label for="">Appointment id</label><br>
                           <input type="text"  class="input" id="view_appointemntid"  style="width: 300px" name="appointment_id" readonly><br>
                         
-                          <label style="margin-top:10px" for="">fullname</label><br>
+                          <label style="margin-top:10px" for="">Fullname</label><br>
                           <input type="text" class="input" readonly  style="width: 300px" id="user_id" name="user_id" hidden>
                           <input type="text" class="input" readonly   style="width: 300px" id="view_fullname" name="fullname">
+
+                          <label style="margin-top: 10px" for="">Appointment date</label><br>
+                          <input type="text" class="input"  style="width: 300px" id="view_date" name="date"><br>
                        
                       </div>
   
                       <div  class="col-md-6">
-  
-                      <label style="margin-top: 0px" for="">Appointment date</label><br>
-                      <input type="text" class="input"  style="width: 300px" id="view_date" name="date"><br>
+                        
+                        <label style="margin-top: 0px" for="">Document Type</label><br>
+                        <input type="text" class="input"  style="width: 300px" id="view_doc_type" name="date"><br>
+                
                       <label style="margin-top:13px" for="">Uploaded pdf</label><br>
                       <input type="text"class="input" readonly   style="width: 300px" id="view_file" name="pdf"><br>
                       </div>
@@ -227,18 +241,34 @@
                           <input type="text" hidden id="document_id" name="document_id">
                           <input type="text"  class="input" id="edit_appointmentid"  style="width: 300px" name="appointment_id" readonly>
                           <br>
+
                           <label style="margin-top:10px" for="">fullname</label><br>
                           <input type="text" class="input" readonly  style="width: 300px" id="edit_userid" name="user_id" hidden>
                           <input type="text" class="input" readonly  style="width: 300px" id="edit_fullname" name="fullname">
                        
+                            <label style="margin-top:10px" for="">Appointment date</label><br>
+                          <input type="text" class="input"  style="width: 300px" id="edit_date" name="date"><br>
                       </div>
             
-                      <div style="margin-top: 1px" class="col-md-6">
+                      <div  class="col-md-6">
+
+                        <label style="margin-bottom: 5px;" for="">Document type</label><br>
+                        <select class="input"  style="width: 300px; height:27px" name="doc_type" id="edit_doc_type">
+                        <option value=""></option>
+                        <option value="Consultation">Consultation</option>
+                        </select>
+                        <br>
+                        <div class="mt-0 mb-2">
+                              <span  role="alert" class="block mt-5   text-danger" id="error_edit_doc_type"></span>
+                        </div>
   
-                      <label style="margin-top: 1px" for="">Appointment date</label><br>
-                      <input type="text" class="input"  style="width: 300px" id="edit_date" name="date"><br>
-                      <label style="margin-top:13px" for="">upload pdf</label><br>
+     
+                      <label style="margin-top:5px" for="">Upload pdf</label><br>
                       <input type="file" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  id="pdf" name="pdf"><br>
+
+                      <div class="mt-0 mb-2">
+                        <span  role="alert" class="block mt-5   text-danger" id="error_edit_file"></span>
+                  </div>
                       </div>
 
                       <div class="form-group" >
@@ -312,9 +342,10 @@ window.addEventListener('beforeunload', function () {
 	   pageLength: 10,
 	   responsive: true,
         columns: [
-		{data: 'id', name: 'id' , orderable: false, searchable: false},
+		    {data: 'id', name: 'id' , orderable: false, searchable: false},
         {data: 'appointment_date', name: 'appointment_date' , orderable: false, searchable: false},
         {data: 'fullname', name: 'fullname' , orderable: false, searchable: false},
+        {data: 'documenttype', name: 'documenttype' , orderable: false, searchable: false},
         {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });
@@ -339,6 +370,16 @@ window.addEventListener('beforeunload', function () {
 
           $('#viewappointments').on('hidden.bs.modal', function() {
             $('.appointment').DataTable().destroy();
+        });
+
+        $(".viewpatients").on("hidden.bs.modal", function(e){
+          e.preventDefault();
+        $('.patient-remove').load(location.href+' .patient-remove');
+        });
+
+        $(".create").on("hidden.bs.modal", function(e){
+          e.preventDefault();
+          $('#create').find('input, select').val("");
         });
 
 
@@ -387,12 +428,15 @@ window.addEventListener('beforeunload', function () {
                 processData: false,
                 success: function(response){ 
                   if(response.status == 400){
-                        $('#error_userid, #error_file' ).html("");
+                        $('#error_userid, #error_file, #error_doc_type' ).html("");
                         $.each(response.errors.fullname, function (key, err_values){
                           $('#error_userid').append('<span>'+err_values+'</span>');
                         })
                         $.each(response.errors.pdf, function (key, err_values){
                             $('#error_file').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.doc_type, function (key, err_values){
+                            $('#error_doc_type').append('<span>'+err_values+'</span>');
                         })
                   }else{
                         $('#message-success').text('Created Successfully');
@@ -461,6 +505,7 @@ window.addEventListener('beforeunload', function () {
               $('#view').find('input, textarea').html("");
                $('#view_appointemntid').val(response.document.appointment_id);
                $('#view_fullname').val(response.document.fullname);
+               $('#view_doc_type').val(response.document.documenttype);
                $('#view_date').val(response.document.appointment_date);
                $('#view_file').val(response.document.filename);
                $('#view_note').val(response.document.note);
@@ -493,7 +538,9 @@ window.addEventListener('beforeunload', function () {
                $('#document_id').val(response.document.id);
                $('#edit_appointmentid').val(response.document.appointment_id);
                $('#edit_userid').val(response.document.user_id);
+               
                $('#edit_fullname').val(response.document.fullname);
+               $('#edit_doc_type').val(response.document.documenttype);
                $('#edit_date').val(response.document.appointment_date);
                $('#edit_note').val(response.document.note);
 
@@ -520,14 +567,15 @@ window.addEventListener('beforeunload', function () {
                 contentType: false,
                 processData: false,
                 success: function(response){ 
+                  console.log(response);
                     if(response.status == 400){
-                        $('#edit_error_, #error_price' ).html("");
-                        $.each(response.errors.servicename, function (key, err_values){
-                        $('#error_servicename').append('<span>'+err_values+'</span>');
-                        });
-                        $.each(response.errors.price, function (key, err_values){
-                        $('#error_price').append('<span>'+err_values+'</span>');
-                        });
+                      $('#error_userid, #error_file, #error_doc_type' ).html("");
+                        $.each(response.errors.pdf, function (key, err_values){
+                            $('#error_edit_file').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.doc_type, function (key, err_values){
+                            $('#error_edit_doc_type').append('<span>'+err_values+'</span>');
+                        })
                     }else{                  
                         $('#message-success').text('Updated Successfully');
                         $(".success").show();

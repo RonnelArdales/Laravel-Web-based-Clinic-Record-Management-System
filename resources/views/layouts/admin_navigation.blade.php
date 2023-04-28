@@ -444,6 +444,13 @@
                     </a>
                </li>
 
+               <li class=" my-1 mx-3  {{Request::is('admin/profile') ? 'active-bar' : '';}}">
+                    <a href="/admin/profile"> 
+                         <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" alt=""> 
+                        <span>Pending User</span> 
+                    </a>
+               </li>
+
                <li class="  my-1 mx-3  {{Request::is('admin/appointment') ? 'active-bar' : '';}}">
                     <a href="/admin/appointment"> 
                          <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296625/JG%20marquez/booking_te8ipg.png" alt="">
