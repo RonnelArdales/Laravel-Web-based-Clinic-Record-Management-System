@@ -20,7 +20,7 @@
           <div style="margin-top: 3px; align-items:center; display:flex; margin-bottom:1%;" >
             <div class="me-auto col-md-8 col-md-offset-5">
         
-            <h1>Consultation</h1>
+            <h1> <b>CONSULTATION</b> </h1>
             </div>
             <a href="/admin/consultation/create" style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" class="btn btn-primary ml-6 show-create">Create</a>
             </div>

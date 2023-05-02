@@ -12,15 +12,20 @@ use Illuminate\Queue\SerializesModels;
 class bookconfirmation extends Mailable
 {
     use Queueable, SerializesModels;
-
+    public $fullname;
+    public $date;
+    public $time;
     /**
+    
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($fullname, $date, $time)
     {
-        //
+        $this->fullname = $fullname;
+        $this->date = $date;
+        $this->time = $time;
     }
 
     /**
@@ -28,11 +33,15 @@ class bookconfirmation extends Mailable
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
+
+
+    public function build()
     {
-        return new Envelope(
-            subject: 'Bookconfirmation',
-        );
+        $fullname = $this->fullname;
+        $time = $this->fullname;
+        $date = $this->date;
+        return $this->markdown('mail.bookconfirmation', compact('fullname','date', 'time'));
+      
     }
 
     /**

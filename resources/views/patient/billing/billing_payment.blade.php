@@ -9,9 +9,7 @@
         Home >> <b>BOOK NOW</b>
     </div>
 
-    @error('reference_no')
-    <div class="alert alert-danger">{{ $message }}</div>
-@enderror
+
 
     <div class="container" style="margin-bottom: 140px">
         <div class="row"  >
@@ -24,6 +22,9 @@
                     <div class="form-group">
                         <label for="">Reference code:</label>
                         <input type="text" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background:#DDDDDD ; width:170px" name="reference_no" id="date"><br>
+                        @error('reference_no')
+                        <span  style="margin-bottom:10px" role="alert" class="block  text-danger">{{ $message }}</span>
+                    @enderror
                       </div>
     
                       <div class="form-group" style="">
@@ -39,13 +40,23 @@
                       </div>
 
                       <div class="form-group" style="">
-                        <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Mode of payment:</label>  
-                        <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="mop" readonly value="gcash"  type="text">
+                        <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Mode of payment:</label>
+                        <select name="mop" id="mop" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background:#DDDDDD ; width:170px" >
+                        <option value="">--select--</option>
+                        @foreach ($mops as $mop)
+                        <option value="{{$mop->modeofpayment}}">{{$mop->modeofpayment}}</option>
+                        @endforeach  
+                        </select>  
+
+
+                        @error('mop')
+                        <br><span style="margin-bottom:10px"  role="alert" class="block  text-danger">{{ $message }}</span>
+                    @enderror
                       </div>
 
                       <div class="form-group" style="">
                         <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Reservation fee:</label>  
-                        <input class="view1 bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="reservation_fee" readonly value="500"  type="text">
+                        <input class="view1 bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="reservation_fee" readonly value="{{$fee->reservationfee}}"  type="text">
                       </div>
                       
 
@@ -68,8 +79,8 @@
                       </div>
                     </form>
                 </div>
-                <div class="col-sm mt-4 mt-sm-0 d-flex justify-content-center" >
-           <img src="{{url('/logo/gcash.png')}}" style="border-radius:20px" width="300" height="300" alt="">
+                <div class="col-sm mt-4 mt-sm-0 d-flex justify-content-center modeofpay" >
+           {{-- <img src="{{url('/logo/gcash.png')}}" style="border-radius:20px" width="300" height="300" alt=""> --}}
             </div>
             
       
@@ -85,6 +96,44 @@
 </div>
 
 
+@endsection
+
+@section('scripts')
+<script>
+
+$(document).ready(function(){
+
+  $('#mop').on('change', function(){
+    var mop = $(this).val();
+    $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        if(mop.length > 0){
+          $.ajax({
+                        url:"/patient/billing/getmop/"+mop,
+                        datatype: "json",
+                        data:{
+                        },
+                        success:function(response){
+                          
+                            // $('.modeofpay').append('<img src="{{url('/logo/gcash.png')}}" style="border-radius:20px" width="300" height="300" alt="">')
+                            $('.modeofpay').html("");
+                            var imageUrl = "{{ url('/modeofpayment') }}" + '/' +response.mop.image;
+                            $('.modeofpay').append(`<img src="${imageUrl}" style="border-radius:20px" width="300" height="300" alt="">`);
+                        }
+                    });
+        }else{
+          $('.modeofpay').html("");
+        }
+        
+  })
 
 
+});
+
+
+</script>
 @endsection

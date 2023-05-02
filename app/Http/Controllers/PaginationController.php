@@ -41,7 +41,7 @@ class PaginationController extends Controller
     }
 
     public function report_audits_paginate(){
-        $audits = DB::table('audit_trails')->orderBy('created_at', 'desc')->paginate(3, ['*'], 'audits');
+        $audits = DB::table('audit_trails')->orderBy('created_at', 'desc')->paginate(12, ['*'], 'audits');
 
         return view('pagination.report.audittrail', compact('audits'))->render();
     }

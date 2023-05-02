@@ -75,10 +75,15 @@
                             @method('PUT')
                             <input hidden name="user_id" value="{{$userinfo->id}}" type="text">
                                     <label for="">Appointment Date:</label>
-
                                     <label for="">{{ date('M d, Y ', strtotime($consultations->date))}} </label><br>
                                     <label for="">Service:</label>
                                     <label for="">{{$consultations->service}}</label><br>
+
+                                    <label style="font-size: 15px; margin-top:25px" for="">Primary diagnosis</label><br>
+                                    <div style="padding-left: 20px; padding-right:20px" >
+                                        <input type="text" style="width: 400px; " class="addtocart_input" value="{{$consultations->primary_diag}}" id="findings" name="primary_diag"><br>
+                                    </div>
+                              
                       
                                     <label style="font-size: 15px; margin-top:25px" for="">Behavioral observation</label><br>
                                     <div style="padding-left: 20px; padding-right:20px">

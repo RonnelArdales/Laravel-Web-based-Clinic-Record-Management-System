@@ -5,7 +5,7 @@
       <div style="margin-top: 3px; align-items:center; display:flex; margin-bottom:1%;" >
         <div class="me-auto col-md-8 col-md-offset-5">
       
-        <h1>Queuing</h1>
+        <h1> <b>Queuing</b> </h1>
         </div>
           </div>
     

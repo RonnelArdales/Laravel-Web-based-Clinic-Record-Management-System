@@ -16,16 +16,16 @@ class UserController extends Controller
         
         if(Auth::user()->usertype == 'admin'){
 
-            $patients = DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
-            $secretaries = DB::table('users')->where('usertype', 'secretary')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
-            $admins = DB::table('users')->where('usertype', 'admin')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin'); 
+            $patients = DB::table('users')->where('usertype', 'patient')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+            $secretaries = DB::table('users')->where('usertype', 'secretary')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
+            $admins = DB::table('users')->where('usertype', 'admin')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin'); 
             return view('admin.profile', compact('patients', 'secretaries', 'admins'));
 
         }else{
 
-            $patients = DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
-            $secretaries = DB::table('users')->where('usertype', 'secretary')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
-            $admins = DB::table('users')->where('usertype', 'admin')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin'); 
+            $patients = DB::table('users')->where('usertype', 'patient')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+            $secretaries = DB::table('users')->where('usertype', 'secretary')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
+            $admins = DB::table('users')->where('usertype', 'admin')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin'); 
             return view('secretary.profile', compact('patients', 'secretaries', 'admins'));
 
         }
@@ -49,7 +49,6 @@ class UserController extends Controller
                   "username" => ['required', 'regex:/\w*$/', 'min:8', Rule::unique('users', 'username')],
                   "password" => 'required|confirmed|min:8',
                   "usertype" => ['required'],
-                  "status" => ['required'],
               ],[
                   'first_name.required' => 'First name is required',
                   'last_name.required' => 'Last name is required',
@@ -63,7 +62,7 @@ class UserController extends Controller
                   'password.required' => 'Password is required',
                   'password.confirmed' => 'Password did not match',
                   'usertype.required' => 'Usertype is required',
-                  'status.required' => 'status is required',
+              
                 ]);
       
               if($validator->fails())
@@ -86,7 +85,8 @@ class UserController extends Controller
                   $user->email = $request->input('email');
                   $user->username = $request->input('username');
                   $user->password = $encrypt;
-                  $user->status = $request->input('status');
+                  $user->status = "verified";
+                  $user->emailstatus = "unverified";
                   $user->usertype = $request->input('usertype');
                   $user->save();
       
@@ -95,8 +95,9 @@ class UserController extends Controller
                   $audit_trail->username = Auth::user()->username;
                   $audit_trail->activity = 'Create new account ';
                   $audit_trail->usertype = Auth::user()->usertype;
-      
-              $audit_trail->save();
+                  $audit_trail->save();
+
+
                   return response()->json([
                       'status'=>200,
                       'message' => 'audit trail',
@@ -119,7 +120,7 @@ class UserController extends Controller
                 "email" => ['required', 'email', Rule::unique('users', 'email') ],
                 "username" => ['required', 'regex:/\w*$/', 'min:8', Rule::unique('users', 'username')],
                 "password" => 'required|confirmed|min:8',
-                "status" => ['required'],
+             
             ],[
                 'first_name.required' => 'First name is required',
                 'last_name.required' => 'Last name is required',
@@ -132,7 +133,7 @@ class UserController extends Controller
                 'username.required' => 'Username name is required',
                 'password.required' => 'Password is required',
                 'password.confirmed' => 'Password did not match',
-                'status.required' => 'status is required',
+          
               ]);
     
             if($validator->fails())
@@ -156,7 +157,8 @@ class UserController extends Controller
                 $user->email = $request->input('email');
                 $user->username = $request->input('username');
                 $user->password = $encrypt;
-                $user->status = $request->input('status');
+                $user->status = "verified";
+                $user->emailstatus = "unverified";
                 $user->usertype = "patient";
                 $user->save();
     
@@ -236,98 +238,32 @@ class UserController extends Controller
                           'status' => $request->get('status'),
                       );
                       DB::table('users')->where('id', $id)->update($arrItem);
-                      return response()->json([
-                          'status'=>200,
-                              'message' => 'discount updated successfully without updated password',
-                          
-                      ]);
+
+                      $audit_trail = new AuditTrail();
+                      $audit_trail->user_id = Auth::user()->id;
+                      $audit_trail->username = Auth::user()->username;
+                      $audit_trail->activity = 'update account ';
+                      $audit_trail->usertype = Auth::user()->usertype;
+                      $audit_trail->save();
       
                   }else{
-                       $encrypt = bcrypt($request->input('password'));
-                          $arrItem = array(
-                              'fname' =>$request->get('first_name'),
-                              'mname' => $request->get('mname'),
-                              'lname' => $request->get('last_name'),
-                              'birthday' => $request->get('birthday'),
-                              'age' => $request->get('age'),
-                              'address' => $request->get('address'),
-                              'gender' => $request->get('gender'),
-                              'mobileno' => $request->get('mobile_number'),
-                              'email' => $request->get('email'),
-                              'password' => $encrypt,
-                              'usertype' => $request->get('usertype'),
-                              'status' => $request->get('status'),
-                          );
-                          DB::table('users')->where('id', $id)->update($arrItem);
+
+                    $validator = Validator::make($request->all(), [
+                         "password" => 'confirmed|min:8',
+                    ],[
+                        'password.confirmed' => 'Password did not match',
+                      ]);
+
+                      if($validator->fails())
+                      {
                           return response()->json([
-                              'status'=>200,
-                              'message' => 'discount updated successfully with  updated password',
-                              
+                              'status'=>400,
+                              'errors'=> $validator->messages(),
                           ]);
-                     
-                  }
-              }
+                      }else
+                      {
 
-        }else{
-
-            $validator = Validator::make($request->all(), [
-                "first_name" => ['required'],
-                "last_name" => ['required'],
-                "birthday" => ['required'],
-                "age" => ['required'],
-                "address" => ['required'],
-                "gender" => ['required'],
-                "mobile_number" => ['required', 'min:4'],
-                "email" => ['required', 'email' ],
-                "password" => ['confirmed'],
-                "usertype" => ['required'],
-                "status" => ['required'],
-            ],[
-                'first_name.required' => 'First name is required',
-                'last_name.required' => 'Last name is required',
-                'birthday.required' => 'Birthday is required',
-                'age.required' => 'Age is required',
-                'address.required' => 'Address is required',
-                'gender.required' => 'gender is required',
-                'mobile_number.required' => 'Mobile number is required',
-                'email.required' => ' Email is required',
-                'username.required' => 'Username name is required',
-                'password.confirmed' => 'Password did not match',
-                'usertype.required' => 'Usertype is required',
-                'status.required' => 'status is required',
-              ]);
-    
-            if($validator->fails())
-            {
-                return response()->json([
-                    'status'=>400,
-                    'errors'=> $validator->messages(),
-                ]);
-            }else
-            {
-                if($request->input('password') == null){
-                    $arrItem = array(
-                        'fname' =>$request->get('first_name'),
-                        'mname' => $request->get('mname'),
-                        'lname' => $request->get('last_name'),
-                        'birthday' => $request->get('birthday'),
-                        'age' => $request->get('age'),
-                        'address' => $request->get('address'),
-                        'gender' => $request->get('gender'),
-                        'mobileno' => $request->get('mobile_number'),
-                        'email' => $request->get('email'),
-                        'usertype' => $request->get('usertype'),
-                        'status' => $request->get('status'),
-                    );
-                    DB::table('users')->where('id', $id)->update($arrItem);
-                    return response()->json([
-                        'status'=>200,
-                            'message' => 'discount updated successfully without updated password',
-                        
-                    ]);
-    
-                }else{
-                     $encrypt = bcrypt($request->input('password'));
+                        $encrypt = bcrypt($request->input('password'));
                         $arrItem = array(
                             'fname' =>$request->get('first_name'),
                             'mname' => $request->get('mname'),
@@ -343,16 +279,92 @@ class UserController extends Controller
                             'status' => $request->get('status'),
                         );
                         DB::table('users')->where('id', $id)->update($arrItem);
+
+                        $audit_trail = new AuditTrail();
+                        $audit_trail->user_id = Auth::user()->id;
+                        $audit_trail->username = Auth::user()->username;
+                        $audit_trail->activity = 'update account ';
+                        $audit_trail->usertype = Auth::user()->usertype;
+                        $audit_trail->save();
+
                         return response()->json([
                             'status'=>200,
-                            'message' => 'discount updated successfully with  updated password',
                             
                         ]);
-                   
-                }
+
+                      }
+
+                  }
+              }
+
+  
+
+        }else{
+
+            $validator = Validator::make($request->all(), [
+                "first_name" => ['required'],
+                "last_name" => ['required'],
+                "birthday" => ['required'],
+                "age" => ['required'],
+                "address" => ['required'],
+                "gender" => ['required'],
+                "mobile_number" => ['required', 'min:4'],
+                "email" => ['required', 'email' ],
+                "status" => ['required'],
+            ],[
+                'first_name.required' => 'First name is required',
+                'last_name.required' => 'Last name is required',
+                'birthday.required' => 'Birthday is required',
+                'age.required' => 'Age is required',
+                'address.required' => 'Address is required',
+                'gender.required' => 'gender is required',
+                'mobile_number.required' => 'Mobile number is required',
+                'email.required' => ' Email is required',
+                'username.required' => 'Username name is required',
+                'status.required' => 'status is required',
+              ]);
+    
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status'=>400,
+                    'errors'=> $validator->messages(),
+                ]);
+            }else
+            {
+                    $arrItem = array(
+                        'fname' =>$request->get('first_name'),
+                        'mname' => $request->get('mname'),
+                        'lname' => $request->get('last_name'),
+                        'birthday' => $request->get('birthday'),
+                        'age' => $request->get('age'),
+                        'address' => $request->get('address'),
+                        'gender' => $request->get('gender'),
+                        'mobileno' => $request->get('mobile_number'),
+                        'email' => $request->get('email'),
+                        'status' => $request->get('status'),
+                    );
+                    DB::table('users')->where('id', $id)->update($arrItem);
+
+                    $audit_trail = new AuditTrail();
+                    $audit_trail->user_id = Auth::user()->id;
+                    $audit_trail->username = Auth::user()->username;
+                    $audit_trail->activity = 'update account';
+                    $audit_trail->usertype = Auth::user()->usertype;
+                    $audit_trail->save();
+
+                    return response()->json([
+                        'status'=>200,
+                            'message' => ' updated successfully without updated password',
+                        
+                    ]);
+    
             }
-            
+
+
         }
+
+ 
       
     }
 
@@ -364,6 +376,14 @@ class UserController extends Controller
         if(Auth::user()->usertype == 'admin'){
 
             DB::table('users')->where('id', $id)->delete();
+
+
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Delete an account ';
+            $audit_trail->usertype = Auth::user()->usertype;
+
             return response()->json([
                 'status'=>200,
                     'message' => 'deleted successfully',
@@ -372,12 +392,21 @@ class UserController extends Controller
         }else{
 
             DB::table('users')->where('id', $id)->delete();
+
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Delete an account ';
+            $audit_trail->usertype = Auth::user()->usertype;
+
             return response()->json([
                 'status'=>200,
                     'message' => 'deleted successfully',
             ]);
             
         }
+
+
    
     }
 
@@ -429,9 +458,9 @@ class UserController extends Controller
         if(Auth::user()->usertype == 'admin'){
 
             $usertype = $request->input('usertypetable');
-            $patients = DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
-            $secretaries = DB::table('users')->where('usertype', 'secretary')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
-            $admins = DB::table('users')->where('usertype', 'admin')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin');
+            $patients = DB::table('users')->where('usertype', 'patient')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+            $secretaries = DB::table('users')->where('usertype', 'secretary')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
+            $admins = DB::table('users')->where('usertype', 'admin')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin');
             
             if($usertype == "patient"){
                 return view('pagination.pagination_patient', compact('patients'))->render();
@@ -442,7 +471,17 @@ class UserController extends Controller
             }
 
         }else{
-            
+            $usertype = $request->input('usertypetable');
+
+            $patients = DB::table('users')->where('usertype', 'patient')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+
+            if($usertype == "patient"){
+                return view('pagination.pagination_patient', compact('patients'))->render();
+            }elseif ($usertype == "secretary") {
+                return view('pagination.pagination_secretary', compact('secretaries'))->render();
+            }else{
+                return view('pagination.pagination_admin', compact('admins' ))->render();
+            }
         }
   
        

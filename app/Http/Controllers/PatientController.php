@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Bookappointment;
+use App\Mail\Cancelappointment;
+use App\Mail\Cancelappointmentpatient;
+use App\Mail\Cancelappointmentpatienttoadmin;
 use App\Models\Appointment;
+use App\Models\AuditTrail;
 use App\Models\Billing;
 use App\Models\Consultationfile;
 use App\Models\Guestpage;
+use App\Models\Modeofpayment;
+use App\Models\Reservationfee;
 use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
@@ -14,7 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PDF;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Mail;
 
 class PatientController extends Controller
 {
@@ -116,8 +123,16 @@ class PatientController extends Controller
                   return redirect()->back()->with('error', 'The password did not match with the current password.');
             }
         }
-       
+        
         $user->save();
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Update profile';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
         return redirect('/patient/profile')->with('message', 'updated successfully');
     }
 
@@ -141,16 +156,28 @@ class PatientController extends Controller
                                 'time' => $request->input('time'),
                             );
 
-            return view('patient.billing.billing_payment')->with('info', $billinginfo);
+            $mops = Modeofpayment::all();
+            $fee = Reservationfee::first();
+
+            return view('patient.billing.billing_payment')->with('info', $billinginfo)
+                                                        ->with('mops', $mops)
+                                                        ->with('fee', $fee);
 
     }
 
+
+    public function get_mop($id){
+        $mop = Modeofpayment::where('modeofpayment', $id)->first();
+        return response()->json(['mop' => $mop]);
+    }
     public function store_payment(Request $request){
 
         $request->validate([
             "reference_no" => ['required'],
+            "mop" => ['required'],
         ], [
-            'reference_no.required' => 'Reference no is required'
+            'reference_no.required' => 'Reference no is required',
+            'mop' => 'Mode of payment is required',
         ]);
 
         $input = $request->all();
@@ -166,18 +193,63 @@ class PatientController extends Controller
             $appointment->time = $time;
             $appointment->appointment_method = "online";
             $appointment->reservation_fee = $input['reservation_fee'];
-            $appointment->mode_of_payment = "Gcash";
+            $appointment->mode_of_payment = $input['mop'];
             $appointment->reference_no = $input['reference_no'] ;
             $appointment->status = 'pending';
             $appointment->save();
 
-            //send email to admin
+            $admins = User::where('usertype', 'admin')->get();
+            $secretaries = User::where('usertype', 'secretary')->get();
+ 
+            foreach ($admins as $admin) {
+                Mail::to($admin->email)->send(new Bookappointment);
+            }
 
-            return redirect('patient/homepage')->with('success', 'Created Successfully, Please wait for the confirmation that will in your email');
+            foreach ($secretaries as $secretary) {
+                Mail::to($secretary->email)->send(new Bookappointment);
+            }
+
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Create an appointment';
+            $audit_trail->usertype = Auth::user()->usertype;
+            $audit_trail->save();
+            
+
+            return redirect('patient/homepage')->with('success', 'Created Successfully, Please wait for your appointment');
     }
 
     public function cancel_appointment($id){
         $appointment = Appointment::where('id', $id)->update(['status' => 'cancel',]);
+        $user = Appointment::where('id', $id)->first();
+        $fullname = $user->fullname;
+        $date = $user->date;
+        $time = $user->time;
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Change appointment status to cancel';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
+        Mail::to($user->email)->send(new Cancelappointmentpatient($fullname, $date, $time));
+
+        $admins = User::where('usertype', 'admin')->get();
+        $secretaries = User::where('usertype', 'secretary')->get();
+
+        foreach ($admins as $admin) {
+
+           Mail::to($admin->email)->send(new Cancelappointmentpatienttoadmin ($fullname, $date, $time));
+        }
+
+        foreach ($secretaries as $secretary) {
+
+            Mail::to($secretary->email)->send(new Cancelappointmentpatienttoadmin ($fullname, $date, $time));
+         }
+        
+
         return response()->json($appointment);
     }
 

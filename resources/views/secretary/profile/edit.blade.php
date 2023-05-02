@@ -23,7 +23,7 @@
         <div class="card-body   " style="background:#EDDBC0; padding: 20px 30px ; border-radius: 5px;box-shadow:  4px 4px 2px rgba(0, 0, 0, 0.25)">
          
 
-            <form class="row  "  action="/admin/myprofile/update" method="POST">
+            <form class="row  "  action="/secretary/myprofile/update" method="POST">
                 @csrf
  
                 <div class="col-md-4">

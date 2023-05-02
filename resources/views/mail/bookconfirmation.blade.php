@@ -1,16 +1,13 @@
 <x-mail::message>
 
-Dear [CustomerName],
+Dear {{$fullname}},
 
-Thank you for booking an appointment with JG Marquez RPSY. We appreciate your trust and look forward to meeting with you on [Date] at [Time].
+Thank you for booking an appointment with JG Marquez RPSY. We appreciate your trust and look forward to meeting with you on 
+{{ date('M d,Y', strtotime($date)) }} at {{ date('h:i A', strtotime($time)) }}.
 
 Thank you again for choosing to work with us. We are excited to speak with you soon.
 
 
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
-
-Best regards,
-Dr.Joseph Marquez,<br>
+Best regards,<br>
+Dr.Joseph Marquez,
 </x-mail::message>

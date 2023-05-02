@@ -24,7 +24,7 @@
         <div style="margin-top: 3px; align-items:center; display:flex; margin-bottom:1%;" >
             <div class="me-auto col-md-8 col-md-offset-5">
         
-            <h1>Document  </h1>
+            <h1> <b>DOCUMENT</b>  </h1>
             </div>
             <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" type="button" class="btn btn-primary ml-6 show-create" data-bs-toggle="modal" data-bs-target="#create"  >
             Create

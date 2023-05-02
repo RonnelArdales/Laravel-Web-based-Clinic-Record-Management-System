@@ -246,7 +246,7 @@
                   </li>      
                   
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/patient/appointment/">BOOK NOW</a>
+                    <a class="nav-link active" aria-current="page" href="/patient/appointment/">APPOINTMENT</a>
                   </li> 
                   
                   <li class="nav-item">

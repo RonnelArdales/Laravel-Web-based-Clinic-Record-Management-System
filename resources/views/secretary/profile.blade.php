@@ -3,7 +3,7 @@
 @section('content')
 <div class="row m-4">
     <div class="col-md-8 col-md-offset-5">
-        <h1>User </h1>
+        <h1><b>USER</b> </h1>
     </div>
 
     <div id="success" class="error alert alert-success" style="display: none;"></div>
@@ -44,17 +44,14 @@
       
                 <thead>
                     <tr>
-                        <th>id</th>
-                        <th>First name</th>
-                        <th>Middle name</th>
-                        <th>Last name</th> 
-                        <th>Birthday</th>
-                        <th>Age</th>
-                        <th>Address</th>
-                        <th>Gender</th>
-                        <th>Mobile no.</th>
-                      
-                        <th>Action</th>
+                      <th>id</th>
+                      <th>First name</th>
+                      <th>Middle name</th>
+                      <th>Last name</th> 
+                      <th>Age</th>
+                      <th>Gender</th>
+                      <th>Status</th>
+                      <th>Action</th>
       
                     </tr>
                 </thead>
@@ -62,21 +59,19 @@
                     @if (count($patients) > 0)
                     @foreach ($patients as $user)
                     <tr class="overflow-auto">
-                        <td>{{$user->id}}</td>
-                        <td>{{$user->fname}}</td>
-                        <td>{{$user->mname}}</td>
-                        <td>{{$user->lname}}</td>
-                        <td>{{$user->birthday}}</td>
-                        <td>{{$user->age}}</td>
-                        <td>{{$user->address}}</td>
-                        <td>{{$user->gender}}</td>
-                        <td>{{$user->mobileno}}</td>
+                      <td>{{$user->id}}</td>
+                      <td>{{$user->fname}}</td>
+                      <td>{{$user->mname}}</td>
+                      <td>{{$user->lname}}</td>
+                      <td>{{$user->age}}</td>
+                      <td>{{$user->gender}}</td>
+                      <td>{{$user->status}}</td>
                      
                         
                         <td style="text-align: center">
                         <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
                         <button type="button" value="{{$user->id}}" class="edit  btn btn-sm btn-primary ">Edit</button>
-                        <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td>
+                        {{-- <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td> --}}
                     </tr>
                     @endforeach
                     @else
@@ -182,7 +177,7 @@
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="usertype"></span>
               </div>
 
-              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
+              {{-- <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
               <select name="status" class="status rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"style="background: #D0B894;" >
                 <option value="">--select--</option>
                 <option value="not verified">Not verified</option>
@@ -191,7 +186,7 @@
               </select>
               <div class="mt-0 mb-2">
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="status"></span>
-              </div>
+              </div> --}}
 
               <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Password</label>
               <input autocomplete="off" class=" password rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" name="password" type="password"> 
@@ -286,18 +281,18 @@
                 </div>
   
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Email</label>
-                <input class=" email rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_email" style="background: #D0B894;"type="text"> 
+                <input readonly class=" email rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_email" style="background: #D0B894;"type="text"> 
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_email"></span>
                 </div>
           
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Username</label>
-                <input class=" username rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_username" style="background: #D0B894;" type="text"> 
+                <input class=" username rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_username" readonly style="background: #D0B894;" type="text"> 
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_username"></span>
                 </div>
             
-                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Usertype:</label>
+                {{-- <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Usertype:</label>
                 <select name="usertype" class="usertype rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_usertype" >
                   <option value="" {{$user->usertype == "" ? 'selected' : ''}}></option>
                   <option value="patient" {{$user->usertype == "patient" ? 'selected' : ''}}>Patient</option>
@@ -306,27 +301,26 @@
                 </select>
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_usertype"></span>
-                </div>
+                </div> --}}
 
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
                 <select name="usertype" class="usertype rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_status" >
                   <option value="" {{$user->status == "" ? 'selected' : ''}}></option>
-                  <option value="not verified" {{$user->status == "not verified" ? 'selected' : ''}}>Not verified</option>
-                  <option value="active" {{$user->status == "active" ? 'selected' : ''}}>Active</option>
-                  <option value="Inactive" {{$user->status == "inactive" ? 'selected' : ''}}>Inactive</option>
+                  <option value="verified" {{$user->status == "verified" ? 'selected' : ''}}>verfied</option>
+                  <option value="inactive" {{$user->status == "inactive" ? 'selected' : ''}}>Inactive</option>
                 </select>
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_status"></span>
                 </div>
   
-                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Password</label>
+                {{-- <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Password</label>
                 <input autocomplete="off" class=" password rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" name="password" type="password" id="edit_password"> 
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_password"></span>
                 </div>
   
                 <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Confirm Password</label>
-                <input autocomplete="off" class="password_confirmation rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="password" id="edit_confirmpassword">  
+                <input autocomplete="off" class="password_confirmation rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="password" id="edit_confirmpassword">   --}}
   
   
         </div>
@@ -512,7 +506,6 @@
                 'address': $('.address').val(),
                 'password': $('.password').val(),
                 'password_confirmation': $('.password_confirmation').val(),
-                'status': $('.status').val(),
             }
             // console.log(data);
             //always add csrf token
@@ -679,8 +672,6 @@
                 'gender': $('#edit_gender').val(),
                 'mobile_number': $('#edit_mobileno').val(), 
                 'email': $('#edit_email').val(),
-                'password': $('#edit_password').val(),
-                'password_confirmation': $('#edit_confirmpassword').val(),
                 'usertype': $('#edit_usertype').val(),
                 'status': $('#edit_status').val(),
             }
@@ -728,14 +719,8 @@
                         $.each(response.errors.email, function (key, err_values){
                         $('#error_email').append('<span>'+err_values+'</span>');
                         })
-                        $.each(response.errors.password, function (key, err_values){
-                        $('#error_pass').append('<span>'+err_values+'</span>');
-                        })
                         $.each(response.errors.gender, function (key, err_values){
                         $('#error_gender').append('<span>'+err_values+'</span>');
-                        })
-                        $.each(response.errors.usertype, function (key, err_values){
-                        $('#error_usertype').append('<span>'+err_values+'</span>');
                         })
 
                     }else{                  
@@ -832,7 +817,7 @@
               $.ajax({
                 type: "GET", 
                 data: {usertypetable :usertypetable},  
-                url: "/admin/profile/pagination/paginate-data?patient="+page , 
+                url: "/secretary/profile/pagination/paginate-data?patient="+page , 
                 datatype: "json",
                 success: function(response){
                   console.log('from paginate' + usertype); 
@@ -845,7 +830,7 @@
               $.ajax({
                 type: "GET", 
                 data: {usertypetable :usertypetable},  
-                url: "/admin/profile/pagination/paginate-data?secretary="+page , 
+                url: "/secretary/profile/pagination/paginate-data?secretary="+page , 
                 datatype: "json",
                 success: function(response){ 
                   console.log('from paginate' + usertype);

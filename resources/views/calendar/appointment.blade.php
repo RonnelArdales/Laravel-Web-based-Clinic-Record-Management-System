@@ -47,7 +47,7 @@
                         <hr class="line">
         
                         <div class="row  d-flex  align-items-center" style="margin-left:12px">
-                            <div style="background-color: #DDDDDD; height:50px; width:50px; margin-right:5px  "  class="border border-dark">
+                            <div style="background-color: #cc6666; height:50px; width:50px; margin-right:5px  "  class="border border-dark">
                             </div>
                             Not Available.
                         </div>
@@ -174,43 +174,43 @@
     selectHelper: true,
     viewRender: function(view, element,) {
       if(day_off.includes("0")){
-              $('.fc-day.fc-sun').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-sun').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("1")){
-              $('.fc-day.fc-mon').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-mon').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("2")){
-              $('.fc-day.fc-tue').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-tue').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("3")){
-              $('.fc-day.fc-wed').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-wed').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("4")){
-              $('.fc-day.fc-thu').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-thu').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("5")){
-              $('.fc-day.fc-fri').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-fri').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("6")){
-              $('.fc-day.fc-sat').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-sat').css('backgroundColor', '#829460');
       }
@@ -229,9 +229,10 @@
     dayRender: function (date, cell) {
     // Get the current date
     var currentDate = moment();
+ 
 
     // Compare the current date to the date of the cell
-    if (date.isSameOrBefore(currentDate, 'day')) {
+    if (date.isSame(currentDate, 'day')) {
       // Apply a disabled style to the cell representing the current or previous date
       cell.addClass('fc-state-disabled');
     }
@@ -254,7 +255,7 @@ let formattedDate = `${year}-${month}-${day}`;
 
 
 
-           if(formattedDate >= start){
+           if(formattedDate == start){
             // $('#message-error').text("Sorry you cannot book this date");
             //                 $(".error").show();
             //                 setTimeout(function() {

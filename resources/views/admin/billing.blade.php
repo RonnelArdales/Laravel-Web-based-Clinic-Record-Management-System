@@ -19,7 +19,7 @@
 {{----------- Billing tab ---------------}}
 
                 <div class="col-md-8 col-md-offset-5">
-                    <h2>Billing</h2>
+                    <h1> <b>BILLING</b> </h1>
                 </div>
 
                 <div id="success" class="success alert alert-success" role="alert" style="display:none">
@@ -362,57 +362,6 @@
             
         } )
       
-        $(document).on('click', '.saveaddtocart', function(e){
-            e.preventDefault();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "POST",   
-                url: "/admin/billing/addtocart/billing_store", 
-                    datatype: "json",
-                    data: {billingno : $('#getid').val() },
-                    success: function(response){ //return galing sa function sa controller
-                        get_maxid();
-                        $('.subtotal').load(location.href+' .subtotal');
-                            $('.data-table').load(location.href+' .data-table');
-                            $('#userid').val("");
-                            $('#fullname').val("");
-                            $('#servicename').val("");
-                            $('#getservice').val("");
-                            $('#price').val("");
-                            $('.billing').load(location.href+' .billing');
-                 
-                }
-            });
-        });
-
-
-        // -------- select patient in modal ------------// 
-        $(document).on('click', '.select', function(e){
-            e.preventDefault();
-            var id = $(this).val();
-console.log(id);
-            $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-            $.ajax({
-                type: "GET",   
-                url: "/admin/appointment/getuser/"+ id, 
-                    datatype: "json",
-                    success: function(response){ //return galing sa function sa controller
-                    $(' #userid, #fullname').html("");
-                    $('#userid').val(response.users[0].id);
-                    $('#fullname').val(response.fullname[0].fullname);
-                    $('#viewpatients').modal('hide');
-                }
-            });
-        });
-
         //------------ close patient modal --------------------------------//
         $(".viewpatients").on("hidden.bs.modal", function(e){
           e.preventDefault();
@@ -609,9 +558,41 @@ console.log(id);
         $('#billingtable').on('click', '.delete', function(e) {
             e.preventDefault();
             var id = $(this).data('id');
+            $('#delete_no').val("");
             $('#delete_no').val(id);
            $('#delete').modal('show');
         });
+
+        $(document).on('click', '.delete_user', function(){
+            id =   $('#delete_no').val();
+
+            $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+
+            $.ajax({
+                type: "DELETE", 
+                url: "/admin/billing/deleteBilling/"+ id , 
+                datatype: "json",
+                success: function(response){ 
+                    console.log(response);
+                    $('#delete_no').val("");
+                    $('#delete_no').val(id);
+                    $('#delete').modal('hide');
+                    billing.draw();
+                    
+                    $('#message-success').text('Deleted Successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
+                }
+
+            }); 
+
+        })
 
 });
 </script>

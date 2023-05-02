@@ -97,9 +97,8 @@
             </div>
           </div>
 
-
           <div class="d-flex bd-highlight container" style="padding: 0; margin-top:30px">
-            <div class="p-2  bd-highlight" style="border-radius: 25px; background-color:#829460; height:400px; width:100%; ">
+            <div class=" " style=" width:100%; ">
               <div id="highcharts"></div>
             </div>
 {{-- 
@@ -217,8 +216,10 @@
 
 
 @section('scripts')
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
+    
+
   function myClock() {         
   setTimeout(function() {   
     const d = new Date();
@@ -229,6 +230,145 @@ $(document).ready(function(){
   }, 1000)
 }
 myClock();  
+
+// $(function(){
+
+     
+
+    // $('#highcharts').highcharts({
+    //   chart:{
+    //     height: 380,
+    //     type:'column'
+    //   },
+    //   title:{
+    //     text:'Sales'
+    //   },
+    //   xAxis:{
+    //     categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+    //   },
+    //   yAxis:{
+    //     title: {
+    //             text: 'Transaction Total'
+    //         }
+    //   },
+    //   series:[{
+    //         name: 'Monthly sales',
+    //         data: ['1000']
+
+    //   }]
+    // })
+
+    // Highcharts.chart('highcharts',{
+    //   title:{
+    //       text:'Monthly services'
+    //     },
+
+    //   xAxis:{
+    //     categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+    //   },
+
+    //   yAxis:{
+    //     title:{
+    //       text:'Gender'
+    //     }
+    //   },
+
+      // series:[{
+      //   name: 'female',
+      //   data: sales,
+     
+      // }]
+    // })
+
+
+
+
+
+  //   $('#highcharts').highcharts({
+  //     chart:{
+  //       height: 380,
+  //       type:'column',
+  //       backgroundColor: 'rgba(130, 148, 96, 1)'
+  //     },
+  //     title:{
+  //       text:'Monthly services'
+  //     },
+  //     xAxis:{
+  //       categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+  //     },
+  //     yAxis:{
+  //       title:{
+  //         text:'Gender'
+  //       }
+  //     },
+  //     series:[{
+  //       name: 'female',
+  //       data: [1000, 60000, 4, 6, 3]
+  //       // female
+  //     }]
+  //   })
+
+
+  // }); 
+
+
+$(function(){
+
+  var sales = {!! json_encode($transactionArray) !!} ;
+
+  transactionArray = sales.map(function(value) {
+        return parseFloat(value);
+    });
+  console.log(transactionArray);
+
+
+  var totals = {!! json_encode($totals) !!} ;
+  console.log(totals);
+
+  var dataArray = [];
+
+// Loop through the keys of the object and create an array of arrays
+for (var key in totals) {
+  if (totals.hasOwnProperty(key)) {
+    dataArray.push([parseInt(key), totals[key]]);
+  }
+}
+
+// The resulting array can be used in Highcharts
+console.log(dataArray); 
+
+  Highcharts.chart('highcharts',{
+      chart:{
+        height: 380,
+        backgroundColor: 'rgba(130, 148, 96, 1)'
+      },
+          title:{
+          text:'Monthly Sales'
+        },
+
+      xAxis:{
+        categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+      },
+
+            yAxis:{
+        title:{
+          text:'Amount'
+        }
+      },
+
+      series:[{
+        name: 'total sales',
+        data:  dataArray,
+      }]
+
+      
+
+  })
+
+})
+  
+
+
 })
 
 

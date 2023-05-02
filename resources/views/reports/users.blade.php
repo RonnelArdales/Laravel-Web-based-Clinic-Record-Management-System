@@ -3,7 +3,7 @@
 @section('content')
 <div class="row m-4">
     <div class="col-md-8 col-md-offset-5">
- <h1>User Report  </h1>
+ <h1> <b>USER REPORT</b> </h1>
     </div>
 
  <div style="margin-top: 15px; align-items:center;margin-bottom:1%;" >
@@ -20,18 +20,19 @@
      </div>
      <div class="col search_usertype" style="display: none;">
           <select name="usertype" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:180px; margin-right:10px; height:100%"class="usertype" id="usertype">
-               <option value="">Select usertype</option>
-               <option value="active">Active</option>
-               <option value="inactive">Inactive</option>
-               <option value="not verified">Not verified</option>
+            <option value="" >Select usertype</option>
+            <option value="admin">Admin</option>
+            <option value="patient">Patient</option>
+            <option value="secretary">Secretary</option>
              </select>
      </div>
      <div class="col search_status " style="display: none; ">
          <select name="status" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; height:100%; background:#EDDBC0; width:180px; margin-right:10px" class="status" id="status">
-          <option value="" >Select usertype</option>
-          <option value="admin">Admin</option>
-          <option value="patient">Patient</option>
-          <option value="secretary">Secretary</option>
+
+          <option value="">Select status</option>
+          <option value="pending">Pending</option>
+          <option value="verified">verified</option>
+          <option value="inactive">inactive</option>
         </select>
      </div>
       
@@ -60,18 +61,18 @@
      </div>
      <div class="col search_usertype" style="display: none;">
           <select name="usertype" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; width:180px; margin-right:10px; height:100%"class="usertype" id="usertype">
-               <option value="">Select usertype</option>
-               <option value="active">Active</option>
-               <option value="inactive">Inactive</option>
-               <option value="not verified">Not verified</option>
+            <option value="" >Select usertype</option>
+            <option value="admin">Admin</option>
+            <option value="patient">Patient</option>
+            <option value="secretary">Secretary</option>
              </select>
      </div>
      <div class="col search_status " style="display: none; ">
          <select name="status" style="font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; height:100%; background:#EDDBC0; width:180px; margin-right:10px" class="status" id="status">
-          <option value="" >Select usertype</option>
-          <option value="admin">Admin</option>
-          <option value="patient">Patient</option>
-          <option value="secretary">Secretary</option>
+          <option value="" >Select status</option>
+          <option value="pending">Pending</option>
+          <option value="verified">verified</option>
+          <option value="inactive">inactive</option>
         </select>
      </div>
       
@@ -152,10 +153,10 @@
 
         function get_status(){
                             $('#status').empty();
-                            $('#status').append('<option value="" >Select status</option>\
-                                    <option value="active">Active</option>\
-                                    <option value="inactive">Inactive</option>\
-                                    <option value="not verified">Not verified</option>\
+                            $('#status').append(' <option value="">Select status</option>\
+                                                  <option value="pending">Pending</option>\
+                                                  <option value="verified">verified</option>\
+                                                  <option value="inactive">inactive</option>\
                             ');
         }
 

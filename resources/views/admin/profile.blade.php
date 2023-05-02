@@ -3,7 +3,7 @@
 @section('content')
 <div class="row m-4">
     <div class="col-md-8 col-md-offset-5">
-        <h1>User </h1>
+        <h1> <b>USER</b>  </h1>
     </div>
 
     <div id="success" class="error alert alert-success" style="display: none;">
@@ -80,12 +80,12 @@
                         <td style="text-align: center">
                         <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
                         <button type="button" value="{{$user->id}}" class="edit  btn btn-sm btn-primary ">Edit</button>
-                        <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td>
+                        {{-- <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td> --}}
                     </tr>
                     @endforeach
                     @else
                     <tr>
-                      <td colspan="4" style="text-align: center;">no user Found</td>
+                      <td colspan="8" style="text-align: center;">no user Found</td>
           
                     </tr>
                     @endif
@@ -134,12 +134,12 @@
                       <td style="text-align: center">
                         <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
                         <button type="button" value="{{$user->id}}" class="edit  btn btn-sm btn-primary ">Edit</button>
-                        <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td>
+                        {{-- <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td> --}}
                   </tr>
                   @endforeach
                   @else
                   <tr>
-                    <td colspan="4" style="text-align: center;">no user Found</td>
+                    <td colspan="8" style="text-align: center;">no user Found</td>
         
                   </tr>
                   @endif
@@ -192,12 +192,12 @@
                       <td style="text-align: center">
                         <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
                         <button type="button" value="{{$user->id}}" class="edit  btn btn-sm btn-primary ">Edit</button>
-                        <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td>
+                    {{-- <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td> --}}
                   </tr>
                   @endforeach
                   @else
                   <tr>
-                    <td colspan="4" style="text-align: center;">no user Found</td>
+                    <td colspan="8" style="text-align: center;">no user Found</td>
         
                   </tr>
                   @endif
@@ -305,16 +305,15 @@
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="usertype"></span>
               </div>
 
-              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
+              {{-- <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
               <select name="status" class="status rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"style="background: #D0B894;" >
                 <option value="">--select--</option>
-                <option value="not verified">Not verified</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="pending">Pending</option>
+                <option value="verified">Verified</option>
               </select>
               <div class="mt-0 mb-2">
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="status"></span>
-              </div>
+              </div> --}}
 
               <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Password</label>
               <input autocomplete="off" class=" password rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" name="password" type="password"> 
@@ -432,9 +431,8 @@
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
                 <select name="usertype" class="usertype rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_status" >
                   <option value="" {{$user->status == "" ? 'selected' : ''}}></option>
-                  <option value="not verified" {{$user->status == "not verified" ? 'selected' : ''}}>Not verified</option>
-                  <option value="active" {{$user->status == "active" ? 'selected' : ''}}>Active</option>
-                  <option value="Inactive" {{$user->status == "inactive" ? 'selected' : ''}}>Inactive</option>
+                  <option value="verified" {{$user->status == "verified" ? 'selected' : ''}}>verfied</option>
+                  <option value="inactive" {{$user->status == "inactive" ? 'selected' : ''}}>Inactive</option>
                 </select>
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_status"></span>
@@ -607,9 +605,10 @@
                }
       }
 
-        $(".modal").on("hidden.bs.modal", function(){
-          alert();
-            $('#create, #edit, #delete').find('input').val("");
+        $(".modal").on("hidden.bs.modal", function(){ 
+            $('#create, #edit, #delete').find('input, select').val("");
+            $('#fname, #mname, #lname,#gender, #usertype, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password, #status, #age '  ).html("");
+            $('#error_fname, #error_lname, #error_gender, #error_usertype, #error_birthday, #error_address, #error_mobileno, #error_email, #error_password, #error_status'  ).html("");
             // $('.modal-create').load(location.href+' .modal-create');
             // $('.modal-update').load(location.href+' .modal-update');
         });
@@ -661,7 +660,7 @@
                 'password': $('.password').val(),
                 'password_confirmation': $('.password_confirmation').val(),
                 'usertype': $('.usertype').val(),
-                'status': $('.status').val(),
+             
             }
             // console.log(data);
             //always add csrf token
@@ -887,6 +886,9 @@
                         })
                         $.each(response.errors.usertype, function (key, err_values){
                         $('#error_usertype').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.password, function (key, err_values){
+                        $('#error_password').append('<span>'+err_values+'</span>');
                         })
 
                     }else{                  

@@ -153,13 +153,12 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
         //----------------------Billing----------------------------//
         Route::get('/billing', [AdminController::class, 'index_billing']);
         Route::get('/billing/getdiscount/{id}', [AdminController::class, 'get_discount']);
-        // Route::get('/billing/getid', [AdminController::class, 'get_id']);
-
-        // Route::post('/billing/addtocart/billing_store', [AdminController::class, 'store_billing']);
+  
         Route::post('/billing/addtocart/delete', [AdminController::class, 'store_delete']);
         Route::put('/billing/update/payment/{id}', [AdminController::class, 'update_payment']);
         Route::get('/billing/viewBilling/{id}', [AdminController::class, 'view_billing']);
         Route::get('/billing/editBilling/{id}', [AdminController::class, 'edit_billing']);
+        Route::delete('/billing/deleteBilling/{id}', [AdminController::class, 'delete_billing']);
         Route::get('/billing/getdata/{id}', [AdminController::class, 'addtocart_getalldata']); //condition if addtocart table has data
         
 
@@ -234,7 +233,11 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
         Route::get('/myprofile/changepassword', [AdminController::class, 'index_changepass']);
         Route::post('/myprofile/changepassword/update', [AdminController::class, 'update_changepass']);
         Route::post('/myprofile/picture/update/{id}', [AdminController::class, 'update_profile_pic']);
-        // Route::post('/profile/picture/update/{id}', [PatientController::class, 'image_profile_update']);
+
+        //------------------ Pending user -----------------//
+        Route::get('/pendinguser', [AdminController::class, 'index_pendinguser']);
+        Route::post('/pendinguser/status/{id}', [AdminController::class, 'update_pendinguser']);
+        
 
 
         Route::get('/data/get', [AdminController::class, 'get_filterdata']);
@@ -250,14 +253,6 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::put('/profile/update/{id}', [UserController::class, 'update_user']); //update user data
     Route::delete('/profile/delete/{id}', [UserController::class, 'delete_user']); //delete user data
     Route::get('/profile/pagination/paginate-data', [UserController::class, 'profile_paginate']);
-
-    //discount(done)
-    Route::get('/discount', [SecretaryController::class, 'discount_show']);   //display discount table
-    Route::get('/discount/creatediscount', [SecretaryController::class, 'create_discount']) ; //display (wala na to)
-    Route::post('/discount/creatediscount/store', [SecretaryController::class, 'store_discount']) ;  //create discount
-    Route::get('/discount/edit/{discountcode}', [SecretaryController::class, 'edit_discount']); //display editable discount
-    Route::put('/discount/update/{discountcode}', [SecretaryController::class, 'update_discount']);  //store updated discount  
-    Route::delete('/discount/delete/{discountcode}', [SecretaryController::class, 'delete_discount']); //delete discount
 
     //----------------------appointment----------------------------//
     Route::get('/appointment', [AppointmentController::class, 'appointment_show'])->name('appointment.show');
@@ -293,7 +288,13 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     //----------------------Billing----------------------------//
     Route::get('/billing',[SecretaryController::class, 'index_billing']);
     Route::get('/billing/getdiscount/{id}', [SecretaryController::class, 'get_discount']);
-    Route::get('/billing/getdata/{id}', [SecretaryController::class, 'addtocart_getalldata']); 
+    Route::get('/billing/getdata/{id}', [SecretaryController::class, 'addtocart_getalldata']);
+
+    Route::post('/billing/addtocart/delete', [AdminController::class, 'store_delete']);
+    Route::put('/billing/update/payment/{id}', [AdminController::class, 'update_payment']);
+    Route::get('/billing/viewBilling/{id}', [SecretaryController::class, 'view_billing']);
+    Route::get('/billing/editBilling/{id}', [AdminController::class, 'edit_billing']);
+
 
                //----------------------reports----------------------------//
                Route::get('/reports/user', [ReportController::class, 'view_user']);
@@ -305,13 +306,13 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
             //    Route::post('/reports/print_user', [PrintController::class, 'print_user']);
             //    Route::get('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
             //    Route::get('/reports/print_appointment', [PrintController::class, 'print_appointment']); 
-            //    Route::get('/billing/printinvoice/{id}', [PrintController::class, 'print_invoice']); 
+               Route::get('/billing/printinvoice/{id}', [PrintController::class, 'print_invoice']); 
             //    Route::get('/reports/print_billing', [PrintController::class, 'print_billing']);
             Route::get('/appointment/print/{id}', [PrintController::class, 'print_appointment_trans']);
             //    Route::get('/consultation/print/{id}', [PrintController::class, 'print_consultation_result']);
             //   Route::get('/document/download/{id}', [PrintController::class, 'download_transaction']);
     
-                Route::post('/reports/print_user', [PrintController::class, 'print_user']);
+    Route::post('/reports/print_user', [PrintController::class, 'print_user']);
     Route::post('/reports/print_audit_trail', [PrintController::class, 'print_auditTrail']); 
     Route::post('/reports/print_appointment', [PrintController::class, 'print_appointment']); 
     Route::post('/reports/print_billing', [PrintController::class, 'print_billing']);
@@ -324,36 +325,43 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::delete('/discount/delete/{discountcode}', [SecretaryController::class, 'delete_discount']); //delete discount
 
     //----------------------service----------------------------//
-    Route::get('/service', [AdminController::class, 'service_show'])->name('service.show'); //display service table
+    Route::get('/service', [SecretaryController::class, 'service_show'])->name('service.show'); //display service table
     Route::post('/service/createservice/store', [AdminController::class, 'store_service']) ;    //create service
     Route::get('/service/edit/{servicecode}', [AdminController::class, 'edit_service']);    //display editable discount
     Route::put('/service/update/{servicecode}', [AdminController::class, 'update_service']);    //store updated discount
     Route::delete('/service/delete/{servicecode}', [AdminController::class, 'delete_service']); //delete discount
-
     
         //--------------------business Hours -----------------------//
-        Route::get('/business_hours', [AdminController::class, 'show_businesshours']);
-        Route::post('/business_hours/store', [AdminController::class, 'store_businesshours']);
-        Route::post('/business_hours/delete', [AdminController::class, 'delete_businesshours']);
-        Route::get('/business_hours/get_hours', [AdminController::class, 'get_hours']);
-        Route::put('/business_hours/off_status', [AdminController::class, 'off_status']);
+    Route::get('/business_hours', [SecretaryController::class, 'show_businesshours']);
+    Route::post('/business_hours/store', [AdminController::class, 'store_businesshours']);
+    Route::post('/business_hours/delete', [AdminController::class, 'delete_businesshours']);
+    Route::get('/business_hours/get_hours', [AdminController::class, 'get_hours']);
+    Route::put('/business_hours/off_status', [AdminController::class, 'off_status']);
 
         //--------------------Guest page -----------------------//
-        Route::get('/guestpage', [AdminController::class, 'show_guestpage_setting']);
-        Route::get('/guestpage/edit/{id}', [AdminController::class, 'edit_guestpage_setting']);
-        Route::put('/guestpage/update/{id}', [AdminController::class, 'update_guestpage_setting']);
+    Route::get('/guestpage', [AdminController::class, 'show_guestpage_setting']);
+    Route::get('/guestpage/edit/{id}', [AdminController::class, 'edit_guestpage_setting']);
+    Route::put('/guestpage/update/{id}', [AdminController::class, 'update_guestpage_setting']);
 
         //------------------reservation fee-------------------//
-        Route::get('/reservationfee', [AdminController::class, 'index_reservationfee_setting']);
-        Route::put('/reservationfee/update/{id}', [AdminController::class, 'update_reservationfee_setting']);
+    Route::get('/reservationfee', [SecretaryController::class, 'index_reservationfee_setting']);
+    Route::put('/reservationfee/update/{id}', [AdminController::class, 'update_reservationfee_setting']);
+
+    //--------------------mode of payment-----------------------//
+    Route::get('/modeofpayment', [SecretaryController::class, 'index_modeofpayment']);
+    Route::post('/modeofpayment/store', [AdminController::class, 'store_modeofpayment']);
+    Route::get('/modeofpayment/edit/{id}', [AdminController::class, 'edit_modeofpayment']);
+    Route::post('/modeofpayment/update/{id}', [AdminController::class, 'update_modeofpayment']);
+    Route::delete('/modeofpayment/delete/{id}', [AdminController::class, 'delete_modeofpayment']);
         
         //------------------profile-------------------//
-        Route::get('/myprofile', [AdminController::class, 'index_myprofile']);
-        Route::get('/myprofile/edit', [AdminController::class, 'edit_myprofile']);
-        Route::post('/myprofile/update', [AdminController::class, 'update_myprofile']);
-        Route::get('/myprofile/changepassword', [AdminController::class, 'index_changepass']);
-        Route::post('/myprofile/changepassword/update', [AdminController::class, 'update_changepass']);
-        Route::post('/myprofile/picture/update/{id}', [AdminController::class, 'update_profile_pic']);
+    Route::get('/myprofile', [SecretaryController::class, 'index_myprofile']);
+    Route::get('/myprofile/edit', [SecretaryController::class, 'edit_myprofile']);
+    Route::post('/myprofile/update', [SecretaryController::class, 'update_myprofile']);
+    Route::get('/myprofile/changepassword', [SecretaryController::class, 'index_changepass']);
+    Route::post('/myprofile/changepassword/update', [SecretaryController::class, 'update_changepass']);
+    Route::post('/myprofile/picture/update/{id}', [SecretaryController::class, 'update_profile_pic']);
+
 
 
 
@@ -383,6 +391,7 @@ Route::prefix('/patient')->middleware('auth','ispatient', 'verify')->group(funct
     //---------------- billing ---------------------//
     Route::get('/billing', [PatientController::class, 'index_billing']);
     Route::get('/billing/payment', [PatientController::class, 'index_payment']);
+    Route::get('/billing/getmop/{id}', [PatientController::class, 'get_mop']);
     Route::post('/billing/payment/store', [PatientController::class, 'store_payment']);
 
 
@@ -402,8 +411,11 @@ Route::get('/resendCode', [AuthController::class, 'resend_code'])->middleware('a
 Route::get('/resetpassword', [AuthController::class, 'reset_password'])->middleware('auth'); //show reset password form
 Route::get('/resetpage', [AuthController::class, 'show_reset'])->middleware('auth'); //showreset page
 Route::put('/updatepassword', [AuthController::class, 'update_password'])->middleware('auth');
-Route::get('/verify-email', [AuthController::class, 'verifyemail'])->middleware('auth'); //show find email
-Route::put('/verifyconfirm', [AuthController::class, 'emailverifycode']);
+
+Route::get('/resendCode/create/{email}', [AuthController::class, 'resend_code_create']);
+Route::get('/verify-email-auth', [AuthController::class, 'verifyemail_auth'])->middleware('auth') ; //show find email
+Route::get('/verify-email', [AuthController::class, 'verifyemail']); //show find email
+Route::post('/verifyconfirm', [AuthController::class, 'emailverifycode']);
 Route::get('/auth', function () {return view('layouts.auth');});
 
 // Route::get('/mail', function () {

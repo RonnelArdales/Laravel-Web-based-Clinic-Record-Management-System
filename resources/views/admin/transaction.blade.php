@@ -20,7 +20,7 @@
 
           <div class="me-auto col-md-8 col-md-offset-5">
 
-            <h1>Transaction</h1>
+            <h1> <b>TRANSACTION</b> </h1>
             </div>
                       <div class="alert success alert-success" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:9999">
                           <p id="message-success"></p> 
@@ -128,7 +128,7 @@
                                               @endforeach
                                               @else
                                               <tr>
-                                                  <td colspan="9" style="text-align: center; height:280px ">No Service Found</td>
+                                                  <td colspan="9" style="text-align: center">No Service Found</td>
                                                 </tr>
                                               @endif
                                           </tbody>

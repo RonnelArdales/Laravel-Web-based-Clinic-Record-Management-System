@@ -1,347 +1,268 @@
-
-@extends('layouts.login_register')
 @section('title', 'Register')
-@section('content')
 
-{{-- <div class="container card" style="font-family:Poppins; background:#EDDBC0;padding-top:1%; margin-bottom:1%;padding-bottom:1%;">
-  <p style="font-family: Poppins;text-align:center;" > To sign up, please complete all needed information below. <strong>Do not leave an fields blank.</strong> </p>
-  <form class="row  "  action="/store" method="POST">
-    @csrf
 
-     <h4>NAME</h4>
-    <div class="col-md-4">
-      <label for="inputEmail4" class="form-label">First Name:</label>
-      <input  type="text" class="form-control" name="first_name" >
-    </div>
-    <div class="col-md-4">
-      <label for="inputPassword4" class="form-label">Middle Name:</label>
-      <input  type="text" class="form-control" name="mname" >
-    </div>
-    <div class="col-md-4">
-      <label for="inputPassword4" class="form-label">Last Name:</label>
-      <input type="text" class="form-control" name="last_name" >
-      @error('last_name')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-12">
-      <h4>Address</h4>
-      <input type="text" class="form-control" name="address" >
-      @error('address')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-md-4">
-      <h4>BIRTHDATE</h4>
-      <input style="text-align:center" type="date" class="form-control"   name="birthday" >
-      @error('birthday')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-md-4">
-     <h4>GENDER</h4>
-      <select name="gender" class="form-control">
-        <option style="text-align:center" value="">--select--</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-      </select>
-      @error('gender')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <h4>CONTACTS</h4>
-    <div class="col-md-4">
-      <label for="inputEmail4" class="form-label">Mobile Number:</label>
-      <input type="text" class="form-control" name="mobile_number"  >
-      @error('mobile_number')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-6">
-      <label for="inputAddress" class="form-label">Email Address:</label>
-      <input type="text" class="form-control" name="email" >
-      @error('email')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <h4>CREATE ACCOUNT</h4>
-        <div class="col-6">
-      <label for="inputAddress" class="form-label">Username:</label>
-      <input type="text" class="form-control" name="username" >
-      @error('username')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
- 
-    <div class="col-6">
-      <label for="inputAddress" class="form-label">Password:</label>
-      <input type="password" class="form-control" name="password" >
-      @error('password')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-6">
-      <label for="inputAddress" class="form-label">Confirm Password:</label>
-      <input type="text" class="form-control" name="password_confirmation"  >
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap" rel="stylesheet">
+
+
     
-    <div>
-      <h4 style="text-align: center;">UPLOAD VALID ID</h4>
-      <button class="btn btn-primary mb-3 mt-2">Upload Photo</button>
-    </div>
-
-    <p>By clicking <strong>Sign Up</strong> , you agree to our <button type="button" data-bs-toggle="modal" data-bs-target="#create" class="logoutbutton" style="outline: none" ><strong>Terms and Privacy Policy.</strong></button> You may receive Email Notifications from us for the verification code to successfully sign in.</p>
-
-    <div class="col-12 text-right">
-      <button class="hober" style="  background: #829460; border-radius: 20px; color:white; font-size:15px;width: 200px;border:#829460; 
-      height: 47px; " type="submit" >Sign Up</button>
-    </div>
-    
-  </form> 
-
-</div> --}}
-
-
-<div class="container card " style="font-family:Poppins; background:#EDDBC0;padding-top:1%; margin-bottom:1%;padding-bottom:1%;">
-  <style>
-   
-    label{
-      font-weight: 400;
-    }
-    div{
-      text-align: center;
-    }
-    h4{
-      font-weight: 700;
-      text-align: left;
-    }
-    @media (max-width: 400px) {
-          label{ 
-            text-align: left;
-          }
-        }
-        /* di ko alam bat ayaw gumana yung hover kung dahil ba sa bootstrap o sa code ko pero parang okay namna yung code */
-    .hober:hover{
-      color:black;
-      background: white;
-    }
-  </style>
-  <form class="row  "  action="/store" method="POST">
-    @csrf
-
-    <p style="font-family: Poppins;text-align:center;" > To sign up, please complete all needed information below. <strong>Do not leave an fields blank.</strong> </p> 
-    <h4>NAME</h4>
-    <div class="col-md-4">
-      <label for="inputEmail4" class="form-label">First Name:</label>
-      <input  type="text" class="form-control" value="{{old('first_name')}}" name="first_name" >
-      @error('first_name')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-md-4">
-      <label for="inputPassword4" class="form-label">Middle Name:</label>
-      <input  type="text" value="{{old('mname')}}"  class="form-control" name="mname" >
-    </div>
-    <div class="col-md-4">
-      <label for="inputPassword4" class="form-label">Last Name:</label>
-      <input type="text" class="form-control" value="{{old('last_name')}}" name="last_name" >
-      @error('last_name')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-12">
-      <h4>Address</h4>
-      <input type="text" class="form-control" value="{{old('address')}}"  name="address" >
-      @error('address')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-md-4">
-      <h4>BIRTHDATE</h4>
-      <input style="text-align:center" value="{{old('birthday')}}" type="date" class="form-control"   name="birthday" >
-      @error('birthday')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-md-4">
-     <h4>Age</h4>
-     <input type="number" style="text-align:center" value="{{old('age')}}" type="age" class="form-control"   name="age" >
-      @error('age')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-md-4">
-      <h4>GENDER</h4>
-       <select name="gender" class="form-control">
-         <option style="text-align:center" value="">--select--</option>
-         <option value="Male" {{old('gender') == "Male" ? 'selected' : ''}}>Male</option>
-         <option value="Female" {{old('gender') == "Female" ? 'selected' : ''}}>Female</option>
-       </select>
-       @error('gender')
-       <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-       @enderror
-     </div>
-    <h4>CONTACTS</h4>
-    <div class="col-md-4">
-      <label for="inputEmail4" class="form-label">Mobile Number:</label>
-      <input type="number" value="{{old('mobile_number')}}"  class="form-control" name="mobile_number"  >
-      @error('mobile_number')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-6">
-      <label for="inputAddress" class="form-label">Email Address:</label>
-      <input type="text" value="{{old('email')}}"  class="form-control" name="email" >
-      @error('email')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <h4>CREATE ACCOUNT</h4>
-        <div class="col-6">
-      <label for="inputAddress" class="form-label">Username:</label>
-      <input type="text" value="{{old('username')}}"  class="form-control" name="username" >
-      @error('username')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
- 
-    <div class="col-6">
-      <label for="inputAddress" class="form-label">Password:</label>
-      <input type="password" class="form-control" name="password" >
-      @error('password')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-    </div>
-    <div class="col-6">
-      <label for="inputAddress" class="form-label">Confirm Password:</label>
-      <input type="password" class="form-control" name="password_confirmation"  >
-    </div>
-    
-    <div class=" mb-3 mt-2">
-      {{-- <h4 style="text-align: center;">UPLOAD VALID ID</h4>
-      <button class="btn btn-primary mb-3 mt-2">Upload Photo</button> --}}
-    </div>
-
-    <p>By clicking <strong>Sign Up</strong> , you agree to our <button type="button" data-bs-toggle="modal" data-bs-target="#privacy" class="logoutbutton" style="outline: none" ><strong>Terms and Privacy Policy.</strong></button> You may receive Email Notifications from us for the verification code to successfully sign in.</p>
-
-    <div class="col-12 text-right">
-      <button class="hober" style="  background: #829460; border-radius: 20px; color:white; font-size:15px;width: 200px;border:#829460; 
-      height: 47px; " type="submit" >Sign Up</button>
-    </div>
-  </form> 
-
-<x-privacyact/>
-
-</div> 
 
 
 
 
 
-@endsection
 
- {{-- Eto yung galing sa yt pero di gumana yung media --}}
-{{-- <style>
-  .buo{
-    display: flex;
-    flex-direction: row;
+
+</head>
+
+<style>
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+  body{
+ background-color: #829460;
+ padding: 0;
+ margin: 0;
+
+ font-family: 'Inter';
+ font-size: 14px;
+  }
+  input{
+    font-size: 14px;
+    font-family: 'Inter';
+  }
+  .sample{
+    background-image:url('https://res.cloudinary.com/uhno-dos-tres/image/upload/v1682778291/JG_MARQUEZ_RPSY_register_jkl47v.png');
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position:center;
+    height:100vh
+  }
+  @media (max-width: 580px) {
+  .sample{
+    height: 45vh;
+    width:100%;
+  }
+  h2{
+    margin-top:25px; 
+  }
+
 
   }
-  .firstcol{
-    flex: 1;
-    height: 1000px;
-    background: white;
-  }
-  .secondcol{
-    flex: 1;
-    height: 1000px;
-    background: #829460;
-  }
-  @media (max-width: 400px) {
-          .buo{ 
-            flex-direction: column;
-            height: 500px;;
-          }
-        }
 </style>
 
-<div class="buo">
-      <div class="firstcol"></div>
-
-      <div class="secondcol" ></div>
-</div> --}}
+<body>
 
 
-{{-- ETO YUNG UNA KONG SAMPLEE --}}
-{{-- <div style="margin:2%">
+      <div>
 
-  <style>
-    h4{
-      font-weight: 700;
-      /* font-size: 1.5vw; */
-    }
-    label{
-      font-weight: 400;
-      /* font-size: 1vw; */
-    }
+             <div class="container-fluid " style="width:100%; color:white">
+
+              <div class="row">                    
+                        <div class="col-sm"  >
+                          <div class="sample" >
+                           <a href="/" style="text-decoration: none;color:white"><h4  style="font-weight: 800;padding-left:15px;" >JG MARQUEZ, RPSY</h4></a> 
+                          </div>
+                         
+                        </div>
+<!--------------- RIGHT SIDE  CONTENTS ----------------->
+                 <div class="col-sm" style="display: flex;flex-direction:column; justify-content:center;">
+                        <div style="padding-left:2%">
+                          <h2 style="font-weight: 800;">WELCOME.</h2>
+                            <p style="padding: 0; margin:0;">To sign up, please complete all needed information below. <b> Do not leave any fields blank. </b> </p>
+                            <div style="display: flex;flex-direction:row;padding: 0; margin:0;">
+                            <p style="padding: 0; margin:0;">Already have an account? <a href="/login " style="text-decoration: none;color:white;"> <b> Log in here.</b> </a></p>
+                         
+                            </div>
+                          
+                        </div>
+                                 
+                         <!----FILL UP FORM FOR REGISTER / TEXTBOXES----------->
+
+                          <div style="padding:4%; width:75%;height: auto;align-self:center;"> 
+                          <form class="row  "  action="/store" method="POST">
+                           @csrf
+                           <div class="container">
+                              <div class="row" style="color: white">
+
+
+                                    <div class="col-sm" >
+                                        <label for="inputEmail4" class="form-label">First Name</label>
+                                        <input  style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;" type="text" class="form-control" value="{{old('first_name')}}" name="first_name" >
+                                        @error('first_name')
+                                        <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+
+                                      <div class="col-sm" >
+                                        <label for="inputPassword4" class="form-label">Middle Name</label>
+                                        <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;" type="text" value="{{old('mname')}}"  class="form-control" name="mname" >                    
+                                      </div>
+
+                                      <div class="col-sm">
+                                          <label for="inputPassword4" class="form-label">Last Name</label>
+                                          <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;" type="text" class="form-control" value="{{old('last_name')}}" name="last_name" >
+                                            @error('last_name')
+                                          <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                                            @enderror
+                                      </div>
+
+                                    <div class="row" style="margin-top:2%;padding-right:0;">
+                                            <div class="col">
+                                               <label for="inputPassword4" class="form-label">Birth Date</label>
+                                                <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;" style="text-align:center" value="{{old('birthday')}}" type="date" class="form-control"   name="birthday" >
+                                                @error('birthday')
+                                                <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col">
+                                                <label for="">Age</label>
+                                                <input type="number" style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0;margin-top:8px; color: white;font-size: 14px;"  style="text-align:center" value="{{old('age')}}" type="age" class="form-control"   name="age" >
+                                                  @error('age')
+                                                  <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                                                  @enderror
+                                            </div>
+
+                                            <div class="col-sm" style="padding-right: 0;">
+                                               <label  for="">Gender</label>
+                                               <select style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0;margin-top:8px; color: white;font-size: 14px;padding:0;" name="gender" class="form-control">
+                                                <option style="text-align:center;line-height:0;font-size:2px" value="">--select--</option>
+                                                <option value="Male" {{old('gender') == "Male" ? 'selected' : ''}}>Male</option>
+                                                <option value="Female" {{old('gender') == "Female" ? 'selected' : ''}}>Female</option>
+                                              </select>
+                                              @error('gender')
+                                              <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                                              @enderror
+                                            </div>
+                                          
+                                    </div>
+
+
+
+
+
+                              </div>
+                            </div>
+
+                            <div style="margin-top:2%">
+                                   <label for="inputPassword4" class="form-label">Address</label>
+                                    <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;"  type="text" class="form-control" value="{{old('address')}}"  name="address" >
+                                    @error('address')
+                                    <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                                    @enderror
+                            </div>
+
+                            <div class="container">
+                              <div class="row" style="margin-top:2%">
+                                  <div class="col-sm" style="">
+                                  <label for="inputEmail4" class="form-label">Mobile Number:</label>
+                                  <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;"  type="number" value="{{old('mobile_number')}}"  class="form-control" name="mobile_number"  >
+                                    @error('mobile_number')
+                                    <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                                    @enderror
+
+                                  </div>
+                                  <div class="col-7">
+                                  <label for="inputAddress" class="form-label">Email Address:</label>
+                                  <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;"  type="text" value="{{old('email')}}"  class="form-control" name="email" >
+                                  @error('email')
+                                  <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                                  @enderror
+
+                                  </div>
+                              </div>
+                            </div>
+                            
+                            <div class="container" >
+                            
+                              <div class="row" style="margin-top:2%">                                       
+                                        <div class="col-7">
+                                              <label for="inputAddress" class="form-label">Username:</label>
+                                              <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;"  type="text" value="{{old('username')}}"  class="form-control" name="username" >
+                                              @error('username')
+                                              <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                                              @enderror
+                                        </div>
+
+                                        <div class="col" style="padding-left: 0;">
+                                              <label for="inputAddress" class="form-label">Password:</label>
+                                              <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;"  type="password" class="form-control" name="password" >
+                                              @error('password')
+                                              <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                                              @enderror
+                                        </div>
+                                      </div>
+                            </div>
+
+                                      <div class="container">
+                                        <div class="row" style="margin-top:2%;padding-right:0;">
+                                          <div class="">
+                                          <label for="inputAddress" class="form-label">Confirm Password:</label>
+                                          <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;"  type="password" class="form-control" name="password_confirmation"  >
+                                          </div>
+                                       
+                                    </div>
+
+                                      </div>
+                                       
+                              
+                                
+
+                           
+
+                         </div>
+              <div style="padding-left:3%">
+
+              <button style="font-weight: 700;background-color:#EDDBC0;border-radius: 5px;border:none;width: 89px;height: 34px; ;color: #829460; margin: 5px 0 8px 0"> Sign Up</button>
+        
+
+
+                <p>By clicking <b> Sign Up</b>, you agree to the <button type="button" data-bs-toggle="modal" data-bs-target="#privacy" class="logoutbutton" 
+                style="outline: none;
+                  text-decoration: none;
+                  background:none;
+                  border:none;
+                  margin:0;
+                  font-family: 'Inter';
+                  font-weight:900;
+                  padding:0;
+                  cursor: pointer;
+                  color:white;" ><b> Terms and Privacy Policy </b> </button> .</a>  You may receive an email notification for the email verification.</p>
+              </div>
+
+                  </div>
+                        
+            </div>
    
-  </style>
-<p style="font-family: Poppins;text-align:center;" > To sign up, please complete all needed information below. Do not leave an fields blank.</p> 
+      </div>
+    </form> 
+    <x-privacyact/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
-<div class="samplelang" style="font-family: Poppins; display: flex; flex-direction: row; justify-content: center;">
 
-  <div style="flex:1;background:white">
-    <h4>NAME</h4>
-    <div>
-      <label for=""> First Name: </label> 
-      <input type="text" class="form-control" name="first_name" >
-      @error('first_name')
-      <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
-      @enderror
-      <br><label for=""> Middle Name: </label>
-      <br><label for=""> Last Name: </label>
-    </div>
-    
-    <h4>BIRTH DATE</h4>
-    
-    <h4>GENDER</h4>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-      <label class="form-check-label" for="inlineRadio1">Female</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-      <label class="form-check-label" for="inlineRadio2">Male</label>
-    </div>
-    <h4>ADDRRESS</h4>
-    <h4>CONTACTS</h4>
-    <label for="">Mobile Number:</label>
-    <br><label for="">E-mail Address:</label>
-
-  </div>
-
-  <div style="flex:1; background:#829460">
-    <div>
-      <h4>CREATE ACCOUNT</h4>
-      <label for="">Username:</label>
-      <br><label for="">Password:</label>
-      <br><label for="">Confirm Password:</label>
-  
-    </div>
-    
-  
-      <h4>UPLOAD VALID ID</h4>
+</body>
+</html>
 
    
-    <p>By clicking Sign Up, you agree to our Terms and Privacy <br> Policy. You may receive Email Notifications from us for <br> the verification code to successfully sign in.</p>
-    <button type="submit"  style="background: #829460;
-    border-radius: 20px;font-family: 'Poppins';font-style: normal;font-weight: 700;color:white; border:none;">Register</button>
-  </div> 
+  
 
-</div> --}}
-{{-- border-0 shadow
-rounded-3
-border
-border-dark --}}
-{{-- </div> --}}
+
+
+
+
+
+
 

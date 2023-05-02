@@ -229,6 +229,65 @@ $(document).ready(function(){
   }, 1000)
 }
 myClock();  
+
+
+$(function(){
+
+var sales = {!! json_encode($transactionArray) !!} ;
+
+transactionArray = sales.map(function(value) {
+      return parseFloat(value);
+  });
+console.log(transactionArray);
+
+
+var totals = {!! json_encode($totals) !!} ;
+console.log(totals);
+
+var dataArray = [];
+
+// Loop through the keys of the object and create an array of arrays
+for (var key in totals) {
+if (totals.hasOwnProperty(key)) {
+  dataArray.push([parseInt(key), totals[key]]);
+}
+}
+
+// The resulting array can be used in Highcharts
+console.log(dataArray); 
+
+Highcharts.chart('highcharts',{
+    chart:{
+      height: 380,
+      backgroundColor: 'rgba(130, 148, 96, 1)'
+    },
+        title:{
+        text:'Monthly Sales'
+      },
+
+    xAxis:{
+      categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+    },
+
+          yAxis:{
+      title:{
+        text:'Amount'
+      }
+    },
+
+    series:[{
+      name: 'total sales',
+      data:  dataArray,
+    }]
+
+    
+
+})
+
+})
+
+
+
 })
 
 

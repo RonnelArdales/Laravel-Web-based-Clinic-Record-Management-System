@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {{-- <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet"> --}}
+    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -18,8 +19,7 @@
     {{-- <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script> --}}
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  
 
 
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
@@ -444,8 +444,8 @@
                     </a>
                </li>
 
-               <li class=" my-1 mx-3  {{Request::is('admin/profile') ? 'active-bar' : '';}}">
-                    <a href="/admin/profile"> 
+               <li class=" my-1 mx-3  {{Request::is('admin/pendinguser') ? 'active-bar' : '';}}">
+                    <a href="/admin/pendinguser"> 
                          <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" alt=""> 
                         <span>Pending User</span> 
                     </a>
@@ -609,6 +609,8 @@
                     </a>
                     </li>
 
+                    
+
               </ul>  
        
                {{-- <form class="" action="/logout" method="POST" >
@@ -716,7 +718,8 @@
                     Request::is('secretary/discount') ||
                     Request::is('secretary/business_hours') ||
                     Request::is('secretary/guestpage') ||
-                    Request::is('secretary/reservationfee') 
+                    Request::is('secretary/reservationfee') ||
+                    Request::is('secretary/modeofpayment') 
                     ? 'active-bar' : '';}}">
         <a href="#setting" data-bs-toggle="collapse" >
              <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/settings_ttbpof.png" alt=""> 
@@ -728,7 +731,8 @@
                     Request::is('secretary/discount') ||
                     Request::is('secretary/business_hours') ||
                     Request::is('secretary/guestpage') ||
-                    Request::is('secretary/reservationfee') 
+                    Request::is('secretary/reservationfee') ||
+                    Request::is('secretary/modeofpayment') 
                     ? 'show' : 'collapse';}} flex-column list-unstyled" id="setting" data-bs-parent="#menu">
               
               <li class=" my-1 mx-3  {{Request::is('secretary/service') ? 'active-bar' : '';}}">
@@ -758,6 +762,21 @@
                         <span>Guestpage</span>
                   </a>
               </li>
+
+              <li class=" my-1 mx-3 {{Request::is('secretary/reservationfee') ? 'active-bar' : '';}}">
+               <a href="/secretary/reservationfee"> 
+                    <img class="icon dropdown" src="{{url('logo/reservationsettings.png')}}" alt=""> 
+                    <span>Reservation Fee</span>
+               </a>
+               </li>
+
+               <li class=" my-1 mx-3 {{Request::is('secretary/modeofpayment') ? 'active-bar' : '';}}">
+                    <a href="/secretary/modeofpayment"> 
+                         <img class="icon dropdown" src="{{url('/logo/discount2.png')}}" alt=""> 
+                         <span style="font-size: 17.5px" >Mode of Payment</span>
+                    </a>
+               </li>
+
           </ul>  
 
    
@@ -839,7 +858,7 @@
         <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-
+  
         @yield('scripts')
 
   <script>

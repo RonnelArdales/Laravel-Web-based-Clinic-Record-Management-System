@@ -15,7 +15,7 @@
 <div style="margin-top: 3px; align-items:center; display:flex; margin-bottom:1%;" >
 	<div class="me-auto col-md-8 col-md-offset-5">
 
-	<h1>Appointment  </h1>
+	<h1> <b>APPOINTMENT</b> </h1>
 	</div>
     <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" type="button" class="btn btn-primary ml-6 show-create" >
 	Create
@@ -306,7 +306,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="background: #EDDBC0;">
         <div class="modal-header" style="border-bottom-color: gray">
-          {{-- <h1 class="modal-title fs-5" id="exampleModalLabel">Book </h1> --}}
+          <h1 class="modal-title fs-4" id="exampleModalLabel">Hold on! </h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -475,7 +475,7 @@
       <td >
         <div class="col-sm  justify-content-center" style="text-align: center; margin-right:5px;" >
           <p style="margin-bottom: 10px">Not available</p>
-          <div  style="height: 30px;margin-left:30%  ;width:30px; background-color: #DDDDDD;  text-align: center;" >
+          <div  style="height: 30px;margin-left:30%  ;width:30px; background-color: #cc6666;  text-align: center;" >
 
           </div>
         </div>
@@ -626,7 +626,7 @@
         $('#available-time').empty()
         $('#available-time').append('<option value="0" disabled selected></option>');
 
-      deleteall();
+
 
       $('.show-create').on('click', function(e){
         e.preventDefault();
@@ -658,24 +658,6 @@
         });
         
 
-        
-        function deleteall () {
-            if (window.location.href) {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "post",
-                url: "/admin/billing/addtocart/deleteall",
-                datatype: "json",
-                success: function(response){ 
-                }
-            });
-                
-            }
-        }
 
 
         $(document).on('click', '.patients', function(e){
@@ -704,7 +686,6 @@
                 'change': $('#change').val(),
                 'reference_no': $('#reference_no').val(),
             }
-         console.log(data);
           $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -778,8 +759,9 @@
                     $(".main-spinner").hide();
                 },
                 success: function(response){ 
+                  console.log(response);
                   $('#success').html();
-                    $('#success').text('Booked successfully');
+                    $('#success').text('Appointment successfully');
                       $('#success').show();
                       setTimeout(function() {
                                 $("#success").fadeOut(500);
@@ -806,12 +788,13 @@
                 data: {status:status},
                 datatype: "json",
                 beforeSend: function(){
-                    $(".spinner").show();
-                },
-                complete: function(){
-				$('#cancel-confirmation').modal('hide');
-                    $(".spinner").hide();
-                },
+              
+              $(".main-spinner").show();
+          },
+          complete: function(){
+            $('#cancel-confirmation').modal('hide');
+              $(".main-spinner").hide();
+          },
                 success: function(response){ 
 				console.log(response);
                   $('#success').html();
@@ -900,43 +883,43 @@
             selectHelper: true,
             viewRender: function(view, element,) {
       if(day_off.includes("0")){
-              $('.fc-day.fc-sun').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-sun').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("1")){
-              $('.fc-day.fc-mon').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-mon').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("2")){
-              $('.fc-day.fc-tue').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-tue').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("3")){
-              $('.fc-day.fc-wed').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-wed').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("4")){
-              $('.fc-day.fc-thu').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-thu').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("5")){
-              $('.fc-day.fc-fri').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-fri').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("6")){
-              $('.fc-day.fc-sat').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-sat').css('backgroundColor', '#829460');
       }
@@ -952,13 +935,31 @@
                     var start = $.fullCalendar.formatDate(start, 'Y-MM-DD');
                     var end = $.fullCalendar.formatDate(end, 'Y-MM-DD HH:mm:ss');
                     const dayOfWeek = $.fullCalendar.moment(date).day();
-                    
-        $.ajaxSetup({
+
+                    let currentDate = new Date(Date.now());
+let year = currentDate.getFullYear();
+let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
+let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
+
+let formattedDate = `${year}-${month}-${day}`;
+
+if(formattedDate == start){
+            // $('#message-error').text("Sorry you cannot book this date");
+            //                 $(".error").show();
+            //                 setTimeout(function() {
+            //                     $(".error").fadeOut(500);
+            //                 }, 3000);
+
+            return false;
+           }else{
+
+            $.ajaxSetup({
             headers:{
                 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
             }
         });
-                    $.ajax({
+
+        $.ajax({
                         url:"/admin/appointment/Calendar-fetch",
                         type:"Get",
                         datatype: "json",
@@ -997,88 +998,18 @@
                             }
                         }
                     })
+
+
+
+           }
+                    
+
+             
             },
             editable:true,
-            // eventResize: function(event, delta)
-            // {
-            //     var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
-            //     var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
-            //     var title = event.title;
-            //     var id = event.id;
-            //     $.ajax({
-            //         url:"/full-calender/action",
-            //         type:"POST",
-            //         data:{
-            //             title: title,
-            //             start: start,
-            //             end: end,
-            //             id: id,
-            //             type: 'update'
-            //         },
-            //         success:function(response)
-            //         {
-            //             calendar.fullCalendar('refetchEvents');
-            //             alert("Event Updated Successfully");
-            //         }
-            //     })
-            // },
-            // eventDrop: function(event, delta)
-            // {
-            //     var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
-            //     var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
-            //     var title = event.title;
-            //     var id = event.id;
-            //     $.ajax({
-            //         url:"/full-calender/action",
-            //         type:"POST",
-            //         data:{
-            //             title: title,
-            //             start: start,
-            //             end: end,
-            //             id: id,
-            //             type: 'update'
-            //         },
-            //         success:function(response)
-            //         {
-            //             calendar.fullCalendar('refetchEvents');
-            //             alert("Event Updated Successfully");
-            //         }
-            //     })
-            // },
-    
-            // eventClick:function(event)
-            // {
-            //     if(confirm("Are you sure you want to remove it?"))
-            //     {
-            //         var id = event.id;
-            //         $.ajax({
-            //             url:"/full-calender/action",
-            //             type:"POST",
-            //             data:{
-            //                 id:id,
-            //                 type:"delete"
-            //             },
-            //             success:function(response)
-            //             {
-            //                 calendar.fullCalendar('refetchEvents');
-            //                 alert("Event Deleted Successfully");
-            //             }
-            //         })
-            //     }
-            // }
         });
     
-        // $('#date').on('keyup', function(e){
-        //         e.preventDefault();
-        //         var usertype = $('#date').val();
-        //         console.log(usertype);
-        //         $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        //     });
-      
-        //     })
+
         
                      //pagination
             $(document).on('click',  '.pagination a', function(e){

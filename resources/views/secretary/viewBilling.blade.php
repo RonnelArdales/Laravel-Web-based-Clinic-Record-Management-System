@@ -15,7 +15,7 @@
 </style>
 <div class="row m-3" style="font-family: poppins;">
     <div style="margin-bottom: 1%;">
-        <a  class="btn btn-outline-dark" href="/admin/billing"> Back </a>
+        <a  class="btn btn-outline-dark" href="/secretary/billing"> Back </a>
     </div>
     <hr>
     <form class="row" >
@@ -84,17 +84,24 @@
 
 <div class="row">
     <div class="col-sm ">
-        <a href="/admin/billing/printinvoice/{{$infos->transno}}" class="btn btn-outline-dark">Print</a>
+        <a href="/secretary/billing/printinvoice/{{$infos->transno}}" class="btn btn-outline-dark">Print</a>
     </div>
 
     <div class="col-sm d-flex justify-content-end" >
         <div style="">
             <label for="">Discount:</label>
-            <input type="text"  class="view1 rounded " id="fullname" value="{{$infos->discountprice}}" name="fullname" readonly>
+            <input type="text"  class="view1 rounded " id="fullname" value="{{$infos->discount_price}}" name="fullname" readonly>
            <br> <label for="">Total:</label>
            <input type="text"  class="view1 rounded " id="fullname" value=" ₱ {{number_format("$infos->total",2)}}" name="fullname" readonly>
            <br> <label for="">Mode of payment:</label>
            <input type="text"  class="view1 rounded " id="fullname" value="{{$infos->mode_of_payment}}" name="fullname" readonly>
+
+           @if ($infos->mode_of_payment == null)
+
+           
+               
+           @else
+
            @if ($infos->mode_of_payment == "Cash")
            <br> <label for="">Payment:</label>
            <input type="text"  class="view1 rounded " id="fullname" value=" ₱ {{number_format("$infos->payment",2)}}" name="fullname" readonly>
@@ -104,6 +111,10 @@
            <br> <label for="">Reference no.:</label>
            <input type="text"  class="view1 rounded " id="fullname" value="{{$infos->reference_no}}" name="fullname" readonly>
            @endif
+               
+           @endif
+
+  
      
           </div>
     </div>

@@ -19,8 +19,12 @@
 {{----------- Billing tab ---------------}}
 
                 <div class="col-md-8 col-md-offset-5">
-                    <h2>Billing</h2>
+                    <h1><b>BILLING</b></h1>
                 </div>
+
+                <div id="success" class="success alert alert-success" role="alert" style="display:none">
+                    <p style="margin-bottom: 0px" id="message-success"></p> 
+                  </div>
 
 
                         <div class="card"  style="background:#EDDBC0;border:none; " >
@@ -106,13 +110,24 @@
                                 <select name="mode_payment" id="mode_payment">
                                     <option value="">--select--</option>
                                     <option value="Cash">Cash</option>
-                                    <option value="Gcash">Gcash</option>
+                                    @foreach ($mops as $mop)
+                                    <option value="{{$mop->modeofpayment}}">{{$mop->modeofpayment}}</option>
+                                    @endforeach
                                 </select><br>
+
+                                <div class="mt-0 mb-2">
+                                    <span  role="alert" class="block mt-5   text-danger" id="error_modeofpayment"></span>
+                                     </div>
+
                                 <div id="cash" style="display: none; margin-top: 10px">
                                     <label for=""><b>payment:</b></label>
                                          <div class="currency-wrap-payment">
                                             <span class="currency-code-payment">₱</span>
                                             <input type="number" class="text-currency-payment" id="payment_cash" placeholder="0.00" class="payment_cash" name="payment_cash" value=""/>
+                                        </div>
+
+                                        <div class="mt-0 mb-2">
+                                            <span  role="alert" class="block mt-5   text-danger" id="error_payment"></span>
                                         </div>
                                   
                                     <label for=""><b>change:</b></label>
@@ -126,6 +141,9 @@
                               <div  id="gcash" style="display:none; margin-top: 10px">
                                 <label for=""><b>Reference no:</b></label>
                                 <input type="text" style="width:  px" id="reference_no" name="reference_no"><br>
+                                <div class="mt-0 mb-2">
+                                    <span  role="alert" class="block mt-5   text-danger" id="error_reference_no"></span>
+                                </div>
                               </div>
 
                         </div>
@@ -140,6 +158,32 @@
                         </div>
                         </div>
                     </div>
+
+                                        {{---- delete modal---}}
+<div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background: #EDDBC0;">
+        <div class="modal-header" style="border-bottom-color: gray" >
+          <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Delete Data</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-5 pt-6  ">
+                <div class=" columns-1 sm:columns-2">
+                    <input type="text" hidden id="delete_no">
+                <h5>Do you want to delete this data?</h5>
+         
+              {{-- </form> --}}
+        </div>
+        </div>
+        <div class="modal-footer" style="border-top-color: gray">
+          <button type="button" class=" close btn btn-secondary" style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px;  " data-bs-dismiss="modal">Close</button>
+          <button class="delete_user" id="deletefile"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
     </div>
 @endsection
 
@@ -211,58 +255,6 @@
           $('#viewpatients').modal('show');
         })
 
-        // $(document).on('click', '.service', function(e){
-        //   $('#viewservice').modal('show');
-        // })
-
-        // //---------------------Show payment modal---------------------//
-        // $(document).on('click', '.proceedpayment', function(e){
-        //     $.ajaxSetup({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         }
-        //     });
-        //     $.ajax({
-        //         type: "GET",
-        //         url: "/admin/billing/addtocart/getdata/",
-        //         datatype: "json",
-        //         success: function(response){ 
-                
-        //         if(response.status == 400){
-        //             $('#message-error').html('');
-        //         $('#message-error').text(response.message);
-        //                     $(".error").show();
-        //                     setTimeout(function() {
-        //                         $(".error").fadeOut(500);
-        //                     }, 2000);
-        //         }else{
-        //                     let userid = $('#userid').val();
-        //                     let fullname = $('#fullname').val();
-        //                     let consultation_date = $('#consultation').val();
-        //                     let service_subtotal = $('#subtotal_value').val();
-        //                     let doctor_fee = $('#doctorfee').val();
-        //                     // let replace_doctor_fee = doctor_fee.replaceAll("₱" , " ")
-        //                     let replace_service_subtotal = service_subtotal.replace(/[^a-z0-9. ]/gi, '');
-        //                     let subtotal = parseInt(replace_service_subtotal, 10) + parseInt(doctor_fee);
-        //                     let number = Number(parseFloat(subtotal).toFixed(2)).toLocaleString('en', {minimumFractionDigits: 2});
-                           
-        //                     console.log(subtotal);
-                           
-                           
-        //                         $('#totalprice_nosymbol').val(subtotal);
-        //                         $('#payment_userid').val(userid);
-        //                         $('#payment_fullname').val(fullname);
-        //                         $('#payment_consultation').val(consultation_date);
-        //                         $('#payment_servicesubtotal').val(service_subtotal);
-        //                         $('#payment_subtotal').val('₱ '+subtotal.toFixed(2));
-        //                         $('#total_price').val('₱ '+ number);
-        //                         $('#payment').modal('show');
-        //         }
-        //         }
-        //     });        
-        // })
-
-
              // //---------------------Show payment modal---------------------//
         $(document).on('click', '.payment', function(e){
        
@@ -324,6 +316,23 @@
                     datatype: "json",
                     data: data ,
                     success: function(response){
+                        if(response.status == "400"){
+                            $('#error_modeofpayment, #error_payment, #error_reference_no').html(" ");
+                            $.each(response.errors.mode_of_payment, function (key, err_values){
+                            $('#error_modeofpayment').append('<span>'+err_values+'</span>');
+                                })
+                            $.each(response.errors.payment, function (key, err_values){
+                                    $('#error_payment').append('<span>'+err_values+'</span>');
+                                })
+                            $.each(response.errors.reference_no, function (key, err_values){
+                                    $('#error_reference_no').append('<span>'+err_values+'</span>');
+                                })
+                        }else{
+                            $('#message-success').text('Updated Successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                         $('#payment_billingno').val("");
                         $('#payment_userid').val("");
                         $('#payment_fullname').val("");
@@ -332,8 +341,12 @@
                         $('#total_price').val("");
                         $('#totalprice_nosymbol').val("");
                         $('#status').val("");
-     billing.draw();
-                    $('#payment').modal('hide');     
+                        billing.draw();
+                        $('#payment').modal('hide');
+                        $('#payment_cash, #change, #reference_no').val(" ");
+                        $('#cash').hide();
+                        $('#gcash').show();   
+                        }
                     }
 
             });
@@ -630,57 +643,14 @@ console.log(id);
           });
         })
 
-    //     $(document).on('click',  '.pagination a', function(e){
-    //         e.preventDefault();
-    //         let status = $('#modal-status').val()
 
-    //         if( status == "show" ){
-    //           let page = $(this).attr('href').split('patient=')[1]
-    //           patient(page);
-    //         }else{
-    //             let page = $(this).attr('href').split('addtocart=')[1]
-    //         addtocart(page);
-    //         }
-    //     });
-
-    //     function patient(page){
-    //       let data = page;
-    //        $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         }
-    //         });
-    //           $.ajax({
-    //             type: "GET",  
-    //             url: "/admin/modal_patient/pagination/paginate-data?patient="+page ,
-    //             data: {data: data}, 
-    //             datatype: "json",
-    //             success: function(response){
-    //               console.log(response);
-    //             $('.patient').html(response);
-    //               }
-    //           });
-    //     }
-
-    //     function addtocart(page){
-    //         let data = page;
-    //         console.log(data);
-    //        $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         }
-    //         });
-    //        $.ajax({
-    //             type: "GET", 
-    //             data: {data:data},  
-    //             url: "/admin/billing/addtocart/pagination/paginate-data?addtocart="+ page , 
-    //             datatype: "json",
-    //             success: function(response){ 
-                
-    //             $('.data-table').html(response);
-    //     }
-    // });
-    //     }
+        $('#billingtable').on('click', '.delete', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            $('#delete_no').val(id);
+           $('#delete').modal('show');
+        });
+        
 });
 </script>
 

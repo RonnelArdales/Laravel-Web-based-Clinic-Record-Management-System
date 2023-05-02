@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Approveaccount;
 use App\Mail\bookconfirmation;
 use App\Mail\Cancelappointment;
+use App\Mail\newAccount;
 use App\Mail\patientbook;
+use App\Mail\PatientDocument;
 use App\Models\Addtocartservice;
 use App\Models\Appointment;
 use App\Models\AuditTrail;
@@ -42,37 +45,49 @@ class AdminController extends Controller
         $appointments =  DB::table('appointments')->where('status', 'Booked')->whereDate('date', '>', date('Y-m-d'))
         ->orderBy('date', 'asc')->limit(3)->get();
         $latestuser = User::orderBy('created_at', 'desc')->take(7)->get();
-        // // $data = Appointment::distinct('service')-> select('service' , DB::raw('count(gender) as gender_count, gender'))->groupBy('gender', 'service')->get();
-        // $data = Appointment:: select('service' , DB::raw('count(*) as gender_count, gender'))->groupBy('gender', 'service')->get();
 
-        // $male = Appointment::where('service', 'Diagnostic')->whereHas('user' , function($query){
-        //     $query->where('gender', 'Female');
-        // })->with('user')->get();
-        // $malecount = $male->count();
-        // $datacount = ['Gender'];
 
-        // dd($gender_records[0]->service);
-        // dd([$service, $male, $female]);
+        $transaction = Transaction::select(DB::raw('SUM(total) as total'))
+    ->whereYear('created_at', date('Y'))
+    ->groupBy(DB::raw('MONTH(created_at)'))
+    ->pluck('total');
 
-        // $array = ['Gender', 'Number', 'Service'];
-        //   foreach ($gender_records as $key=>$value){
-        //         $array[++$key] = [ $value->service, $value->gender, $value->number,];
-        //   }
- 
-        
-// dd(json_encode ($gender_records));
-        
-        // $data = DB::table('appointments')->select('service' ,DB::raw('gender as gender'),
-        //                                         DB::raw('count(*) as number'))
-        //   ->groupBy('gender', 'service')->get();
+    
+$transactionArray = $transaction->map(function ($item) {
+    return (string) $item;
+})->toArray();
 
-        //   $array = ['Gender', 'Number', 'Service'];
-        //   foreach ($data as $key=>$value){
-        //         $array[++$key] = [ $value->service, $value->gender, $value->number,];
-        //   }
-    //   {{$data->service}} {{$data->gender}} {{$data->number}} 
-            
-    // dd(json_encode($array));
+$try = DB::select(DB::raw('
+    SELECT SUM(total) as total, MONTH(created_at) as month FROM (
+        SELECT total, created_at FROM transactions WHERE YEAR(created_at) = YEAR(NOW())
+        UNION ALL
+        SELECT reservation_fee, created_at FROM appointments WHERE YEAR(created_at) = YEAR(NOW())
+    ) as combined_totals
+    GROUP BY MONTH(created_at)
+    ORDER BY MONTH(created_at)
+'));
+
+
+
+$totals = array_column($try, 'total', 'month');
+
+
+
+$gender_records =   Consultation::selectRaw('primary_diag,
+COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male",
+COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female",
+COUNT(*) as "all"
+')->groupBy('primary_diag')->get();
+
+$service=[];
+$male=[];
+$female=[];
+foreach($gender_records as $gender){
+$service[]=$gender->primary_diag;
+$male[]=$gender->male;
+$female[]=$gender->female;
+}
+
 
 
             $users = User::all()->count();
@@ -85,7 +100,7 @@ class AdminController extends Controller
             $name= auth()->user()->fname;
     
             // $patient = User::select('fname')->distinct()->get();
-            return view('admin.dashboard') ->with('name', $name)
+            return view('admin.dashboard', compact('totals', 'transactionArray')) ->with('name', $name)
                                         //   ->with('patients', $patient)
                                           ->with('users', $users)
                                           ->with('pending', $pending)
@@ -98,19 +113,7 @@ class AdminController extends Controller
 
 
     
-//     $gender_records = Appointment::selectRaw('service,
-//     COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male",
-//     COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female",
-//     COUNT(*) as "all"
-// ')->groupBy('service')->get();
-// $service=[];
-// $male=[];
-// $female=[];
-// foreach($gender_records as $gender){
-// $service[]=$gender->service;
-// $male[]=$gender->male;
-// $female[]=$gender->female;
-// }
+
 
 
 // $users = User::all()->count();
@@ -167,6 +170,14 @@ class AdminController extends Controller
             $discount->discountname = $request->input('discountname');
             $discount->percentage = $request->input('percentage');
             $discount->save();
+
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Create new discount';
+            $audit_trail->usertype = Auth::user()->usertype;
+            $audit_trail->save();
+
             return response()->json([
                 'status'=>200,
                 'message' => 'discount added successfully',
@@ -210,6 +221,13 @@ class AdminController extends Controller
 
             DB::table('discounts')->where('discountcode', $discountcode)->update($arrItem);
 
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Update Discount';
+            $audit_trail->usertype = Auth::user()->usertype;
+            $audit_trail->save();
+
             return response()->json([
                 'status'=>200,
                     'message' => 'discount updated successfully',
@@ -222,6 +240,13 @@ class AdminController extends Controller
     public function delete_discount($discountcode)
     {   
         DB::table('discounts')->where('discountcode', $discountcode)->delete();
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Delete discount';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
 
         return response()->json([
             'status'=>200,
@@ -266,6 +291,14 @@ public function fetch_service(){
             $service->services = $request->input('servicename');
             $service->price = $request->input('price');
             $service->save();
+
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Create new service';
+            $audit_trail->usertype = Auth::user()->usertype;
+            $audit_trail->save();
+
             return response()->json([
                 'status'=>200,
                 'message' => 'Added successfully',
@@ -312,6 +345,13 @@ public function fetch_service(){
             );
 
             $upadted = DB::table('services')->where('servicecode', $servicecode)->update($arrItem);
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Update Service';
+            $audit_trail->usertype = Auth::user()->usertype;
+            $audit_trail->save();
+
             if($upadted){
                 return response()->json([
                     'status'=>200,
@@ -331,6 +371,13 @@ public function fetch_service(){
     public function delete_service($servicecode){
         DB::table('services')->where('servicecode', $servicecode)->delete();
 
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Delete service';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
         return response()->json([
             'status'=>200,
                 'message' => 'deleted successfully',
@@ -344,18 +391,38 @@ public function fetch_service(){
 
 
     public function appointment_change_status($id, Request $request){
+        $email = DB::table('appointments')->where('id', $id)->first();
+        $fullname = $email->fullname;
+        $date = $email->date;
+        $time = $email->time;
 
     if($request->status == "Success"){
         $upadted = DB::table('appointments')->where('id', $id)->update(['status' =>  'success']);
-        // Mail::to('ronnelardales2192@gmail.com')->send(new bookconfirmation);
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Change appointment status to success';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
+        // Mail::to($email->email)->send(new bookconfirmation($fullname, $date, $time));
         return response()->json([
-        'staus' => $id,
     ]);
     }elseif($request->status == "Cancel"){
         $upadted = DB::table('appointments')->where('id', $id)->update(['status' =>  'cancel']);
-        // Mail::to('ronnelardales2192@gmail.com')->send(new Cancelappointment);
+        Mail::to($email)->send(new Cancelappointment($fullname, $date, $time));
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Change appointment status to cancel';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+        
         return response()->json([
         'staus' => $id,
+        
     ]);
     }else{
         return response()->json([
@@ -445,7 +512,7 @@ public function fetch_service(){
         $addtocarts =  DB::table('addtocartservices')->orderBy('created_at', 'desc')->paginate(4, ['*'], 'addtocart');
         $service = Service::all();
         $sum = Addtocartservice::sum('price');
-        $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
+        $patients =  DB::table('users')->where('usertype', 'patient')->where('status', 'verified')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
         return view('admin.transaction', [
                                         'services' => $service, 
                                         'addtocarts'=> $addtocarts, 
@@ -765,6 +832,13 @@ public function fetch_service(){
                 $billing->save();
             }
             Addtocartservice::truncate();  
+
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Create transaction';
+            $audit_trail->usertype = Auth::user()->usertype;
+            $audit_trail->save();
     
             return response()->json([
                'status' => 200,
@@ -807,6 +881,7 @@ $input = $request->all();
                 ]);
             }else{
 
+                
                         Transaction::where('transno', $id)->update([
                                                     'discount' => $input['discountname'],
                                                     'discount_price' => $input['discountprice'],
@@ -817,6 +892,13 @@ $input = $request->all();
                                                     'change' => floatval(str_replace(',', '', $input['change'])),
                                                     'status' => "Paid",             
                                                             ]);
+
+                                                    $audit_trail = new AuditTrail();
+                                                    $audit_trail->user_id = Auth::user()->id;
+                                                    $audit_trail->username = Auth::user()->username;
+                                                    $audit_trail->activity = 'Update transaction';
+                                                    $audit_trail->usertype = Auth::user()->usertype;
+                                                    $audit_trail->save();
           
             }
         }else{
@@ -843,6 +925,13 @@ $input = $request->all();
                                                     'change' => floatval(str_replace(',', '', $input['change'])),
                                                     'status' => "Paid",             
                                                             ]);
+
+                                                            $audit_trail = new AuditTrail();
+                                                            $audit_trail->user_id = Auth::user()->id;
+                                                            $audit_trail->username = Auth::user()->username;
+                                                            $audit_trail->activity = 'Update transaction';
+                                                            $audit_trail->usertype = Auth::user()->usertype;
+                                                            $audit_trail->save();
             }
         }
 
@@ -908,6 +997,14 @@ $input = $request->all();
         // ]);
 
         return view('admin.editBilling', compact('services', 'infos'));
+    }
+
+
+    public function delete_billing($id){
+          
+        $transaction = Transaction::where('transno', '=', $id)->delete();
+        return response()->json($id);
+
     }
 
     public function deleteall_addtocart(){
@@ -1036,6 +1133,14 @@ public function index_discount(){
     $checked_array = $request->day_id;
 
     $data = BusinessHour::whereIn('id', $checked_array)->delete();
+
+    $audit_trail = new AuditTrail();
+    $audit_trail->user_id = Auth::user()->id;
+    $audit_trail->username = Auth::user()->username;
+    $audit_trail->activity = 'Delete business hours';
+    $audit_trail->usertype = Auth::user()->usertype;
+    $audit_trail->save();
+
           return response()->json([
                 "status" => "deleted successfully",
             ]);
@@ -1044,11 +1149,28 @@ public function index_discount(){
 public function off_status(Request $request ){
     $status = $request->status;
     $day = implode($request->day_id);
+    
     if( $status == "checked"){
         BusinessHour::where('day', '=', $day)->update(['off' => 0]);
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Update business hour';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
         return response()->json(['status' => 'successfully remove off day']);
     }else{
         BusinessHour::where('day', '=', $day)->update(['off' => 1]);
+
+        
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Update business hour';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
         
         return response()->json(['status' => 'successfully add off day']);
     }
@@ -1075,10 +1197,25 @@ public function store_businesshours(Request $request){
     if($day){
         $businesshours->off = 1;
          $businesshours->save();
+         $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Create new business hour';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
         return response()->json(['status' => 'off day', 'data' => $day]);
     }else{
         $businesshours->off = 0;
          $businesshours->save();
+
+         $audit_trail = new AuditTrail();
+         $audit_trail->user_id = Auth::user()->id;
+         $audit_trail->username = Auth::user()->username;
+         $audit_trail->activity = 'Create new business hour';
+         $audit_trail->usertype = Auth::user()->usertype;
+         $audit_trail->save();
+
         return response()->json(['status' => 'none', 'data' => $day]);
     }
     // $time = Carbon::createFromFormat('H:i', $input['business_time'])->format('H:i:s');
@@ -1134,6 +1271,15 @@ public function store_businesshours(Request $request){
                 $guestpage_id->image = $filename;
             }
             $guestpage_id->save();
+
+            
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Update guestpage ';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
             return redirect('admin/guestpage')->with('success', 'updated Successfully');
         }
 
@@ -1234,6 +1380,7 @@ public function store_businesshours(Request $request){
         $consultation->date = $date;
         $consultation->time = $time;
         $consultation->service = $input['service'];
+        $consultation->primary_diag = $input['primary_diag'];
         $consultation->behavioral_observation = $input['observation'];
         $consultation->brief_summary_encounter = $input['summary'];
         $consultation->clinical_impression = $input['impression'];
@@ -1376,6 +1523,19 @@ public function store_businesshours(Request $request){
             $documents->filename = $input['pdf'];
             $documents->note = $input['note'];
             $documents->save();
+
+            $user = User::where('id', $input['user_id'])->first();
+            
+            $fullname = $input['fullname'];
+
+            Mail::to($user->email)->send(new PatientDocument ($fullname, $date));
+
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Create  Document';
+            $audit_trail->usertype = Auth::user()->usertype;
+            $audit_trail->save();
         
             return response()->json([
                'status' =>'success',
@@ -1433,6 +1593,14 @@ public function store_businesshours(Request $request){
                             }
                             
                             $document->save();
+
+                            $audit_trail = new AuditTrail();
+                            $audit_trail->user_id = Auth::user()->id;
+                            $audit_trail->username = Auth::user()->username;
+                            $audit_trail->activity = 'Update document';
+                            $audit_trail->usertype = Auth::user()->usertype;
+                            $audit_trail->save();
+
                             return response()->json([
                                     'status'=> 200,
                                     'message'=> 'updated successfully',
@@ -1455,6 +1623,14 @@ public function store_businesshours(Request $request){
             if(File::exists($path)){
                     File::delete($path);
                 }
+
+                $audit_trail = new AuditTrail();
+                $audit_trail->user_id = Auth::user()->id;
+                $audit_trail->username = Auth::user()->username;
+                $audit_trail->activity = 'Delete Document';
+                $audit_trail->usertype = Auth::user()->usertype;
+                $audit_trail->save();
+
             return response()->json([
                 'status'=>200,
                     'message' => 'Deleted successfully',
@@ -1470,6 +1646,15 @@ public function store_businesshours(Request $request){
         public function update_reservationfee_setting($id, Request $request){
 
             $reservationfee = Reservationfee::where('id', $id)->update(['reservationfee' => $request->input('newfee')]);
+
+            
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Update reservation fee';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
             return redirect()->back();
         }
 
@@ -1511,6 +1696,13 @@ public function store_businesshours(Request $request){
         $user->gender = $input['gender'];
 
         $user->save();
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Update profile';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
 
         return redirect('/admin/myprofile')->with('success', 'Updated successfully');
 
@@ -1559,6 +1751,15 @@ public function store_businesshours(Request $request){
             $user = User::where('id', Auth::user()->id)->first();
             $encrypt = bcrypt($request->input('password'));
             $user->password = $encrypt;
+            $user->save();
+
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Change password';
+            $audit_trail->usertype = Auth::user()->usertype;
+            $audit_trail->save();
+
             return redirect()->back()->with('success', 'Updated successfully');
              
         }else{
@@ -1601,6 +1802,14 @@ public function store_businesshours(Request $request){
             $mop->modeofpayment = $input['mop'];
             $mop->save();
         
+            
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Create new mode of payment';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
             return response()->json([
                'status' =>'success',
                 'data' => $request->all(),
@@ -1653,6 +1862,15 @@ public function store_businesshours(Request $request){
                         }
                         
                         $mop->save();
+
+                        
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Update mode of payment';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+                        
                         return response()->json([
                                 'status'=> 200,
                                 'message'=> 'updated successfully',
@@ -1670,6 +1888,15 @@ public function store_businesshours(Request $request){
 
     public function delete_modeofpayment($id){
             Modeofpayment::where('id', $id)->delete();
+
+            
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Delete mode of payment';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
         return response()->json([
             'status'=> 200,
             'message'=> 'updated successfully',
@@ -1690,7 +1917,49 @@ public function store_businesshours(Request $request){
         return view('reports.searchresult.appointment_result', compact('appointments'))->render();
     }
 
-    
+    public function index_pendinguser(Request $request){
+        
+        if ($request->ajax()) {
+            $data = DB::table('users')->where('status', 'pending')->orderby('created_at','desc');
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                        $btn = '<button class="verify btn btn-sm btn-primary" style="text-align:center" data-id="' . $row->id . '">Verify</button>';
+                        // $btn = $btn.'<button class="edit btn btn-sm btn-primary" style="margin-left: 5px; margin-right: 5px;" data-id="' . $row->id . '">Edit</button>';
+                        // $btn = $btn.'<button class="delete btn btn-sm btn-danger" data-id="' . $row->id . '">Delete</button>';
+                        // $size = '<div style="width: 150px; text-align:center">' . $btn . '</div>';                
+                            return $btn;
+                    })
+                    ->addColumn('fullname', function ($row){
+                        return $row->fname . ' ' . $row->lname;
+                    })
+ 
+                    ->rawColumns(['action', 'fullname'])
+                    
+                    ->make(true);
+        }
+        return view('admin.pendinguser');
+    }
+
+    public function update_pendinguser($id){
+
+        $user = User::where('id', $id)->first();
+        $user->status = "verified";
+        $user->save();
+
+        Mail::to($user->email)->send(new Approveaccount);
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Verify user';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+        
+        return response()->json($user->email);
+
+
+    }
     
 
 }

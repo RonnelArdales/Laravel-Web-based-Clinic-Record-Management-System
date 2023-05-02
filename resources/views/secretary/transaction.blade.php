@@ -20,12 +20,12 @@
 
           <div class="me-auto col-md-8 col-md-offset-5">
 
-            <h1>Transaction</h1>
+            <h1><b>TRANSACTION</b></h1>
             </div>
-                      <div class="alert success alert-success" role="alert" style="width:250px; right:25px; display:none;  position:fixed">
+                      <div class="alert success alert-success" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:999">
                           <p id="message-success"></p> 
                       </div>
-                      <div class="alert error alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed">
+                      <div class="alert error alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:999">
                           <p id="message-error"></p> 
                       </div>
                       <div class="loading" style="width:250px; right:25px; display:none; position:fixed">
@@ -132,7 +132,7 @@
                                               @endforeach
                                               @else
                                               <tr>
-                                                  <td colspan="9" style="text-align: center; height:280px ">No Service Found</td>
+                                                  <td colspan="9" style="text-align: center ">No Service Found</td>
                                                 </tr>
                                               @endif
                                           </tbody>
@@ -397,6 +397,17 @@
                     datatype: "json",
                     data: {transno : $('#getid').val() },
                     success: function(response){ //return galing sa function sa controller
+                        if(response.status == "400"){
+
+                            $('#message-error').text("");
+                            $('#message-error').text("Please add service");
+                            $(".error").show();
+                            setTimeout(function() {
+                                $(".error").fadeOut(500);
+                            }, 2000);
+                        
+                        }else{
+
                         get_maxid();
                         $('.subtotal').load(location.href+' .subtotal');
                             $('.data-table').load(location.href+' .data-table');
@@ -410,7 +421,8 @@
                             setTimeout(function() {
                                 $(".success").fadeOut(500);
                             }, 2000);
-                 
+
+                        }
                 }
             });
           });

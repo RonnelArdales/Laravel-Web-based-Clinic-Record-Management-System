@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\HelloMail;
 use App\Mail\SendOtp;
+use App\Models\AuditTrail;
 use App\Models\EmailOtp;
 use App\Models\User;
 use Carbon\Carbon;
@@ -17,30 +18,86 @@ class AuthController extends Controller
     public function verifyemail(){
         return view('auth.verify');
     }
+
+    public function verifyemail_auth(){
+        return view('auth.verifyauth');
+    }
+
     public function identify_email(){
         return view('auth.identify');
     }
 
     public function emailverifycode(Request $request){
+
+   
         $validated = $request->validate([
             'code' => ['required'],
         ],[
             'code.required' => 'Verification code is required',
         ]);
-       $emailverify = EmailOtp::where('email', '=',  Auth::user()->email)->where('verifycode' , '=', $request->input('code')) ->first();
+
+        if(Auth::check()){
+            $emailverify = EmailOtp::where('email', '=',  Auth::user()->email)->where('verifycode' , '=', $request->input('code')) ->first();
+        }else{
+            $emailverify = EmailOtp::where('email', '=',  $request->email)->where('verifycode' , '=', $request->input('code')) ->first();
+
+        }
+
+     
 
        if($emailverify){
             if($emailverify->expire_at > Carbon::now()){
-                User::where('id', Auth::user()->id)->update([
-                    'status' => 'active',
-                ]);
-                if(Auth::user()->usertype == 'active'){
-                    return redirect('admin/dashboard');
+
+                if(Auth::check()){
+                $user = User::where('id', Auth::user()->id)->first();
+                $user->emailstatus = 'verified';
+                $user->save();
+                if(Auth::user()->usertype == 'admin'){
+                    return redirect('admin/dashboard')  ;
                   }elseif(Auth::user()->usertype == 'patient'){
                     return redirect('patient/homepage');
                   }else{
                     return redirect('secretary/dashboard');
+                  }  
+                }else{
+                        $encrypt = bcrypt($request->input('password'));
+                        $user = new User();
+                        $user->fname = $request->input('first_name');
+                        $user->mname = $request->input('mname');
+                        $user->lname = $request->input('last_name');
+                        $user->birthday = $request->input('birthday');
+                        $user->age = $request->input('age');
+                        $user->address = $request->input('address');
+                        $user->gender = $request->input('gender');
+                        $user->mobileno = $request->input('mobile_number');
+                        $user->email = $request->input('email');
+                        $user->username = $request->input('username');
+                        $user->password = $encrypt;
+                        $user->usertype = 'patient'; //usertype
+                        $user->status = "pending";
+                        $user->emailstatus = "verified"; 
+                        $user->save();
+
+                        $audit_trail = new AuditTrail();
+                        $audit_trail->user_id = Auth::user()->id;
+                        $audit_trail->username = Auth::user()->username;
+                        $audit_trail->activity = 'Created an account';
+                        $audit_trail->usertype = Auth::user()->usertype;
+                        $audit_trail->save();
+
+                        $userauth = User::where('email','=', $request->input('email'))->first(); 
+                        auth()->login($userauth);
+
+
+                    if(Auth::user()->usertype == 'admin'){
+                    return redirect('admin/dashboard');
+                  }elseif(Auth::user()->usertype == 'patient'){
+                    return redirect('patient/homepage')->with('success', 'Your account is successfully created, wait for the administrator approval to used the full function of the system. Please check back later' );
+                  }else{
+                    return redirect('secretary/dashboard');
                   }
+                }
+
             }else{
                 return redirect()->back()->with('error', 'Verification code has expired ' );
             }
@@ -68,12 +125,11 @@ class AuthController extends Controller
              $otp = rand(10, 99999);
              $time = Carbon::now()->addMinute(5);
              EmailOtp::create([
-                'user_id' => $user->id,
                 'email' => $user->email,
                 'verifycode' => $otp,
                 'expire_at' =>$time,
              ]);
-             Mail::to('ronnelardales2192@gmail.com')->send(new SendOtp($otp));
+             Mail::to($user->email)->send(new SendOtp($otp));
              
              return redirect('/verifycode');
         }
@@ -91,16 +147,36 @@ class AuthController extends Controller
              $otp = rand(10, 99999);
              $time = Carbon::now()->addMinute(5);
              EmailOtp::create([
-                'user_id' => $user->id,
                 'email' => $user->email,
                 'verifycode' => $otp,
                 'expire_at' =>$time,
              ]);
-             Mail::to('ronnelardales2192@gmail.com')->send(new SendOtp($otp));
+             Mail::to($user->email)->send(new SendOtp($otp));
              
              return redirect()->back();
         }
         return redirect()->back()->with('error', 'Email not send, please try again' );
+        // return view('auth.passwords.confirm');
+        
+    }
+
+    public function resend_code_create($email){
+
+
+        // $user = User::where('email','=', Auth::user()->email)->first(); 
+        // if ($user) {
+             $otp = rand(10, 99999);
+             $time = Carbon::now()->addMinute(5);
+             EmailOtp::create([
+                'email' => $email,
+                'verifycode' => $otp,
+                'expire_at' =>$time,
+             ]);
+             Mail::to($email)->send(new SendOtp($otp));
+             
+             return redirect()->back();
+        // }
+        // return redirect()->back()->with('error', 'Email not send, please try again' );
         // return view('auth.passwords.confirm');
         
     }
@@ -127,16 +203,25 @@ class AuthController extends Controller
 
     public function update_password(Request $request){
         $validated = $request->validate([
-            'new_password' => ['required', 'string', 'min:6'],
+            'new_password' => ['required', 'min:8'],
         ], [
             'new_password.required' => 'Password is required',
-            'new_password.min' => 'Password is minimun of 6 characters',
+            'new_password.min' => 'Password is minimun of 8 characters',
         ]);
-                if($request->input('new_password') == $request->input('password_confirmation')){
+
                     $password = bcrypt($validated['new_password']);
                     User::where('id', Auth::user()->id)->update([
                         'password' => $password,
                     ]);
+
+                    $audit_trail = new AuditTrail();
+                    $audit_trail->user_id = Auth::user()->id;
+                    $audit_trail->username = Auth::user()->username;
+                    $audit_trail->activity = 'Change password';
+                    $audit_trail->usertype = Auth::user()->usertype;
+                    $audit_trail->save();
+
+
                     if(Auth::check()){
                         if(Auth::user()->usertype == 'admin'){
                             return redirect('admin/dashboard');
@@ -146,9 +231,7 @@ class AuthController extends Controller
                             return redirect('secretary/dashboard');
                           }
                     }
-                }else{
-                    return redirect()->back()->with('error', 'Password mismatch');
-                }
+            
     
     }
     public function show_reset(){

@@ -279,9 +279,16 @@ h1 {
                     <a class="nav-link active" aria-current="page" href="/patient/profile/">PROFILE </a>
                   </li>      
                   
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/patient/appointment/">BOOK NOW</a>
+                  @if (Auth::user()->status == 'pending')
+                  <li hidden class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/patient/appointment/">APPOINTMENT</a>
                   </li> 
+                  @else
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/patient/appointment/">APPOINTMENT</a>
+                  </li> 
+                  @endif
+                  
                   
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/patient/billing/">BILLING</a>
@@ -446,6 +453,9 @@ h1 {
             </div>
         </div>
       </footer> --}}
+
+      @yield('scripts')
+
 </body>
 
 

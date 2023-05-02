@@ -72,7 +72,7 @@
        
             <br>
             <label style="margin-top: 5px" for="">Primary diagnosis:</label>
-                <input type="text" style="width: 410px" class="addtocart_input" value="eme" id="findings" name="">
+                <input type="text" style="width: 400px" class="addtocart_input" value="" id="findings" name="primary_diag">
             </div>
         </div>
            

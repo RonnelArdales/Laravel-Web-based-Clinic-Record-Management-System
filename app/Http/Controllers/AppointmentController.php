@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\AuditTrail;
 use App\Models\BusinessHour;
 use App\Models\Modeofpayment;
 use App\Models\Reservationfee;
@@ -36,7 +37,7 @@ class AppointmentController extends Controller
         }
         $day = BusinessHour::select('day', 'off')->distinct()->get();
         $appointments = DB::table('appointments')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'appointment');
-        $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
+        $patients =  DB::table('users')->where('usertype', 'patient')->where('status', 'verified')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
         $services = Service::all();
         $mops = Modeofpayment::all();
         $fee = Reservationfee::select('reservationfee')->first();
@@ -249,6 +250,12 @@ class AppointmentController extends Controller
             $appointment->status = "pending";
             $appointment->save();
 
+            $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Create an appointment';
+            $audit_trail->usertype = Auth::user()->usertype;
+            $audit_trail->save();
             //send to patient
             // Mail::to('ronnelardales2192@gmail.com')->send(new patientbook);
       

@@ -66,7 +66,7 @@
       <div class="card-body " style="background:#EDDBC0; padding: 20px 30px ; border-radius: 5px;box-shadow:  4px 4px 2px rgba(0, 0, 0, 0.25)">
 <div class="d-flex justify-content-between">
   <h3>Basic information</h3>
-  <a style="border-radius:3px; padding-left:10px;padding-right:10px ; padding-top:10px;background-color: #829460; border:none; color:white; text-decoration:none" href="/admin/myprofile/edit">Edit</a>
+  <a style="border-radius:3px; padding-left:10px;padding-right:10px ; padding-top:10px;background-color: #829460; border:none; color:white; text-decoration:none" href="/secretary/myprofile/edit">Edit</a>
 </div>
        
 

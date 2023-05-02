@@ -3,7 +3,7 @@
 @section('content')
 <div class="row m-4">
     <div class="col-md-8 col-md-offset-5">
-      <h1>Appointment Report  </h1>
+      <h1> <B>APPOINTMENT REPORT</B> </h1>
     </div>
 
     <div style="margin-top: 15px; align-items:center;margin-bottom:1%;" >

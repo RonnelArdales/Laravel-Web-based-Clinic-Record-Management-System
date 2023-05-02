@@ -134,7 +134,7 @@
 <script>
        setTimeout(function() {
                                 $(".success").fadeOut(500);
-                            }, 3000);
+                            }, 4000);
 </script>
 
 @endsection

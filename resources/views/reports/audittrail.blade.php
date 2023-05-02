@@ -3,7 +3,7 @@
 @section('content')
 <div class="row m-4">
     <div class="col-md-8 col-md-offset-5">
- <h1>Audit trail  </h1>
+ <h1>  <b>AUDIT TRAIL</b> </h1>
     </div>
 
 

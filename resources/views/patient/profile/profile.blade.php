@@ -98,6 +98,7 @@ th, td{
   <thead style="background-color: burlywood">
     <tr  style=" position: relative;">
           <th style="text-align: center;" >Appointment Date</th>
+          <th style="text-align: center;">Document type</th>
           <th style="text-align: center;">File</th>
           <th style="text-align: center;">Action</th>
     </tr>
@@ -113,6 +114,7 @@ th, td{
         @foreach ($documents as $document)
         <tr>
           <td style="text-align: center;" >{{$document->appointment_date}}</td>
+          <td style="text-align: center;" >{{$document->documenttype}}</td>
           <td style="text-align: center;" >{{$document->filename}}</td>
           <td style="text-align: center;">
             <button style="text-align: center;" value="{{$document->id}}" class="view btn btn-primary">View</button>
@@ -161,8 +163,8 @@ th, td{
       @if ($appointment->status == "pending")
       <tr>
    
-          <td>{{$appointment->date}}</td>
-          <td>{{$appointment->time}}</td>
+          <td>{{ date('M d, Y', strtotime($appointment->date))}} </td>
+          <td>{{ date('h:i A', strtotime($appointment->time))}}</td>
           <td>{{$appointment->reservation_fee}}</td>
           <td>{{$appointment->mode_of_payment}}</td>
           <td>{{$appointment->status}}</td>
@@ -174,8 +176,8 @@ th, td{
       @else
       <tr>
 
-          <td>{{$appointment->date}}</td>
-          <td>{{$appointment->time}}</td>
+          <td>{{ date('M d, Y', strtotime($appointment->date))}}</td>
+          <td>{{ date('h:i A', strtotime($appointment->time))}}</td>
           <td>{{$appointment->reservation_fee}}</td>
           <td>{{$appointment->mode_of_payment}}</td>
           <td>{{$appointment->status}}</td>
@@ -197,10 +199,10 @@ th, td{
 
 {{-------------------------- cancel Appointment --------------------------------------}}
   <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="background: #EDDBC0;">
         <div class="modal-header" style="border-bottom-color: gray">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel </h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Hold on!</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -233,24 +235,31 @@ th, td{
           <div class="mb-4 pt-6  ">
               <div class=" columns-1 sm:columns-2">
                   <div  class="row">
-                      <div class="col-md-6">
+                    <div class="col-md-6">
 
-                          <label for="">Appointment id</label><br>
-                          <input type="text"  class="input" id="view_appointemntid"  style="width: 300px" name="appointment_id" readonly><br>
-                        
-                          <label style="margin-top:10px" for="">fullname</label><br>
-                          <input type="text" class="input" readonly  style="width: 300px" id="user_id" name="user_id" hidden>
-                          <input type="text" class="input" readonly   style="width: 300px" id="view_fullname" name="fullname">
-                       
-                      </div>
-  
-                      <div  class="col-md-6">
-  
-                      <label style="margin-top: 0px" for="">Appointment date</label><br>
-                      <input type="text" class="input" readonly style="width: 300px" id="view_date" name="date"><br>
-                      <label style="margin-top:13px" for="">Uploaded pdf</label><br>
-                      <input type="text"class="input" readonly   style="width: 300px" id="view_file" name="pdf"><br>
-                      </div>
+                      <label for="">Appointment id</label><br>
+                      <input type="text"  class="input" id="view_appointemntid"  style="width: 300px" name="appointment_id" readonly><br>
+                    
+                      <label style="margin-top:10px" for="">Fullname</label><br>
+                      <input type="text" class="input" readonly  style="width: 300px" id="user_id" name="user_id" hidden>
+                      <input type="text" class="input" readonly   style="width: 300px" id="view_fullname" name="fullname">
+
+                      <label style="margin-top: 10px" for="">Appointment date</label><br>
+                      <input type="text" class="input"  style="width: 300px" id="view_date" name="date"><br>
+                   
+                  </div>
+
+                  <div  class="col-md-6">
+                    
+                    <label style="margin-top: 0px" for="">Document Type</label><br>
+                    <input type="text" readonly class="input"  style="width: 300px" id="view_doc_file" name="date"><br>
+            
+                  <label style="margin-top:13px" for="">Uploaded pdf</label><br>
+                  <input type="text"class="input" readonly   style="width: 300px" id="view_file" name="pdf"><br>
+                  </div>
+
+
+                      
 
                       <div class="form-group" >
                           <label for="message-text" style="margin-top:20px"  class="col-form-label">Note:</label>
@@ -340,6 +349,7 @@ th, td{
                $('#view_appointemntid').val(response.document.appointment_id);
                $('#view_fullname').val(response.document.fullname);
                $('#view_date').val(response.document.appointment_date);
+               $('#view_doc_file').val(response.document.documenttype);
                $('#view_file').val(response.document.filename);
                $('#view_note').val(response.document.note);
                $('#fileview').append('  <a href="/patient/document/download/' + response.document.id+'" class=" p-2 w-30 bg-[#829460]  mt-7 " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; text-decoration:none; " >Download</a>\

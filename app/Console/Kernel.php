@@ -2,8 +2,13 @@
 
 namespace App\Console;
 
+use App\Mail\Appointmentreminder;
+use App\Mail\Bookappointment;
+use App\Models\Appointment;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,6 +21,17 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        $schedule->call(function () {
+            $appointments = Appointment::where('date', Carbon::tomorrow())->get();
+
+            foreach ($appointments as $appointment) {
+                $fullname = $appointment->fullname;
+                $time = $appointment->time;
+                Mail::to($appointment->email)->send(new Appointmentreminder($fullname, $time));
+            }
+            
+        })->daily();
     }
 
     /**

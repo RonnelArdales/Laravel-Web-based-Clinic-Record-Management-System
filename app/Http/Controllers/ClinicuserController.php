@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\SendVerifycode;
+use App\Models\AuditTrail;
 use App\Models\EmailOtp;
 use App\Models\User;
 use Carbon\Carbon;
@@ -29,10 +30,21 @@ class ClinicuserController extends Controller {
     //logout function
     public function logout(Request $request)
     {
+
+      $audit_trail = new AuditTrail();
+      $audit_trail->user_id = Auth::user()->id;
+      $audit_trail->username = Auth::user()->username;
+      $audit_trail->activity = 'Logout';
+      $audit_trail->usertype = Auth::user()->usertype;
+      $audit_trail->save();
+
         auth()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('login');
+
+    
+
+        return redirect('/login');
 
     }
 
@@ -59,32 +71,44 @@ class ClinicuserController extends Controller {
               $user = User::where('email','=', $email)->first(); 
               if($user){
                 if(Hash::check($request->password, $user->password)){
-             
-                  if($user->status == 'active'){
-                    auth()->login($user);
-                        if($user->usertype == 'admin'){
-                          return redirect('admin/dashboard');
-                        }elseif($user->usertype == 'patient'){
-                          return redirect('patient/homepage');
-                        }else{
-                          return redirect('secretary/dashboard');
-                        }
-                  }elseif($user->status == 'not verified'){
-                    auth()->login($user);
-                    $otp = rand(10, 99999);
-                    $time = Carbon::now()->addMinute(5);
-                         EmailOtp::create([
-                            'user_id' => Auth::user()->id,
-                            'email' =>  Auth::user()->email,
-                            'verifycode' => $otp,
-                            'expire_at' => $time ,
-                         ]); 
-                         //create ng bagong user account dahil crypt ng nagamit
-                         Mail::to('ronnelardales2192@gmail.com')->send(new SendVerifycode($otp));
-                      return redirect('/verify-email');
-                  }else{
-                    return redirect('/')->with('error', 'Password not matches' );
-                  }
+
+                 if($user->status == 'inactive'){
+                 return  redirect()->back()->with('error', 'Your account has been inactive, please contact the admin');
+                          
+                  }else {
+                    if($user->emailstatus == 'unverified'){
+                      auth()->login($user);
+                      $otp = rand(10, 99999);
+                      $time = Carbon::now()->addMinute(5);
+                      EmailOtp::create([
+                      'email' =>  Auth::user()->email,
+                      'verifycode' => $otp,
+                      'expire_at' => $time ,
+                            ]); 
+                      Mail::to(Auth::user()->email)->send(new SendVerifycode($otp));
+                      return redirect('/verify-email-auth');
+                    }else{
+                         auth()->login($user);
+
+
+                         $audit_trail = new AuditTrail();
+                         $audit_trail->user_id = Auth::user()->id;
+                         $audit_trail->username = Auth::user()->username;
+                         $audit_trail->activity = 'Login';
+                         $audit_trail->usertype = Auth::user()->usertype;
+                         $audit_trail->save();
+
+                 
+
+                              if($user->usertype == 'admin'){
+                              return redirect('admin/dashboard');
+                              }elseif($user->usertype == 'patient'){
+                              return redirect('patient/homepage');
+                              }else{
+                              return redirect('secretary/dashboard');
+                              }
+                    }
+                 }
                 }else{
                   return redirect()->back()->with('error', 'Password not matches' );
                 }
@@ -125,34 +149,68 @@ class ClinicuserController extends Controller {
           'password.confirmed' => 'Password did not match',
         ]);
 
-            $encrypt = bcrypt($request->input('password'));
-            $user = new User();
-            $user->fname = $request->input('first_name');
-            $user->mname = $request->input('mname');
-            $user->lname = $request->input('last_name');
-            $user->birthday = $request->input('birthday');
-            $user->age = $request->input('age');
-            $user->address = $request->input('address');
-            $user->gender = $request->input('gender');
-            $user->mobileno = $request->input('mobile_number');
-            $user->email = $request->input('email');
-            $user->username = $request->input('username');
-            $user->password = $encrypt;
-            $user->usertype = 'patient'; //usertype
-            $user->status = "not verified";
-            $user->save();
-        $userauth = User::where('email','=', $request->input('email'))->first(); 
-        auth()->login($userauth);
+        // $userinfo = array( 'first_name' => $request->input('first_name'),
+        //                   'mname' => $request->input('mname'),
+        //                   'last_name' => $request->input('last_name'),
+        //                   'birth_date' => $request->input('birthday'),
+        //                   'age' => $request->input('age'),
+        //                   'address' => $request->input('address'),
+        //                   'gender' => $request->input('gender'),
+        //                   'mobile_number' => $request->input('mobile_number'),
+        //                   'email' => $request->input('email'),
+        //                   'username' => $request->input('username'),
+        //                   'password' => $request->input('password'),
+        //                   'usertype' => 'patient',
+        //                   'status' => 'pending',
+        //                 );
+
+          session(['first_name' => $request->input('first_name'),
+          'mname' => $request->input('mname'),
+          'last_name' => $request->input('last_name'),
+          'birthday' => $request->input('birthday'),
+          'age' => $request->input('age'),
+          'address' => $request->input('address'),
+          'gender' => $request->input('gender'),
+          'mobile_number' => $request->input('mobile_number'),
+          'email' => $request->input('email'),
+          'username' => $request->input('username'),
+          'password' => $request->input('password'),
+          'usertype' => 'patient',
+          'status' => 'pending',
+          'emailstatus' => "unverified", 
+                      ]);
+          //   $billinginfo = array(
+          //     'modeofpayment' => "Gcash",
+          // );
+        //     $encrypt = bcrypt($request->input('password'));
+        //     $user = new User();
+        //     $user->fname = $request->input('first_name');
+        //     $user->mname = $request->input('mname');
+        //     $user->lname = $request->input('last_name');
+        //     $user->birthday = $request->input('birthday');
+        //     $user->age = $request->input('age');
+        //     $user->address = $request->input('address');
+        //     $user->gender = $request->input('gender');
+        //     $user->mobileno = $request->input('mobile_number');
+        //     $user->email = $request->input('email');
+        //     $user->username = $request->input('username');
+        //     $user->password = $encrypt;
+        //     $user->usertype = 'patient'; //usertype
+        //     $user->status = "pending";
+        //     $user->emailstatus = "unverified"; //emailstatus
+        //     $user->save();
+
+        // $userauth = User::where('email','=', $request->input('email'))->first(); 
+        // auth()->login($userauth);
         $otp = rand(10, 99999);
         $time = Carbon::now()->addMinute(5);
              EmailOtp::create([
-                'user_id' => Auth::user()->id,
-                'email' =>  Auth::user()->email,
+                'email' =>  $request->input('email'),
                 'verifycode' => $otp,
                 'expire_at' => $time ,
              ]); 
-             //create ng bagong user account dahil crypt ng nagamit
-             Mail::to('ronnelardales2192@gmail.com')->send(new SendVerifycode($otp));
-        return redirect('/verify-email');
+            Mail::to($request->input('email'))->send(new SendVerifycode($otp));
+
+            return redirect('/verify-email');
     }
 }

@@ -50,7 +50,7 @@ padding-top: 18px;
 <body >
 
 <header  style="width:100%; text-align: center;" >
-  <img class="border border-dark" style="height: 90px; width:530px" src="{{ "data:image/png;base64,".base64_encode(file_get_contents(public_path('logo/report-logo.png'))) }}">
+  <img class="border border-dark" style="height: 80px; width:515px" src="{{ "data:image/png;base64,".base64_encode(file_get_contents(public_path('logo/report-logo.png'))) }}">
 <hr style="width:100%; border:solid; margin-top:10px;margin-bottom:10px ;padding:0px" >
 </header>
 

@@ -15,15 +15,14 @@
 <div style="margin-top: 3px; align-items:center; display:flex; margin-bottom:1%;" >
 	<div class="me-auto col-md-8 col-md-offset-5">
 
-	<h1>Appointment  </h1>
+    <h1> <b>APPOINTMENT</b> </h1>
 	</div>
     <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" type="button" class="btn btn-primary ml-6 show-create" >
 	Create
     </button>
     </div>
 
-
-<div class="main-spinner" style="
+    <div class="main-spinner" style="
 	  position:fixed;
 		width:100%;
 		left:0;right:0;top:0;bottom:0;
@@ -475,7 +474,7 @@
       <td >
         <div class="col-sm  justify-content-center" style="text-align: center; margin-right:5px;" >
           <p style="margin-bottom: 10px">Not available</p>
-          <div  style="height: 30px;margin-left:30%  ;width:30px; background-color: #DDDDDD;  text-align: center;" >
+          <div  style="height: 30px;margin-left:30%  ;width:30px; background-color:#cc6666;;  text-align: center;" >
 
           </div>
         </div>
@@ -806,12 +805,13 @@
                 data: {status:status},
                 datatype: "json",
                 beforeSend: function(){
-                    $(".spinner").show();
-                },
-                complete: function(){
-				$('#cancel-confirmation').modal('hide');
-                    $(".spinner").hide();
-                },
+              
+              $(".main-spinner").show();
+          },
+          complete: function(){
+            $('#cancel-confirmation').modal('hide');
+              $(".main-spinner").hide();
+          },
                 success: function(response){ 
 				console.log(response);
                   $('#success').html();
@@ -900,43 +900,43 @@
             selectHelper: true,
             viewRender: function(view, element,) {
       if(day_off.includes("0")){
-              $('.fc-day.fc-sun').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-sun').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("1")){
-              $('.fc-day.fc-mon').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-mon').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("2")){
-              $('.fc-day.fc-tue').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-tue').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("3")){
-              $('.fc-day.fc-wed').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-wed').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("4")){
-              $('.fc-day.fc-thu').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-thu').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("5")){
-              $('.fc-day.fc-fri').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-fri').css('backgroundColor', '#829460');
       }
 
       if(day_off.includes("6")){
-              $('.fc-day.fc-sat').css('backgroundColor', '#D9D9D9');
+              $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
       }else{
         $('.fc-day.fc-sat').css('backgroundColor', '#829460');
       }
@@ -1087,6 +1087,7 @@
         $('#mode_payment').on('change', function(e){
           e.preventDefault();
           var payment = $(this).val();
+          $('#error_modepayment, #error_payment, #error_reference_no').html(" ");
           $('#payment_cash, #change, #reference_no').val(" ");
 
             if(payment == "Cash"){
