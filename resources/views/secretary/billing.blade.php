@@ -37,7 +37,7 @@
                                     <th>Trans no.</th>
                                     <th >User ID</th>
                                     <th>Fullname</th>
-                                    <th>Sub-total</th>
+                                    <th>Total</th>
                                     <th>Status</th>
                                     <th style="width: 230px">Action</th>
                                 </tr>
@@ -202,7 +202,7 @@
 		{data: 'transno', name: 'transno' , orderable: false, searchable: false},
             {data: 'user_id', name: 'user_id' , orderable: false, searchable: false},
 		  {data: 'fullname', name: 'fullname' , orderable: false},
-		  {data: 'sub_total', name: 'sub_total' , orderable: false, searchable: false},
+		  {data: 'total', name: 'total' , orderable: false, searchable: false},
 		  {data: 'status', name: 'status' , orderable: false, searchable: false},
           {data: 'action', name: 'action', orderable: false, searchable: false},
 
@@ -345,7 +345,7 @@
                         $('#payment').modal('hide');
                         $('#payment_cash, #change, #reference_no').val(" ");
                         $('#cash').hide();
-                        $('#gcash').show();   
+                        $('#gcash').hide();   
                         }
                     }
 
@@ -516,15 +516,14 @@ console.log(id);
         $('#mode_payment').on('change', function(e){
             var payment = $(this).val();
 
-            if(payment == "Gcash"){
-                $('#cash').hide();
-                $('#gcash').show();
-            }else if (payment == "Cash"){
+            $('#payment_cash, #reference_no').val(" ");
+            $(' #error_payment, #error_reference_no').html(' ');
+            if(payment == "Cash"){
                 $('#cash').show();
                 $('#gcash').hide();
             }else{
                 $('#cash').hide();
-                $('#gcash').hide();
+                $('#gcash').show();
             }
         });
 

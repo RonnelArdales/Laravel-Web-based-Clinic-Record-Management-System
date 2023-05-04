@@ -31,7 +31,7 @@
 @else
     <img style=" border-radius:100%;height:150px; width:150px;box-shadow: -10px 0px 0px 5px  #829460;"  src="{{url('profilepic/' . Auth::user()->profile_pic )}}" alt="">
 @endif
-<form style="margin-top:15px" action="/admin/myprofile/picture/update/{{Auth::user()->id}}" method="POST" enctype="multipart/form-data">
+<form style="margin-top:15px" action="/secretary/myprofile/picture/update/{{Auth::user()->id}}" method="POST" enctype="multipart/form-data">
   @csrf
 
 <input type="file" name="profilepic"  style="width:180px ; "  >  

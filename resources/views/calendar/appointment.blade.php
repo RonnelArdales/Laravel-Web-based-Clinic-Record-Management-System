@@ -141,6 +141,30 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="errormodal" tabindex="-1" role="alert" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: #EDDBC0;">
+      <div class="modal-header" style="border-bottom-color: #EDDBC0;">
+      </div>
+      <div class="modal-body">
+          <div class="mb-5 mt-5  ">
+              <div class=" columns-1 sm:columns-2">
+              <h3   id="errormessage"  style="text-align: center" ></h3>
+      </div>
+      </div>
+      <div class="modal-footer" style="border-top-color: gray">
+        <button class="cancel_appointment "  data-bs-dismiss="modal"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
 </div>
 
 <script>
@@ -218,13 +242,7 @@
       $('.fc-day.fc-today').css('backgroundColor', 'white');
     },
 
-    // eventRender: function(event, element) {
-    //     // if (event.start.format('w') ==  1 ) { // check if it's your specific date
-    //     //     // element.css('backgroundColor', 'black'); // change the background color
-    //     //     //       $('.fc-day.fc-sat').css('backgroundColor', 'red');
-    //     // alert();
-    //     // }
-    // },
+
 
     dayRender: function (date, cell) {
     // Get the current date
@@ -292,11 +310,25 @@ let formattedDate = `${year}-${month}-${day}`;
                             $('#available-time').empty()
                             $('#available-time').append('<option value="0" disabled selected></option>')
                             if(response.status == "405"){
-                                $('#message-error').text(response.message);
-                            $(".error").show();
-                            setTimeout(function() {
-                                $(".error").fadeOut(500);
-                            }, 3000);
+                            //     $('#message-error').text(response.message);
+                            // $(".error").show();
+                            // setTimeout(function() {
+                            //     $(".error").fadeOut(500);
+                            // }, 3000);
+
+                            // Swal.fire({
+                            //       title: 'error!',
+                            //       text: response.message,
+                            //       icon: 'error',
+                            //       confirmButtonText: 'OK',
+                            //       confirmButtonColor: '#829460',
+                            //       confirmButtonBorder: '#829460',
+                            //   });
+                        
+                            $('#errormodal').modal('show');
+                            $('#errormessage').text(" ");
+                            $('#errormessage').text(response.message);
+                            
                             
                             }else{
                             
@@ -366,19 +398,48 @@ let formattedDate = `${year}-${month}-${day}`;
             var services = $('#services').val();
             if($('#agree').is(":checked")){
                   if(date.length === 0 ){
-                    $(".error").hide();
-                    $('#message-error').text("Please select date in calendar");
-                    $(".error").show();
-                    setTimeout(function() {
-                            $(".error").fadeOut(500);
-                    }, 3000);   
+                    // $(".error").hide();
+                    // $('#message-error').text("Please select date in calendar");
+                    // $(".error").show();
+                    // setTimeout(function() {
+                    //         $(".error").fadeOut(500);
+                    // }, 3000);   
+                    // Swal.fire({
+                    //               title: 'Error!',
+                    //               text: 'Please select date in calendar.' ,
+                    //               icon: 'error',
+                    //               confirmButtonText: 'OK',
+                    //               confirmButtonColor: '#829460',
+                    //               confirmButtonBorder: '#829460',
+                    //           });
+
+                    $('#errormodal').modal('show');
+                            $('#errormessage').text(" ");
+                            $('#errormessage').text('Please select date in calendar.');
+                            
+                            
+                    
                   }else if(time == null){
-                    $(".error").hide();
-                    $('#message-error').text("Please select available time");
-                    $(".error").show();
-                    setTimeout(function() {
-                            $(".error").fadeOut(500);
-                    }, 3000); 
+                    // $(".error").hide();
+                    // $('#message-error').text("Please select available time");
+                    // $(".error").show();
+                    // setTimeout(function() {
+                    //         $(".error").fadeOut(500);
+                    // }, 3000); 
+                    // Swal.fire({
+                    //               title: 'Error!',
+                    //               text: 'Please select available time.' ,
+                    //               icon: 'error',
+                    //               confirmButtonText: 'OK',
+                    //               confirmButtonColor: '#829460',
+                    //               confirmButtonBorder: '#829460',
+                    //           });
+
+                    
+                    $('#errormodal').modal('show');
+                            $('#errormessage').text(" ");
+                            $('#errormessage').text('Please select available time.');
+                    
                   }else{
                     $('#form-dateselected, #form-timeselected').val("");
                     $('#form-dateselected').val($('#date').val());
@@ -387,12 +448,26 @@ let formattedDate = `${year}-${month}-${day}`;
                   }
             }
             else{
-                $(".error").hide();
-                $('#message-error').text("Please read and accept the terms and condition to proceed.");
-                $(".error").show();
-                setTimeout(function() {
-                        $(".error").fadeOut(500);
-                }, 3000);        
+                // $(".error").hide();
+                // $('#message-error').text("Please read and accept the terms and condition to proceed.");
+                // $(".error").show();
+                // Swal.fire({
+                //                   title: 'Error!',
+                //                   text: 'Please read and accept the terms and condition to proceed.' ,
+                //                   icon: 'error',
+                //                   confirmButtonText: 'OK',
+                //                   confirmButtonColor: '#829460',
+                //                   confirmButtonBorder: '#829460',
+                //               });
+                // setTimeout(function() {
+                //         $(".error").fadeOut(500);
+                // }, 3000);      
+                  
+                $('#errormodal').modal('show');
+                            $('#errormessage').text(" ");
+                            $('#errormessage').text('Please read and accept the terms and condition to proceed.');
+                            
+                            
             }
 
         });

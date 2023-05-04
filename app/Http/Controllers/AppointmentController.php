@@ -21,15 +21,6 @@ class AppointmentController extends Controller
 //--------------- show tables -------------------------//
 
     public function appointment_show(Request $request){
-        // $female = Appointment::where('service', 'Diagnostic')->whereHas('user' , function($query){
-        //     $query->where('gender', 'Female');
-        // })->with('user')->get()->count(); 
-        // $male = Appointment::where('service', 'Diagnostic')->whereHas('user' , function($query){
-        //     $query->where('gender', 'Male');
-        // })->with('user')->get()->count(); 
-        // $total =     $male = Appointment::select('service')->whereHas('user' , function($query){
-        //     $query->where('gender', 'Male');
-        // })->get()->count(); 
         $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
         $day_array = [];
         foreach($days as $day){

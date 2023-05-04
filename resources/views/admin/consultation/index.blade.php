@@ -1,5 +1,5 @@
 @extends('layouts.admin_navigation')
-
+@section('title', 'Consultation')
 @section('content')
 <style>
   label{

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ClinicuserController extends Controller {
 
@@ -103,7 +104,10 @@ class ClinicuserController extends Controller {
                               if($user->usertype == 'admin'){
                               return redirect('admin/dashboard');
                               }elseif($user->usertype == 'patient'){
-                              return redirect('patient/homepage');
+
+                                // Alert::success('success Title', 'Success Message');
+
+                              return redirect('patient/homepage')->with('success', 'Your account is successfully created, wait for the administrator approval to used the full function of the system. Please check back later' );
                               }else{
                               return redirect('secretary/dashboard');
                               }

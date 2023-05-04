@@ -8,15 +8,19 @@ use App\Models\AuditTrail;
 use App\Models\EmailOtp;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Console\Input\Input;
+use Twilio\Rest\Client;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthController extends Controller
 {
     public function verifyemail(){
         return view('auth.verify');
+      
     }
 
     public function verifyemail_auth(){
@@ -38,79 +42,83 @@ class AuthController extends Controller
 
         if(Auth::check()){
             $emailverify = EmailOtp::where('email', '=',  Auth::user()->email)->where('verifycode' , '=', $request->input('code')) ->first();
+
+            if($emailverify){
+                if($emailverify->expire_at > Carbon::now()){
+        
+                $user = User::where('id', Auth::user()->id)->first();
+                        $user->emailstatus = 'verified';
+                        $user->save();
+                        if(Auth::user()->usertype == 'admin'){
+                            return redirect('admin/dashboard')  ;
+                          }elseif(Auth::user()->usertype == 'patient'){
+                            return redirect('patient/homepage');
+                          }else{
+                            return redirect('secretary/dashboard');
+                          }  
+                }else{
+                    return redirect()->back()->with('error', 'Verification code has expired ' );
+                }
+               }else{
+                return redirect()->back()->with('error', 'Incorrect verification code' );
+               }
+
         }else{
             $emailverify = EmailOtp::where('email', '=',  $request->email)->where('verifycode' , '=', $request->input('code')) ->first();
 
+            if($emailverify){
+                if($emailverify->expire_at > Carbon::now()){
+        
+                    $encrypt = bcrypt($request->input('password'));
+                    $user = new User();
+                    $user->fname = $request->input('first_name');
+                    $user->mname = $request->input('mname');
+                    $user->lname = $request->input('last_name');
+                    $user->birthday = $request->input('birthday');
+                    $user->age = $request->input('age');
+                    $user->address = $request->input('address');
+                    $user->gender = $request->input('gender');
+                    $user->mobileno = $request->input('mobile_number');
+                    $user->email = $request->input('email');
+                    $user->username = $request->input('username');
+                    $user->password = $encrypt;
+                    $user->usertype = 'patient'; //usertype
+                    $user->status = "pending";
+                    $user->emailstatus = "verified"; 
+                    $user->save();
+
+                    $userauth = User::where('email','=', $request->input('email'))->first(); 
+                    auth()->login($userauth);
+
+                    $audit_trail = new AuditTrail();
+                    $audit_trail->user_id = Auth::user()->id;
+                    $audit_trail->username = Auth::user()->username;
+                    $audit_trail->activity = 'Created an account';
+                    $audit_trail->usertype = Auth::user()->usertype;
+                    $audit_trail->save();
+
+          
+
+
+                if(Auth::user()->usertype == 'admin'){
+                return redirect('admin/dashboard');
+              }elseif(Auth::user()->usertype == 'patient'){
+                // Alert::success('Created Successfully', 'Your account is successfully created, wait for the administrator approval to used the full function of the system. Please check back later');
+                return redirect('patient/homepage')->with('success', 'Your account is successfully created, wait for the administrator approval to used the full function of the system. Please check back later' );
+              }else{
+                return redirect('secretary/dashboard');
+              }
+                }else{
+                    return redirect()->back()->with('error', 'Verification code has expired ' );
+                }
+               }else{
+                return redirect()->back()->with('error', 'Incorrect verification code' );
+               }
+   
+         
         }
 
-     
 
-       if($emailverify){
-            if($emailverify->expire_at > Carbon::now()){
-
-                if(Auth::check()){
-                $user = User::where('id', Auth::user()->id)->first();
-                $user->emailstatus = 'verified';
-                $user->save();
-                if(Auth::user()->usertype == 'admin'){
-                    return redirect('admin/dashboard')  ;
-                  }elseif(Auth::user()->usertype == 'patient'){
-                    return redirect('patient/homepage');
-                  }else{
-                    return redirect('secretary/dashboard');
-                  }  
-                }else{
-                        $encrypt = bcrypt($request->input('password'));
-                        $user = new User();
-                        $user->fname = $request->input('first_name');
-                        $user->mname = $request->input('mname');
-                        $user->lname = $request->input('last_name');
-                        $user->birthday = $request->input('birthday');
-                        $user->age = $request->input('age');
-                        $user->address = $request->input('address');
-                        $user->gender = $request->input('gender');
-                        $user->mobileno = $request->input('mobile_number');
-                        $user->email = $request->input('email');
-                        $user->username = $request->input('username');
-                        $user->password = $encrypt;
-                        $user->usertype = 'patient'; //usertype
-                        $user->status = "pending";
-                        $user->emailstatus = "verified"; 
-                        $user->save();
-
-                        $audit_trail = new AuditTrail();
-                        $audit_trail->user_id = Auth::user()->id;
-                        $audit_trail->username = Auth::user()->username;
-                        $audit_trail->activity = 'Created an account';
-                        $audit_trail->usertype = Auth::user()->usertype;
-                        $audit_trail->save();
-
-                        $userauth = User::where('email','=', $request->input('email'))->first(); 
-                        auth()->login($userauth);
-
-
-                    if(Auth::user()->usertype == 'admin'){
-                    return redirect('admin/dashboard');
-                  }elseif(Auth::user()->usertype == 'patient'){
-                    return redirect('patient/homepage')->with('success', 'Your account is successfully created, wait for the administrator approval to used the full function of the system. Please check back later' );
-                  }else{
-                    return redirect('secretary/dashboard');
-                  }
-                }
-
-            }else{
-                return redirect()->back()->with('error', 'Verification code has expired ' );
-            }
-       }else{
-        return redirect()->back()->with('error', 'Incorrect verification code' );
-       }
-
-
-    //    if($emailverify->expire_at > Carbon::now()){
-    //     return redirect('/resetpage');
-    // }else{
-    //   
-    // }
     }
 
     public function confirm_email(Request $request){
@@ -236,6 +244,31 @@ class AuthController extends Controller
     }
     public function show_reset(){
         return view('auth.passwords.reset');
+    }
+
+
+    public function sendsms(){
+
+        $receiverNumber = "+63 993 619 4046";
+        $message = "hello";
+
+        try {
+  
+            $account_sid = getenv("TWILIO_SID");
+            $auth_token = getenv("TWILIO_TOKEN");
+            $twilio_number = getenv("TWILIO_FROM");
+  
+            $client = new Client($account_sid, $auth_token);
+            $client->messages->create($receiverNumber, [
+                'from' => $twilio_number, 
+                'body' => $message]);
+  
+            dd('SMS Sent Successfully.');
+  
+        } catch (Exception $e) {
+            dd("Error: ". $e->getMessage());
+        }
+
     }
 
 }

@@ -1,5 +1,5 @@
 @extends('layouts.admin_navigation')
-
+@section('title', 'Transaction')
 @section('content')
 <style>
   label{
@@ -153,77 +153,42 @@
 
             {{--------------- View patients ---------------------}}
 
-                  <div class="modal fade viewpatients " id="viewpatients" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-xl">
-                      <div class="modal-content viewbody" style="background: #EDDBC0;">
-
-                        <!-- Modal Header -->
-                        <div class="modal-header" style="border-bottom-color: gray">
-                          <h4 class="modal-title">Patients</h4>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                      <!-- Modal body -->
-                      <div class="modal-body " >
-                        <i class="fa fa-search"></i>
-                        <input type="text" name="fullname_patient" id="fullname_patient" placeholder="search" style="font-family:Poppins;font-size:1.1vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; margin-bottom:10px"> 
-                    <input type="text" hidden class="modal-status" id="modal-status">
-                        <div class="patient patient-remove overflow-auto container-fluid" style="height:380px" >
-                          <table class="table table-bordered table-striped" >
-
-                              <thead>
-                                  <tr>
-                                      <th>id</th>
-                                      <th>First name</th>
-                                      <th>Middle name</th>
-                                      <th>Last name</th> 
-                                      <th>Address</th>
-                                      <th>Gender</th>
-                                      <th>Mobile no.</th>
-                                      <th>Email</th>
-                                      <th>Action</th>
-                                  </tr>
-                              </thead>
-                              <tbody class="nofound" >
-                                @if (count($patients) > 0)
-                                @foreach ($patients as $user)
-                                <tr class="overflow-auto">
-                            
-                                    <td>{{$user->id}}</td>
-                                    <td>{{$user->fname}}</td>
-                                    <td>{{$user->mname}}</td>
-                                    <td>{{$user->lname}}</td>
-                                    <td>{{$user->address}}</td>
-                                    <td>{{$user->gender}}</td>
-                                    <td>{{$user->mobileno}}</td>
-                                    <td>{{$user->email}}</td>
-                              
-                                    <td>
-                                    <button type="button" value="{{$user->id}}" style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " class="select btn2 btn btn-primary ">Select</button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                                @else
-                                <tr>
-                                  <div>
-                                    <td colspan="4" style="text-align: center;">no user Found</td>
-                                  </div>
-                                </tr>
-                                @endif
-                                
-                              </tbody>
-                          </table>
-                          <div style="">
-                            {!! $patients->links() !!}
-                        </div>
-                        </div>
-                    <div class="modal-footer w-5" style="position:absolute; bottom:1%; width:97% ;border-top-color: gray" >
-                      <button type="button" class="  " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
+            <div class="modal fade viewpatients " id="viewpatients" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                  <div class="modal-content viewbody" style="background: #EDDBC0;">
+              
+                    <!-- Modal Header -->
+                    <div class="modal-header" style="border-bottom-color: gray">
+                      <h4 class="modal-title">Patients</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
+                    <div class="modal-body " >
+                      <div class="patient patient-remove overflow-auto container-fluid" style="height:420px" >
+                        <table class="table table-bordered users table-striped" id="users"  style="background-color: white; width:100%" >
+              
+                          <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>fullname</th>
+                                <th>Gender</th>
+                                <th>Age</th> 
+                                <th >Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="nofound" >
+                        
+                        </tbody>
+              
+                        </table>
+                      </div>    
+              
+                  <div class="modal-footer w-5" style="position:absolute; bottom:1%; width:97% ;border-top-color: gray" >
+                    <button type="button" class="  " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
                   </div>
-                      </div>
-                    </div>
+                </div>
                   </div>
+                </div>
+              </div>
                 
 
   </div>
@@ -241,6 +206,40 @@
                             $(".success").show();
                         }, 500);
       }
+
+
+      var usertable = null;
+  
+  $('.viewpatients').on('shown.bs.modal', function() {
+    if (!usertable) {
+              usertable =  $('#users').DataTable({
+                "ajax": "/admin/appointment/show_user",
+                processing: true,
+                serverSide: true,
+                dom: 'frtp',
+                pageLength: 6,
+                responsive: true,
+                "columns": [
+                  {data: 'id', name: 'id' , orderable: false, searchable: false},
+                          {data: 'fullname', name: 'fullname' , orderable: false},
+                          {data: 'gender', name: 'gender' , orderable: false},
+                          {data: 'age', name: 'age' , orderable: false},
+                          { width: "10%",data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+          }else{
+          
+      usertable.ajax.reload();
+ 
+          }
+          });
+
+          $('.viewpatients').on('hidden.bs.modal', function() {
+    if (usertable) {
+      usertable.destroy();
+      usertable = null;
+    }
+  });
 
         // ------ get max biling no --------------//
         function get_maxid(){
@@ -267,9 +266,9 @@
         })
 
         //------------------ Select patient info -------------------//
-                $(document).on('click', '.select', function(e){
+        $('#users').on('click', '.select', function(e){
             e.preventDefault();
-            var id = $(this).val();
+            var id = $(this).data('id');
             $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -429,11 +428,8 @@
             });
           });
 
-        // ------------------- close patient modal ----------------//
-        $(".viewpatients").on("hidden.bs.modal", function(e){
-          e.preventDefault();
-        $('.patient-remove').load(location.href+' .patient-remove');
-        });
+
+
 
         $(document).on('click', '.delete', function(e){
             e.preventDefault();

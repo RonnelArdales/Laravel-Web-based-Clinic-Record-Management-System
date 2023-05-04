@@ -9,13 +9,14 @@
         "barryvdh/laravel-dompdf": "^2.0",
         "doctrine/dbal": "^3.6",
         "elibyy/tcpdf-laravel": "^10.0",
-        "guzzlehttp/guzzle": "^7.2",
         "humans/semaphore-sms": "^4.0",
         "laravel/framework": "^9.19",
         "laravel/helpers": "^1.6",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
+        "realrashid/sweet-alert": "^7.0",
+        "twilio/sdk": "^7.3",
         "yajra/laravel-datatables-oracle": "^10.4"
     },
     "require-dev": {

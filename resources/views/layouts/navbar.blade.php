@@ -14,15 +14,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Gujarati:wght@700&family=Poppins:wght@400;700&family=Song+Myung&display=swap" rel="stylesheet">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>@yield('title',)</title>
     <link rel="icon"  href="{!! asset('logo/icon.ico') !!}"/>
 </head>
 <style>
 
-  /* .fc-widget-content{
-    background-color: #829460;
-  } */
+.swal2-popup {
+
+height: auto;
+background-color: #EDDBC0;
+}
+
+
 
   
   /* .billing-cancel{
@@ -257,9 +261,6 @@ h1 {
                   <li class="nav-item">
                     <a class="nav-link active" href="/patient/about_us">ABOUT US</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link active" href="/contactus">CONTACT US</a>
-                  </li>
                   @else
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/">HOME</a>
@@ -267,9 +268,7 @@ h1 {
               <li class="nav-item">
                 <a class="nav-link active" href="/about_us">ABOUT US</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="/contactus">CONTACT US</a>
-              </li>
+
               @endif
     
       
@@ -391,68 +390,10 @@ h1 {
 <!-- Grid container -->
 </footer>
 
-      {{-- <footer style="padding:30px">
-        <div class="container-fluid row" >
-          
-              <div class="col-sm" style="text-align:center;">
-                <p style="font-weight: 700; font-size: 1.5vw;">ADDRESS</p>
-                <p style="font-size: 1.1vw">2nd Flr. Everlasting Bldg., #172 Rizal Avenue, Brgy. San Isidro, Taytay, Philippines</p>
-              </div>
-              <div class="col-sm " style="text-align:center;">
-                <p style=" font-weight: 700;font-size: 1.5vw;">CONTACT US</p> 
-                <p style="font-size: 1.1vw">09171732844 - GLOBE <br>
-                  090983992102 - SMART
-                </p>
-              </div>
-          
-   
-          <div class="col-sm " style="text-align:center;">
-            <p style="font-weight: 700;font-size: 1.5vw;">EMAIL US</p>
-            <p style="font-size: 1.1vw">jgmarquez.psych@gmail.com</p>
-          </div>
-          <div class="col-sm " style="text-align:center;">
-            <p style="font-weight: 700;font-size: 1.5vw;">SOCIAL MEDIA</p>
-            
-            <div class="social" style="margin:0%; padding:0%;">
-                <a href="https://www.facebook.com/jgmarquezpsych"> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_6_et05wg.png" alt=""> </a>
-                <a href="https://www.instagram.com/jgmarquezpsych/?igshid=YmMyMTA2M2Y%3D&fbclid=IwAR2e7HVw8Gctwx_ctM0Tkhue3PqgGg-UJuEY8e7ssLyEbtip0Y3YSeqIgWA"> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_4_dicjnk.png" alt=""> </a>
-                <a href=""> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_5_gjmers.png" alt=""> </a>
-            </div>
-          </div>
-        </div>
-      </footer> --}}
 
 
 
-      {{-- <footer>
-        
-        <div class="column1" style="text-align:center; ">
-            <p style="font-weight: 700; font-size: 1.5vw;">ADDRESS</p>
-            <p style="font-size: 1.1vw">2nd Flr. Everlasting Bldg., #172 Rizal Avenue, Brgy. San Isidro, Taytay, Philippines</p>
-        </div>
 
-        <div class="column2" style="text-align:center;">
-            <p style=" font-weight: 700;font-size: 1.5vw;">CONTACT US</p> 
-            <p style="font-size: 1.1vw">09171732844 - GLOBE <br>
-               090983992102 - SMART
-            </p>
-        </div>
-
-        <div class="column3" style="text-align:center;">
-            <p style="font-weight: 700;font-size: 1.5vw;">EMAIL US</p>
-            <p style="font-size: 1.1vw">jgmarquez.psych@gmail.com</p>
-        </div>
-
-        <div class="column4" style="text-align:center;">
-            <p style="font-weight: 700;font-size: 1.5vw;">SOCIAL MEDIA</p>
-            
-            <div class="social" style="margin:0%; padding:0%;">
-                <a href="https://www.facebook.com/jgmarquezpsych"> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_6_et05wg.png" alt=""> </a>
-                <a href="https://www.instagram.com/jgmarquezpsych/?igshid=YmMyMTA2M2Y%3D&fbclid=IwAR2e7HVw8Gctwx_ctM0Tkhue3PqgGg-UJuEY8e7ssLyEbtip0Y3YSeqIgWA"> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_4_dicjnk.png" alt=""> </a>
-                <a href=""> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_5_gjmers.png" alt=""> </a>
-            </div>
-        </div>
-      </footer> --}}
 
       @yield('scripts')
 

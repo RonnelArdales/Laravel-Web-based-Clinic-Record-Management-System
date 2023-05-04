@@ -1,4 +1,5 @@
 @extends('layouts.admin_navigation')
+@section('title', 'Pending user')
 @section('content')
 
 <div class="row m-4">

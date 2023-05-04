@@ -1,5 +1,5 @@
 @extends('layouts.admin_navigation')
-
+@section('title', 'Queuing')
 @section('content')
     <div class="row m-4">
       <div style="margin-top: 3px; align-items:center; display:flex; margin-bottom:1%;" >

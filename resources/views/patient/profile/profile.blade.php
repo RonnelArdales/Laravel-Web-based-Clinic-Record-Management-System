@@ -98,18 +98,13 @@ th, td{
   <thead style="background-color: burlywood">
     <tr  style=" position: relative;">
           <th style="text-align: center;" >Appointment Date</th>
-          <th style="text-align: center;">Document type</th>
+          <th style="text-align: center;">Description</th>
           <th style="text-align: center;">File</th>
           <th style="text-align: center;">Action</th>
     </tr>
   </thead>
   <tbody>
-      {{-- @foreach ($transactions as $transaction)
-      <tr onclick="document.location = '/patient/transaction/download/{{$transaction->id}}';">
-          <td>{{$transaction->consultation_date}}</td>
-          <td>{{$transaction->file}}</td>
-        </tr>
-      @endforeach --}}
+
         @if (count($documents) > 0)
         @foreach ($documents as $document)
         <tr>
@@ -125,7 +120,7 @@ th, td{
         @endforeach
         @else
         <tr>
-          <td colspan="3" style="text-align: center;" >No Consultation file found</td>
+          <td colspan="4" style="text-align: center;" >No Consultation file found</td>
         </tr>
             
         @endif
@@ -251,7 +246,7 @@ th, td{
 
                   <div  class="col-md-6">
                     
-                    <label style="margin-top: 0px" for="">Document Type</label><br>
+                    <label style="margin-top: 0px" for="">Description</label><br>
                     <input type="text" readonly class="input"  style="width: 300px" id="view_doc_file" name="date"><br>
             
                   <label style="margin-top:13px" for="">Uploaded pdf</label><br>

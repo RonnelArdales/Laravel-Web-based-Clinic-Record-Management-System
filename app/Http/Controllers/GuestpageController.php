@@ -13,6 +13,8 @@ class GuestpageController extends Controller
     }
 
     public function aboutus(){
-        return view('patient.about_us');
+        $about_us_1 = Guestpage::where('title', 'about us 1')->first();
+    
+        return view('patient.about_us')->with('aboutus1', $about_us_1);
     }
 }

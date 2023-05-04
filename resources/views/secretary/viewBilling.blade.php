@@ -14,8 +14,14 @@
     }
 </style>
 <div class="row m-3" style="font-family: poppins;">
-    <div style="margin-bottom: 1%;">
-        <a  class="btn btn-outline-dark" href="/secretary/billing"> Back </a>
+    <div  class="d-flex justify-content-between " style="height: 43px">
+        <div style="margin-bottom: 1%;">
+            <a  class="btn" href="/secretary/billing"><img height="23" width="23" src="{{url('logo/arrow.png')}}" alt=""></a>
+        </div>
+    
+        <div class=" ">
+            <a href="/secretary/billing/printinvoice/{{$infos->transno}}" class="btn"><img height="28" width="28" src="{{url('logo/printer.png')}}" alt=""></a>
+        </div>
     </div>
     <hr>
     <form class="row" >
@@ -40,25 +46,24 @@
 
         <div class="col-sm d-flex justify-content-end" >
             <div style="">
-                <label for="">Billing No.:</label>
-                <input type="text"  class="view1 rounded " id="fullname" value="{{$infos->transno}}" name="fullname" readonly>
-               <br> <label for="">Billing Date:</label>
-               <input type="text"  class="view1 rounded " id="fullname" value="{{$infos->created_at}}" name="fullname" readonly>
+                <label for="">Transaction No.:</label>
+                <input type="text"  style="width: 50px" class="view1 rounded " id="fullname" value="{{$infos->transno}}" name="fullname" readonly>
+               <br> <label for="">Trans Date:</label>
+               <input type="text"  class="view1 rounded " id="fullname" value="{{ date('M d, Y H:i A', strtotime($infos->created_at))}}" name="fullname" readonly>
               </div>
         </div>
         </form> 
 
 
-        <div style="margin-top:10px">
-            <h4>Services</h4>
+        <div style="margin-top:20px">
+            <h3><b>Services</b> </h3>
         </div>
 
         <table class="table table-bordered table-striped">
             <thead>
                 <tr style="text-align: center;">
               
-                    <th>Service code</th>
-                    <th>Name</th>
+                    <th>Description</th>
                     <th>Price</th>
               
                 </tr>
@@ -82,43 +87,45 @@
             </tbody>
         </table>
 
-<div class="row">
-    <div class="col-sm ">
-        <a href="/secretary/billing/printinvoice/{{$infos->transno}}" class="btn btn-outline-dark">Print</a>
-    </div>
-
-    <div class="col-sm d-flex justify-content-end" >
-        <div style="">
-            <label for="">Discount:</label>
-            <input type="text"  class="view1 rounded " id="fullname" value="{{$infos->discount_price}}" name="fullname" readonly>
-           <br> <label for="">Total:</label>
-           <input type="text"  class="view1 rounded " id="fullname" value=" ₱ {{number_format("$infos->total",2)}}" name="fullname" readonly>
-           <br> <label for="">Mode of payment:</label>
-           <input type="text"  class="view1 rounded " id="fullname" value="{{$infos->mode_of_payment}}" name="fullname" readonly>
-
-           @if ($infos->mode_of_payment == null)
-
-           
-               
-           @else
-
-           @if ($infos->mode_of_payment == "Cash")
-           <br> <label for="">Payment:</label>
-           <input type="text"  class="view1 rounded " id="fullname" value=" ₱ {{number_format("$infos->payment",2)}}" name="fullname" readonly>
-           <br> <label for="">Change:</label>
-           <input type="text"  class="view1 rounded " id="fullname"  value=" ₱ {{number_format("$infos->change",2)}}"name="fullname" readonly>
-           @else
-           <br> <label for="">Reference no.:</label>
-           <input type="text"  class="view1 rounded " id="fullname" value="{{$infos->reference_no}}" name="fullname" readonly>
-           @endif
-               
-           @endif
-
-  
-     
-          </div>
-    </div>
-</div>
+        <form class="row" >
+                
+            <div class="col-sm-8 ">
+        
+        
+             
+            </div>
+        
+            <div class="col-sm " >
+                <div >
+                    @if ($infos->status == 'Pending')
+            
+                    @else
+                    <label for="">Discount:</label>
+                    <input type="text" style="width:150px" class="view1 rounded " id="fullname" value="{{$infos->discount_price}}" name="fullname" readonly><br>
+                    @endif
+                     <label for="">Total:</label>
+                    <input type="text"  class="view1 rounded " id="fullname" value=" ₱ {{number_format("$infos->total",2)}}" name="fullname" readonly>
+                    @if ($infos->status == 'Pending')
+                    <br> <label for="">Status:</label>
+                    <label for="">{{$infos->status}}</label>
+                    @else
+                    <br> <label for="">Mode of payment:</label>
+                    <input type="text"  style="width:100px"  class="view1 rounded " id="fullname" value="{{$infos->mode_of_payment}}" name="fullname" readonly>
+                    @if ($infos->mode_of_payment == "Cash")
+                    <br> <label for="">Payment:</label>
+                    <input type="text"  class="view1 rounded  "  style="width:150px"  id="fullname" value=" ₱ {{number_format("$infos->payment",2)}}" name="fullname" readonly>
+                    <br> <label for="">Change:</label>
+                    <input type="text"  class="view1 rounded "  style="width:150px"  id="fullname"  value=" ₱ {{number_format("$infos->change",2)}}"name="fullname" readonly>
+                    @else
+                    <br> <label for="">Reference no.:</label>
+                    <input type="text"  class="view1 rounded "  id="fullname" value="{{$infos->reference_no}}" name="fullname" readonly>
+                    @endif
+                    @endif
+                  </div>
+        
+                  
+            </div>
+            </form> 
 
 
 </div>

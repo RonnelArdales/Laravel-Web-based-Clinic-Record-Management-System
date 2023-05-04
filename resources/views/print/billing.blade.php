@@ -99,7 +99,7 @@ padding-top: 18px;
                 @endforeach
                 @else
                 <tr id="nouser">
-                  <td colspan="7" style="text-align: center;">No user Found</td>
+                  <td colspan="8" style="text-align: center;">No Transaction Found</td>
             
                 </tr>
                 @endif
@@ -107,6 +107,10 @@ padding-top: 18px;
               </tbody>
               </table>
           </div>
+        </div>
+        <div style="width: 100%; text-align:right">
+          <label for="">Total:</label>
+          <label for="">PHP {{$sum}}</label>
         </div>
     
 

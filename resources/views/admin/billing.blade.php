@@ -1,4 +1,5 @@
 @extends('layouts.admin_navigation')
+@section('title', 'Billing')
 @section('content')
 <style>
     label{
@@ -352,7 +353,7 @@
                         $('#payment').modal('hide');
                         $('#payment_cash, #change, #reference_no').val(" ");
                         $('#cash').hide();
-                        $('#gcash').show();   
+                        $('#gcash').hide();   
 
                         }
               

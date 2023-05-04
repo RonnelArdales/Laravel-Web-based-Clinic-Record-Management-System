@@ -64,7 +64,7 @@ table, td, th {
                 <label style="margin-top: 2px" for="">Fullname:</label>
                 <label for="">{{$infos->fullname}}</label>
                 <br>
-                <label style="margin-top: 2px" for="">Sex:</label>
+                <label style="margin-top: 2px" for="">Gender:</label>
                 <label for="">{{$infos->user->gender}}</label>
                 <br>
                 <label style="margin-top: 2px" for="">Address:</label>
@@ -135,15 +135,23 @@ table, td, th {
         </div>
 
         <div class="column column2" >
-            <div style="margin-left:140px">
+            <div style="margin-left:135px">
+                @if ($infos->status == 'Pending')
+    
+                @else
                 <label for="">Discount:</label> 
-                <label for=""> {{$infos->discount_price}}</label>
-               <br> 
+                <label for="">PHP {{$infos->discount_price}}</label> <br> 
+                @endif
+              
                <label style="margin-top: 2px" for="">Total:</label>
-               <label for="">{{number_format("$infos->total",2)}}</label>
+               <label for="">PHP {{number_format("$infos->total",2)}}</label>
+
+               @if ($infos->status == 'Pending')
+               <br> <label style="margin-top: 2px" for="">Status:</label>
+               <label for="">{{$infos->status}}</label>
+               @else
                <label style="margin-top: 2px" for="">Mode of payment:</label>
                <label for="">{{$infos->mode_of_payment}}</label> 
-           
                @if ($infos->mode_of_payment == "Cash")
                 <label style="margin-top: 2px" for="">Payment:</label>
                <label for="">PHP {{number_format("$infos->payment",2)}}</label> 
@@ -154,12 +162,12 @@ table, td, th {
                <br> <label style="margin-top: 2px" for="">Reference no.:</label>
                <label for="">{{$infos->reference_no}}</label>
                @endif
-            
+            @endif
               </div>
         </div>
         </div> 
 
-    
+
     
     </div>
 

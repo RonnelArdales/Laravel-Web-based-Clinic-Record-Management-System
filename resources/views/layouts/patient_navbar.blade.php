@@ -15,29 +15,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Gujarati:wght@700&family=Poppins:wght@400;700&family=Song+Myung&display=swap" rel="stylesheet">
 
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
 
-  /* .fc-widget-content{
-    background-color: #829460;
-  } */
+.swal2-popup {
 
-  
-  /* .billing-cancel{
-    background: transparent;
-    text-decoration:none;
-    border-radius: 30px; 
-    color:#829460; 
-    border: 2px solid #829460;
-    display:inline-block;
-    text-align:center;
-    vertical-align:top;
-    width: 110px;
-    height: 37px; 
-    margin-right:20px
+  height: auto;
+  background-color: #EDDBC0;
+}
 
-  } */
+/* .swal2-confirm {
+  background-color:  #829460;
+  color: white;
+} */
+.swalbutton {
+  background-color:  #829460;
+  color: white;
+}
+
+
     body{
         margin: 0%;
         padding: 0%;

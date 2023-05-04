@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Models\Appointment;
 use App\Models\AuditTrail;
 use App\Models\BusinessHour;
+use App\Models\Consultation;
 use App\Models\Discount;
 use App\Models\Modeofpayment;
 use App\Models\Reservationfee;
@@ -35,77 +36,18 @@ class SecretaryController extends Controller
         ->orderBy('date', 'asc')->limit(3)->get();
         $latestuser = User::orderBy('created_at', 'desc')->take(7)->get();
 
-        // // $data = Appointment::distinct('service')-> select('service' , DB::raw('count(gender) as gender_count, gender'))->groupBy('gender', 'service')->get();
-        // $data = Appointment:: select('service' , DB::raw('count(*) as gender_count, gender'))->groupBy('gender', 'service')->get();
 
-        // $male = Appointment::where('service', 'Diagnostic')->whereHas('user' , function($query){
-        //     $query->where('gender', 'Female');
-        // })->with('user')->get();
-        // $malecount = $male->count();
-        // $datacount = ['Gender'];
+        $transaction = Transaction::select(DB::raw('SUM(total) as total'))
+    ->whereYear('created_at', date('Y'))
+    ->groupBy(DB::raw('MONTH(created_at)'))
+    ->pluck('total');
 
-        // $gender_records = Appointment::selectRaw('service,
-        //         COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male",
-        //         COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female",
-        //         COUNT(*) as "all"
-        // ')->groupBy('service')->get();
-        // $service=[];
-        // $male=[];
-        // $female=[];
-        // foreach($gender_records as $gender){
-        //     $service[]=$gender->service;
-        //     $male[]=$gender->male;
-        //     $female[]=$gender->female;
-        // }
-        // dd($gender_records[0]->service);
-        // dd([$service, $male, $female]);
+    
+$transactionArray = $transaction->map(function ($item) {
+    return (string) $item;
+})->toArray();
 
-        // $array = ['Gender', 'Number', 'Service'];
-        //   foreach ($gender_records as $key=>$value){
-        //         $array[++$key] = [ $value->service, $value->gender, $value->number,];
-        //   }
- 
-        
-// dd(json_encode ($gender_records));
-        
-        // $data = DB::table('appointments')->select('service' ,DB::raw('gender as gender'),
-        //                                         DB::raw('count(*) as number'))
-        //   ->groupBy('gender', 'service')->get();
-
-        //   $array = ['Gender', 'Number', 'Service'];
-        //   foreach ($data as $key=>$value){
-        //         $array[++$key] = [ $value->service, $value->gender, $value->number,];
-        //   }
-    //   {{$data->service}} {{$data->gender}} {{$data->number}} 
-            
-    // dd(json_encode($array));
-
-
-            // $users = User::all()->count();
-            // $pending = Appointment::where('status', 'Pending')->count();
-            // $name= auth()->user()->fname;
-            // // dd($data);
-            // $patient = User::select('fname')->distinct()->get();
-            // return view('secretary.dashboard', ['services' => $service, 'males' => $male, 'females' =>$female])->with('name', $name)
-            //                               ->with('patients', $patient)
-            //                               ->with('users', $users)
-            //                               ->with('pending', $pending)
-            //                               ->with('datas', $gender_records)
-            //                              ->with('appointments', $appointments)
-            //                               ;
-
-            $transaction = Transaction::select(DB::raw('SUM(total) as total'))
-            ->whereYear('created_at', date('Y'))
-            ->groupBy(DB::raw('MONTH(created_at)'))
-            ->pluck('total');
-        
-            
-        $transactionArray = $transaction->map(function ($item) {
-            return (string) $item;
-        })->toArray();
-
-
-            $try = DB::select(DB::raw('
+$try = DB::select(DB::raw('
     SELECT SUM(total) as total, MONTH(created_at) as month FROM (
         SELECT total, created_at FROM transactions WHERE YEAR(created_at) = YEAR(NOW())
         UNION ALL
@@ -118,7 +60,33 @@ class SecretaryController extends Controller
 
 
 $totals = array_column($try, 'total', 'month');
-     
+
+
+$gender_records = Consultation::selectRaw('primary_diag, 
+    MONTH(created_at) as month, 
+    COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male", 
+    COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female", 
+    COUNT(*) as "all"')
+    ->whereNotNull('primary_diag')
+    ->whereYear('created_at', '=',  date('Y') )
+    ->groupBy('primary_diag', 'month')
+    ->get();
+
+
+$diagnosis=[];
+$male=[];
+$female=[];
+foreach($gender_records as $gender){
+$diagnosis[]=$gender->primary_diag;
+$male[]=$gender->male;
+$female[]=$gender->female;
+}
+
+
+
+
+
+
             $users = User::all()->count();
             $pending = Appointment::where('status', 'Pending')->count();
             $transaction = Transaction::whereDate('created_at', Carbon::today())->get();
@@ -127,16 +95,14 @@ $totals = array_column($try, 'total', 'month');
             $totalbilling = $transaction->sum('total');
             $totalsales = intval($totalappointment) + intval($totalbilling);
             $name= auth()->user()->fname;
-    
-            // $patient = User::select('fname')->distinct()->get();
-            return view('secretary.dashboard', compact('totals', 'transactionArray')) ->with('name', $name)
+
+            return view('secretary.dashboard', compact('totals', 'transactionArray'), ['diagnosis' => $diagnosis, 'males' => $male, 'females' =>$female]) ->with('name', $name)
                                         // ->with('patients', $patient)
                                           ->with('users', $users)
                                           ->with('pending', $pending)
                                           ->with('transaction', $totalsales)
                                           ->with('latests', $latestuser)
-                                        //   ->with('datas', $gender_records)
-                                        //  ->with('appointments', $appointments)
+                            
                                           ;
 
     }
@@ -144,7 +110,7 @@ $totals = array_column($try, 'total', 'month');
     //profile page
     public function profile(){
   
-        $patients = DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+        $patients = DB::table('users')->where('usertype', 'patient')->where('status', 'verified')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
 
         return view('secretary.profile', compact('patients'));
     }
@@ -426,7 +392,7 @@ public function view_transaction(){
     $addtocarts =  DB::table('addtocartservices')->orderBy('created_at', 'desc')->paginate(4, ['*'], 'addtocart');
     $service = Service::all();
     $sum = Addtocartservice::sum('price');
-    $patients =  DB::table('users')->where('usertype', 'patient')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
+    $patients =  DB::table('users')->where('usertype', 'patient')->where('status', 'verified')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
     return view('secretary.transaction', [
                                     'services' => $service, 
                                     'addtocarts'=> $addtocarts, 

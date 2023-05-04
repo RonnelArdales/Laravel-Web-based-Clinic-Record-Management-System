@@ -167,12 +167,14 @@ class PrintController extends Controller
 
             $name =  $request->input('fullname');
             $billings = Transaction::where('fullname', 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->get();
-            $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
+            $sum = Transaction::where('fullname', 'LIKE', "%".$name."%")->sum('total');
+            $pdf = Pdf::loadView('print.billing', compact('billings', 'sum'))->setPaper('A4','landscape');
             return $pdf->stream('billing.pdf');
         }elseif($request->input('status')){
             $status =  $request->input('status');
             $billings = Transaction::where('status', $status)->orderBy('created_at', 'desc')->get();
-            $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
+            $sum = Transaction::where('status', $status)->sum('total');
+            $pdf = Pdf::loadView('print.billing', compact('billings', 'sum'))->setPaper('A4','landscape');
             return $pdf->stream('billing.pdf');
         }elseif($request->input('start_date') && $request->input('end_date')){
             $startDate = $request->input('start_date');
@@ -180,27 +182,21 @@ class PrintController extends Controller
           $endDate = $request->input('end_date');
           $concatEnd = $endDate . " " . "23:59:59";
            $billings =  Transaction::whereBetween('created_at', [$concatStart, $concatEnd])->get();
-            $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
+           $sum =  Transaction::whereBetween('created_at', [$concatStart, $concatEnd])->sum('total');
+            $pdf = Pdf::loadView('print.billing', compact('billings', 'sum'))->setPaper('A4','landscape');
             return $pdf->stream('billing.pdf');
         }elseif($request->input('mop')){
             $mop =  $request->input('mop');
             $billings = Transaction::where('mode_of_payment', $mop)->orderBy('created_at', 'desc')->get();
-            $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
+            $sum = Transaction::where('mode_of_payment', $mop)->sum('total');
+            $pdf = Pdf::loadView('print.billing', compact('billings', 'sum'))->setPaper('A4','landscape');
             return $pdf->stream('billing.pdf');
         }else{
 
             
             $billings = DB::table('transactions')->orderBy('created_at', 'desc')->get();
-            $pdf = Pdf::loadView('print.billing', compact('billings'))->setPaper('A4','landscape');
-            // $pdf->setOptions(['isPhpEnabled' => true]);
-            // set options for Dompdf
-            // $options = $pdf->getOptions();
-            // $options['isRemoteEnabled'] = true;
-            // $options['isHtml5ParserEnabled'] = true;
-            // $pdf->setOptions($options);
-
-            // set the header content
-       
+            $sum =  Transaction::sum('total');
+            $pdf = Pdf::loadView('print.billing', compact('billings', 'sum'))->setPaper('A4','landscape');
             return $pdf->stream('billing.pdf');
         }
     }
@@ -216,25 +212,6 @@ class PrintController extends Controller
             return response()->download(public_path('consultation/' . $file->file));
         }
        
-        // $pdf = Pdf::loadFile(public_path('consultation/' . $file->file));
-        // $pdf->setEncryption('123' );
-        // // file_put_contents('output.pdf', $pdf->output());
-        // // return $pdf->download('invoice.pdf');
-        // // return $pdf->stream('invoice.pdf');
-        // // $pdf = PDF::loadView('pdf.invoice', $data);
-        // // $pdf->setEncryption($password);
-        // return $pdf->download('invoice.pdf');
-     
-    //     if(Auth::user()->usertype == "admin"){
-    //     }else{  
-    //         $file = Transaction::Where('id', $id)->first();
-    // //         //    dd($file->file);
-    //         //  return response()->download(public_path('consultation/' . $file->file));
-    //             return Pdf::loadFile(public_path('consultation/' . $file->file))->stream('download.pdf');
-    // //     }
-    // //            return response()->download(public_path('consultation/' . $file));
-    // // $file = Pdf::loadFile(public_path('consultation/' . $file))->stream('download.pdf');
-    // // dd($file);
     }
 
     

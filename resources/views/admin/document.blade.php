@@ -1,4 +1,5 @@
 @extends('layouts.admin_navigation')
+@section('title', 'Document')
 @section('content')
 
 <style>
@@ -87,11 +88,8 @@
     
                         <div class="col-md-6">
 
-                          <label style="margin-bottom: 5px;" for="">Document type</label><br>
-                          <select class="input"  style="width: 300px; height:27px" name="doc_type" id="">
-                            <option value="">-- select --</option>
-                            <option value="Consultation">Consultation file</option>
-                          </select>
+                          <label style="margin-bottom: 5px;" for="">Description</label><br>
+                          <input style="width:300px" name="doc_type" class="input" type="text">
                           <br>
                           <div class="mt-0 mb-2">
                                 <span  role="alert" class="block mt-5   text-danger" id="error_doc_type"></span>
@@ -168,7 +166,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content" style="background: #EDDBC0;">
       <div class="modal-header" style="border-bottom-color: gray">
-        <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">New document</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">View document</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -186,14 +184,14 @@
                           <input type="text" class="input" readonly   style="width: 300px" id="view_fullname" name="fullname">
 
                           <label style="margin-top: 10px" for="">Appointment date</label><br>
-                          <input type="text" class="input"  style="width: 300px" id="view_date" name="date"><br>
+                          <input type="text" readonly class="input"  style="width: 300px" id="view_date" name="date"><br>
                        
                       </div>
   
                       <div  class="col-md-6">
                         
-                        <label style="margin-top: 0px" for="">Document Type</label><br>
-                        <input type="text" class="input"  style="width: 300px" id="view_doc_type" name="date"><br>
+                        <label style="margin-top: 0px" for="">Description</label><br>
+                        <input readonly type="text" class="input"  style="width: 300px" id="view_doc_type" name="date"><br>
                 
                       <label style="margin-top:13px" for="">Uploaded pdf</label><br>
                       <input type="text"class="input" readonly   style="width: 300px" id="view_file" name="pdf"><br>
@@ -252,11 +250,8 @@
             
                       <div  class="col-md-6">
 
-                        <label style="margin-bottom: 5px;" for="">Document type</label><br>
-                        <select class="input"  style="width: 300px; height:27px" name="doc_type" id="edit_doc_type">
-                        <option value=""></option>
-                        <option value="Consultation">Consultation</option>
-                        </select>
+                        <label style="margin-bottom: 5px;" for="">Description</label><br>
+                        <input style="width:300px" name="doc_type" id="edit_doc_type" class="input" type="text">
                         <br>
                         <div class="mt-0 mb-2">
                               <span  role="alert" class="block mt-5   text-danger" id="error_edit_doc_type"></span>
@@ -372,10 +367,7 @@ window.addEventListener('beforeunload', function () {
             $('.appointment').DataTable().destroy();
         });
 
-        $(".viewpatients").on("hidden.bs.modal", function(e){
-          e.preventDefault();
-        $('.patient-remove').load(location.href+' .patient-remove');
-        });
+
 
         $(".create").on("hidden.bs.modal", function(e){
           e.preventDefault();
@@ -383,21 +375,6 @@ window.addEventListener('beforeunload', function () {
         });
 
 
-    // var appointment = $('.appointment').DataTable({
-    //                     processing: true,
-    //                     serverSide: true,
-    //                     ajax: "/admin/consultation/show_appointment",
-    //                     dom: 'frtp',
-    //                     pageLength: 10,
-    //                     responsive: true,
-    //                         columns: [
-    //                       {data: 'id', name: 'id' , orderable: false, searchable: false},
-    //                       {data: 'fullname', name: 'fullname' , orderable: false},
-    //                       {data: 'date', name: 'date' , orderable: false, searchable: false},
-    //                       {data: 'time', name: 'time' , orderable: false, searchable: false},
-    //                       {width: "10%", data: 'action', name: 'action', orderable: false, searchable: false},
-    //                         ]
-    //                 });
 
                     $('.getappointment').on('click', function(e){
                       e.preventDefault();

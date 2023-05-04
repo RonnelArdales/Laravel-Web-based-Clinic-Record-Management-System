@@ -72,21 +72,28 @@ $try = DB::select(DB::raw('
 $totals = array_column($try, 'total', 'month');
 
 
+$gender_records = Consultation::selectRaw('primary_diag, 
+    MONTH(created_at) as month, 
+    COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male", 
+    COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female", 
+    COUNT(*) as "all"')
+    ->whereNotNull('primary_diag')
+    ->whereYear('created_at', '=',  date('Y') )
+    ->groupBy('primary_diag', 'month')
+    ->get();
 
-$gender_records =   Consultation::selectRaw('primary_diag,
-COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male",
-COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female",
-COUNT(*) as "all"
-')->groupBy('primary_diag')->get();
 
-$service=[];
+$diagnosis=[];
 $male=[];
 $female=[];
 foreach($gender_records as $gender){
-$service[]=$gender->primary_diag;
+$diagnosis[]=$gender->primary_diag;
 $male[]=$gender->male;
 $female[]=$gender->female;
 }
+
+
+
 
 
 
@@ -99,15 +106,13 @@ $female[]=$gender->female;
             $totalsales = intval($totalappointment) + intval($totalbilling);
             $name= auth()->user()->fname;
     
-            // $patient = User::select('fname')->distinct()->get();
-            return view('admin.dashboard', compact('totals', 'transactionArray')) ->with('name', $name)
-                                        //   ->with('patients', $patient)
+            return view('admin.dashboard', compact('totals', 'transactionArray'), ['diagnosis' => $diagnosis, 'males' => $male, 'females' =>$female]) ->with('name', $name)
+                              
                                           ->with('users', $users)
                                           ->with('pending', $pending)
                                           ->with('transaction', $totalsales)
                                           ->with('latests', $latestuser)
-                                        //   ->with('datas', $gender_records)
-                                        //  ->with('appointments', $appointments)
+                               
                                           ;
     }
 
@@ -1497,7 +1502,7 @@ public function store_businesshours(Request $request){
         'pdf.mimes'=>'the file must be a pdf',
         'pdf.required' => 'pdf file is required',
         'fullname.required' => 'Please select an appointment',
-        'doc_type.required' => 'Document type is required',
+        'doc_type.required' => 'File description is required',
     ]);
 
     if($validator->fails())
@@ -1561,7 +1566,7 @@ public function store_businesshours(Request $request){
         ],[
 
                     'pdf.mimes'=>'the file must be a pdf',
-                    'doc_type.required'=>'Document type is required',
+                    'doc_type.required'=>'File description is required',
         ]);
     
         if($validator->fails()){
@@ -1959,6 +1964,25 @@ public function store_businesshours(Request $request){
         return response()->json($user->email);
 
 
+    }
+
+    public function fetch_user(Request $request){
+
+        if ($request->ajax()) {
+            $data =  DB::table('users')->where('usertype', 'patient')->where('status', 'verified')->orderBy('created_at', 'desc');
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('fullname', function($row){
+                        $fullname = $row->fname . " " . $row->lname;
+                            return $fullname;
+                    })
+                    ->addColumn('action', function($row){
+                        $btn = '<button style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 30px; " class=" select btn btn-sm btn-danger" id="select"  data-id="' . $row->id . '">Select</button>';         
+                            return $btn;
+                    })
+                    ->rawColumns(['action', 'fullname'])
+                    ->make(true);
+        }
     }
     
 

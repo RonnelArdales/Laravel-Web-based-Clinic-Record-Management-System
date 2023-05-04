@@ -1,5 +1,8 @@
 @extends('layouts.admin_navigation')
+@section('title', 'Home')
 @section('content')
+
+
     <div class="row m-4" style="font-family: Poppins;">
         <div style="margin-top: 20px; margin-bottom:30px" class="d-flex justify-content-between">
             <h3>GOOD DAY, <b>ADMIN</b></h3>
@@ -13,7 +16,8 @@
             
         </div>
         
-        
+        <a href="/admin/sendsms">send sms</a>
+
         <div class="container">
             <div class="row " >
               <div class="col-sm " style=" border-left:12px solid white;
@@ -24,7 +28,7 @@
               
                 <div class="p-1" style="color: aliceblue">
                     Total
-                    <h5 >USERS:</h5>
+                    <h5 > <b>USERS:</b> </h5>
                 </div>
                 <div class="d-flex justify-content-center"  style="color: aliceblue; font-size:40px">
                         <h1 style="font-size: 45px" >{{$users}}</h1>
@@ -36,7 +40,7 @@
               height: 135px;" >
                 <div class="p-1" style="color: aliceblue">
                     Total
-                    <h5 >TODAY SALES:</h5>
+                    <h5 > <b>TODAY SALES:</b> </h5>
                 </div>
                 <div class="d-flex justify-content-center"  style="color: white; font-size:40px;">
                   <h1 style="font-size: 45px" >₱ {{ number_format($transaction, 2) }}</h1>
@@ -46,7 +50,7 @@
               <div class="col-sm" style=" border-radius: 10px; border-left:12px solid white;background-color:#829460; height:135px">
                 <div class="p-1" style="color: aliceblue">
                     Total
-                    <h5 >PENDING APPOINTMENTS:</h5>
+                    <h5 > <b>PENDING APPOINTMENTS:</b> </h5>
                 </div>
                 <div class="d-flex justify-content-center"  style="color: aliceblue; font-size:40px">
                   <h1 style="font-size: 45px" >{{$pending}}</h1>
@@ -59,7 +63,7 @@
               <div class="container" style="margin-top: 20px" style="background: #EDDBC0;">
             <div class="row " >
               <div class="col-sm " style=" border-radius: 10px;  height:450px; padding-top:25px" >
-                <h3 >Latest User</h3>
+                <h3 > <b>LATEST USER</b> </h3>
                 <table style="width:100%; margin-top:10px; " class=" table table-bordered table-striped" >
                   <thead style="background-color: burlywood" >
                     <tr>
@@ -85,7 +89,7 @@
                   @endforeach
                   @else
                   <tr>
-                    <td colspan="4" style="text-align: center;">No appointment Found</td>
+                    <td colspan="5" style="text-align: center;">No appointment Found</td>
               
                   </tr>
                   @endif
@@ -97,128 +101,40 @@
             </div>
           </div>
 
-          <div class="d-flex bd-highlight container" style="padding: 0; margin-top:30px">
+          <div class="d-flex bd-highlight container" style="padding: 0; margin-top:px">
             <div class=" " style=" width:100%; ">
               <div id="highcharts"></div>
             </div>
-{{-- 
-            <div class="p-2 bd-highlight" style="border-radius: 25px; background-color:#829460; height:400px; width:30%">Flex item</div> --}}
+
           </div>
+ 
+     
+     
+       
+          <div class="d-flex bd-highlight container" style="padding: 0; margin-top:30px">
+            <div class=" " style=" width:100%; ">
+              <div class="select-wrapper" style="margin-bottom: 10px">
+                <label for="">Filter</label>
+                <select name="" id="year-filter">
+                  <option value="">--select year--</option>
+                  @foreach (range(date('Y') + 3 , 1900) as $year)
+                    <option value="{{ $year }}">{{ $year }}</option>
+                  @endforeach
+                </select>
+              </div>
+              <div id="diagnosis"></div>
+            </div>
+
+          </div>
+
         </div>
         @endsection
 
-{{-- @extends('layouts.admin_navigation')
-@section('content')
-    <div class="row m-4">
-        <div style="margin-top: 20px; margin-bottom:20px">
-            <h3>GOOD DAY, <b>ADMIN</b></h3>
-        </div>
-        
-        
-        <div class="container">
-            <div class="row " >
-              <div class="col-sm " style=" border-left:12px solid white;
-              height: 135px; border-radius: 10px; background-color:#F26969;" >
-              <div >
-
-              </div>
-                <div class="p-1" style="color: aliceblue">
-                    Total
-                    <h5 >USERS:</h5>
-                </div>
-                <div class="d-flex justify-content-center"  style="color: aliceblue; font-size:40px">
-                        <h1 style="font-size: 45px" >{{$users}}</h1>
-                </div>
-                
-              </div>
-              <div class="col-sm " style="margin-left: 15px; margin-right:15px; border-radius: 10px; background-color:#40DE7A; border-left:12px solid white;
-              height: 135px;" >
-                <div class="p-1" style="color: aliceblue">
-                    Total
-                    <h5 >SALES:</h5>
-                </div>
-                <div class="d-flex justify-content-center"  style="color: aliceblue; font-size:40px">
-                  <h1 style="font-size: 45px" >₱ 2000.00</h1>
-                </div>
-              </div>
-
-              <div class="col-sm" style=" border-radius: 10px; border-left:12px solid white;background-color:#3B82F6; height:135px">
-                <div class="p-1" style="color: aliceblue">
-                    Total
-                    <h5 >PENDING:</h5>
-                </div>
-                <div class="d-flex justify-content-center"  style="color: aliceblue; font-size:40px">
-                  <h1 style="font-size: 45px" >{{$pending}}</h1>
-          </div>
-              </div>
-
-              
-            </div>
-          </div>
-
-          <div class="container" style="margin-top: 20px">
-            <div class="row " >
-              <div class="col-sm " style=" border-radius: 10px; background-color:white; height:450px; padding-top:25px" >
-                <h3 >Current Appointment</h3>
-                <table style="width:100%; margin-top:10px; background-color:aliceblue" class=" table table-bordered table-striped" >
-                  <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>Fullname</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Service</th>       
-                    </tr>
-                </thead>
-                <tbody style="text-align: center" >
-                  @if (count($appointments)> 0 )
-                  @foreach ($appointments as $appointment)
-                  <tr class="overflow-auto">
-                      <td>{{$appointment->user_id}}</td>
-                      <td>{{$appointment->fullname}}</td>
-                      <td>{{date('m/d/Y', strtotime($appointment->date))}}</td>
-                      <td>{{date('h:i A', strtotime($appointment->time))}}</td>
-                       <td>{{$appointment->service}}</td>
-                       
-                  </tr>
-                  @endforeach
-                  @else
-                  <tr>
-                    <td colspan="4" style="text-align: center;">No appointment Found</td>
-              
-                  </tr>
-                  @endif
-                   
-                </tbody>
-                </table>
-              </div>
-             
-            </div>
-          </div>
-
-          
-          <div class="d-flex bd-highlight container" style="padding: 0; margin-top:30px">
-            <div class="p-2  bd-highlight" style="border-radius: 25px; background-color:#829460; height:400px; width:70%; margin-right:20px">
-              <div id="highcharts"></div>
-            </div>
-
-            <div class="p-2 bd-highlight" style="border-radius: 25px; background-color:#829460; height:400px; width:30%">Flex item</div>
-          </div>
-
-          
-
-    </div>
-
-
-
-
-@endsection --}}
 
 
 @section('scripts')
 <script type="text/javascript">
 $(document).ready(function(){
-    
 
   function myClock() {         
   setTimeout(function() {   
@@ -231,100 +147,13 @@ $(document).ready(function(){
 }
 myClock();  
 
-// $(function(){
 
-     
-
-    // $('#highcharts').highcharts({
-    //   chart:{
-    //     height: 380,
-    //     type:'column'
-    //   },
-    //   title:{
-    //     text:'Sales'
-    //   },
-    //   xAxis:{
-    //     categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
-    //   },
-    //   yAxis:{
-    //     title: {
-    //             text: 'Transaction Total'
-    //         }
-    //   },
-    //   series:[{
-    //         name: 'Monthly sales',
-    //         data: ['1000']
-
-    //   }]
-    // })
-
-    // Highcharts.chart('highcharts',{
-    //   title:{
-    //       text:'Monthly services'
-    //     },
-
-    //   xAxis:{
-    //     categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
-    //   },
-
-    //   yAxis:{
-    //     title:{
-    //       text:'Gender'
-    //     }
-    //   },
-
-      // series:[{
-      //   name: 'female',
-      //   data: sales,
-     
-      // }]
-    // })
-
-
-
-
-
-  //   $('#highcharts').highcharts({
-  //     chart:{
-  //       height: 380,
-  //       type:'column',
-  //       backgroundColor: 'rgba(130, 148, 96, 1)'
-  //     },
-  //     title:{
-  //       text:'Monthly services'
-  //     },
-  //     xAxis:{
-  //       categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
-  //     },
-  //     yAxis:{
-  //       title:{
-  //         text:'Gender'
-  //       }
-  //     },
-  //     series:[{
-  //       name: 'female',
-  //       data: [1000, 60000, 4, 6, 3]
-  //       // female
-  //     }]
-  //   })
-
-
-  // }); 
-
-
-$(function(){
 
   var sales = {!! json_encode($transactionArray) !!} ;
-
   transactionArray = sales.map(function(value) {
         return parseFloat(value);
     });
-  console.log(transactionArray);
-
-
   var totals = {!! json_encode($totals) !!} ;
-  console.log(totals);
-
   var dataArray = [];
 
 // Loop through the keys of the object and create an array of arrays
@@ -335,26 +164,29 @@ for (var key in totals) {
 }
 
 // The resulting array can be used in Highcharts
-console.log(dataArray); 
 
   Highcharts.chart('highcharts',{
       chart:{
         height: 380,
-        backgroundColor: 'rgba(130, 148, 96, 1)'
+        backgroundColor:  '#EDDBC0',
+       
       },
           title:{
           text:'Monthly Sales'
         },
 
       xAxis:{
-        categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+        categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+      
       },
 
-            yAxis:{
-        title:{
-          text:'Amount'
-        }
-      },
+      yAxis: {
+        title: {
+            text: 'Amount'
+        },
+        gridLineColor: '#000000'
+      
+    },
 
       series:[{
         name: 'total sales',
@@ -365,7 +197,77 @@ console.log(dataArray);
 
   })
 
-})
+
+      var diagnosis = {!! json_encode($diagnosis) !!} ;
+      var male = {!! json_encode($males) !!} ;
+      var female = {!! json_encode($females) !!} ;
+
+
+  var diagnosis_graph =   Highcharts.chart('diagnosis',{
+      chart:{
+        height: 380,
+        type:'column',
+        backgroundColor: '#EDDBC0'
+      },
+      title:{
+        text:'Yearly Mental Health Statistic'
+      },
+      xAxis:{
+        categories:diagnosis
+      },
+      yAxis:{
+        title:{
+          text:'Gender'
+        }
+      },
+      series:[{
+        name: 'Male',
+        data: male,
+        
+      },{
+        name: 'female',
+        data: female
+
+      }]
+    })
+
+
+
+
+
+  $('#year-filter').on( 'change', function() {
+    var selectedYear = $(this).val();
+
+    $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+
+            $.ajax({
+                type: "GET", 
+                url: "/diagnosis/filter/"+selectedYear , 
+                datatype: "json",
+                success: function(response){ 
+                  if (response.diagnosis.length  == 0 ) {
+                    diagnosis_graph.setTitle({ text: 'No Record Found' }); 
+                    diagnosis_graph.series[0].setData(response.male);
+                diagnosis_graph.series[1].setData(response.female);
+                  } else {
+                    diagnosis_graph.setTitle({ text: 'Yearly Mental Health Statistic' }); 
+                    diagnosis_graph.xAxis[0].setCategories(response.diagnosis); 
+                diagnosis_graph.series[0].setData(response.male);
+                diagnosis_graph.series[1].setData(response.female);
+                  }
+
+           
+                }
+
+            }); 
+  });
+
+
+
   
 
 
@@ -377,82 +279,3 @@ console.log(dataArray);
 @endsection
 
 
-
-{{-- 
-
-// $(function(){
-  //     var services = {!! json_encode($services) !!} ;
-  //     var male = {!! json_encode($males) !!} ;
-  //     var female = {!! json_encode($females) !!} ;
-  //   console.log(services ,male, female);
-
-  //   $('#highcharts').highcharts({
-  //     chart:{
-  //       height: 380,
-  //       type:'column',
-  //       backgroundColor: 'rgba(130, 148, 96, 1)'
-  //     },
-  //     title:{
-  //       text:'Monthly services'
-  //     },
-  //     xAxis:{
-  //       categories:['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
-  //     },
-  //     yAxis:{
-  //       title:{
-  //         text:'Gender'
-  //       }
-  //     },
-  //     series:[{
-  //       name: 'Male',
-  //       data: [6, 3, 6, 9, 2]
-  //       // male
-  //     },{
-  //       name: 'female',
-  //       data: [1, 3, 4, 6, 3]
-  //       // female
-  //     }]
-  //   })
-  // }); --}}
-
-
-  
-          {{-- <div class="container" style="margin-top: 20px" style="background: #EDDBC0;">
-            <div class="row " >
-              <div class="col-sm " style=" border-radius: 10px;  height:450px; padding-top:25px" >
-                <h3 >Current Appointment</h3>
-                <table style="width:100%; margin-top:10px; " class=" table table-bordered table-striped" >
-                  <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>Fullname</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Service</th>       
-                    </tr>
-                </thead>
-                <tbody style="text-align: center" >
-                  @if (count($appointments)> 0 )
-                  @foreach ($appointments as $appointment)
-                  <tr class="overflow-auto;" style="text-align: center">
-                      <td>{{$appointment->user_id}}</td>
-                      <td>{{$appointment->fullname}}</td>
-                      <td>{{date('m/d/Y', strtotime($appointment->date))}}</td>
-                      <td>{{date('h:i A', strtotime($appointment->time))}}</td>
-                       <td>{{$appointment->service}}</td>
-                       
-                  </tr>
-                  @endforeach
-                  @else
-                  <tr>
-                    <td colspan="5" style="text-align: center;">No appointment Found</td>
-              
-                  </tr>
-                  @endif
-                   
-                </tbody>
-                </table>
-              </div>
-             
-            </div>
-          </div> --}}

@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +10,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
     {{-- <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet"> --}}
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
@@ -30,6 +34,7 @@
 
     <title>@yield('title',)</title>
     <link rel="icon"  href="{!! asset('logo/icon.ico') !!}"/>
+
 </head>
 
 <style>
@@ -471,15 +476,23 @@
                          <span>Transaction</span> 
                     </a>
                </li> 
-
-               <li class=" my-1 mx-3 {{Request::is('admin/billing') ? 'active-bar' : '';}}">
+               
+               <li class=" my-1 mx-3 {{Request::is('admin/billing') ||
+                                       Request::is('admin/billing/viewBilling/*')
+               ? 'active-bar' : '';}}">
                     <a href="/admin/billing"> 
                          <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
                          <span>Billing</span>
                     </a>
                </li>
 
-               <li class=" my-1 mx-3 {{Request::is('admin/consultation') ? 'active-bar' : '';}}">
+               <li class=" my-1 mx-3 {{Request::is('admin/consultation') ||
+                                        Request::is('admin/consultation/create') ||
+                                        Request::is('admin/consultation/viewrecords/*') ||
+                                        Request::is('admin/consultation/edit/*/*') ||
+                                        Request::is('admin/consultation/viewconsultation/*/*')
+                                     
+               ? 'active-bar' : '';}}">
                     <a href="/admin/consultation"> 
                          <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/consult_las4n9.png" alt=""> 
                          <span>Consultation</span>
@@ -553,7 +566,8 @@
                 Request::is('admin/discount') ||
                 Request::is('admin/business_hours') ||
                 Request::is('admin/guestpage') ||
-                Request::is('admin/reservationfee') 
+                Request::is('admin/reservationfee') ||
+                Request::is('admin/modeofpayment') 
                  ? 'active-bar' : '';}}">
                   <a href="#setting" data-bs-toggle="collapse" >
                        <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/settings_ttbpof.png" alt=""> 
@@ -565,7 +579,8 @@
                           Request::is('admin/discount') ||
                           Request::is('admin/business_hours') ||
                           Request::is('admin/guestpage') ||
-                          Request::is('admin/reservationfee') 
+                          Request::is('admin/reservationfee') ||
+                          Request::is('admin/modeofpayment') 
              ? 'show' : 'collapse';}} flex-column list-unstyled" id="setting" data-bs-parent="#menu">
                   
                   <li class=" my-1 mx-3  {{Request::is('admin/service') ? 'active-bar' : '';}}">
@@ -665,7 +680,7 @@
      </li> 
          
          
-         <li class=" my-1 mx-3 {{Request::is('secretary/billing') ? 'active-bar' : '';}}">
+         <li class=" my-1 mx-3 {{Request::is('secretary/billing')  ? 'active-bar' : '';}}">
           <a href="/secretary/billing"> 
                <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
                <span>Billing</span>
@@ -858,7 +873,7 @@
         <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  
+        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         @yield('scripts')
 
   <script>

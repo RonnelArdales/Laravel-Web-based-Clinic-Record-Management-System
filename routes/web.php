@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth']], function() {
 
     //-----------search------------//
 
+    Route::get('/diagnosis/filter/{year}', [SearchController::class, 'filter_diagnosis']);
+
     Route::get('/profile/search-name', [SearchController::class, 'profile_search_user']);
 
     Route::get('/profile/search-usertype', [SearchController::class, 'search_usertype']);
@@ -98,6 +100,8 @@ Route::group(['middleware' => ['auth']], function() {
 });
 
 Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(function(){
+    Route::get('/sendsms', [AuthController::class, 'sendsms']);
+
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');//show dashboard page
 
     //----------------------Profile----------------------------//
@@ -135,8 +139,8 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::get('/appointment/getuser/{id}', [AdminController::class, 'get_user']); 
     Route::get('/appointment/get_appointment_service/{id}', [AdminController::class, 'get_appointment_service']); 
     Route::get('/appointment/Calendar-fetch', [AdminController::class, 'get_time']); 
-    Route::get('/appointment/pagination/paginate-data', [PaginationController::class, 'appointment_paginate']);
-    Route::get('/modal_patient/pagination/paginate-data', [PaginationController::class, 'patient_paginate']);
+
+    Route::get('/appointment/show_user', [AdminController::class, 'fetch_user']);
     Route::get('/appointment/status/{id}', [AdminController::class, 'appointment_status']);
 
     //-------------------Queuing---------------------------//
@@ -270,7 +274,7 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::get('/appointment/pagination/paginate-data', [PaginationController::class, 'appointment_paginate']);
     Route::get('/modal_patient/pagination/paginate-data', [PaginationController::class, 'patient_paginate']);
     Route::get('/appointment/status/{id}', [AdminController::class, 'appointment_status']);
-
+    Route::get('/appointment/show_user', [AdminController::class, 'fetch_user']);
 
 
     //-----------------queuing ------------------------//
@@ -416,6 +420,7 @@ Route::get('/resendCode/create/{email}', [AuthController::class, 'resend_code_cr
 Route::get('/verify-email-auth', [AuthController::class, 'verifyemail_auth'])->middleware('auth') ; //show find email
 Route::get('/verify-email', [AuthController::class, 'verifyemail']); //show find email
 Route::post('/verifyconfirm', [AuthController::class, 'emailverifycode']);
+
 Route::get('/auth', function () {return view('layouts.auth');});
 
 // Route::get('/mail', function () {

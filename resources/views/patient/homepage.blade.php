@@ -2,11 +2,24 @@
 @section('content')
     
 {{-- <h1 class="text-center text-[30px]">Patient homepage</h1> --}}
-@if (session('success'))
-<div class="alert success alert-success" role="alert" style="width:250px; right:25px;  position:fixed; z-index:9999; top:90px">
-  <p id="message-error"> {{ session('success') }}</p> 
-</div>
+
+@if(session('success'))
+    <script>
+        Swal.fire({
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            icon: 'success',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#829460',
+            confirmButtonBorder: '#829460',
+        });
+    </script>
 @endif
+{{-- 
+@include('sweetalert::alert') --}}
+
+
+
 
 <div class="container-fluid" style="padding: 0px" >
     <div style="height:50vw; background-color: #EDDBC0;" >
@@ -24,8 +37,11 @@
                     {!!$speakwithyou->content!!}
                 </div>
                <div class="" style="margin-top: 25px">
-                <a href="/register" style="text-decoration:none; font-weight:900; font-family:Poppins; background-color: #829460; text-align:center; color:white;   line-height: 1vw; border-radius: 2vw 0vw;margin-left: 5%; padding:0.5vw 1vw 0.5vw 1vw" class="button-size" >Register</a> 
-                <a href="/login"  style="text-decoration:none; font-family:Poppins; font-weight:900; text-align:center; color:#829460; border: 0.2vw solid; line-height: 1vw;  border-radius: 2vw 0vw; margin-left: 0.5%; padding:0.4vw 2vw 0.4vw 2vw" class="button-size" >Log in</a> 
+                @if (Auth::user()->status == 'pending')
+                <a hidden href="/patient/appointment/"  style="text-decoration:none; font-family:Poppins; font-weight:900; text-align:center; color:#829460; border: 0.2vw solid; line-height: 1vw;  border-radius: 2vw 0vw; margin-left: 0.5%; padding:0.4vw 2vw 0.4vw 2vw" class="button-size" >Book now</a> 
+                @else
+                <a href="/patient/appointment/"  style="text-decoration:none; font-family:Poppins; font-weight:900; text-align:center; color:#829460; border: 0.2vw solid; line-height: 1vw;  border-radius: 2vw 0vw; margin-left: 0.5%; padding:0.4vw 2vw 0.4vw 2vw" class="button-size" >Book now</a> 
+                @endif
                </div>
                
         </div>

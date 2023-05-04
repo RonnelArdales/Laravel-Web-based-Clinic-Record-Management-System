@@ -306,7 +306,7 @@
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
                 <select name="usertype" class="usertype rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_status" >
                   <option value="" {{$user->status == "" ? 'selected' : ''}}></option>
-                  <option value="verified" {{$user->status == "verified" ? 'selected' : ''}}>verfied</option>
+                  <option value="verified" {{$user->status == "verified" ? 'selected' : ''}}>verified</option>
                   <option value="inactive" {{$user->status == "inactive" ? 'selected' : ''}}>Inactive</option>
                 </select>
                 <div class="mt-0 mb-2">
