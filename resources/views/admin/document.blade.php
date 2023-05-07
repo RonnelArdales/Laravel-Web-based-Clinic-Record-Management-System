@@ -21,6 +21,20 @@
         <p style="margin-bottom: 0px" id="message-success"></p> 
       </div>
 
+      <div class="main-spinner" style="
+	  position:fixed;
+		width:100%;
+		left:0;right:0;top:0;bottom:0;
+		background-color: rgba(255, 255, 255, 0.279);
+		z-index:9999;
+		display:none;"> 
+	<div class="spinner">
+		<div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
+		  <span class="visually-hidden">Loading...</span>
+		</div>
+	    </div>
+</div>	
+
 
         <div style="margin-top: 3px; align-items:center; display:flex; margin-bottom:1%;" >
             <div class="me-auto col-md-8 col-md-offset-5">
@@ -135,7 +149,7 @@
               
                     <!-- Modal body -->
                            <div class="modal-body " >
-          <div class="patient patient-remove overflow-auto container-fluid" style="height:380px" >
+          <div class="patient patient-remove overflow-auto container-fluid" style="height:420px" >
             <table class="table table-bordered appointment table-striped"  style="background-color: white; width:100%" >
                 
                             <thead>
@@ -184,7 +198,7 @@
                           <input type="text" class="input" readonly   style="width: 300px" id="view_fullname" name="fullname">
 
                           <label style="margin-top: 10px" for="">Appointment date</label><br>
-                          <input type="text" readonly class="input"  style="width: 300px" id="view_date" name="date"><br>
+                          <input readonly type="text" readonly class="input"  style="width: 300px" id="view_date" name="date"><br>
                        
                       </div>
   
@@ -194,7 +208,7 @@
                         <input readonly type="text" class="input"  style="width: 300px" id="view_doc_type" name="date"><br>
                 
                       <label style="margin-top:13px" for="">Uploaded pdf</label><br>
-                      <input type="text"class="input" readonly   style="width: 300px" id="view_file" name="pdf"><br>
+                      <input readonly type="text"class="input" readonly   style="width: 300px" id="view_file" name="pdf"><br>
                       </div>
 
                       <div class="form-group" >
@@ -237,7 +251,7 @@
 
                           <label for="">Appointment id</label><br>
                           <input type="text" hidden id="document_id" name="document_id">
-                          <input type="text"  class="input" id="edit_appointmentid"  style="width: 300px" name="appointment_id" readonly>
+                          <input  type="text"  class="input" id="edit_appointmentid"  style="width: 300px" name="appointment_id" readonly>
                           <br>
 
                           <label style="margin-top:10px" for="">fullname</label><br>
@@ -245,7 +259,7 @@
                           <input type="text" class="input" readonly  style="width: 300px" id="edit_fullname" name="fullname">
                        
                             <label style="margin-top:10px" for="">Appointment date</label><br>
-                          <input type="text" class="input"  style="width: 300px" id="edit_date" name="date"><br>
+                          <input readonly type="text" class="input"  style="width: 300px" id="edit_date" name="date"><br>
                       </div>
             
                       <div  class="col-md-6">
@@ -403,6 +417,13 @@ window.addEventListener('beforeunload', function () {
                 contentType:false,
                 cache:false,
                 processData: false,
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                 success: function(response){ 
                   if(response.status == 400){
                         $('#error_userid, #error_file, #error_doc_type' ).html("");
@@ -445,6 +466,13 @@ window.addEventListener('beforeunload', function () {
                         $.ajax({
                             url: "/admin/consultation/getappointment/" +id,
                             datatype: "json",
+                            beforeSend: function(){
+                                $(".main-spinner").show();
+                            },
+                            complete: function(){
+
+                                $(".main-spinner").hide();
+                            },
                             success: function(response){ 
                                    $('#appointment_id,#user_id,#fullname,#date,#time ').val("");
 
@@ -477,7 +505,6 @@ window.addEventListener('beforeunload', function () {
                 contentType: false,
                 processData: false,
                 success: function(response){ 
-                  console.log(response)
               $('#fileview').html("");
               $('#view').find('input, textarea').html("");
                $('#view_appointemntid').val(response.document.appointment_id);
@@ -543,6 +570,13 @@ window.addEventListener('beforeunload', function () {
                 cache: false,
                 contentType: false,
                 processData: false,
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                 success: function(response){ 
                   console.log(response);
                     if(response.status == 400){
@@ -589,8 +623,14 @@ window.addEventListener('beforeunload', function () {
                 type: 'DELETE', 
                 url: "/admin/document/delete/"+ id,
                 datatype: "json",
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                 success: function(response){ 
-               
                         $('#documentid' ).html("");
                         $('#message-success').text('Deleted Successfully');
                         $(".success").show();

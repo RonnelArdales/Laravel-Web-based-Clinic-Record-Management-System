@@ -265,13 +265,24 @@
       <div class="row">
 
         <div class="col-sm-5" style="text-align: left;padding-left:0">
-            <img class="image1"  src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1682782581/Untitled_design_11_zvl1ur.png" alt="">
+          @if ($aboutus1->image == "") 
+              <img class="image1"   src="{{url('/guestpage/noimage.png')}}" alt="">
+          @else
+              <img class="image1"  src="{{url('/guestpage/'.$aboutus1->image)}}" alt="">
+          @endif
+            
         </div>
-
-        <div class="col" style="padding-right:2%;background-color: #829460;text-align:justify;display: flex; align-items:center;">
+       
+        {{-- <div class="col" style="padding-right:2%;background-color: #829460;text-align:justify;display: flex; align-items:center;">
           <p class="letters" style="color: #fff">JG Marquez,Rpsy is a Psychology clinic owned by Mr. Joseph G. Marquez. In 2018, the business started at his own house and was stopped before the pandemic. Going back to 2018, Mr. Marquez was accepting walk-ins and scheduled clients at his house in Taytay. The clinic was then established in 2020 located at 2nd Flr. Everlasting Bldg., #172 Rizal Avenue, Brgy. San Isidro, Taytay, Rizal and he is the only one who managed his clinic.
             <br><br> JG Marquez, Rpsy offers various psychological services like psychological evaluation, psychotherapy, and counseling. The appointment method is through walk-in and Facebook using google forms that they provide. The clinic has a Facebook page that advertises its services. The clinic can book 3-4 clients a day, it has 6 working hours and is open every Monday and Wednesday. </p>
+        </div> --}}
+
+        <div class="col letters flex-column  " style="color: rgb(255, 255, 255); padding-top:7.5%;padding-right:2%;background-color: #829460;text-align:  justify;  align-items:center;">
+          <p  class="letters" style="color: rgb(255, 255, 255);" >   {!! $aboutus1->content !!}</p>
+       
         </div>
+
 
        </div>
     </div>

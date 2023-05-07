@@ -306,11 +306,11 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="background: #EDDBC0;">
         <div class="modal-header" style="border-bottom-color: gray">
-          <h1 class="modal-title fs-4" id="exampleModalLabel">Hold on! </h1>
+          <h1 class="modal-title fs-4" id="exampleModalLabel"></h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="mb-5 pt-6  ">
+            <div class="mb-5 mt-4  ">
                 <div class=" columns-1 sm:columns-2">
                     <input type="text" hidden id="cancel_id">
                 <h5 style="font-size:19px"  >Are you sure you want to cancel this appointnment?</h5>
@@ -706,6 +706,13 @@
                 url: "/admin/appointment/create/",
                 data: data,
                 datatype: "json",
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                 success: function(response){ 
                   if(response.status == 400){
                     $('#error_user, #error_date, #error_time, #error_modepayment, #error_payment, #error_reference_no ' ).html("");
@@ -765,13 +772,13 @@
                     $(".main-spinner").show();
                 },
                 complete: function(){
-				$('#complete-confirmation').modal('hide');
+				            $('#complete-confirmation').modal('hide');
                     $(".main-spinner").hide();
                 },
                 success: function(response){ 
                   console.log(response);
                   $('#success').html();
-                    $('#success').text('Appointment successfully');
+                    $('#success').text('Updated successfully');
                       $('#success').show();
                       setTimeout(function() {
                                 $("#success").fadeOut(500);
@@ -844,7 +851,6 @@
                         setTimeout(function() {
                             $(".success").fadeOut(500);
                         }, 3000);
-                  
                         $('#delete').modal('hide');
                         $('#delete').find('input').val("");
                         $('.table-appointment').load(location.href+' .table-appointment');
@@ -999,23 +1005,6 @@ if(formattedDate == start){
             },
             editable:true,
         });
-    
-
-        
-                     //pagination
-            $(document).on('click',  '.pagination a', function(e){
-            e.preventDefault();
-            let status = $('#modal-status').val()
-
-            if( status == "show" ){
-              let page = $(this).attr('href').split('patient=')[1]
-              patient(page);
-            }else{
-                let page = $(this).attr('href').split('appointment=')[1]
-              appointment(page);
-            }
-        });
-
 	   
         $('#mode_payment').on('change', function(e){
             var payment = $(this).val();
@@ -1029,136 +1018,6 @@ if(formattedDate == start){
                 $('#gcash').show();
             }
         });
-
-        function patient(page){
-          let data = page;
-           $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-              $.ajax({
-                type: "GET",  
-                url: "/admin/modal_patient/pagination/paginate-data?patient="+page ,
-                data: {data: data}, 
-                datatype: "json",
-                success: function(response){
-                  console.log(response);
-                $('.patient').html(response);
-                  }
-              });
-        }
-
-        
-        function appointment(page){
-          let data = page;
-           $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-       
-              $.ajax({
-                type: "GET",  
-                url: "/admin/appointment/pagination/paginate-data?appointment="+page ,
-                data: {data: data}, 
-                datatype: "json",
-                success: function(response){
-            
-                $('.table-appointment').html(response);
-                  }
-              });
-        }
-
-        $('#appointment_name').on('keyup', function(e){
-          e.preventDefault();
-          let search = $('#appointment_name').val();
-          $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-          $.ajax({
-            url: '/appointment/search-name',
-            method:'GET',
-            data: {search:search,},
-            success:function(response){
-              $('.table-appointment').html(response);
-              if(response.message == 'Nofound'){
-
-                $('.table-appointment').append('<div class="card-body" style="width:100%; height:68vh; overflow-x: auto;  font-size: 15px;">\
-                                      <div class="" style="width:100%; ">\
-                                        <table class="table table-bordered table-striped ">\
-                                            <thead>\
-                                                <tr>\
-                                                    <th>id</th>\
-                                                    <th>Patient Id</th>\
-                                                    <th>Fullname</th>\
-                                                    <th>Date</th>\
-                                                    <th>Time</th>\
-                                                    <th>Service</th>\
-                                                    <th>Price</th>\
-                                                    <th>Status</th>\
-                                                    <th style="width: 205px">Action</th>\
-                                                </tr>\
-                                            </thead>\
-                                            <tbody >\
-                                              <tr>\
-                                                <td colspan="9" style="text-align: center;">No appointment Found</td>\
-                                              </tr>\
-                                            </tbody>\
-                                        </table>\
-                                      </div>\
-                                    </div>');
-               }
-            }
-          });
-        })
-
-        $('#fullname_patient').on('keyup', function(e){
-          e.preventDefault();
-          let search = $('#fullname_patient').val();
-          // console.log(search);
-          $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-          $.ajax({
-            url: '/modal_profile/search-name',
-            method:'GET',
-            data: {search:search,},
-            success:function(response){
-              console.log(response);
-             
-              $('.patient').html(response);
-              if(response.message == 'Nofound'){       
-                $('.patient').append('<table class="table table-bordered table-striped" >\
-                                                            <thead>\
-                                                                <tr>\
-                                                                    <th>id</th>\
-                                                                    <th>First name</th>\
-                                                                    <th>Middle name</th>\
-                                                                    <th>Last name</th> \
-                                                                    <th>Birthday</th>\
-                                                                    <th>Address</th>\
-                                                                    <th>Gender</th>\
-                                                                    <th>Mobile no.</th>\
-                                                                    <th>Email</th>\
-                                                                    <th>Action</th>\
-                                                                </tr>\
-                                                            </thead>\
-                                                            <tbody class="nofound" >\
-                                                              <tr>\
-                                                                <td colspan="10" style="text-align: center;">no user Found</td>\
-                                                                </tr>\
-                                                            </tbody>\
-                                                          </table>');
-               }
-            }
-          });
-        })
-
 
         $('#payment_cash').on('keyup', function(e){
           e.preventDefault();

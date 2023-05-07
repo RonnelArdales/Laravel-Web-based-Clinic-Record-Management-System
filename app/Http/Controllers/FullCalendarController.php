@@ -20,17 +20,22 @@ class FullCalendarController extends Controller
     public function index(Request $request)         
     {   
         $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
+        // $days = BusinessHour::select('day')->where('off', '1')->whereNot('appointment_method', 'walkin')->groupBy('day')->get();
+        $walkins = BusinessHour::select('day')->where('off', '1')->where('appointment_method', 'walkin')->groupBy('day')->get();
         $services = Service::all();
         $discounts = Discount::all();
-        // $reservationfee = Reservationfee::first();
-        // dd($reservationfee);
         $day_array = [];
         foreach($days as $day){
             $day_array[] = date('w', strtotime($day->day));
         }
 
+        $walkin_array = [];
+        foreach ($walkins as $walkin){
+            $walkin_array[] = date('w', strtotime($walkin->day));
+        } 
+
         $day = BusinessHour::select('day', 'off')->distinct()->get();
-        return view('calendar.appointment', compact('day', 'days', 'services', 'discounts'))->with('day_array', $day_array);
+        return view('calendar.appointment', compact('day', 'days', 'services', 'discounts'))->with('day_array', $day_array)->with('walkin_array', $walkin_array);
     }
 
     public function index_businesshour(){

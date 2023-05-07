@@ -16,7 +16,7 @@
             
         </div>
         
-        <a href="/admin/sendsms">send sms</a>
+        {{-- <a href="/admin/sendsms">Send sms</a> --}}
 
         <div class="container">
             <div class="row " >
@@ -159,9 +159,11 @@ myClock();
 // Loop through the keys of the object and create an array of arrays
 for (var key in totals) {
   if (totals.hasOwnProperty(key)) {
-    dataArray.push([parseInt(key), totals[key]]);
+    dataArray.push([parseInt(key) - 1 , totals[key]]);
   }
 }
+
+console.log(dataArray);
 
 // The resulting array can be used in Highcharts
 

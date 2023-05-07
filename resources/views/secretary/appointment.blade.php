@@ -324,32 +324,6 @@
     </div>
   </div>
 </div>
-    
-
-{{-- //delete modal --}}
-
-{{-- <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:5%;">
-  <div class="modal-dialog">
-    <div class="modal-content" style="background: #EDDBC0;">
-      <div class="modal-header" style="border-bottom-color: gray">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          <div class="mb-5 pt-6  ">
-              <div class=" columns-1 sm:columns-2">
-                  <input type="text" hidden id="appointmentid">
-              <h6>Do you want to delete this data?</h6>
-      </div>
-      </div>
-      <div class="modal-footer" style="border-top-color: gray">
-        <button type="button" class=" close " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
-        <button class=" delete_appointment " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Delete</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div> --}}
 
 {{--------------- View patients ---------------------}}
 
@@ -705,6 +679,12 @@
                 url: "/secretary/appointment/create/",
                 data: data,
                 datatype: "json",
+                beforeSend: function(){
+              $(".main-spinner").show();
+          },
+          complete: function(){
+              $(".main-spinner").hide();
+          },
                 success: function(response){ 
                   if(response.status == 400){
                     $('#error_user, #error_date, #error_time, #error_modepayment, #error_payment, #error_reference_no ' ).html("");
@@ -769,7 +749,7 @@
                 },
                 success: function(response){ 
                   $('#success').html();
-                    $('#success').text('Booked successfully');
+                    $('#success').text('Updated successfully');
                       $('#success').show();
                       setTimeout(function() {
                                 $("#success").fadeOut(500);

@@ -20,18 +20,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('appointment:reminder')->dailyAt('00:01')->dailyAt('18:00');
 
-        $schedule->call(function () {
-            $appointments = Appointment::where('date', Carbon::tomorrow())->get();
+        // $schedule->call(function () {
+        //     $appointments = Appointment::where('date', Carbon::tomorrow())->get();
 
-            foreach ($appointments as $appointment) {
-                $fullname = $appointment->fullname;
-                $time = $appointment->time;
-                Mail::to($appointment->email)->send(new Appointmentreminder($fullname, $time));
-            }
+        //     foreach ($appointments as $appointment) {
+        //         $fullname = $appointment->fullname;
+        //         $time = $appointment->time;
+        //         Mail::to($appointment->email)->send(new Appointmentreminder($fullname, $time));
+        //     }
             
-        })->daily();
+        // })->daily('23:16');
     }
 
     /**

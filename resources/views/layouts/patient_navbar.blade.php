@@ -230,13 +230,9 @@
               </li>
               @endif
               <li class="nav-item">
-                <a class="nav-link active" href="#">ABOUT US</a>
+                <a class="nav-link active" href="/about_us">ABOUT US</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="#">CONTACT US</a>
-              </li>
-      
-                  
+                
               @if (Auth::check())      
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/patient/profile/">PROFILE </a>

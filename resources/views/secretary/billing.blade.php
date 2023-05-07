@@ -26,6 +26,20 @@
                     <p style="margin-bottom: 0px" id="message-success"></p> 
                   </div>
 
+                  <div class="main-spinner" style="
+                  position:fixed;
+                      width:100%;
+                      left:0;right:0;top:0;bottom:0;
+                      background-color: rgba(255, 255, 255, 0.279);
+                      z-index:9999;
+                      display:none;"> 
+                  <div class="spinner">
+                      <div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
+                      <span class="visually-hidden">Loading...</span>
+                      </div>
+                      </div>
+              </div>	
+
 
                         <div class="card"  style="background:#EDDBC0;border:none; " >
                             <div class="table-appointment" style="padding: 0%" >
@@ -315,6 +329,13 @@
                 url: "/secretary/billing/update/payment/" + billing_no, 
                     datatype: "json",
                     data: data ,
+                    beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                     success: function(response){
                         if(response.status == "400"){
                             $('#error_modeofpayment, #error_payment, #error_reference_no').html(" ");
@@ -409,31 +430,6 @@ console.log(id);
           e.preventDefault();
         $('.patient-remove').load(location.href+' .patient-remove');
         });
-
-    //     $(document).on('click', '.selectservice', function(e){
-    //         e.preventDefault();
-    //         var service = $(this).val();
-        
-    //        $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         }
-    //         });
-    //        $.ajax({
-    //             type: "GET",   
-    //             url: "/admin/billing/getservice/"+ service, 
-    //             datatype: "json",
-    //             success: function(response){ 
-    //                 $('#servicecode').val(response.service.servicecode);
-    //               $('#servicename').val(response.service.servicename);
-    //               $('#price').val(response.service.price);
-    //               $('#viewservice').modal('hide');
-    //     }
-    // });
-    //     });
-
-    $('')
-
     
         $(document).on('change', '.getservice', function(e){
             e.preventDefault();
@@ -598,57 +594,50 @@ console.log(id);
         });
 
 
-        $('#fullname_patient').on('keyup', function(e){
-          e.preventDefault();
-          let search = $('#fullname_patient').val();
-          // console.log(search);
-          $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-          $.ajax({
-            url: '/modal_profile/search-name',
-            method:'GET',
-            data: {search:search,},
-            success:function(response){
-              console.log(response);
-             
-              $('.patient').html(response);
-              if(response.message == 'Nofound'){       
-                $('.patient').append('<table class="table table-bordered table-striped" >\
-                                                            <thead>\
-                                                                <tr>\
-                                                                    <th>id</th>\
-                                                                    <th>First name</th>\
-                                                                    <th>Middle name</th>\
-                                                                    <th>Last name</th> \
-                                                                    <th>Birthday</th>\
-                                                                    <th>Address</th>\
-                                                                    <th>Gender</th>\
-                                                                    <th>Mobile no.</th>\
-                                                                    <th>Email</th>\
-                                                                    <th>Action</th>\
-                                                                </tr>\
-                                                            </thead>\
-                                                            <tbody class="nofound" >\
-                                                              <tr>\
-                                                                <td colspan="10" style="text-align: center;">no user Found</td>\
-                                                                </tr>\
-                                                            </tbody>\
-                                                          </table>');
-               }
-            }
-          });
-        })
-
-
         $('#billingtable').on('click', '.delete', function(e) {
             e.preventDefault();
             var id = $(this).data('id');
             $('#delete_no').val(id);
            $('#delete').modal('show');
         });
+
+        $(document).on('click', '.delete_user', function(){
+            id =   $('#delete_no').val();
+
+            $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+
+            $.ajax({
+                type: "DELETE", 
+                url: "/secretary/billing/deleteBilling/"+ id , 
+                datatype: "json",
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
+                success: function(response){ 
+                    console.log(response);
+                    $('#delete_no').val("");
+                    $('#delete_no').val(id);
+                    $('#delete').modal('hide');
+                    billing.draw();
+                    
+                    $('#message-success').text('Deleted Successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
+                }
+
+            }); 
+
+        })
         
 });
 </script>

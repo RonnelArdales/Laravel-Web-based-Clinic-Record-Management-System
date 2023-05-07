@@ -16,6 +16,20 @@
 </style>
   <div class="row m-3">
 
+    <div class="main-spinner" style="
+	  position:fixed;
+		width:100%;
+		left:0;right:0;top:0;bottom:0;
+		background-color: rgba(255, 255, 255, 0.279);
+		z-index:9999;
+		display:none;"> 
+	<div class="spinner">
+		<div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
+		  <span class="visually-hidden">Loading...</span>
+		</div>
+	    </div>
+</div>	
+
     @foreach ($errors->all() as $message) 
     <div class="alert alert-danger error" id="error">{{ $message }}</div>
     @endforeach
@@ -200,6 +214,13 @@
                         $.ajax({
                             url: "/admin/consultation/getappointment/" +id,
                             datatype: "json",
+                            beforeSend: function(){
+                                $(".main-spinner").show();
+                            },
+                            complete: function(){
+
+                                $(".main-spinner").hide();
+                            },
                             success: function(response){ 
                                    $('#appoint_id,#user_id,#fullname,#date,#time, #gender,#age').val("");
 

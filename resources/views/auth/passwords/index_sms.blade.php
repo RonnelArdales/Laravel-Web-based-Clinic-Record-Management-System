@@ -1,5 +1,3 @@
-
-
 @extends('layouts.auth')
 @section('content')
 
@@ -21,12 +19,11 @@
                   </div>
                 @endif
 
-
+  
                 <!-- Sign In Form -->
-                <form action="/verifyconfirm" method="POST">
-                    @csrf
-
-                  <h6>Please enter the code that we sent to email.</h6>
+                <form action="/resetpassword" method="GET">
+                  @csrf
+                  <h6>Please enter the code that we sent to mobile number.</h6>
                   <div class="form-floating ">
                       
                     <input   class="form-control"   name="code" value="" style="background: #D0B894;">
@@ -36,12 +33,11 @@
                   @if(Session::has('error'))
                   <span  role="alert" class="block mt-0 text-danger">{{Session::get('error')}}</span>
               @endif
-
                   <hr style="margin-bottom: 0px; margin-top:10px" >
-                  <a href="/resend/auth" style="text-decoration: none">Resend Code</a>
-                  
+                  <a href="/resendCode/sms" style="text-decoration: none">Resend Code</a>
                   <div class="d-grid" style="margin-top: 2%;justify-content:right;">
-                    <button style="background: #829460; border-radius: 15px; color:white; border:#829460;width: 110px;height: 37px;" type="submit">Verify</button>
+                    <input type="text" name="smsotp" hidden value="mobileno">
+                    <button style="background: #829460; border-radius: 15px; color:white; border:#829460;width: 110px;height: 37px;" type="submit">Verify Code</button>
                 </form>
               </div>
             </div>

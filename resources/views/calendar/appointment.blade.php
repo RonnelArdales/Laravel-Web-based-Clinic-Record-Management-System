@@ -39,6 +39,7 @@
                 <div   style="padding:0px; width:1100px" >
 
                     <div class="" style=" background-color: #EDDBC0; margin-left:15px; margin-right:15px" id="calendar"></div>
+                    
                 </div>    
                 <div class="col-sm" style="margin-left: 20px"  >
                     <div >
@@ -104,7 +105,7 @@
       
         </div>
         <div class="col-sm  " style=" padding:0px">
-
+          {{-- <button id="refresh-calendar">Refresh Calendar</button> --}}
         </div>
     </div>
 
@@ -162,20 +163,23 @@
 </div>
 </div>
 
-
-
-
 </div>
 
 <script>
 
     $(document).ready(function () {
-    
+
+      // $('#refresh-calendar').click(function() {
+      //       $('#calendar').fullCalendar('refetchEvents');
+      //   });
+
         setTimeout(function() {
                                 $(".success").fadeOut(500);
                             }, 3000);
 
         var day_off = {!! json_encode($day_array) !!} ;
+        var walkin = {!! json_encode($walkin_array) !!} ;
+
         var date = new Date();
         var d = date.getDate();
         var m = date.getMonth();
@@ -245,13 +249,10 @@
 
 
     dayRender: function (date, cell) {
-    // Get the current date
-    var currentDate = moment();
- 
 
-    // Compare the current date to the date of the cell
+    var currentDate = moment();
+
     if (date.isSame(currentDate, 'day')) {
-      // Apply a disabled style to the cell representing the current or previous date
       cell.addClass('fc-state-disabled');
     }
   },

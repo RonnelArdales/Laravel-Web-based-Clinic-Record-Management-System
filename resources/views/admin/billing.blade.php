@@ -28,6 +28,21 @@
                   </div>
 
 
+                  <div class="main-spinner" style="
+                        position:fixed;
+                            width:100%;
+                            left:0;right:0;top:0;bottom:0;
+                            background-color: rgba(255, 255, 255, 0.279);
+                            z-index:9999;
+                            display:none;"> 
+                        <div class="spinner">
+                            <div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
+                            <span class="visually-hidden">Loading...</span>
+                            </div>
+                            </div>
+                    </div>	
+
+
                         <div class="card"  style="background:#EDDBC0;border:none; " >
                             <div class="table-appointment" style="padding: 0%" >
                               <div class="card-body" style="width:100%; min-height:64vh;  font-size: 15px; ">
@@ -165,7 +180,6 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="background: #EDDBC0;">
         <div class="modal-header" style="border-bottom-color: gray" >
-          <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Delete Data</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -210,25 +224,11 @@
 
         ]
     });
-
-    // <th>Trans no.</th>
-    //                                 <th >User ID</th>
-    //                                 <th>Fullname</th>
-    //                                 <th>Sub-total</th>
-    //                                 <th>Status</th>
-    //                                 <th style="width: 230px">Action</th>
  
     $("#payment_cash").on('change', function(e){
         e.preventDefault();
             this.value = parseFloat(this.value).toFixed(2);
     });
-
-    
-      function message_success(){
-        setTimeout(function() {
-                            $(".success").show();
-                        }, 500);
-      }
         
         function deleteall () {
             if (window.location.href) {
@@ -320,6 +320,13 @@
                 url: "/admin/billing/update/payment/" + billing_no, 
                     datatype: "json",
                     data: data ,
+                    beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                     success: function(response){
                             console.log(response);
                         if(response.status == "400"){
@@ -362,37 +369,6 @@
             });
             
         } )
-      
-        //------------ close patient modal --------------------------------//
-        $(".viewpatients").on("hidden.bs.modal", function(e){
-          e.preventDefault();
-        $('.patient-remove').load(location.href+' .patient-remove');
-        });
-
-    //     $(document).on('click', '.selectservice', function(e){
-    //         e.preventDefault();
-    //         var service = $(this).val();
-        
-    //        $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         }
-    //         });
-    //        $.ajax({
-    //             type: "GET",   
-    //             url: "/admin/billing/getservice/"+ service, 
-    //             datatype: "json",
-    //             success: function(response){ 
-    //                 $('#servicecode').val(response.service.servicecode);
-    //               $('#servicename').val(response.service.servicename);
-    //               $('#price').val(response.service.price);
-    //               $('#viewservice').modal('hide');
-    //     }
-    // });
-    //     });
-
-    $('')
-
     
         $(document).on('change', '.getservice', function(e){
             e.preventDefault();
@@ -415,62 +391,6 @@
 
         });
         
-        $(document).on('click','.store_addtocart' ,function(e){
-            e.preventDefault();
-            var data ={
-                'billingno' : $('#getid').val(),
-                'userid': $('#userid').val(),
-                'fullname': $('#fullname').val(),
-                'servicecode': $('#getservice').val(),
-                'service': $('#servicename').val(),
-                'price': $('#price').val(),
-            }
-
-            console.log(data);
-            $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-
-            $.ajax({
-                type: "POST",   
-                url: "/admin/billing/addtocart/store", 
-                data: data,
-                datatype: "json",
-                beforeSend: function(){
-                    $(".loading").show();
-                },
-                complete: function(){
-                    $(".loading").hide();
-                },
-                success: function(response){ 
-                        if(response.status == 200){     
-                            $('#sub-total').val(response.subtotal);
-                            $('#message').text(response.message);
-                            $('.subtotal').load(location.href+' .subtotal');
-                            $('.data-table').load(location.href+' .data-table');
-                            $('.billing').load(location.href+' .billing');
-                            $('#servicename').val("");
-                            $('#getservice').val("");
-                            $('#price').val("");
-                            message_success();
-                            setTimeout(function() {
-                                $(".success").fadeOut(500);
-                            }, 2000);
-                        }else if(response.status == 400){
-                            $('#message-error').text(response.message);
-                            $(".error").show();
-                            setTimeout(function() {
-                                $(".error").fadeOut(500);
-                            }, 2000);
-                        }
-                        
-                    }
-                });
-        });
-
-
 
         $('#mode_payment').on('change', function(e){
             var payment = $(this).val();
@@ -577,6 +497,13 @@
                 type: "DELETE", 
                 url: "/admin/billing/deleteBilling/"+ id , 
                 datatype: "json",
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                 success: function(response){ 
                     console.log(response);
                     $('#delete_no').val("");

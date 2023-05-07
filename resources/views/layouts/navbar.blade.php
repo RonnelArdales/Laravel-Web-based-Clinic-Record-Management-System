@@ -270,8 +270,6 @@ h1 {
               </li>
 
               @endif
-    
-      
                   
               @if (Auth::check())      
                 <li class="nav-item">

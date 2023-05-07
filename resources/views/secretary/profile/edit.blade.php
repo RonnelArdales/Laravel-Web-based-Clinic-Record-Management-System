@@ -76,6 +76,25 @@
                    <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
                    @enderror
                  </div>
+
+                 <div class="col-md-4"  style="margin-top:10px" >
+                  <label for="inputPassword4" class="form-label">Mobile no:</label>
+                <input style="text-align:center" value="{{Auth::user()->mobileno}}" type="text" class="form-control"   name="mobileno" >
+                @error('mobileno')
+                <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                @enderror
+              </div>
+              <div class="col-md-4"  style="margin-top:10px" >
+              <label for="inputPassword4" class="form-label">Email:</label>
+               <input type="text" style="text-align:center" value="{{Auth::user()->email}}" type="age" class="form-control"   name="email" >
+                @error('email')
+                <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
+                @enderror
+              </div>
+              <div class="col-md-4" style="margin-top:10px">
+                  <label for="inputPassword4" class="form-label">Username:</label>
+                  <input type="text" style="text-align:center" value="{{Auth::user()->username}}" readonly type="age" class="form-control"   name="username" >
+               </div>
            
             
                 <div class="col-12 d-flex justify-content-end mt-3 " >

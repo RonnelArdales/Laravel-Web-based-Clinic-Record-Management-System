@@ -72,6 +72,7 @@ $try = DB::select(DB::raw('
 $totals = array_column($try, 'total', 'month');
 
 
+
 $gender_records = Consultation::selectRaw('primary_diag, 
     MONTH(created_at) as month, 
     COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male", 
@@ -463,7 +464,7 @@ public function fetch_service(){
         $day_numeric = date('w', strtotime($start));
 
         $workinghours = BusinessHour::where('day', $day)->whereNotIn('from', ['23:59:00'])->pluck('from')->toArray();
-        $currentappointment = Appointment::where('date', $start)->pluck('time')->toArray();
+        $currentappointment = Appointment::where('date', $start)->where('status', 'pending' )->pluck('time')->toArray();
         $availablehours = array_diff($workinghours, $currentappointment);
         $offday = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
         $day_array = [];
@@ -1006,6 +1007,13 @@ $input = $request->all();
 
 
     public function delete_billing($id){
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = 'Delete Transaction';
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
           
         $transaction = Transaction::where('transno', '=', $id)->delete();
         return response()->json($id);
@@ -1240,9 +1248,10 @@ public function store_businesshours(Request $request){
 
  public function update_guestpage_setting($id, Request $request)
  {
+     
     $validator = Validator::make($request->all(), [
         // "content" => 'bail|required',
-        'image' => 'c|mimes:img,jpg,png|max:3000'
+        'image' => 'bail|mimes:img,jpg,png|max:3000'
         ],[
             'image.mimes'=>'the file must be a image',
             ])->stopOnFirstFailure(true);
@@ -1267,6 +1276,7 @@ public function store_businesshours(Request $request){
             }
 
             if($request->image){
+             
                 if(File::exists($path)){
                     File::delete($path);
                 }
@@ -1278,12 +1288,12 @@ public function store_businesshours(Request $request){
             $guestpage_id->save();
 
             
-        $audit_trail = new AuditTrail();
-        $audit_trail->user_id = Auth::user()->id;
-        $audit_trail->username = Auth::user()->username;
-        $audit_trail->activity = 'Update guestpage ';
-        $audit_trail->usertype = Auth::user()->usertype;
-        $audit_trail->save();
+        // $audit_trail = new AuditTrail();
+        // $audit_trail->user_id = Auth::user()->id;
+        // $audit_trail->username = Auth::user()->username;
+        // $audit_trail->activity = 'Update guestpage ';
+        // $audit_trail->usertype = Auth::user()->usertype;
+        // $audit_trail->save();
 
             return redirect('admin/guestpage')->with('success', 'updated Successfully');
         }
@@ -1672,6 +1682,7 @@ public function store_businesshours(Request $request){
         }
 
         public function update_myprofile(Request $request){
+
             $validated = $request->validate([
                 "first_name" => ['required'],
                 "mname" => [''],
@@ -1680,6 +1691,8 @@ public function store_businesshours(Request $request){
                 "age" => ['required'],
                 "address" => ['required'],
                 "gender" => ['required'],
+                "mobileno" => ['required'],
+                "email" => ['required', 'email'],
             ],[
               'first_name.required' => 'First name is required',
               'last_name.required' => 'Last name is required',
@@ -1687,11 +1700,35 @@ public function store_businesshours(Request $request){
               'age.required' => 'Age is required',
               'address.required' => 'Address is required',
               'gender.required' => 'gender is required',
+              'mobileno.required' => 'Mobile number is required',
+              'email.required' => ' Email is required',
             ]);
 
         $user = User::where('id', Auth::user()->id)->first();
         $input = $request->all();
+
+        if($user->email == $input['email']  ){
+            $user->email = $input['email'];
+
+        }else{
+
+            $validated = $request->validate([
+                "email" => [ Rule::unique('users', 'email') ],
+            ]);
+            $user->email = $input['email'];
+        }
+
+        if($user->mobileno == $input['mobileno']  ){
+            $user->mobileno = $input['mobileno'];
+
+        }else{
+            $validated = $request->validate([
+                "mobileno" => [Rule::unique('users', 'mobileno') ],
+            ]);
+            $user->mobileno = $input['mobileno'];
+        }
         
+
         $user->fname = $input['first_name'];
         $user->mname = $input['mname'];
         $user->lname = $input['last_name'];
@@ -1928,6 +1965,13 @@ public function store_businesshours(Request $request){
             $data = DB::table('users')->where('status', 'pending')->orderby('created_at','desc');
             return Datatables::of($data)
                     ->addIndexColumn()
+                    ->addColumn('created_at', function ($event) {
+                        // Convert the start_time to a Carbon instance
+                        $date = Carbon::parse($event->created_at);
+            
+                        // Format the time as desired, e.g. "h:i A" for 12-hour time format
+                        return $date->format('M j, Y H:i A');
+                    })
                     ->addColumn('action', function($row){
                         $btn = '<button class="verify btn btn-sm btn-primary" style="text-align:center" data-id="' . $row->id . '">Verify</button>';
                         // $btn = $btn.'<button class="edit btn btn-sm btn-primary" style="margin-left: 5px; margin-right: 5px;" data-id="' . $row->id . '">Edit</button>';

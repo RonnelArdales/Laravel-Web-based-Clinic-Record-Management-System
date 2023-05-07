@@ -16,27 +16,34 @@
 
 </style>
   <div class="row m-3">
-          {{--Show Add to cart tab--}}
+
+
+    <div class="main-spinner" style="
+	  position:fixed;
+		width:100%;
+		left:0;right:0;top:0;bottom:0;
+		background-color: rgba(255, 255, 255, 0.279);
+		z-index:9999;
+		display:none;"> 
+	<div class="spinner">
+		<div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
+		  <span class="visually-hidden">Loading...</span>
+		</div>
+	    </div>
+</div>	
+
+
 
           <div class="me-auto col-md-8 col-md-offset-5">
 
             <h1> <b>TRANSACTION</b> </h1>
             </div>
-                      <div class="alert success alert-success" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:9999">
-                          <p id="message-success"></p> 
+                      <div class="alert success alert-success" role="alert" style="width:300px; right:25px; display:none;  position:fixed; z-index:9999; text-align:center">
+                          <p  style="font-size:20px" id="message-success"></p> 
                       </div>
-                      <div class="alert error alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:9999">
-                          <p id="message-error"></p> 
-                      </div>
-                      <div class="loading" style="width:250px; right:25px; display:none; position:fixed">
-                          <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                              <span class="visually-hidden">Loading...</span>
-                          </div>
-                          <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-                              <span class="visually-hidden">Loading...</span>
-                          </div>
-                      </div>
-                      
+                      <div class="alert error alert-danger" role="alert" style="width:300px; right:25px; display:none;  position:fixed; z-index:9999; text-align:center">
+                          <p  style="font-size:20px" id="message-error"></p> 
+                      </div>       
                           <form class="row" >
                             <div hidden>
                                 <label for="" style="text-align:right">billing no.</label><br>
@@ -93,7 +100,7 @@
                         </div>
                   
                           <div class="float-end text-right d-flex justify-content-end" style="margin-bottom: 2%; margin-top:20px">
-                              <button type="button" class="store_addtocart"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; margin-bottom:2%; " >Add to Cart</button>
+                              <button type="button" class="store_addtocart"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; margin-bottom:2%; " >Add Service</button>
                           </div>
 
                           </div>
@@ -278,6 +285,13 @@
                 type: "GET",   
                 url: "/admin/appointment/getuser/"+ id, 
                     datatype: "json",
+                    beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                     success: function(response){ //return galing sa function sa controller
                     $(' #userid, #fullname').html("");
                     $('#userid').val(response.users[0].id);
@@ -290,7 +304,6 @@
         $(document).on('change', '.getservice', function(e){
             e.preventDefault();
             var id = $(this).val();
-
                     $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -340,10 +353,10 @@
                 data: data,
                 datatype: "json",
                 beforeSend: function(){
-                    $(".loading").show();
+                    $(".main-spinner").show();
                 },
                 complete: function(){
-                    $(".loading").hide();
+                    $(".main-spinner").hide();
                 },
                 success: function(response){ 
                     $('#error_fullname, #error_service, #error_price' ).html("");
@@ -397,6 +410,13 @@
                 url: "/admin/transaction/addtocart/billing_store", 
                     datatype: "json",
                     data: {transno : $('#getid').val() },
+                    beforeSend: function(){
+                    $(".main-spinner").show();
+                    },
+                    complete: function(){
+
+                        $(".main-spinner").hide();
+                    },
                     success: function(response){ 
                         if(response.status == "400"){
 
@@ -443,6 +463,13 @@
                 type: "DELETE",   
                 url: "/admin/transaction/delete/" + id, 
                     datatype: "json",
+                    beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                     success: function(response){ //return galing sa function sa controller
                         $(".success").show();
                             $('#message-success').text(response.message);

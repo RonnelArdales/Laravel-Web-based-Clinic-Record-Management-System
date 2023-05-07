@@ -73,7 +73,6 @@
                 @if (count($services)> 0 )
                 @foreach ($services as $service)
                 <tr class="overflow-auto">
-                    <td style="text-align: center;"> {{$service->servicecode}}</td>
                     <td style="text-align: center;">{{$service->service}}</td>
                     <td style="text-align: center;">{{$service->price}}</td>
                

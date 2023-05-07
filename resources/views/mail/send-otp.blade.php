@@ -9,5 +9,5 @@ Button Text
 </x-mail::button> --}}
 
 Thanks,<br>
-{{ config('app.name') }}
+JGMarquez, Rpsy
 </x-mail::message>

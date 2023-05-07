@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\HelloMail;
 use App\Mail\SendOtp;
+use App\Mail\SendVerifycode;
 use App\Models\AuditTrail;
 use App\Models\EmailOtp;
 use App\Models\User;
@@ -25,6 +26,19 @@ class AuthController extends Controller
 
     public function verifyemail_auth(){
         return view('auth.verifyauth');
+    }
+
+    public function resendcode_verify(){
+        $otp = rand(10, 99999);
+        $time = Carbon::now()->addMinute(5);
+        EmailOtp::create([
+           'email' => Auth::user()->email,
+           'verifycode' => $otp,
+           'expire_at' =>$time,
+        ]);
+        Mail::to(Auth::user()->email)->send(new SendVerifycode($otp));
+        
+        return redirect()->back();
     }
 
     public function identify_email(){
@@ -130,23 +144,86 @@ class AuthController extends Controller
         $user = User::where('email','=', $request->input('email'))->first(); 
         if ($user) {
             auth()->login($user);
-             $otp = rand(10, 99999);
+            //  $otp = rand(10, 99999);
+            //  $time = Carbon::now()->addMinute(5);
+            //  EmailOtp::create([
+            //     'email' => $user->email,
+            //     'verifycode' => $otp,
+            //     'expire_at' =>$time,
+            //  ]);
+            //  Mail::to($user->email)->send(new SendOtp($otp)); 
+            //  return redirect('/verifycode');
+                return redirect('/select');
+        }
+        return redirect()->back()->with('error', 'Email not found' );
+      
+        }
+
+
+
+  public function index_select(){
+        return view('auth.passwords.selectcodesender');
+    }
+
+    public function select_sendcode(Request $request){
+        $user = User::where('email','=', Auth::user()->email)->first(); 
+
+            if ($request->input('email')) {
+            $otp = rand(10, 99999);
              $time = Carbon::now()->addMinute(5);
              EmailOtp::create([
                 'email' => $user->email,
                 'verifycode' => $otp,
                 'expire_at' =>$time,
              ]);
-             Mail::to($user->email)->send(new SendOtp($otp));
-             
-             return redirect('/verifycode');
-        }
-        return redirect()->back()->with('error', 'Email not found' );
-      
-        }
+             Mail::to(Auth::user()->email)->send(new SendOtp($otp)); 
+             return redirect('/verifycode/email');
+            } else {
+         
+                $otp = rand(10, 99999);
+                $time = Carbon::now()->addMinute(5);
 
-    public function show_verifycode(){
+                $email_otp = new EmailOtp();
+                $email_otp->mobileno =  strval($user->mobileno); 
+                $email_otp->verifycode = $otp;
+                $email_otp->expire_at = $time;
+                $email_otp->save();
+
+                $cleanedNumber = preg_replace('/[^0-9]/', '', Auth::user()->mobileno);
+
+                $formattedNumber = "+" . '63 ' . substr($cleanedNumber, 1, 3) . ' ' . substr($cleanedNumber, 4, 3) . ' ' . substr($cleanedNumber, 7 , 8);
+                
+                $message = "This an sms verification code to change your password" . " " . $otp;
+        
+                try {
+          
+                    $account_sid = getenv("TWILIO_SID");
+                    $auth_token = getenv("TWILIO_TOKEN");
+                    $twilio_number = getenv("TWILIO_FROM");
+          
+                    $client = new Client($account_sid, $auth_token);
+                    $client->messages->create($formattedNumber, [
+                        'from' => $twilio_number, 
+                        'body' => $message]);
+          
+                        return redirect('/verifycode/sms');
+          
+                } catch (Exception $e) {
+                    dd("Error: ". $e->getMessage());
+                }
+        
+            }
+            
+         
+    }
+
+
+    public function show_verifycode_email(){
         return view('auth.passwords.confirm');
+    }
+
+    public function show_verifycode_sms(){
+        return view('auth.passwords.index_sms');
     }
 
     public function resend_code(){
@@ -164,8 +241,44 @@ class AuthController extends Controller
              return redirect()->back();
         }
         return redirect()->back()->with('error', 'Email not send, please try again' );
-        // return view('auth.passwords.confirm');
+    }
+
+    public function resend_code_sms(){
+        $user = User::where('email','=', Auth::user()->email)->first(); 
+        $otp = rand(10, 99999);
+        $time = Carbon::now()->addMinute(5);
+
+        $email_otp = new EmailOtp();
+        $email_otp->mobileno =  strval($user->mobileno); 
+        $email_otp->verifycode = $otp;
+        $email_otp->expire_at = $time;
+        $email_otp->save();
+
+        $cleanedNumber = preg_replace('/[^0-9]/', '', Auth::user()->mobileno);
+
+        $formattedNumber = "+" . '63 ' . substr($cleanedNumber, 1, 3) . ' ' . substr($cleanedNumber, 4, 3) . ' ' . substr($cleanedNumber, 7 , 8);
         
+        $message = "This an sms verification code to change your password" . " " . $otp;
+
+        try {
+  
+            $account_sid = getenv("TWILIO_SID");
+            $auth_token = getenv("TWILIO_TOKEN");
+            $twilio_number = getenv("TWILIO_FROM");
+  
+            $client = new Client($account_sid, $auth_token);
+            $client->messages->create($formattedNumber, [
+                'from' => $twilio_number, 
+                'body' => $message]);
+  
+                return redirect('/verifycode/sms');
+  
+        } catch (Exception $e) {
+            dd("Error: ". $e->getMessage());
+        }
+
+
+
     }
 
     public function resend_code_create($email){
@@ -180,7 +293,7 @@ class AuthController extends Controller
                 'verifycode' => $otp,
                 'expire_at' =>$time,
              ]);
-             Mail::to($email)->send(new SendOtp($otp));
+             Mail::to($email)->send(new SendVerifycode($otp));
              
              return redirect()->back();
         // }
@@ -190,23 +303,45 @@ class AuthController extends Controller
     }
 
     public function reset_password(Request $request){
-        $validated = $request->validate([
-            'code' => ['required'],
-        ]);
-       $emailverify = EmailOtp::where('email', '=',  Auth::user()->email)->where('verifycode' , '=', $request->input('code')) ->first();
-     
-       if($emailverify){
-        if($emailverify->expire_at > Carbon::now()){
-            return redirect('/resetpage');
-        }else{
-            return redirect()->back()->with('error', 'expired code' );
-        }
-        
-       }else{
-        return redirect()->back()->with('error', 'Incorrect code' );
-       }
 
-        // return view('auth.passwords.reset');
+        if($request->input('emailotp')){
+
+            $validated = $request->validate([
+                'code' => ['required'],
+            ]);
+           $emailverify = EmailOtp::where('email', '=',  Auth::user()->email)->where('verifycode' , '=', $request->input('code')) ->first();
+         
+           if($emailverify){
+            if($emailverify->expire_at > Carbon::now()){
+                return redirect('/resetpage');
+            }else{
+                return redirect()->back()->with('error', 'expired code' );
+            }
+            
+           }else{
+            return redirect()->back()->with('error', 'Incorrect code' );
+           }
+
+        }else{
+
+            $validated = $request->validate([
+                'code' => ['required'],
+            ]);
+           $emailverify = EmailOtp::where('mobileno', '=',  Auth::user()->mobileno)->where('verifycode' , '=', $request->input('code')) ->first();
+         
+           if($emailverify){
+            if($emailverify->expire_at > Carbon::now()){
+                return redirect('/resetpage');
+            }else{
+                return redirect()->back()->with('error', 'expired code' );
+            }
+            
+           }else{
+            return redirect()->back()->with('error', 'Incorrect code' );
+           }
+
+        }
+
     }
 
     public function update_password(Request $request){

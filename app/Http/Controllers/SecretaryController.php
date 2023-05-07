@@ -110,7 +110,7 @@ $female[]=$gender->female;
     //profile page
     public function profile(){
   
-        $patients = DB::table('users')->where('usertype', 'patient')->where('status', 'verified')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+        $patients = DB::table('users')->where('usertype', 'patient')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
 
         return view('secretary.profile', compact('patients'));
     }
@@ -729,6 +729,7 @@ public function addtocart_getalldata($id){
     }
 
     public function update_myprofile(Request $request){
+
         $validated = $request->validate([
             "first_name" => ['required'],
             "mname" => [''],
@@ -737,6 +738,8 @@ public function addtocart_getalldata($id){
             "age" => ['required'],
             "address" => ['required'],
             "gender" => ['required'],
+            "mobileno" => ['required'],
+            "email" => ['required', 'email'],
         ],[
           'first_name.required' => 'First name is required',
           'last_name.required' => 'Last name is required',
@@ -744,11 +747,35 @@ public function addtocart_getalldata($id){
           'age.required' => 'Age is required',
           'address.required' => 'Address is required',
           'gender.required' => 'gender is required',
+          'mobileno.required' => 'Mobile number is required',
+          'email.required' => ' Email is required',
         ]);
 
     $user = User::where('id', Auth::user()->id)->first();
     $input = $request->all();
+
+    if($user->email == $input['email']  ){
+        $user->email = $input['email'];
+
+    }else{
+
+        $validated = $request->validate([
+            "email" => [ Rule::unique('users', 'email') ],
+        ]);
+        $user->email = $input['email'];
+    }
+
+    if($user->mobileno == $input['mobileno']  ){
+        $user->mobileno = $input['mobileno'];
+
+    }else{
+        $validated = $request->validate([
+            "mobileno" => [Rule::unique('users', 'mobileno') ],
+        ]);
+        $user->mobileno = $input['mobileno'];
+    }
     
+
     $user->fname = $input['first_name'];
     $user->mname = $input['mname'];
     $user->lname = $input['last_name'];
@@ -759,11 +786,10 @@ public function addtocart_getalldata($id){
 
     $user->save();
 
-    
     $audit_trail = new AuditTrail();
     $audit_trail->user_id = Auth::user()->id;
     $audit_trail->username = Auth::user()->username;
-    $audit_trail->activity = 'Update profole';
+    $audit_trail->activity = 'Update profile';
     $audit_trail->usertype = Auth::user()->usertype;
     $audit_trail->save();
 

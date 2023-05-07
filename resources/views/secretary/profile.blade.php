@@ -71,7 +71,6 @@
                         <td style="text-align: center">
                         <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
                         <button type="button" value="{{$user->id}}" class="edit  btn btn-sm btn-primary ">Edit</button>
-                        {{-- <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td> --}}
                     </tr>
                     @endforeach
                     @else
@@ -292,16 +291,7 @@
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_username"></span>
                 </div>
             
-                {{-- <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Usertype:</label>
-                <select name="usertype" class="usertype rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_usertype" >
-                  <option value="" {{$user->usertype == "" ? 'selected' : ''}}></option>
-                  <option value="patient" {{$user->usertype == "patient" ? 'selected' : ''}}>Patient</option>
-                  <option value="secretary" {{$user->usertype == "secretary" ? 'selected' : ''}}>Secretary</option>
-                  <option value="admin" {{$user->usertype == "admin" ? 'selected' : ''}}>Admin</option>
-                </select>
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_usertype"></span>
-                </div> --}}
+      
 
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
                 <select name="usertype" class="usertype rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_status" >
@@ -312,15 +302,7 @@
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_status"></span>
                 </div>
-  
-                {{-- <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Password</label>
-                <input autocomplete="off" class=" password rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" name="password" type="password" id="edit_password"> 
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_password"></span>
-                </div>
-  
-                <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Confirm Password</label>
-                <input autocomplete="off" class="password_confirmation rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="password" id="edit_confirmpassword">   --}}
+
   
   
         </div>
@@ -787,75 +769,34 @@
                 $(document).on('click',  '.pagination a', function(e){
             e.preventDefault();
             let usertype = $('#usertypetable').val();
-
-            if (usertype == "patient") {
+       
               let page = $(this).attr('href').split('patient=')[1]
-              profile(page, usertype);
+              profile(page);
               
-            } else if(usertype == "secretary"){
-              let page = $(this).attr('href').split('secretary=')[1]
-              profile(page, usertype);
-            }else{
-              let page = $(this).attr('href').split('admin=')[1]
-              profile(page, usertype);
-              
-            }
         });
 
         
 
-        function profile(page, usertype){
+        function profile(page){
             let data = page;
-            let usertypetable = usertype;
-            console.log(page, usertype);
            $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
             });
-            if (usertypetable == "patient") {
               $.ajax({
                 type: "GET", 
-                data: {usertypetable :usertypetable},  
                 url: "/secretary/profile/pagination/paginate-data?patient="+page , 
                 datatype: "json",
                 success: function(response){
-                  console.log('from paginate' + usertype); 
                   console.log(response);
                 $('.patient').html(response);
                   }
               });
-              
-            } else if(usertypetable == "secretary"){
-              $.ajax({
-                type: "GET", 
-                data: {usertypetable :usertypetable},  
-                url: "/secretary/profile/pagination/paginate-data?secretary="+page , 
-                datatype: "json",
-                success: function(response){ 
-                  console.log('from paginate' + usertype);
-                  console.log(response);
-                $('.secretary').html(response);
-                  }
-              });
-            }else{
-              $.ajax({
-                type: "GET", 
-                data:{usertypetable :usertypetable},  
-                url: "/admin/profile/pagination/paginate-data?admin="+page , 
-                datatype: "json",
-                success: function(response){
-                  console.log('from paginate' + usertype);
-                  console.log(response); 
-                $('.admin').html(response);
-                  }
-              });
-            }
         }
 
         $('#search-fullname').on('keyup', function(e){
           e.preventDefault();
-          let usertype = $('#usertypetable').val();
           let search = $('#search-fullname').val();
           $.ajaxSetup({
             headers: {
@@ -866,11 +807,8 @@
             url: '/profile/search-name',
             method:'GET',
             data: {search:search,
-                  usertype:usertype,
                                     },
             success:function(response){
-             
-              if(usertype == 'patient'){
                 // console.log(response.message);
                 $('.patient').html("");
                 $('.patient').html(response);
@@ -896,66 +834,10 @@
                                               </tr>\
                                             </tbody>\
                                         </table>');
-               }
-              }else if(usertype == 'secretary'){
-                console.log(response);
-              $('.secretary').html("");
-              $('.secretary').html(response);
-
-              if(response.message == 'Nofound'){
-                $('.secretary').append(' <table class="table table-bordered table-striped" style="background-color: white">\
-                                      <thead>\
-                                                <tr>\
-                                                    <th>id</th>\
-                                                    <th>First name</th>\
-                                                    <th>Middle name</th>\
-                                                    <th>Last name</th> \
-                                                    <th>Birthday</th>\
-                                                    <th>Address</th>\
-                                                    <th>Gender</th>\
-                                                    <th>Mobile no.</th>\
-                                                    <th>Email</th>\
-                                                    <th>Action</th>\
-                                                </tr>\
-                                            </thead>\
-                                            <tbody >\
-                                              <tr>\
-                                                <td colspan="10" style="text-align: center;">No Secretary Found</td>\
-                                              </tr>\
-                                            </tbody>\
-                                        </table>');
-               }
-              
-              }else{
-                console.log(response);
-              $('.admin').html("");
-              $('.admin').html(response);
-
-              if(response.message == 'Nofound'){
-                $('.admin').append(' <table class="table table-bordered table-striped" style="background-color: white">\
-                                      <thead>\
-                                                <tr>\
-                                                    <th>id</th>\
-                                                    <th>First name</th>\
-                                                    <th>Middle name</th>\
-                                                    <th>Last name</th> \
-                                                    <th>Birthday</th>\
-                                                    <th>Address</th>\
-                                                    <th>Gender</th>\
-                                                    <th>Mobile no.</th>\
-                                                    <th>Email</th>\
-                                                    <th>Action</th>\
-                                                </tr>\
-                                            </thead>\
-                                            <tbody >\
-                                              <tr>\
-                                                <td colspan="10" style="text-align: center;">No Admin Found</td>\
-                                              </tr>\
-                                            </tbody>\
-                                        </table>');
-               }
-
+               
               }
+
+              
             }
           });
         })

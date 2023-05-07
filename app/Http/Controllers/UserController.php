@@ -24,9 +24,7 @@ class UserController extends Controller
         }else{
 
             $patients = DB::table('users')->where('usertype', 'patient')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
-            $secretaries = DB::table('users')->where('usertype', 'secretary')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
-            $admins = DB::table('users')->where('usertype', 'admin')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin'); 
-            return view('secretary.profile', compact('patients', 'secretaries', 'admins'));
+            return view('secretary.profile', compact('patients'));
 
         }
 
@@ -471,17 +469,8 @@ class UserController extends Controller
             }
 
         }else{
-            $usertype = $request->input('usertypetable');
-
             $patients = DB::table('users')->where('usertype', 'patient')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
-
-            if($usertype == "patient"){
                 return view('pagination.pagination_patient', compact('patients'))->render();
-            }elseif ($usertype == "secretary") {
-                return view('pagination.pagination_secretary', compact('secretaries'))->render();
-            }else{
-                return view('pagination.pagination_admin', compact('admins' ))->render();
-            }
         }
   
        

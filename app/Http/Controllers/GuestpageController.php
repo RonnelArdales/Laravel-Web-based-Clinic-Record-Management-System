@@ -14,6 +14,7 @@ class GuestpageController extends Controller
 
     public function aboutus(){
         $about_us_1 = Guestpage::where('title', 'about us 1')->first();
+        $about_us_2 = Guestpage::where('title', 'about us 2')->first();
     
         return view('patient.about_us')->with('aboutus1', $about_us_1);
     }

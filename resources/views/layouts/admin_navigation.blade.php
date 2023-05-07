@@ -38,20 +38,6 @@
 </head>
 
 <style>
-/* .nav-tabs .nav-item .nav-link {
-  background-color: #0080FF;
-  color: #FFF;
-} */
-
-/* .nav-tabs .nav-item .nav-link.active {
-  color: #0080FF;
-} */
-/* 
-.tab-content {
-  border: 1px solid #dee2e6;
-  border-top: transparent;
-  padding: 15px;
-} */
 
 .nav-pills > li > a.adopt-tab.active {
     background-color: #EF476F;
@@ -628,15 +614,7 @@
 
               </ul>  
        
-               {{-- <form class="" action="/logout" method="POST" >
-                    @csrf
-                    <li class="my-1 mx-3">
-                        <button type="submit" class="btn dropdown-btn rounded">
-                          <img class="icon" src="{{url('/logo/businesshours.png')}}" alt=""> 
-                          Logout</button>
-                    </li>
-                    </form> --}}
-          
+
           </ul>
           @else
 

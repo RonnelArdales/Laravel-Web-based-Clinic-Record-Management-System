@@ -107,7 +107,7 @@ class ClinicuserController extends Controller {
 
                                 // Alert::success('success Title', 'Success Message');
 
-                              return redirect('patient/homepage')->with('success', 'Your account is successfully created, wait for the administrator approval to used the full function of the system. Please check back later' );
+                              return redirect('patient/homepage');
                               }else{
                               return redirect('secretary/dashboard');
                               }
@@ -135,7 +135,7 @@ class ClinicuserController extends Controller {
             "age" => ['required'],
             "address" => ['required'],
             "gender" => ['required'],
-            "mobile_number" => ['required'],
+            "mobile_number" => ['required', Rule::unique('users', 'mobileno') ],
             "email" => ['required', 'email', Rule::unique('users', 'email') ],
             "username" => ['required', 'regex:/\w*$/', 'min:8', Rule::unique('users', 'username')],
             "password" => 'required|confirmed|min:8',

@@ -16,26 +16,34 @@
 
 </style>
   <div class="row m-3">
-          {{--Show Add to cart tab--}}
+          
+    
+    <div class="main-spinner" style="
+	  position:fixed;
+		width:100%;
+		left:0;right:0;top:0;bottom:0;
+		background-color: rgba(255, 255, 255, 0.279);
+		z-index:9999;
+		display:none;"> 
+	<div class="spinner">
+		<div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
+		  <span class="visually-hidden">Loading...</span>
+		</div>
+	    </div>
+</div>	
+
 
           <div class="me-auto col-md-8 col-md-offset-5">
 
             <h1><b>TRANSACTION</b></h1>
             </div>
-                      <div class="alert success alert-success" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:999">
-                          <p id="message-success"></p> 
-                      </div>
-                      <div class="alert error alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:999">
-                          <p id="message-error"></p> 
-                      </div>
-                      <div class="loading" style="width:250px; right:25px; display:none; position:fixed">
-                          <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                              <span class="visually-hidden">Loading...</span>
-                          </div>
-                          <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-                              <span class="visually-hidden">Loading...</span>
-                          </div>
-                      </div>
+            <div class="alert success alert-success" role="alert" style="width:300px; right:25px; display:none;  position:fixed; z-index:9999; text-align:center">
+                <p  style="font-size:20px" id="message-success"></p> 
+            </div>
+            <div class="alert error alert-danger" role="alert" style="width:300px; right:25px; display:none;  position:fixed; z-index:9999; text-align:center">
+                <p  style="font-size:20px" id="message-error"></p> 
+            </div>       
+               
                       
                           <div hidden>
                               <label for="" style="text-align:right">billing no.</label><br>
@@ -97,7 +105,7 @@
                         </div>
                   
                           <div class="float-end text-right d-flex justify-content-end" style="margin-bottom: 2%; margin-top:20px">
-                              <button type="button" class="store_addtocart"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; margin-bottom:2%; " >Add to Cart</button>
+                              <button type="button" class="store_addtocart"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; margin-bottom:2%; " >Add Service</button>
                           </div>
 
                           </div>
@@ -144,7 +152,6 @@
                                        </div>
                                        <div id="subtotal" class="subtotal d-flex justify-content-end col " style="margin-bottom:15px; margin-right:20px; justify-content:center">
                                         <label for="" style="font-weight: 700;Padding-top:2%; font-size:15px;margin-right:10px; justify-content:center">Sub-Total:</label>
-                                        {{-- <input type="text" id="subtotal_value" style="text-align: right;" readonly value="₱ {{number_format("$sum",2)}}" > --}}
                                         <div class="currency-wrap">
                                           <span class="currency-code">₱</span>
                                           <input readonly type="text" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 " placeholder="0.00"  style="background: #D0B894; height:38px" value="{{number_format("$sum",2)}}" />
@@ -342,10 +349,10 @@
                 data: data,
                 datatype: "json",
                 beforeSend: function(){
-                    $(".loading").show();
+                    $(".main-spinner").show();
                 },
                 complete: function(){
-                    $(".loading").hide();
+                    $(".main-spinner").hide();
                 },
                 success: function(response){ 
                     $('#error_fullname, #error_service, #error_price' ).html("");
@@ -399,6 +406,12 @@
                 url: "/secretary/transaction/addtocart/billing_store", 
                     datatype: "json",
                     data: {transno : $('#getid').val() },
+                    beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+                    $(".main-spinner").hide();
+                },
                     success: function(response){ //return galing sa function sa controller
                         if(response.status == "400"){
 

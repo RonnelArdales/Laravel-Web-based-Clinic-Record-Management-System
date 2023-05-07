@@ -8,6 +8,7 @@ use App\Models\Consultation;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
@@ -93,29 +94,45 @@ class SearchController extends Controller
                 $name =  $request->input('search');
                 $usertype =  $request->input('usertype');
 
-                if($usertype == "patient"){
-                    $patients = DB::table('users')->where('usertype', $usertype)->where(DB::raw("CONCAT(`fname`, ' ', `lname`)"), 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+                if(Auth::user()->usertype == "admin"){
+
+                    if($usertype == "patient"){
+                        $patients = DB::table('users')->where('usertype', $usertype)->whereNot('status', 'pending')->where(DB::raw("CONCAT(`fname`, ' ', `lname`)"), 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
+                        if($patients->count() >= 1){
+                            return view('pagination.pagination_patient', compact('patients'))->render();
+                        }else{
+                            return response()->json(['message' => 'Nofound']);
+                        }
+                        
+                    }elseif ($usertype == "secretary") {
+                        $secretaries = DB::table('users')->where('usertype', $usertype)->whereNot('status', 'pending')->where(DB::raw("CONCAT(`fname`, ' ', `lname`)"), 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
+                        if($secretaries->count() >= 1){
+                            return view('pagination.pagination_secretary', compact('secretaries'))->render();
+                        }else{
+                            return response()->json(['message' => 'Nofound']);
+                        }
+                    }else{
+                        $admins = DB::table('users')->where('usertype', $usertype)->whereNot('status', 'pending')->where(DB::raw("CONCAT(`fname`, ' ', `lname`)"), 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin');
+                        if($admins->count() >= 1){
+                            return view('pagination.pagination_admin', compact('admins'))->render();
+                        }else{
+                            return response()->json(['message' => 'Nofound']);
+                        }
+                    }
+
+                }else{
+
+                    $patients = DB::table('users')->where('usertype', 'patient' )->whereNot('status', 'pending')->where(DB::raw("CONCAT(`fname`, ' ', `lname`)"), 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
                     if($patients->count() >= 1){
                         return view('pagination.pagination_patient', compact('patients'))->render();
                     }else{
                         return response()->json(['message' => 'Nofound']);
                     }
-                    
-                }elseif ($usertype == "secretary") {
-                    $secretaries = DB::table('users')->where('usertype', $usertype)->where(DB::raw("CONCAT(`fname`, ' ', `lname`)"), 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->paginate(9, ['*'], 'secretary');
-                    if($secretaries->count() >= 1){
-                        return view('pagination.pagination_secretary', compact('secretaries'))->render();
-                    }else{
-                        return response()->json(['message' => 'Nofound']);
-                    }
-                }else{
-                    $admins = DB::table('users')->where('usertype', $usertype)->where(DB::raw("CONCAT(`fname`, ' ', `lname`)"), 'LIKE', "%".$name."%")->orderBy('created_at', 'desc')->paginate(9, ['*'], 'admin');
-                    if($admins->count() >= 1){
-                        return view('pagination.pagination_admin', compact('admins'))->render();
-                    }else{
-                        return response()->json(['message' => 'Nofound']);
-                    }
+
+
                 }
+
+     
            }
         }
 
@@ -130,32 +147,6 @@ class SearchController extends Controller
             }
          
         }
-
-        public function modal_profile(Request $request){
-                $fullname = $request->search;
-
-                $patients =  DB::table('users')->where('usertype', 'patient')->where(DB::raw("CONCAT(`fname`, ' ', `lname`)"), 'LIKE', "%".$fullname."%")->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
-                if($patients->count() >= 1){
-                    return view('pagination.pagination_modalpatient', compact('patients'))->render();
-                }else{
-                    return response()->json(['message' => 'Nofound']);
-                }
-                // return response()->json(['search' => $fullname]);
-        }
-        public function queuing_fullname(Request $request){
-                $fullname = $request->search;
-                
-                $appointments =  DB::table('appointments')->where('fullname' , 'LIKE', "%".$fullname."%")->where('status', 'Booked')->whereDate('date', '>', date('Y-m-d'))
-                ->orderBy('date', 'asc')->paginate(1, ['*'], 'queuing');
-          
-                if($appointments->count() >= 1){
-                    return view('pagination.pagination_queuing', compact('appointments'))->render();
-                }else{
-                    return response()->json(['message' => 'Nofound']);
-                }
-             
-        }
-
 
         public function search_appointment_user(Request $request){
             $name =  $request->input('search');

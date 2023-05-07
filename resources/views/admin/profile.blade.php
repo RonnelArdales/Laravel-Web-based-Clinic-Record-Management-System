@@ -412,7 +412,7 @@
                 </div>
           
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Username</label>
-                <input class=" username rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_username" style="background: #D0B894;" type="text"> 
+                <input readonly class=" username rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_username" style="background: #D0B894;" type="text"> 
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_username"></span>
                 </div>
@@ -886,6 +886,9 @@
                         })
                         $.each(response.errors.usertype, function (key, err_values){
                         $('#error_usertype').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.status, function (key, err_values){
+                        $('#error_status').append('<span>'+err_values+'</span>');
                         })
                         $.each(response.errors.password, function (key, err_values){
                         $('#error_password').append('<span>'+err_values+'</span>');
