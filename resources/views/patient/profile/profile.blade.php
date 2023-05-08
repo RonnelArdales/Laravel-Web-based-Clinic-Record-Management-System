@@ -36,8 +36,11 @@ th, td{
   <p id="message-success"></p> 
 </div>
 
-
 <div class="container" style="margin-bottom:100px">
+
+  @if (session()->has('success'))
+<div class="alert alert-success success"  id="success" >{{ session('success') }}</div> 
+@endif
 
 
 <div class="card w-40 " style="box-sizing: border-box;font-family:Poppins; background:#EDDBC0;padding-top:1%; margin-bottom:4%;padding-bottom:1%;margin-top:5%;box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.25);">
@@ -74,7 +77,7 @@ th, td{
         <span  role="alert" class="block mt-3 pb-5 text-danger">{{$message}}</span><br>
         @enderror
         <div style="margin-top:10px">
-          <a style="text-decoration:none;background-color: #829460;  padding-left:7px;padding-right:7px ; padding-bottom:3px; padding-top:3px;color:white" href="/patient/profile/edit">Change profile</a> 
+          <a style="text-decoration:none;background-color: #829460;  padding-left:7px;padding-right:7px ; padding-bottom:3px; padding-top:3px;color:white" href="/patient/profile/edit">Edit profile</a> 
         </div>
   
     </div>
@@ -282,6 +285,10 @@ th, td{
 </div>
 <script>
     $(document).ready(function(e){
+
+      setTimeout(function() {
+            $(".success").fadeOut(800);
+            }, 2000);
      
         $(document).on('click', '.cancel-confirmation', function(e){
             e.preventDefault();

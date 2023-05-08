@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Gujarati:wght@700&family=Poppins:wght@400;700&family=Song+Myung&display=swap" rel="stylesheet">
@@ -26,7 +27,62 @@ height: auto;
 background-color: #EDDBC0;
 }
 
+.container1{
+    width:77%;height: auto;
+    
+    align-self: center;margin-bottom: 5%;
 
+  }
+  .divngpamagat1{
+    margin-top:2.5%;padding:0;
+    margin-bottom: 3%;
+  }
+  .pamagat{
+   margin: 0 0 1% 0%;
+   font-size: 32px;
+   padding:0;
+   line-height:0%;
+   font-weight: 800;
+  }
+  .linya{
+    border: 1px solid rgba(0, 0, 0, 0.3);width:100%;align-self:center;margin:1% 0 1% 0;
+  }
+  .divngpamagat2{
+   position: absolute;
+   visibility: hidden;
+   text-align: center;
+   align-self: center;
+    line-height:0%;
+    margin: 0;
+    padding: 0;
+    background-color: #EDDBC0;
+    top: 4%;
+  }
+  .form-label{
+    margin: 4.5% 0 0 0 ;padding:0;font-size: 14px;
+  }
+    @media (max-width: 578px) {
+  
+  .divngpamagat1{
+    visibility: hidden;
+  }
+  .divngpamagat2{
+    visibility: visible;
+  }
+  .pamagat2{
+    font-size: 25px;
+    margin:0;
+    line-height:0%;
+   font-weight: 800;
+  }
+  .linya{
+    margin:15px 0 2% 0;
+  }
+  .form-label{
+    margin: 1% 0% 0% 0%;
+  }
+
+}
 
   
   /* .billing-cancel{

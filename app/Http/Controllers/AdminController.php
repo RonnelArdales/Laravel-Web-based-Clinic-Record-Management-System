@@ -1660,8 +1660,14 @@ public function store_businesshours(Request $request){
 
         public function update_reservationfee_setting($id, Request $request){
 
-            $reservationfee = Reservationfee::where('id', $id)->update(['reservationfee' => $request->input('newfee')]);
+            $validated = $request->validate([
+                "newfee" => ['required'],
+            ],[
+              'newfee.required' => 'Reservation fee is required',
 
+            ]);
+
+        $reservationfee = Reservationfee::where('id', $id)->update(['reservationfee' => $request->input('newfee')]);
             
         $audit_trail = new AuditTrail();
         $audit_trail->user_id = Auth::user()->id;
@@ -1670,7 +1676,7 @@ public function store_businesshours(Request $request){
         $audit_trail->usertype = Auth::user()->usertype;
         $audit_trail->save();
 
-            return redirect()->back();
+            return redirect()->back()->with('success', 'Updated successfully');
         }
 
         public function index_myprofile(){

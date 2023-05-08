@@ -278,7 +278,7 @@
             <br><br> JG Marquez, Rpsy offers various psychological services like psychological evaluation, psychotherapy, and counseling. The appointment method is through walk-in and Facebook using google forms that they provide. The clinic has a Facebook page that advertises its services. The clinic can book 3-4 clients a day, it has 6 working hours and is open every Monday and Wednesday. </p>
         </div> --}}
 
-        <div class="col letters flex-column  " style="color: rgb(255, 255, 255); padding-top:7.5%;padding-right:2%;background-color: #829460;text-align:  justify;  align-items:center;">
+        <div class="col letters flex-column  " style="color: rgb(255, 255, 255); padding-top:7.5%;padding-right:2%;background-color: #829460;text-align:  justify;  align-items:center;  font-family: Inter;">
           <p  class="letters" style="color: rgb(255, 255, 255);" >   {!! $aboutus1->content !!}</p>
        
         </div>
@@ -292,12 +292,17 @@
 
       <div class="row">
 
-        <div class="col-sm" style="text-align:justify;display: flex; align-items:center;padding:2%">
-          <p class="letters"> In JG Marquez,Rpsy Clinic, We take social responsibility seriously. We understand that mental health is a critical aspect of overall well-being, and we believe that everyone deserves access to quality mental health care. To this end, we strive to create a welcoming and inclusive environment that is accessible to all individuals, regardless of their background or financial situation. We work to reduce stigma surrounding mental health issues and actively engage with our local community through outreach and education initiatives. We also prioritize ethical and culturally sensitive treatment practices, recognizing the importance of understanding and respecting each individual's unique experiences and needs. By fulfilling our social responsibility, we hope to make a positive impact on the mental health and well-being of our clients and the wider community.</p>
+        <div class="col-sm" style="text-align:justify;display: flex; align-items:center;padding:2%; color: rgb(33, 37, 41); background-color: rgb(237, 219, 192);  font-family: Inter;">
+          <p class="letters"> {!! $aboutus2->content !!}</p>
         </div>
 
+
         <div class="col-sm-5" style="padding: 0;text-align:right;">
-            <img class="image2" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1682782582/Untitled_design_12_epw2dw.png" alt="">
+          @if ($aboutus2->image == "")
+              <img class="image2" src="{{url('/guestpage/noimage.png')}}" alt="">
+          @else
+               <img class="image2" alt="" src="{{url('/guestpage/'.$aboutus2->image)}}"> 
+          @endif
         </div>
 
        </div>

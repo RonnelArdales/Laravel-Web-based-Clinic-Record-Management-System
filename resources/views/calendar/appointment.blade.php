@@ -25,8 +25,8 @@
 	    </div>
 </div>	
     <div>
-        <div style="background-color:#DDDDDD ; width:100%; height:150px" class="d-flex justify-content-center">
-            <h3>no image</h3>
+        <div style="background-color:#DDDDDD ;  height:150px" class="d-flex justify-content-center">
+           <img style="width:90%;" src="{{url('guestpage/appointment.jpg')}}" alt="">
         </div>
         
         <div class="container" style="margin-top: 20px; margin-bottom:20px"> 

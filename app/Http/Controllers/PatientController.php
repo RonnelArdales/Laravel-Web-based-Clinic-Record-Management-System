@@ -71,7 +71,7 @@ class PatientController extends Controller
         $user->profile_pic = $filename;
 
         $user->save();
-       return redirect()->back();
+       return redirect()->back()->with('success', 'Updated successfully');
     }
 
     public function edit_profile(){
@@ -82,7 +82,6 @@ class PatientController extends Controller
         
         $validated = $request->validate([
             "fname" => ['required', 'min:4'],
-            // "mname" => ['min:4'],
             "lname" => ['required', 'min:4'],
             "birthday" => ['required'],
             "address" => ['required', 'min:4'],
@@ -107,8 +106,13 @@ class PatientController extends Controller
 
         if($request->input('old_password') || $request->input('password') || $request->input('password_confirmation')){
             if(password_verify($input['old_password'], $user->password)){
+                $validated = $request->validate([
+                    "password" => 'required|confirmed|min:8',
+                ], [
+                    'password.required' => 'Password is required',
+                    'password.confirmed' => 'Password did not match',
+                ] );
                   
-                  if($request->input('password') == $request->input('password_confirmation')){
                         $validated = $request->validate([
                               "password" => ['required'],
                           ], [
@@ -116,9 +120,7 @@ class PatientController extends Controller
                           ] );
                         $encrypt = bcrypt($request->input('password'));
                         $user->password = $encrypt;
-                  }else{
-                        return redirect()->back()->with('error', 'The password did not match.');
-                  }
+      
             }else{
                   return redirect()->back()->with('error', 'The password did not match with the current password.');
             }
@@ -133,7 +135,7 @@ class PatientController extends Controller
         $audit_trail->usertype = Auth::user()->usertype;
         $audit_trail->save();
 
-        return redirect('/patient/profile')->with('message', 'updated successfully');
+        return redirect('/patient/profile')->with('success', 'Updated successfully');
     }
 
     public function index_billing(){
