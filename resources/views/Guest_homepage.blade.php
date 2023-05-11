@@ -30,7 +30,7 @@
         <img style="height: 19vw; width: 19vw; margin-top: 2.5rem; margin-left:auto; margin-right: auto; border-radius: 9999px; " src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt="JGRPSYlogo">
         <h1 style="margin-top: 1.75rem;font-family:Poppins; text-align:center; font-size:2vw; color:white;font-weight: 900; "> PSYCHOLOGICAL SERVICES </h1>
         <p style="font-size: 1vw; margin-top:5%; margin-bottom:5%; color:white; text-align:center;font-family:Song Myung; "> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae dolorem tenetur quam! Assumenda explicabo architecto voluptate, rerum minima vel, id vitae, aliquid in reiciendis fugit sunt pariatur? Dignissimos, et iste. </p>
-        <a href="" style="Poppins; background-color:#EDDBC0; color:#829460; text-align:center; font-weight:700; font-size: 1.5vw; border-radius: 1.5vw 0vw;padding:0.5vw 5vw 0.5vw 5vw; text-decoration:none;">Read More</a>
+        {{-- <a href="" style="Poppins; background-color:#EDDBC0; color:#829460; text-align:center; font-weight:700; font-size: 1.5vw; border-radius: 1.5vw 0vw;padding:0.5vw 5vw 0.5vw 5vw; text-decoration:none;">Read More</a> --}}
         </div>
     
     <div class="textpage1">
@@ -160,13 +160,21 @@
 
       <div style="width: 100%; height: 50vw;background-color: #AA8B56;display: flex;flex-direction:row; justify-content: center; padding: 3%;">
         <div style="margin-right: 3%; align-self:center;">
-            <img style="height: 35vw; width:31vw;border-radius: 10% 0px;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt=""> 
+
+            @if ($doctorsinfo->image == "") 
+            <img style="height: 35vw; width:31vw;border-radius: 10% 0px;"   src="{{url('/guestpage/noimage.png')}}" alt="">
+        @else
+            <img style="height: 35vw; width:31vw;border-radius: 10% 0px;"  src="{{url('/guestpage/'.$doctorsinfo->image)}}" alt="">
+        @endif
+
         </div>
     
         <div style="text-align: left; padding-top:5%;">
-            <p style="font-family: 'Poppins'; font-style: normal; font-weight: 700; color:white; font-size:2.5vw;margin-bottom:0%;"> DOCTOR'S NAME</p>
-            <p style="font-family: 'Poppins'; font-style: normal; font-weight: 700; color:white; font-size:1vw;margin-top:0%;line-height:0%;">title</p>
-            <p style="font-size: 2vw; font-family:'Song Myung';font-weight: 400; margin-bottom:3%; color:white; ">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat beatae repellat eius dolor culpa amet nesciunt vitae nobis sequi, inventore, temporibus voluptatum non distinctio quidem est molestias accusantium tenetur ratione! <br> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem maiores veritatis sapiente maxime magnam ab, culpa explicabo facilis! Obcaecati, ipsa illo. Nisi qui porro similique quaerat, tempore perspiciatis ratione sequi.</p>
+     
+            <div style="margin-bottom: 3%; color:white; font-family:'Song Myung';font-weight: 400;"  >
+                {!! $doctorsinfo->content !!}
+            </div>
+       
 
             
         </div>
@@ -176,13 +184,21 @@
            
         <div style="text-align: justify; ">
             <p style="font-family: 'Poppins'; font-style: normal; font-weight: 700; color:black; font-size:2.5vw;margin-bottom:0%; text-align:center;"> WHY SPEAKING UP IS IMPORTANT? </p>
-            <p style="font-size: 1.5vw; font-family:'Song Myung';font-weight: 400; color:black;margin-right: 3%; margin-top:8%; margin-bottom:5%;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat beatae repellat eius dolor culpa amet nesciunt vitae nobis sequi, inventore, temporibus voluptatum non distinctio quidem est molestias accusantium tenetur ratione! <br> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem maiores veritatis sapiente maxime magnam ab, culpa explicabo facilis! Obcaecati, ipsa illo. Nisi qui porro similique quaerat, tempore perspiciatis ratione sequi.</p>
-            <a style="font-size: 1.8vw; text-decoration:none; color:black;font-weight: 900; text-align:center; " href=""> Read More >> </a>
+            {{-- <p style="font-size: 1.5vw; font-family:'Song Myung';font-weight: 400; color:black;margin-right: 3%; margin-top:8%; margin-bottom:5%;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat beatae repellat eius dolor culpa amet nesciunt vitae nobis sequi, inventore, temporibus voluptatum non distinctio quidem est molestias accusantium tenetur ratione! <br> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem maiores veritatis sapiente maxime magnam ab, culpa explicabo facilis! Obcaecati, ipsa illo. Nisi qui porro similique quaerat, tempore perspiciatis ratione sequi.</p> --}}
+          
+            <div style="margin-right: 3%; font-weight: 400; ;margin-top:8%; margin-bottom:5%;">
+                <p>{!! $speakingup->content !!}</p>
+            </div>
         </div>
        
 
         <div style=" align-self:auto">
-            <img style="height: 28vw; width:38vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt=""> 
+
+            @if ($speakingup->image == "") 
+            <img style="height: 28vw; width:38vw;"  src="{{url('/guestpage/noimage.png')}}" alt="">
+        @else
+            <img style="height: 28vw; width:38vw;"  src="{{url('/guestpage/'.$speakingup->image)}}" alt="">
+        @endif
         </div>
 
     </div>

@@ -2,7 +2,7 @@
 @section('content')
 <div >
     <div class="alert error alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed">
-        <p id="message-error">sdfsdf</p> 
+        <p id="message-error"></p> 
       </div>
       @if (session('success'))
       <div class="alert success alert-success" role="alert" style="width:250px; right:25px;  position:fixed">
@@ -25,8 +25,9 @@
 	    </div>
 </div>	
     <div>
-        <div style="background-color:#DDDDDD ;  height:150px" class="d-flex justify-content-center">
-           <img style="width:90%;" src="{{url('guestpage/appointment.jpg')}}" alt="">
+        <div style="background-color:#DDDDDD ;  height:150px; width:100%" class="d-flex justify-content-center">
+           {{-- <img style="width:90%;" src="{{url('guestpage/appointment.jpg')}}" alt=""> --}}
+           <img style="width:100%; height:150px" src="{{url('guestpage/appointment_header.png')}}" alt="">
         </div>
         
         <div class="container" style="margin-top: 20px; margin-bottom:20px"> 
@@ -115,20 +116,22 @@
 <div class="modal fade" id="appointment-confirmation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="background: #EDDBC0;">
-        <div class="modal-header" style="border-bottom-color: gray">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">HOLD ON!</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div style="display: flex; justify-content: flex-end;">
+          <button type="button" style="margin-top:5px; margin-right:5px" class="btn-close text-right" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-header" style="border-bottom-color: gray; display: flex; justify-content: center; padding:10px">
+          <h2 class="modal-title text-center" id="exampleModalLabel"> <b>HOLD ON.</b> </h2>
         </div>
         <div class="modal-body">
-            <div class="mb-5 pt-6  ">
-                <div class=" columns-1 sm:columns-2">
+          <div class="mb-3 mt-4  ">
+            <div class=" columns-1 sm:columns-2 " style="display: flex; justify-content: center; ">
                     <input type="hidden" id="discountcode">
-                <h6>Are you sure you want to continue?</h6>
+                    <h4>Are you sure you want to continue?</h4>
 
         </div>
         </div>
-        <div class="modal-footer" style="border-top-color: gray">
-          <button type="button" class=" close " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
+        <div style=" display: flex; justify-content: center; margin-bottom:40px "  >
+          <button type="button" class=" close " style="margin-right:15px; background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">No</button>
           <form action="/patient/billing/payment" method="GET">
             @csrf
             <input type="text" hidden name="date" id="form-dateselected">

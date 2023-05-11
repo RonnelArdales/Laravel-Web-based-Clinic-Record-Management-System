@@ -3,7 +3,7 @@
 <div class="row m-4">
     <div class="col-md-8 col-md-offset-5">
     
- <h1>Business Hours</h1>
+ <h1><B>BUSINESS HOURS</B></h1>
 </div>   
 
 <div id="success"></div>
@@ -30,7 +30,8 @@
     </div>
 
 <div class="card table-appointment" style="background:#EDDBC0;border:none; padding-top:15px"  >
-    <h2 style="margin: 0px; margin-bottom:10px">Available hours</h2>
+    <h2 style="margin: 0px; margin-bottom:10px">Available Hours</h2>
+    <p>Select the preferred day and click "<b>Day Off</b>" to set the <b>day in a whole month</b> as day off.</p>
     <div class="card-body" style="width:100%; min-height:50vh; display: flex; overflow-x: auto;padding:0px ; font-size: 15px; ">
       <div  style="width:100%; " class="businessHours" >
         <div id="" style="height:300px; padding:10px; background-color:aliceblue; border-radius:10px" >
@@ -52,7 +53,7 @@
         @foreach ($days as $day)
         <div class="refresh_off" style="margin-top:10px">
             <button class="delete btn btn-danger ml-20 delete" id="delete">Delete</button>
-            <button style="padding-left:30px; padding-right:30px" class=" btn btn-primary ml-0 off_day" value="{{$day->day}}" id="off_day"><label for=""><input onclick="this.checked=!this.checked;" type="checkbox" {{ $day->off == 1  ? 'checked' : '' }} class="checked_off" name="checked_off" id="checked_off"  > </label> <label for="">off</label></button>
+            <button style="padding-left:30px; padding-right:30px" class=" btn btn-primary ml-0 off_day" value="{{$day->day}}" id="off_day"><label for=""><input onclick="this.checked=!this.checked;" type="checkbox" {{ $day->off == 1  ? 'checked' : '' }} class="checked_off" name="checked_off" id="checked_off"  > </label> <label for="">Off</label></button>
         </div>
         @endforeach
       

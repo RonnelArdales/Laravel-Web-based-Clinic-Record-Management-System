@@ -35,7 +35,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['guest'])->group(function () {
-  
+    Route::get('/about_us', [GuestpageController::class, 'aboutus']);
+    Route::get('/', [GuestpageController::class, 'index_guestpage']);
     Route::get('/login', function () {return view('auth.login');})->name('login');
     Route::get('/register', function () {return view('auth.register');});
     Route::post('/store', [ClinicuserController::class, 'store']);
@@ -43,8 +44,7 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/login/process', [ClinicuserController::class, 'process']);
 });
 
-Route::get('/about_us', [GuestpageController::class, 'aboutus']);
-Route::get('/', [GuestpageController::class, 'index_guestpage']);
+
 
 
 Route::post('/logout', [ClinicuserController::class, 'logout'])->name('logout');
@@ -126,7 +126,7 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
         Route::get('/appointment/get_appointment_service/{id}', [AdminController::class, 'get_appointment_service']); 
         Route::get('/appointment/Calendar-fetch', [AdminController::class, 'get_time']); 
         Route::get('/appointment/show_user', [AdminController::class, 'fetch_user']);
-        Route::get('/appointment/status/{id}', [AdminController::class, 'appointment_status']);
+        Route::put('/appointment/resched', [AdminController::class, 'resched_appointment']);
 
         //-------------------Queuing---------------------------//
         Route::get('/queuing', [AdminController::class, 'view_queuing']);
@@ -323,9 +323,9 @@ Route::prefix('/secretary')->middleware('auth', 'verify' ,'issecretary' )->group
         Route::put('/business_hours/off_status', [AdminController::class, 'off_status']);
 
             //--------------------Guest page -----------------------//
-        Route::get('/guestpage', [AdminController::class, 'show_guestpage_setting']);
-        Route::get('/guestpage/edit/{id}', [AdminController::class, 'edit_guestpage_setting']);
-        Route::put('/guestpage/update/{id}', [AdminController::class, 'update_guestpage_setting']);
+        Route::get('/guestpage', [SecretaryController::class, 'show_guestpage_setting']);
+        Route::get('/guestpage/edit/{id}', [SecretaryController::class, 'edit_guestpage_setting']);
+        Route::put('/guestpage/update/{id}', [SecretaryController::class, 'update_guestpage_setting']);
 
             //------------------reservation fee-------------------//
         Route::get('/reservationfee', [SecretaryController::class, 'index_reservationfee_setting']);
@@ -362,7 +362,8 @@ Route::prefix('/patient')->middleware('auth','ispatient', 'verify')->group(funct
     Route::put('/appointment/cancel/{id}', [PatientController::class, 'cancel_appointment']);
     Route::get('/document/view/{id}', [PatientController::class, 'document_view']);
     Route::post('/profile/picture/update/{id}', [PatientController::class, 'image_profile_update']);
-    
+    Route::get('/resched_count/{id}', [PatientController::class, 'resched_count']);
+    Route::put('/appointment/resched', [AdminController::class, 'resched_appointment']);
 
    
     // ------------ appointment -------------------//

@@ -24,7 +24,7 @@
                     <td>{!! \Illuminate\Support\Str::limit(strip_tags($guestpage->content), 20) !!}</td>
                     <td>{{$guestpage->updated_at}}</td>
                     <td>
-                        <a href="/admin/guestpage/edit/{{$guestpage->id}}" class="edit btn btn-primary btn-sm">Edit</a>
+                        <a href="/secretary/guestpage/edit/{{$guestpage->id}}" class="edit btn btn-primary btn-sm">Edit</a>
                     </td>
                 </tr>
                 

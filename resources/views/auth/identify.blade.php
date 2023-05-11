@@ -50,12 +50,12 @@
 </div>
 <div style="
 width: 7vw;
-height: 24vw;
+height: 20vw;
 left: 0;
 bottom:0;
 position: absolute;
 background: #829460;
-box-shadow: 20px 30px 10px rgba(0, 0, 0, 0.25);
+/* box-shadow: 20px 30px 10px rgba(0, 0, 0, 0.25); */
 border-radius: 0 200px 0 0 ;"></div>
 </div>
 @endsection

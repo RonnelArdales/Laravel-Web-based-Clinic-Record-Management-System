@@ -58,8 +58,6 @@
                                           </div>
                                     </div>
                     
-                    
-                                
                           
                             </div>
                             <div class="col-md-8" style="margin-right:15px;border-radius: 5px; padding:0px; box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25); background: #EDDBC0">
@@ -93,9 +91,8 @@
                                      
                     
                                                 <td style="text-align: center">
-                                                    <a href="/admin/consultation/viewconsultation/{{$consult->id}}/{{$consult->user_id}}" class=" btn btn-sm btn-info">View</a>
-                                                    <a href="/admin/consultation/edit/{{$consult->id}}/{{$consult->user_id}}" class=" btn btn-sm btn-primary">Edit</a>
-                                                    {{-- <a href="/admin/consultation/delete/{{$consult->id}}" class=" btn btn-sm btn-danger">Delete</a> --}}
+                                                    <a href="/admin/consultation/viewconsultation/{{$consult->id}}/{{$consult->user_id}}" class=" btn btn-sm btn-primary">View</a>
+                                                    <a href="/admin/consultation/edit/{{$consult->id}}/{{$consult->user_id}}" class=" btn btn-sm btn-info" style="color: white" >Edit</a>
                                                     <button value="{{$consult->id}}" class=" delete btn btn-sm btn-danger" > Delete</button>
                                         </td> 
                                             </tr>
@@ -122,22 +119,24 @@
 <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog  ">
       <div class="modal-content" style="background: #EDDBC0; margin-top:30%;">
-        <div class="modal-header" style="border-bottom-color: gray" >
-          <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Delete Data</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+        <div style="display: flex; justify-content: flex-end;">
+            <button type="button" style="margin-top:5px; margin-right:5px" class="btn-close text-right" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-header" style="border-bottom-color: gray; display: flex; justify-content: center; padding:10px">
+            <h2 class="modal-title text-center" id="exampleModalLabel"> <b>HOLD ON.</b> </h2>
+          </div>
         <div class="modal-body">
-            <div class="mb-5 pt-6  ">
-                <div class=" columns-1 sm:columns-2">
-                    <input type="text" hidden id="documentid">
+            <div class="mb-3 mt-4  ">
+                <div class=" columns-1 sm:columns-2 " style="display: flex; justify-content: center; ">
+                    <input type="text" hidden id="consultationid">
                 <h5>Do you want to delete this data?</h5>
          
 
         </div>
         </div>
-        <div class="modal-footer" style="border-top-color: gray">
-          <button type="button" class=" close btn btn-secondary" style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px;  " data-bs-dismiss="modal">Close</button>
-          <button class="delete_user" id="deletefile"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Delete</button>
+        <div style=" display: flex; justify-content: center; margin-bottom:40px "  >
+          <button type="button" class=" close btn btn-secondary" style="margin-right:15px; background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px;  " data-bs-dismiss="modal">Close</button>
+          <button class="delete_user" id="deleteconsultation"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Delete</button>
         </div>
       </div>
     </div>
@@ -151,6 +150,9 @@
         $(document).ready(function() {
 
             $(document).on('click', '.delete', function (){
+                id =  $(this).val();
+                $('#consultationid').val(" ")
+                $('#consultationid').val(id)
                 $('#delete').modal('show');
             })
         })

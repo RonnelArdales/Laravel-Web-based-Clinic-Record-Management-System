@@ -56,13 +56,12 @@
 
 
         <div style="margin-top:20px">
-            <h3><b>Services</b> </h3>
+            <h3> <b>Services</b> </h3>
         </div>
 
-        <table class="table table-bordered table-striped">
-            <thead>
+        <table class="table table-bordered table-striped border-dark">
+            <thead style="background-color: burlywood" >
                 <tr style="text-align: center;">
-              
                     <th>Description</th>
                     <th>Price</th>
               
@@ -80,7 +79,7 @@
                 @endforeach
                 @else
                 <tr>
-                    <td colspan="9" style="text-align: center; height:280px ">No Service Found</td>
+                    <td colspan="9" style="text-align: center; ">No Service Found</td>
                   </tr>
                 @endif
             </tbody>

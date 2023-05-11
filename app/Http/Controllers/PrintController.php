@@ -227,6 +227,12 @@ class PrintController extends Controller
         }else{
             $infos = Transaction::with('user')->where('transno', $id)->first();
             $services = Transaction::where('transno', $id)->get();
+            $pdf = new Dompdf();
+            $options = new Options();
+            $options->set('font_dir', public_path('fonts/Inter-VariableFont_slnt,wght.ttf'));
+            $options->set('default_font', 'inter');
+            $pdf->setOptions($options);
+
             $pdf = Pdf::loadView('print.invoice', compact('services', 'infos'));
             return $pdf->stream('Invoice.pdf');
         }

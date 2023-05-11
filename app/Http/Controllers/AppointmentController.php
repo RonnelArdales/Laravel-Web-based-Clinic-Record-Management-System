@@ -40,13 +40,35 @@ class AppointmentController extends Controller
                         ->addIndexColumn()
                         ->addColumn('action', function($row){
 
+                            $currentDate = now()->toDateString();
+                            $appointmentDate = date('Y-m-d', strtotime($row->date));
+                            $btn = '';
+                    
+                            $oneDayBefore = date('Y-m-d', strtotime('-1 day', strtotime($appointmentDate)));
+                            
+
+                            if ($currentDate >= $oneDayBefore) {
                                 $btn = '<button style="margin-right:5px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
                                 $btn = $btn.'<button class="cancel btn btn-sm btn-danger" data-id="' . $row->id . '">Cancel</button>';
-                                $size = '<div style="width: 150px">' . $btn . '</div>';                
+                         
+                            }else{
+                                $btn = '<button style="margin-right:5px; padding-left:4px; padding-right:4px; font-size:14px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
+                                $btn = $btn.'<button class="resched btn btn-sm btn-info" style="color:white; padding-left:4px; padding-right:4px; font-size:14px" data-id="' . $row->id . '">Reschedule</button> ' ;
+                                $btn = $btn.'<button class="cancel btn btn-sm btn-danger" style="padding-left:4px;</br> padding-right:4px; font-size:14px" data-id="' . $row->id . '">Cancel</button>';
+                            }
+                                $size = '<div style="margin:0px">' . $btn . '</div>';                
                                     return $size;
+                                    
+                        })    ->editColumn('user_id', function ($row) {
+                            return '<div style="width: 50px">' . $row->user_id . '</div>';
+                        }) ->editColumn('status', function ($row) {
+                            return '<div style="width: 50px">' . $row->status . '</div>';
                         })
-                        ->rawColumns(['action'])
+                        
+                    
+                        ->rawColumns(['action', 'user_id', 'status'])
                         ->make(true);
+
             }
 
             return view('admin.appointment', compact('appointments', 'patients', 'services', 'day', 'days', 'mops', 'fee'))->with('day_array', $day_array);
@@ -57,13 +79,30 @@ class AppointmentController extends Controller
                 return Datatables::of($data)
                         ->addIndexColumn()
                         ->addColumn('action', function($row){
+                            $currentDate = now()->toDateString();
+                            $appointmentDate = date('Y-m-d', strtotime($row->date));
+                            $btn = '';
+                    
+                            $oneDayBefore = date('Y-m-d', strtotime('-2 day', strtotime($appointmentDate)));
+                            
 
+                            if ($currentDate >= $oneDayBefore) {
                                 $btn = '<button style="margin-right:5px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
                                 $btn = $btn.'<button class="cancel btn btn-sm btn-danger" data-id="' . $row->id . '">Cancel</button>';
-                                $size = '<div style="width: 150px">' . $btn . '</div>';                
+                         
+                            }else{
+                                $btn = '<button style="margin-right:5px; padding-left:4px; padding-right:4px; font-size:14px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
+                                $btn = $btn.'<button class="resched btn btn-sm btn-info" style="color:white; padding-left:4px; padding-right:4px; font-size:14px" data-id="' . $row->id . '">Reschedule</button> ' ;
+                                $btn = $btn.'<button class="cancel btn btn-sm btn-danger" style="padding-left:4px;</br> padding-right:4px; font-size:14px" data-id="' . $row->id . '">Cancel</button>';
+                            }
+                                $size = '<div style="margin:0px">' . $btn . '</div>';                
                                     return $size;
+                       })  ->editColumn('user_id', function ($row) {
+                            return '<div style="width: 50px">' . $row->user_id . '</div>';
+                        }) ->editColumn('status', function ($row) {
+                            return '<div style="width: 50px">' . $row->status . '</div>';
                         })
-                        ->rawColumns(['action'])
+                        ->rawColumns(['action', 'user_id', 'status'])
                         ->make(true);
             }
             return view('secretary.appointment', compact('appointments', 'patients', 'services', 'day', 'days', 'mops', 'fee' ))->with('day_array', $day_array);
@@ -204,6 +243,7 @@ class AppointmentController extends Controller
             $appointment->date =  $input['date'];
             $appointment->time = $time;
             $appointment->appointment_method = "walk-in";
+            $appointment->reschedule_limit = 1;
             $appointment->reservation_fee = $input['reservation_fee'];
             $appointment->mode_of_payment = $input['modepayment'];
             if($input['modepayment'] == "Cash"){

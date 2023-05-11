@@ -9,6 +9,7 @@ use App\Models\AuditTrail;
 use App\Models\BusinessHour;
 use App\Models\Consultation;
 use App\Models\Discount;
+use App\Models\Guestpage;
 use App\Models\Modeofpayment;
 use App\Models\Reservationfee;
 use App\Models\Service;
@@ -858,6 +859,72 @@ public function addtocart_getalldata($id){
 
 }
 
+public function show_guestpage_setting(){
+    $content = Guestpage::all();
+    return view('secretary.system_settings.guestpage', ['guestpages' => $content]);
+ }
+
+ public function edit_guestpage_setting($id){
+    $content = Guestpage::where('id', $id)->first();
+    return view('secretary.system_settings.edit_guestpage', ['guestpages' => $content]);
+ }
+
+
+ public function update_guestpage_setting($id, Request $request)
+ {
+     
+    $validator = Validator::make($request->all(), [
+        // "content" => 'bail|required',
+        'image' => 'bail|mimes:img,jpg,png|max:3000'
+        ],[
+            'image.mimes'=>'the file must be a image',
+            ])->stopOnFirstFailure(true);
+
+     if($validator->fails()) {
+        return Redirect::back()->withErrors($validator);
+    }else{
+
+        $input = $request->all();
+        $guestpage_id = Guestpage::where('id', $id)->first();
+        $path = public_path('guestpage/'.$guestpage_id->image) ;
+
+        if($guestpage_id){
+            $guestpage_id->title = $input['title'];
+            $guestpage_id->content = $input['content']; 
+
+            if($request->image_status == "remove"){
+                if(File::exists($path)){
+                    File::delete($path);
+                }
+                $guestpage_id->image = "";
+            }
+
+            if($request->image){
+             
+                if(File::exists($path)){
+                    File::delete($path);
+                }
+                $filename = date('YmdHis'). '.' . $input['image']->getClientOriginalExtension();
+                $input['image']->move(public_path('guestpage/'), $filename);
+                $input['image'] = $filename;
+                $guestpage_id->image = $filename;
+            }
+            $guestpage_id->save();
+
+            
+        // $audit_trail = new AuditTrail();
+        // $audit_trail->user_id = Auth::user()->id;
+        // $audit_trail->username = Auth::user()->username;
+        // $audit_trail->activity = 'Update guestpage ';
+        // $audit_trail->usertype = Auth::user()->usertype;
+        // $audit_trail->save();
+
+            return redirect('secretary/guestpage')->with('success', 'updated Successfully');
+        }
+
+    }
+
+ }
 
 
 }

@@ -2,7 +2,7 @@
 @section('content')
 <div class="row m-4">
     <div class="col-md-8 col-md-offset-5">
- <h1>Guest page </h1>
+ <h1> <B>GUEST PAGE</B> </h1>
 </div>   
 @if (session()->has('success'))
    <div class="alert alert-success success"  id="success" >{{ session('success') }}</div> 

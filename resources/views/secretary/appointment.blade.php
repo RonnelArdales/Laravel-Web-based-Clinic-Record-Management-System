@@ -58,18 +58,16 @@
 	  <div class="card-body" style="width:100%; min-height:64vh;  font-size: 15px; ">
 		<table class="table table-bordered table-striped  "  id="pendings" style="background-color: white; width:100%" >
 		    <thead>
-			  <tr>
-				<th>id</th>
-				<th>Patient Id</th>
-				<th>Fullname</th>
-				<th>Contact no.</th>
-				<th>Email</th>
-				<th>Date</th>
-				<th >Time</th>
-				<th>Appointment method</th>
-				<th>Status</th>
-				<th>Action</th>
-			  </tr>
+          <tr>
+            <th>id</th>
+            <th style="width:30px">Patient Id</th>
+            <th>Fullname</th>
+            <th>Contact no.</th>
+            <th>Email</th>
+            <th>Date</th>
+            <th >Time</th>
+            <th>Action</th>
+            </tr>
 		    </thead>
 		    <tbody class="error">
 	
@@ -274,52 +272,59 @@
 </div>
 </div>
 
-  {{-- accept confirmation --}}
-  <div class="modal fade" id="complete-confirmation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered ">
-      <div class="modal-content" style="background: #EDDBC0;"> 
-        <div class="modal-header" style="border-bottom-color: gray">
-          {{-- <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Accept Confirmation </h1> --}}
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="mb-5 pt-6  ">
-                <div class=" columns-1 sm:columns-2">
-                    <input type="text" hidden id="appointmentcode">
-                <h5 style="font-size:19px">Are you sure you want to confirm this appointment?</h5>
-        </div>
-        </div>
-        <div class="modal-footer" style="border-top-color: gray">
-          {{-- <button type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class=" update_appointment p-2 w-30 bg-[#829460]  mt-7 rounded" >Update</button> --}}
-          <button type="button" class="  "style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
-          <button class=" update_appointment "style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Yes</button>
-        </div>
+ {{-- accept confirmation --}}
+ <div class="modal fade" id="complete-confirmation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal-content" style="background: #EDDBC0;"> 
+      <div style="display: flex; justify-content: flex-end;">
+        <button type="button" style="margin-top:5px; margin-right:5px" class="btn-close text-right" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-header" style="border-bottom-color: gray; display: flex; justify-content: center; padding:10px">
+        <h2 class="modal-title text-center" id="exampleModalLabel"> <b>HOLD ON.</b> </h2>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 mt-4  ">
+          <div class=" columns-1 sm:columns-2 " style="display: flex; justify-content: center; ">
+                  <input type="text" hidden id="appointmentcode">
+              <h5 style="font-size:19px">Are you sure you want to confirm this appointment?</h5>
+      </div>
+      </div>
+   
+      <div style=" display: flex; justify-content: center; margin-bottom:40px "  >
+        <button type="button" class="  "style="margin-right:15px ; background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
+        <button class=" update_appointment "style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Yes</button>
+      </div>
+  
     </div>
   </div>
+</div>
 </div>
 
   {{-- cancel confirmation --}}
   <div class="modal fade" id="cancel-confirmation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="background: #EDDBC0;">
-        <div class="modal-header" style="border-bottom-color: gray">
-          {{-- <h1 class="modal-title fs-5" id="exampleModalLabel">Book </h1> --}}
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div style="display: flex; justify-content: flex-end;">
+          <button type="button" style="margin-top:5px; margin-right:5px" class="btn-close text-right" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-header" style="border-bottom-color: gray; display: flex; justify-content: center; padding:10px">
+          <h2 class="modal-title text-center" id="exampleModalLabel"> <b>HOLD ON.</b> </h2>
         </div>
         <div class="modal-body">
-            <div class="mb-5 pt-6  ">
-                <div class=" columns-1 sm:columns-2">
+            <div class="mb-3 mt-4  ">
+                <div class=" columns-1 sm:columns-2 " style="display: flex; justify-content: center; ">
                     <input type="text" hidden id="cancel_id">
-                <h5 style="font-size:19px"  >Are you sure you want to cancel this appointnment?</h5>
+                <h4 style="font-size:19px"  >Are you sure you want to cancel this appointment?</h4>
         </div>
         </div>
-        <div class="modal-footer" style="border-top-color: gray">
-          <button type="button" class=" close btn btn-secondary"  style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
-          {{-- <button class=" cancel_appointment p-2 w-30 bg-[#829460]  mt-7 rounded" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; "  >Cancel</button> --}}
+        <div style=" display: flex; justify-content: center; margin-bottom:40px "  >
+          <button type="button" class=" close btn btn-secondary"  style="margin-right:15px; background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
           <button class=" cancel_appointment "style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Yes</button>
         </div>
+
+          {{-- <button class=" cancel_appointment p-2 w-30 bg-[#829460]  mt-7 rounded" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; "  >Cancel</button> --}}
+
+   
       </div>
     </div>
   </div>
@@ -446,6 +451,89 @@
   </div>
 </div>
 
+
+{{-------------- Reschedule appointment------------------}}
+<div class="modal fade" id="reschedcalendar">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content" style="height: 650px; background:#EDDBC0;">
+
+      <!-- Modal Header -->
+      <div class="modal-header" style="border-bottom-color: gray">
+        <h4 class="modal-title"  style="font-weight: 700;">Reschedule</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body ">
+        <div class="mb-5 pt-6  ">
+
+          <div class="container ">
+            <div class="row"  >
+
+                <div   style="padding:0px; width:800px" >
+                  <p style="margin-bottom:5px">Click your preffered Date to view availability</p>
+                    <div class="" style=" background-color: #EDDBC0; margin-left:15px; margin-right:15px" id="calendar_res"></div>
+                    <label style="color: red; margin-top:15px; margin-left:20px"  for="">Please note: You can only reschedule appointment once.</label>
+                </div>    
+                <div class="col-sm" style="margin-left: 20px"  >
+                    <div >
+                        {{-- justify-content-center  --}}
+                        <h3>Legends:</h3>
+                        <hr class="line">
+        
+                        <div class="row  d-flex  align-items-center" style="margin-left:12px">
+                            <div style="background-color: #cc6666; height:35px; width:35px; margin-right:5px  "  class="border border-dark">
+                            </div>
+                            Not Available.
+                        </div>
+                        <div class="row  d-flex  align-items-center" style="margin-left:12px; margin-top:10px">
+                            <div style="background-color: #829460 ;  height:35px; width:35px; margin-right:5px  "  class="border border-dark">
+                            </div>
+                            Available day.
+                        </div>
+                        <div class="row  d-flex  align-items-center" style="margin-left:12px; margin-top:10px">
+                            <div style="background-color: white ;  height:35px; width:35px; margin-right:5px  "  class="border border-dark">
+                            </div>
+                            Date Today.
+                        </div>
+
+                        <div class="row  d-flex  align-items-center" style="margin-left:12px; margin-top:25px">
+                            <label style="padding-left: 0px" for="">Date selected:</label>
+                            <input type="text" class="date rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:250px" readonly id="resched_date">
+                            <br>
+                            <label style="padding-left: 0px; margin-top:10px" for="">Time selected:</label>
+                            <select name="" id="reschedtime" class="rounded text-gray-700  focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:250px" >
+                              <option value="">--select--</option>
+                          </select>
+
+                          <input hidden type="text" id="reschedid">
+                      </div>
+
+                      <div style="margin-top: 65px" class="row  d-flex  justify-content-center">
+
+                        <button type="button" class=" " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; margin-right:10px" data-bs-dismiss="modal" data-bs-dismiss="modal">Close</button>
+
+                        <button type="button" class=" " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Reschedule</button>
+
+                      </div>
+                
+
+                    </div>
+                 
+                
+                </div>
+            
+            </div>
+        </div>
+         
+    </div>
+
+  </div>
+
+    </div>
+  </div>
+</div>
+
 </div>
 @endsection
 
@@ -468,15 +556,13 @@
 	   pageLength: 10,
 	   responsive: true,
         columns: [
-		{data: 'id', name: 'id' , orderable: false, searchable: false},
+            {data: 'id', name: 'id' , orderable: false, searchable: false},
             {data: 'user_id', name: 'user_id' , orderable: false, searchable: false},
-		  {data: 'fullname', name: 'fullname' , orderable: false},
-		  {data: 'contact_no', name: 'contact_no' , orderable: false, searchable: false},
-		  {data: 'email', name: 'email' , orderable: false, searchable: false},
-		  {data: 'date', name: 'date' , orderable: false, searchable: false},
-		  {data: 'time', name: 'time' , orderable: false, searchable: false},
-		  {data: 'appointment_method', name: 'appointment_method' , orderable: false, searchable: false},
-		  {data: 'status', name: 'status', orderable: false, searchable: false},
+            {data: 'fullname', name: 'fullname' , orderable: false},
+            {data: 'contact_no', name: 'contact_no' , orderable: false, searchable: false},
+            {data: 'email', name: 'email' , orderable: false, searchable: false},
+            {data: 'date', name: 'date' , orderable: false, searchable: false},
+            {data: 'time', name: 'time' , orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
@@ -581,6 +667,17 @@
             var appointcode = $(this).data('id');
             $('#appointmentcode').val(appointcode);
                    $('#complete-confirmation').modal('show');
+        });
+
+
+        $('#pendings').on('click', '.resched', function(e) {
+	e.preventDefault();
+            var appointid = $(this).data('id');
+            $('#reschedid').val("");
+            $('#reschedid').val(appointid);
+                   $('#reschedcalendar').modal('show');
+            // $('#appointmentcode').val(appointcode);
+            //        $('#complete-confirmation').modal('show');
         });
 
 	   $('#pendings').on('click', '.cancel', function(e) {
@@ -970,88 +1067,171 @@
                     })
             },
             editable:true,
-            // eventResize: function(event, delta)
-            // {
-            //     var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
-            //     var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
-            //     var title = event.title;
-            //     var id = event.id;
-            //     $.ajax({
-            //         url:"/full-calender/action",
-            //         type:"POST",
-            //         data:{
-            //             title: title,
-            //             start: start,
-            //             end: end,
-            //             id: id,
-            //             type: 'update'
-            //         },
-            //         success:function(response)
-            //         {
-            //             calendar.fullCalendar('refetchEvents');
-            //             alert("Event Updated Successfully");
-            //         }
-            //     })
-            // },
-            // eventDrop: function(event, delta)
-            // {
-            //     var start = $.fullCalendar.formatDate(event.start, 'Y-MM-DD HH:mm:ss');
-            //     var end = $.fullCalendar.formatDate(event.end, 'Y-MM-DD HH:mm:ss');
-            //     var title = event.title;
-            //     var id = event.id;
-            //     $.ajax({
-            //         url:"/full-calender/action",
-            //         type:"POST",
-            //         data:{
-            //             title: title,
-            //             start: start,
-            //             end: end,
-            //             id: id,
-            //             type: 'update'
-            //         },
-            //         success:function(response)
-            //         {
-            //             calendar.fullCalendar('refetchEvents');
-            //             alert("Event Updated Successfully");
-            //         }
-            //     })
-            // },
-    
-            // eventClick:function(event)
-            // {
-            //     if(confirm("Are you sure you want to remove it?"))
-            //     {
-            //         var id = event.id;
-            //         $.ajax({
-            //             url:"/full-calender/action",
-            //             type:"POST",
-            //             data:{
-            //                 id:id,
-            //                 type:"delete"
-            //             },
-            //             success:function(response)
-            //             {
-            //                 calendar.fullCalendar('refetchEvents');
-            //                 alert("Event Deleted Successfully");
-            //             }
-            //         })
-            //     }
-            // }
+  
         });
     
-        // $('#date').on('keyup', function(e){
-        //         e.preventDefault();
-        //         var usertype = $('#date').val();
-        //         console.log(usertype);
-        //         $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        //     });
-      
-        //     })
-        
-                     //pagination
+        var calendar = $('#calendar_res').fullCalendar({
+            height:470,
+            editable:true,
+            header:{
+                left:'prev,next today',
+                center:'title',
+                right:'month'
+            },
+            events:'/admin/appointment',
+            selectable:true,
+           
+            color: 'red',
+            contentHeight:"auto",
+            selectHelper: true,
+   
+
+    viewRender: function(view, element) {
+
+      if(day_off.includes("0")){
+              $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
+      }else{
+        $('.fc-day.fc-sun').css('backgroundColor', '#829460');
+      }
+      if(day_off.includes("1")){
+        $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
+      }else{
+        $('.fc-day.fc-mon').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("2")){
+              $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
+      }else{
+        $('.fc-day.fc-tue').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("3")){
+              $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
+      }else{
+        $('.fc-day.fc-wed').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("4")){
+              $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
+      }else{
+        $('.fc-day.fc-thu').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("5")){
+              $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
+      }else{
+        $('.fc-day.fc-fri').css('backgroundColor', '#829460');
+      }
+
+      if(day_off.includes("6")){
+              $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
+      }else{
+        $('.fc-day.fc-sat').css('backgroundColor', '#829460');
+      }
+
+      var targetDates = [
+        '2023-05-10', // Example date in the array
+        '2023-05-15',
+        '2023-05-18',
+        '2023-05-24', // Example date in the array
+        '2023-05-26',
+        '2023-05-29',
+        // Add more dates to the array as needed
+      ];
+
+      element.find('.fc-day').each(function() {
+        var date = $(this).data('date');
+        if (targetDates.includes(date)) {
+          $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
+        } else {
+          // $(this).css('background-color', '#829460'); // Green for dates not in the array
+        }
+      });
+
+      $('.fc-day.fc-today').css('backgroundColor', 'white');
+    },
+
+
+    select:function(start, end, allDay)
+      {
+        var startDate = moment(start);
+                date = startDate.clone();
+           
+                    var start = $.fullCalendar.formatDate(start, 'Y-MM-DD');
+                    var end = $.fullCalendar.formatDate(end, 'Y-MM-DD HH:mm:ss');
+                    const dayOfWeek = $.fullCalendar.moment(date).day();
+
+                    let currentDate = new Date(Date.now());
+let year = currentDate.getFullYear();
+let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
+let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
+
+let formattedDate = `${year}-${month}-${day}`;
+
+if(formattedDate == start){
+            // $('#message-error').text("Sorry you cannot book this date");
+            //                 $(".error").show();
+            //                 setTimeout(function() {
+            //                     $(".error").fadeOut(500);
+            //                 }, 3000);
+
+            return false;
+           }else{
+
+            $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+                        url:"/secretary/appointment/Calendar-fetch",
+                        type:"Get",
+                        datatype: "json",
+                        data:{
+                            start: start,
+                        },
+                        beforeSend: function(){
+                        $('#complete-confirmation').modal('hide');
+                            $(".main-spinner").show();
+                        },
+                        complete: function(){
+                            $(".main-spinner").hide();
+                        },
+                        success:function(response)
+                        {   
+                         
+                          $('#resched_date').val("");
+                          $('#reschedtime').empty();
+                          $('#reschedtime').append('<option value="0" disabled selected></option>');
+                          if(response.status == "405"){
+                                $('#message-error').text(response.message);
+                            $(".error-calendar").show();
+                            setTimeout(function() {
+                                $(".error-calendar").fadeOut(500);
+                            }, 3000);
+                            
+                            }else{
+                           
+                          $('#resched_date').val(start);
+                                $('#date').val(response.date);
+         
+                                $.each(response.available_time, function(index, val){ 
+                                    $("#reschedtime").append("<option value='"+val+"'>"+val+"</option>");
+                                } )
+                            }
+                        }
+                    })
+
+
+
+           }
+                    
+
+             
+            },
+            editable:true,
+        });
     
 
 	   

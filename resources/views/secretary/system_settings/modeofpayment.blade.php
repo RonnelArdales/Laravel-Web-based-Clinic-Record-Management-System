@@ -146,28 +146,30 @@
 {{-- //delete modal --}}
 
 <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" >
-        <div class="modal-content"  style="background: #EDDBC0;">
-          <div class="modal-header" style="border-bottom-color: gray">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Hold on!</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog modal-dialog-centered" >
+      <div class="modal-content"  style="background: #EDDBC0;">
+        <div style="display: flex; justify-content: flex-end;">
+          <button type="button" style="margin-top:5px; margin-right:5px" class="btn-close text-right" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-            <div class="mb-5 pt-6  ">
-                <div class=" columns-1 sm:columns-2">
-                    <input type="text" hidden id="deletemopid">
-                <h6>Do you want to delete this data?</h6>
-         
-              {{-- </form> --}}
+        <div class="modal-header" style="border-bottom-color: gray; display: flex; justify-content: center; padding:10px">
+          <h2 class="modal-title text-center" id="exampleModalLabel"> <b>HOLD ON.</b> </h2>
         </div>
-        </div>
-        <div style="border-top-color: gray" class="modal-footer">
-          <button style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px; height: 37px; "  type="button" class=" btn" data-bs-dismiss="modal">Close</button>
-          <button style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " class=" delete_mop" >delete</button>
-        </div>
+      <div class="modal-body">
+        <div class="mb-3 mt-4  ">
+          <div class=" columns-1 sm:columns-2 " style="display: flex; justify-content: center; ">
+                  <input type="text" hidden id="deletemopid">
+              <h4>Do you want to delete this data?</h4>
+       
+            {{-- </form> --}}
+      </div>
+      </div>
+      <div style=" display: flex; justify-content: center; margin-bottom:40px "  >
+        <button style="margin-right:15px;background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px; height: 37px; "  type="button" class=" btn" data-bs-dismiss="modal">Close</button>
+        <button style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " class=" delete_mop" >Delete</button>
       </div>
     </div>
   </div>
+</div>
 </div>
     
 </div>

@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Gujarati:wght@700&family=Poppins:wght@400;700&family=Song+Myung&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap" rel="stylesheet">
 </head>
 <style>
     body{
@@ -53,7 +54,7 @@
               </ul>
                   <div class="btn-group mr-5" style="margin-right:20px">
                       <button type="button" style="color:white" class="btn  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{Auth::user()->fname}}
+                        {{Auth::user()->username}} 
                       </button>
                       <div class="dropdown-menu dropdown-menu-end " style="position: absolute">
                         <form action="/logout" method="POST">
@@ -138,7 +139,6 @@
                 <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
                 <a href="https://www.facebook.com/jgmarquezpsych"> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_6_et05wg.png" alt=""> </a>
                 <a href="https://www.instagram.com/jgmarquezpsych/?igshid=YmMyMTA2M2Y%3D&fbclid=IwAR2e7HVw8Gctwx_ctM0Tkhue3PqgGg-UJuEY8e7ssLyEbtip0Y3YSeqIgWA"> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_4_dicjnk.png" alt=""> </a>
-                <a href=""> <img style="height: 4vw;width:4vw;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676299299/JG%20marquez/image_5_gjmers.png" alt=""> </a>
             </div>
             <!-- Grid column -->
             </div>

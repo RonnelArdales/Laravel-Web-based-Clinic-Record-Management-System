@@ -35,6 +35,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use PDO;
 use DataTables;
+use GuzzleHttp\Client;
+
+use function GuzzleHttp\Promise\all;
 
 class AdminController extends Controller
 {
@@ -113,13 +116,17 @@ $female[]=$gender->female;
                                           ->with('pending', $pending)
                                           ->with('transaction', $totalsales)
                                           ->with('latests', $latestuser)
-                               
                                           ;
     }
 
 
     
-
+    private function fetchTwitterData()
+    {
+        $client = new Client();
+        $response = $client->get('https://api.example.com/twitter');
+        return json_decode($response->getBody(), true);
+    }
 
 
 // $users = User::all()->count();
@@ -435,6 +442,45 @@ public function fetch_service(){
             'staus' => $id,
         ]);
     }
+    }
+
+    public function resched_appointment(Request $request){
+        $validator = Validator::make($request->all(), [
+            'date' => 'required',
+            'time' => 'required',
+            
+        ],[
+            'date.required' => 'Appointment date is required',
+            'time.required' => 'Appointment time is required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->messages(),
+            ]);
+        }else{
+
+       
+            $time = Carbon::createFromFormat('h:i A', $request->input('time'))->format('H:i:s');
+            if(Auth::user()->usertype ==  "admin" || Auth::user()->usertype == "secretary"){
+                $appointment = Appointment::where('id', $request->input('id'))->update(["date" => $request->input('date'),
+                                                                                        "time" => $time,
+                                                                                        ]);
+        
+            }else{
+                $date = Carbon::createFromFormat('m-d-Y',$request->input('date'))->format('Y-m-d');
+                $appointment = Appointment::where('id', $request->input('id'))->update(["date" => $date,
+                                                                                        "time" => $time,
+                                                                                        "reschedule_limit" => 0,
+                                                                                        ]);
+            }
+     
+            return response()->json('Reschedule Successfully');
+
+        }
+
+
 
     }
 
@@ -1456,7 +1502,7 @@ public function store_businesshours(Request $request){
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
                     $btn = '<button class="view btn btn-sm btn-primary" data-id="' . $row->id . '">View</button>';
-                    $btn = $btn.'<button class="edit btn btn-sm btn-primary" style="margin-left: 5px; margin-right: 5px;" data-id="' . $row->id . '">Edit</button>';
+                    $btn = $btn.'<button class="edit btn btn-sm btn-info" style="margin-left: 5px;color:white ;margin-right: 5px;" data-id="' . $row->id . '">Edit</button>';
                     $btn = $btn.'<button class="delete btn btn-sm btn-danger" data-id="' . $row->id . '">Delete</button>';
                     $size = '<div style="width: 200px">' . $btn . '</div>';                
                         return $size;

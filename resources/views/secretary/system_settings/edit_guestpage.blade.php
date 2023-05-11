@@ -10,7 +10,7 @@
         @foreach ($errors->all() as $message) 
         <div class="alert alert-danger error" id="error">{{ $message }}</div>
         @endforeach
-            <form action="/admin/guestpage/update/{{$guestpages->id}}" method="POST" enctype="multipart/form-data">
+            <form action="/secretary/guestpage/update/{{$guestpages->id}}" method="POST" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
                 <div class="row"  >

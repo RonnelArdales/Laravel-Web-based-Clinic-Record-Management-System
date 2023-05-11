@@ -34,7 +34,7 @@
             
             <td style="text-align: center">
               <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
-              <button type="button" value="{{$user->id}}" class="edit  btn btn-sm btn-primary ">Edit</button>
+              <button type="button" style="color:white" value="{{$user->id}}" class="edit  btn btn-sm btn-info ">Edit</button>
               {{-- <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td> --}}
         </tr>
         @endforeach

@@ -78,8 +78,8 @@
                 
                         
                         <td style="text-align: center">
-                        <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
-                        <button type="button" value="{{$user->id}}" class="edit  btn btn-sm btn-primary ">Edit</button>
+                        <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">View</button>
+                    <button type="button" style="color:white" value="{{$user->id}}" class="edit  btn btn-sm btn-info ">Edit</button>
                         {{-- <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td> --}}
                     </tr>
                     @endforeach
@@ -132,8 +132,8 @@
                 
                       
                       <td style="text-align: center">
-                        <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
-                        <button type="button" value="{{$user->id}}" class="edit  btn btn-sm btn-primary ">Edit</button>
+                        <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">View</button>
+                        <button type="button" style="color:white" value="{{$user->id}}" class="edit  btn btn-sm btn-info ">Edit</button>
                         {{-- <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td> --}}
                   </tr>
                   @endforeach
@@ -190,8 +190,8 @@
                
                       
                       <td style="text-align: center">
-                        <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
-                        <button type="button" value="{{$user->id}}" class="edit  btn btn-sm btn-primary ">Edit</button>
+                        <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">View</button>
+                        <button type="button" style="color:white" value="{{$user->id}}" class="edit  btn btn-sm btn-info ">Edit</button>
                     {{-- <button type="button" value="{{$user->id}}" class="delete btn-sm btn  btn-danger">delete</button></td> --}}
                   </tr>
                   @endforeach
@@ -488,7 +488,7 @@
           <br>
 
           <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Address:</label>
-          <input class="view1 lname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_address" readonly  type="text"> 
+          <input style="width: 80%; height:auto;" class="view1 lname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_address" readonly  type="text"> 
      
           <br>
           <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Gender: </label>
@@ -504,7 +504,7 @@
    
           <br>
           <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Email: </label>
-          <input class="view1 email bg-[#EDDBC0] rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" readonly id="view_email" > 
+          <input style="width:80%; height:auto;" class="view1 email bg-[#EDDBC0] rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" readonly id="view_email" > 
           <br>
 
           <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Username:</label>

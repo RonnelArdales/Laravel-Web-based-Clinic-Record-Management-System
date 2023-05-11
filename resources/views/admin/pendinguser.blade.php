@@ -58,20 +58,22 @@
 <div class="modal fade" id="verify" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content" style="background: #EDDBC0; margin-top:30%;">
-        <div class="modal-header" style="border-bottom-color: gray" >
-          <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;"></h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div style="display: flex; justify-content: flex-end;">
+          <button type="button" style="margin-top:5px; margin-right:5px" class="btn-close text-right" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-header" style="border-bottom-color: gray; display: flex; justify-content: center; padding:10px">
+          <h2 class="modal-title text-center" id="exampleModalLabel"> <b>HOLD ON.</b> </h2>
         </div>
         <div class="modal-body">
-            <div class="mb-5 pt-6  ">
-                <div class=" columns-1 sm:columns-2">
+          <div class="mb-3 mt-4  ">
+            <div class=" columns-1 sm:columns-2 " style="display: flex; justify-content: center; ">
                     <input type="text" hidden id="userid">
                 <h5>Do you want to verify this user?</h5>
 
         </div>
         </div>
-        <div class="modal-footer" style="border-top-color: gray">
-          <button type="button" class=" btn btn-secondary" style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px;  " data-bs-dismiss="modal">No</button>
+        <div style=" display: flex; justify-content: center; margin-bottom:40px "  >
+          <button type="button" class=" btn btn-secondary" style=" margin-right:15px; background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px;  " data-bs-dismiss="modal">Cancel</button>
           <button class="verify_user" id="verify_user"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Yes</button>
         </div>
       </div>

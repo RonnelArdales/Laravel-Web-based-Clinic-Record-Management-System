@@ -63,7 +63,7 @@
         </div>
 
         <table class="table table-bordered table-striped border-dark">
-            <thead>
+            <thead style="background-color: burlywood" >
                 <tr style="text-align: center;">
                     <th>Description</th>
                     <th>Price</th>

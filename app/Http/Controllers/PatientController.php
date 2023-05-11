@@ -9,6 +9,7 @@ use App\Mail\Cancelappointmentpatienttoadmin;
 use App\Models\Appointment;
 use App\Models\AuditTrail;
 use App\Models\Billing;
+use App\Models\BusinessHour;
 use App\Models\Consultationfile;
 use App\Models\Guestpage;
 use App\Models\Modeofpayment;
@@ -27,8 +28,16 @@ class PatientController extends Controller
 {
 
     public function homepage(){
+      
         $speak_with_you = Guestpage::where('title', 'speak with you')->select('content')->first() ;
-        return view('patient.homepage' , ['speakwithyou' => $speak_with_you]);
+        $about_us_1 = Guestpage::where('title', 'about us 1')->first();
+        $about_us_2 = Guestpage::where('title', 'about us 2')->first();
+        $doctors_info = Guestpage::where('title', 'doctor info')->first();
+        $speakingup = Guestpage::where('title', 'why speaking up is important important?')->first();
+        return view('patient.homepage' , ['speakwithyou' => $speak_with_you])->with('aboutus1', $about_us_1)
+                                                                            ->with('aboutus2', $about_us_2)
+                                                                            ->with('doctorsinfo', $doctors_info)
+                                                                            ->with('speakingup', $speakingup);
     }
     public function profileshow(){
         
@@ -45,9 +54,24 @@ class PatientController extends Controller
         // return response()->download(public_path($filename));
         // $client = new Client('SEMAPHORE API KEY', 'Sender Name');
         // $client->message()->send('0917xxxxxxx', 'Your message here');
+        $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
+        // $days = BusinessHour::select('day')->where('off', '1')->whereNot('appointment_method', 'walkin')->groupBy('day')->get();
+        $walkins = BusinessHour::select('day')->where('off', '1')->where('appointment_method', 'walkin')->groupBy('day')->get();
+        $day_array = [];
+        foreach($days as $day){
+            $day_array[] = date('w', strtotime($day->day));
+        }
+
+        $walkin_array = [];
+        foreach ($walkins as $walkin){
+            $walkin_array[] = date('w', strtotime($walkin->day));
+        } 
+
+        $day = BusinessHour::select('day', 'off')->distinct()->get();
+
         $documents = Consultationfile::where('user_id', Auth::user()->id)->get();
         $appointments = DB::table('appointments')->where('user_id',  Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
-        return view('patient.profile.profile', compact('documents', 'appointments'));
+        return view('patient.profile.profile', compact('documents', 'appointments'))->with('day_array', $day_array)->with('walkin_array', $walkin_array);
     }
 
     public function image_profile_update($id, Request $request){
@@ -250,9 +274,17 @@ class PatientController extends Controller
 
             Mail::to($secretary->email)->send(new Cancelappointmentpatienttoadmin ($fullname, $date, $time));
          }
-        
-
         return response()->json($appointment);
+    }
+
+    public function resched_count($id){
+        $appointment = Appointment::where('id', $id)->first();
+        if($appointment->reschedule_limit == 1){
+            return response()->json(['status' => 200]);
+        }else{
+            return response()->json(['status' => 400]);
+        }
+      
     }
 
     public function document_view($id){

@@ -9,6 +9,7 @@
         "barryvdh/laravel-dompdf": "^2.0",
         "doctrine/dbal": "^3.6",
         "elibyy/tcpdf-laravel": "^10.0",
+        "guzzlehttp/guzzle": "^7.5",
         "humans/semaphore-sms": "^4.0",
         "laravel/framework": "^9.19",
         "laravel/helpers": "^1.6",
