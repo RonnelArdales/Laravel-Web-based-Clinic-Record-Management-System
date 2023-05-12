@@ -8,86 +8,135 @@
 
 <div id="success"></div>
 
-<div style="margin-top: 15px; align-items:center; display:flex; d-flex;  margin-bottom:1%;" >
-	<div class="me-auto">
-        <div class="days" id="days">
-        <label for=""><b>Day</b> </label>
-        <select name="businessdays" id="businessdays" style="width:220px;height:30px ;font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; ">
-       
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-        </select>
+<div class="main-spinner" style="
+	  position:fixed;
+		width:100%;
+		left:0;right:0;top:0;bottom:0;
+		background-color: rgba(255, 255, 255, 0.279);
+		z-index:9999;
+		display:none;"> 
+	<div class="spinner">
+		<div class="spinner-border" role="status" style="width: 8rem; height: 8rem;">
+		  <span class="visually-hidden">Loading...</span>
+		</div>
+	    </div>
+</div>	
+
+
+<div class="row">
+    <div class="col-md">
+        <div class="card table-appointment" style="background:#EDDBC0;border:none; padding-top:15px; padding-left:7px; padding-right:7px "  >
+            <div style="align-items:center; display:flex;   margin-bottom:1%;" >
+                <div class="me-auto">
+                    <div class="days" id="days">
+                    <label for=""><b>Day</b> </label>
+                    <select name="businessdays" id="businessdays" style="width:220px;height:30px ;font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; ">
+                   
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select>
+                    </div>
+                </div>
+                <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" type="button" class="btn btn-primary ml-6 show-create" data-bs-toggle="modal" data-bs-target="#create" >
+                Create
+                </button>
+                </div>
+
+                <style>
+                    .label-container {
+                        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: center;
+
+                    }
+                
+                    .label-container label {
+                        margin-right: 10px;
+                        margin-bottom: 10px;
+                   
+                    }
+                </style>
+        
+            <h2 style="margin: 0px; margin-bottom:10px"> <b>Available Hours</b></h2>
+            <p>Select the preferred day and click "<b>Day Off</b>" to set the <b>day in a whole month</b> as day off.</p>
+            <div class="card-body" style="width:100%; min-height:50vh; display: flex; overflow-x: auto;padding:0px ; font-size: 15px; ">
+              <div  style="width:100%; " class="businessHours" >
+                <div id="" style="height:300px; padding:10px; background-color:aliceblue; border-radius:10px; " >
+                    <div class="label-container">
+                        @foreach ($hours as $hour)
+                            <label style="margin-bottom: 10px">
+                                <input type="checkbox" class="day_id" name="day_id[]" id="day_id" value="{{$hour->id}}" id="time-checkbox">
+                                <div style="margin-left: 10px" class="btn btn-primary ml-20">{{$hour->from}}</div>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+        
+                @foreach ($days as $day)
+                <div class="refresh_off" style="margin-top:10px">
+                    <button class="delete btn btn-danger ml-20 delete" id="delete">Delete</button>
+                    <button style="padding-left:30px; padding-right:30px" class=" btn btn-primary ml-0 off_day" value="{{$day->day}}" id="off_day"><label for=""><input onclick="this.checked=!this.checked;" type="checkbox" {{ $day->off == 1  ? 'checked' : '' }} class="checked_off" name="checked_off" id="checked_off"  > </label> <label for="">Off</label></button>
+                </div>
+                @endforeach
+              
+              </div>
+            </div>
         </div>
-	</div>
-    <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" type="button" class="btn btn-primary ml-6 show-create" data-bs-toggle="modal" data-bs-target="#create" >
-	Create
-    </button>
     </div>
+    <div class="col-md">
 
-<div class="card table-appointment" style="background:#EDDBC0;border:none; padding-top:15px"  >
-    <h2 style="margin: 0px; margin-bottom:10px">Available Hours</h2>
-    <p>Select the preferred day and click "<b>Day Off</b>" to set the <b>day in a whole month</b> as day off.</p>
-    <div class="card-body" style="width:100%; min-height:50vh; display: flex; overflow-x: auto;padding:0px ; font-size: 15px; ">
-      <div  style="width:100%; " class="businessHours" >
-        <div id="" style="height:300px; padding:10px; background-color:aliceblue; border-radius:10px" >
-            @foreach ($hours as $hour)
-            <table >
-                <tr >
-                    <td>  
-                        <label  style="margin-bottom: 10px"><input type="checkbox" class="day_id" name="day_id[]" id="day_id"  value="{{$hour->id}}" id="time-checkbox"><div style="margin-left: 10px" class=" btn btn-primary ml-20">{{$hour->from}}</div></label>
-                    </td>
-                </tr>
-             
-            </table>
-            @endforeach
-            {{-- @foreach ($days as $day)
-            <label  style="margin-bottom: 10px"><input type="checkbox" {{ $day->off == 1  ? 'checked' : '' }} class="off" name="off" id="off"  value="{{$day->day}}" id="time-checkbox"><div style="margin-left: 10px" class=" btn btn-primary ml-20">S</div></label>
-            @endforeach --}}
+        <div class="card " style="background:#EDDBC0;border:none; padding-top:15px; padding-left:7px; padding-right:7px; "  >
+            <div style="align-items:center; display:flex; d-flex;  margin-bottom:1%;" >
+                <div class="me-auto">
+                    <div class="days" id="days">
+                    <label for=""><b>Date</b> </label>
+                    <input type="date" class="date" style="width:220px;height:30px ;font-family:Poppins;font-size:1.2vw; border-top: none;border-right:none; border-left:none; background:#EDDBC0; " >
+                    </div>
+
+                </div>
+                <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" type="button" class="btn btn-primary ml-6 add_date"   >
+                Add
+                </button>
+                </div>
+        
+            <h2 style="margin: 0px; margin-bottom:10px"><b>Date off dates</b></h2>
+            <p style="margin-top:7px">Select a specific "<b>date</b>" for Day Off.</p>
+            <div class="card-body" style="width:100%; min-height:50vh; display: flex; overflow-x: auto;padding:0px ; font-size: 15px;margin-top:14px">
+              <div  style="width:100%; " class="dayoff_dates" >
+                <div id="" style="height:300px; padding:10px; background-color:aliceblue; border-radius:10px" >
+                    @foreach ($offdates as $offdate)
+                    <table >
+                        <tr >
+                            <td>  
+                                <label  style="margin-bottom: 10px"><input type="checkbox" class="day_id" name="day_id[]" id="day_id"  value="{{$offdate->id}}" id="time-checkbox"><div style="margin-left: 10px" class=" btn btn-primary ml-20">{{date('m-d-Y', strtotime($offdate->date))}}</div></label>
+                            </td>
+                        </tr>
+                     
+                    </table>
+                    @endforeach
+                </div>
+        
+                <div style="margin-top:10px">
+                    <button class="delete btn btn-danger ml-20 delete" id="delete">Delete</button>
+                </div>
+         
+              
+              </div>
+            </div>
         </div>
 
-        @foreach ($days as $day)
-        <div class="refresh_off" style="margin-top:10px">
-            <button class="delete btn btn-danger ml-20 delete" id="delete">Delete</button>
-            <button style="padding-left:30px; padding-right:30px" class=" btn btn-primary ml-0 off_day" value="{{$day->day}}" id="off_day"><label for=""><input onclick="this.checked=!this.checked;" type="checkbox" {{ $day->off == 1  ? 'checked' : '' }} class="checked_off" name="checked_off" id="checked_off"  > </label> <label for="">Off</label></button>
-        </div>
-        @endforeach
-      
-      </div>
     </div>
 </div>
 
-{{-- 
-<div class="businessHours">
-    <div class="border border-dark" id="" style="height:300px; padding:10px; background-color:aliceblue" >
-        @foreach ($hours as $hour)
-        <table >
-            <tr >
-                <td>  
-                    <label  style="margin-bottom: 10px"><input type="checkbox" class="day_id" name="day_id[]" id="day_id"  value="{{$hour->id}}" id="time-checkbox"><div style="margin-left: 10px" class=" btn btn-primary ml-20">{{$hour->from}}</div></label>
-                </td>
-            </tr>
-         
-        </table>
-        @endforeach
-        {{-- @foreach ($days as $day)
-        <label  style="margin-bottom: 10px"><input type="checkbox" {{ $day->off == 1  ? 'checked' : '' }} class="off" name="off" id="off"  value="{{$day->day}}" id="time-checkbox"><div style="margin-left: 10px" class=" btn btn-primary ml-20">S</div></label>
-        @endforeach --}}
-    {{-- </div>
- 
-    
-    @foreach ($days as $day)
-    <div class="refresh_off">
-        <button class="delete btn btn-danger ml-20 delete" id="delete">Delete</button>
-        <button style="padding-left:30px; padding-right:30px" class=" btn btn-primary ml-0 off_day" value="{{$day->day}}" id="off_day"><label for=""><input onclick="this.checked=!this.checked;" type="checkbox" {{ $day->off == 1  ? 'checked' : '' }} class="checked_off" name="checked_off" id="checked_off"  > </label> <label for="">off</label></button>
-    </div>
-    @endforeach
-    
-</div>  --}}
+
+
+
 
 {{-- create business modal --}}
 <div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -113,13 +162,13 @@
                 </select>
                 <br>
                 <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="name"></span>
+                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_day"></span>
                 </div>
                 <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Time</label>
                 <input class="create_businesstime bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" type="time">
                 <br>
                 <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="percent"></span>
+                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_time"></span>
               </div>
         </div>
         </div>
@@ -185,14 +234,29 @@
                 data: { 'business_date' : $('.create_businessday').val(),
                         'business_time': $('.create_businesstime').val(), },
                 datatype: "json",
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                 success: function(response){
-                    // $('#create').find('.create_businessday').val("select");
-                    // $('#create').find('input').val("");
+                    if(response.status == 400){
+                    $('#error_day, #error_time' ).html("");
+                        $.each(response.errors.day, function (key, err_values){
+                            $('#error_day').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.time, function (key, err_values){
+                            $('#error_time').append('<span>'+err_values+'</span>');
+                        });
+                  }else{
                     $('.modal-asd').load(location.href+' .modal-asd');
                     $('.businessHours').load(location.href+' .businessHours');
                     $('#businessdays').val('Monday');
                     $('#create').modal('hide');
-                    console.log(response);
+                  }
+             
                 }
             });
             
@@ -223,6 +287,13 @@
                 url: "/admin/business_hours/delete",
                 data: {day_id : day_id},
                 datatype: "json",
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                 success: function(response){
                     $('#days').find('select').val("Monday");
                     $('.businessHours').load(location.href+' .businessHours');
@@ -247,8 +318,6 @@
                 datatype: "json",
                 success: function(response){
                     $('.businessHours').html(response);
-
-                    
                 }
             });
             })
@@ -272,8 +341,16 @@
                                     status: status,
                                                         },
                             datatype: "json",
+                            beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                             success: function(response){
-                                
+                                $('#days').find('select').val("Monday");
+                                $('.businessHours').load(location.href+' .businessHours');
                                 $('.refresh_off').load(location.href+' .refresh_off');
                             }
                         });
@@ -288,13 +365,58 @@
                                     status: status,
                                                         },
                             datatype: "json",
+                            beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
                             success: function(response){
+                                $('#days').find('select').val("Monday");
+                                $('.businessHours').load(location.href+' .businessHours');
                                 $('.refresh_off').load(location.href+' .refresh_off');
                             }
                         });
                     }
                
             })
+
+            $('.add_date').on('click', function(){
+                $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+
+          $.ajax({
+                            type: "POST",
+                            url: "/admin/business_hours/store_date",
+                            data: {date : $('.date').val() },
+                            datatype: "json",
+                            beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
+                            success: function(response){
+                                $('.date').val(" ");
+                                $('.dayoff_dates').load(location.href+' .dayoff_dates');
+
+                                // $('#days').find('select').val("Monday");
+                                // $('.businessHours').load(location.href+' .businessHours');
+                                // $('.refresh_off').load(location.href+' .refresh_off');
+                            }
+                        });
+            });
+
+            $(".modal").on("hidden.bs.modal", function(){
+            $('#create').find('input').val("");
+            $('#create_businessday').val("");
+            $('#error_day, #error_time').html("");
+        });
 
     });
 </script>

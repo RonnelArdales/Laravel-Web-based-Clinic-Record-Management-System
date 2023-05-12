@@ -1,17 +1,12 @@
-<div id="" style="height:300px; padding:10px; background-color:aliceblue; border-radius:10px" >
-    @foreach ($hours as $hour)
-    <table >
-        <tr >
-            <td>  
-                <label  style="margin-bottom: 10px"><input type="checkbox" class="day_id" name="day_id[]" id="day_id"  value="{{$hour->id}}" id="time-checkbox"><div style="margin-left: 10px" class=" btn btn-primary ml-20">{{$hour->from}}</div></label>
-            </td>
-        </tr>
-     
-    </table>
-    @endforeach
-    {{-- @foreach ($days as $day)
-    <label  style="margin-bottom: 10px"><input type="checkbox" {{ $day->off == 1  ? 'checked' : '' }} class="off" name="off" id="off"  value="{{$day->day}}" id="time-checkbox"><div style="margin-left: 10px" class=" btn btn-primary ml-20">S</div></label>
-    @endforeach --}}
+<div id="" style="height:300px; padding:10px; background-color:aliceblue; border-radius:10px; " >
+    <div class="label-container">
+        @foreach ($hours as $hour)
+            <label style="margin-bottom: 10px">
+                <input type="checkbox" class="day_id" name="day_id[]" id="day_id" value="{{$hour->id}}" id="time-checkbox">
+                <div style="margin-left: 10px" class="btn btn-primary ml-20">{{$hour->from}}</div>
+            </label>
+        @endforeach
+    </div>
 </div>
 
 @foreach ($days as $day)

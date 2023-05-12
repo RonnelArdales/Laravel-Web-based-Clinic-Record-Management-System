@@ -473,7 +473,7 @@
                 <div   style="padding:0px; width:800px" >
                   <p style="margin-bottom:5px">Click your preffered Date to view availability</p>
                     <div class="" style=" background-color: #EDDBC0; margin-left:15px; margin-right:15px" id="calendar_res"></div>
-                    <label style="color: red; margin-top:15px; margin-left:20px"  for="">Please note: You can only reschedule appointment once.</label>
+      
                 </div>    
                 <div class="col-sm" style="margin-left: 20px"  >
                     <div >
@@ -498,22 +498,29 @@
                         </div>
 
                         <div class="row  d-flex  align-items-center" style="margin-left:12px; margin-top:25px">
-                            <label style="padding-left: 0px" for="">Date selected:</label>
-                            <input type="text" class="date rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:250px" readonly id="resched_date">
-                            <br>
-                            <label style="padding-left: 0px; margin-top:10px" for="">Time selected:</label>
-                            <select name="" id="reschedtime" class="rounded text-gray-700  focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:250px" >
-                              <option value="">--select--</option>
-                          </select>
+                          <label style="padding-left: 0px" for="">Date selected:</label>
+                          <input type="text" class="date refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:250px" readonly id="resched_date">
+                          <div class="mt-0 mb-1">
+                            <span  role="alert" class="block   text-danger" id="error_resched_date"></span>
+                        </div>
+                          <br>
+                          <label style="padding-left: 0px; margin-top:10px" for="">Time selected:</label>
+                          <select name="" id="reschedtime" class="rounded text-gray-700  focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:250px" >
+                            <option value="">--select--</option>
+                        </select>
 
-                          <input hidden type="text" id="reschedid">
+                        <div class="mt-0 mb-1">
+                          <span  role="alert" class="block mt-5   text-danger" id="error_resched_tim"></span>
                       </div>
+
+                        <input hidden type="text" class="refresh" id="reschedid">
+                    </div>
 
                       <div style="margin-top: 65px" class="row  d-flex  justify-content-center">
 
                         <button type="button" class=" " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; margin-right:10px" data-bs-dismiss="modal" data-bs-dismiss="modal">Close</button>
 
-                        <button type="button" class=" " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Reschedule</button>
+                        <button type="button" class="resched_button" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Reschedule</button>
 
                       </div>
                 
@@ -700,7 +707,7 @@
         $('#available-time').empty()
         $('#available-time').append('<option value="0" disabled selected></option>');
 
-      deleteall();
+    
 
       $('.show-create').on('click', function(e){
         e.preventDefault();
@@ -718,25 +725,32 @@
         });
 
 
+        $("#reschedcalendar").on("hidden.bs.modal", function(e){
+        e.preventDefault();
+        $('#reschedcalendar').find('#resched_date').val("");
+        $('#reschedtime').empty()
+        $('#reschedtime').append('<option value="">-- select --</option>');
+	   $(' #error_resched_date, #error_resched_tim' ).html("");
+        });
 
         
-        function deleteall () {
-            if (window.location.href) {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "post",
-                url: "/secretary/billing/addtocart/deleteall",
-                datatype: "json",
-                success: function(response){ 
-                }
-            });
+        // function deleteall () {
+        //     if (window.location.href) {
+        //         $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
+        //     $.ajax({
+        //         type: "post",
+        //         url: "/secretary/billing/addtocart/deleteall",
+        //         datatype: "json",
+        //         success: function(response){ 
+        //         }
+        //     });
                 
-            }
-        }
+        //     }
+        // }
 
 
         $(document).on('click', '.patients', function(e){
@@ -1043,9 +1057,9 @@
                         success:function(response)
                         {   
                          
-                          $('#date').val("");
-                          $('#available-time').empty();
-                          $('#available-time').append('<option value="0" disabled selected></option>');
+                          $('#resched_date').val("");
+                          $('#reschedtime').empty();
+                          // $('#reschedtime').append('<option value="0" disabled selected></option>');
                           if(response.status == "405"){
                                 $('#message-error').text(response.message);
                             $(".error-calendar").show();
@@ -1055,12 +1069,11 @@
                             
                             }else{
                            
-                          $('#date').val(start);
-                              $('#viewcalendar').modal('hide');
+                          $('#resched_date').val(start);
                                 $('#date').val(response.date);
-                                $('#form-dateselected').val(response.date);
+                                $("#reschedtime").append("<option value=''>-- select --</option>");
                                 $.each(response.available_time, function(index, val){ 
-                                    $("#available-time").append("<option value='"+val+"'>"+val+"</option>");
+                                    $("#reschedtime").append("<option value='"+val+"'>"+val+"</option>");
                                 } )
                             }
                         }
@@ -1078,7 +1091,7 @@
                 center:'title',
                 right:'month'
             },
-            events:'/admin/appointment',
+            events:'/secretary/appointment',
             selectable:true,
            
             color: 'red',
@@ -1225,12 +1238,67 @@ if(formattedDate == start){
 
 
 
-           }
-                    
-
-             
+           }  
             },
             editable:true,
+        });
+
+
+        $('.resched_button').on('click', function(e){
+          $('#reschedid').val();
+          $('#resched_date').val();
+          $('#reschedtime').val();
+
+          data = {
+            "id": $('#reschedid').val(),
+            "date": $('#resched_date').val(),
+            "time": $('#reschedtime').val(),
+          }
+          
+          $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+                type: "PUT",
+                url: "/secretary/appointment/resched",
+                datatype: "json",
+                data: data,
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+				 
+                    $(".main-spinner").hide();
+                },
+                success: function(response){ 
+                  console.log(response);
+                  if(response.status == 400){
+                    $('#error_resched_date, #error_resched_tim' ).html("");
+                        $.each(response.errors.date, function (key, err_values){
+                            $('#error_resched_date').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.time, function (key, err_values){
+                            $('#error_resched_tim').append('<span>'+err_values+'</span>');
+                        })
+                        console.log(response.errors.time);
+                  }else{
+                    console.log(response);
+                    $('#reschedcalendar').modal('hide');
+                  $('#success').html();
+                    $('#success').text('Reschedule successfully');
+                      $('#success').show();
+                      setTimeout(function() {
+                                $("#success").fadeOut(500);
+                            }, 2000);
+                          pendings.draw();
+                          complete.draw();
+                  }
+             
+        }
+    });
         });
     
 

@@ -39,7 +39,9 @@
 
 <style>
 
-
+.fc-body{
+     background-color: #829460;
+}
 
 
 .labelang{
@@ -55,10 +57,6 @@
     border: none;
 }
 
-
-  .fc-mon{
-    background-color: red;
-  }
   .spinner {
     position: fixed;
     z-index: 1;

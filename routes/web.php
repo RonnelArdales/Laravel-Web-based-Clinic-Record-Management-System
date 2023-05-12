@@ -205,6 +205,8 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
         //--------------------business Hours -----------------------//
         Route::get('/business_hours', [AdminController::class, 'show_businesshours']);
         Route::post('/business_hours/store', [AdminController::class, 'store_businesshours']);
+        Route::post('/business_hours/store_date', [AdminController::class, 'store_businesshours_date']);
+        
         Route::post('/business_hours/delete', [AdminController::class, 'delete_businesshours']);
         Route::get('/business_hours/get_hours', [AdminController::class, 'get_hours']);
         Route::put('/business_hours/off_status', [AdminController::class, 'off_status']);
@@ -267,6 +269,7 @@ Route::prefix('/secretary')->middleware('auth', 'verify' ,'issecretary' )->group
         Route::get('/appointment/Calendar-fetch', [AdminController::class, 'get_time']); 
         Route::get('/appointment/status/{id}', [AdminController::class, 'appointment_status']);
         Route::get('/appointment/show_user', [AdminController::class, 'fetch_user']);
+        Route::put('/appointment/resched', [AdminController::class, 'resched_appointment']);
 
         //-----------------queuing ------------------------//
         Route::get('/queuing', [SecretaryController::class, 'view_queuing']);

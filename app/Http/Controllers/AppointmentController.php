@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\AuditTrail;
 use App\Models\BusinessHour;
+use App\Models\Dayoff_date;
 use App\Models\Modeofpayment;
 use App\Models\Reservationfee;
 use App\Models\Service;
@@ -22,7 +23,14 @@ class AppointmentController extends Controller
 
     public function appointment_show(Request $request){
         $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
+        $dates = Dayoff_date::select('date')->get();
+
+        $date_array = [];
         $day_array = [];
+
+        foreach($dates as $date){
+            $date_array[] = $date->date;
+        }
         foreach($days as $day){
             $day_array[] = date('w', strtotime($day->day));
         }
@@ -40,22 +48,22 @@ class AppointmentController extends Controller
                         ->addIndexColumn()
                         ->addColumn('action', function($row){
 
-                            $currentDate = now()->toDateString();
-                            $appointmentDate = date('Y-m-d', strtotime($row->date));
-                            $btn = '';
+                            // $currentDate = now()->toDateString();
+                            // $appointmentDate = date('Y-m-d', strtotime($row->date));
+                            // $btn = '';
                     
-                            $oneDayBefore = date('Y-m-d', strtotime('-1 day', strtotime($appointmentDate)));
+                            // $oneDayBefore = date('Y-m-d', strtotime('-1 day', strtotime($appointmentDate)));
                             
 
-                            if ($currentDate >= $oneDayBefore) {
-                                $btn = '<button style="margin-right:5px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
-                                $btn = $btn.'<button class="cancel btn btn-sm btn-danger" data-id="' . $row->id . '">Cancel</button>';
+                            // if ($currentDate >= $oneDayBefore) {
+                            //     $btn = '<button style="margin-right:5px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
+                            //     $btn = $btn.'<button class="cancel btn btn-sm btn-danger" data-id="' . $row->id . '">Cancel</button>';
                          
-                            }else{
+                            // }else{
                                 $btn = '<button style="margin-right:5px; padding-left:4px; padding-right:4px; font-size:14px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
                                 $btn = $btn.'<button class="resched btn btn-sm btn-info" style="color:white; padding-left:4px; padding-right:4px; font-size:14px" data-id="' . $row->id . '">Reschedule</button> ' ;
                                 $btn = $btn.'<button class="cancel btn btn-sm btn-danger" style="padding-left:4px;</br> padding-right:4px; font-size:14px" data-id="' . $row->id . '">Cancel</button>';
-                            }
+                            // }
                                 $size = '<div style="margin:0px">' . $btn . '</div>';                
                                     return $size;
                                     
@@ -71,7 +79,7 @@ class AppointmentController extends Controller
 
             }
 
-            return view('admin.appointment', compact('appointments', 'patients', 'services', 'day', 'days', 'mops', 'fee'))->with('day_array', $day_array);
+            return view('admin.appointment', compact('appointments', 'patients', 'services', 'day', 'days', 'mops', 'fee'))->with('day_array', $day_array) ->with('date_array', $date_array);
         }else{
 
             if ($request->ajax()) {
@@ -86,15 +94,15 @@ class AppointmentController extends Controller
                             $oneDayBefore = date('Y-m-d', strtotime('-2 day', strtotime($appointmentDate)));
                             
 
-                            if ($currentDate >= $oneDayBefore) {
-                                $btn = '<button style="margin-right:5px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
-                                $btn = $btn.'<button class="cancel btn btn-sm btn-danger" data-id="' . $row->id . '">Cancel</button>';
+                            // if ($currentDate >= $oneDayBefore) {
+                            //     $btn = '<button style="margin-right:5px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
+                            //     $btn = $btn.'<button class="cancel btn btn-sm btn-danger" data-id="' . $row->id . '">Cancel</button>';
                          
-                            }else{
+                            // }else{
                                 $btn = '<button style="margin-right:5px; padding-left:4px; padding-right:4px; font-size:14px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
                                 $btn = $btn.'<button class="resched btn btn-sm btn-info" style="color:white; padding-left:4px; padding-right:4px; font-size:14px" data-id="' . $row->id . '">Reschedule</button> ' ;
                                 $btn = $btn.'<button class="cancel btn btn-sm btn-danger" style="padding-left:4px;</br> padding-right:4px; font-size:14px" data-id="' . $row->id . '">Cancel</button>';
-                            }
+                            // }
                                 $size = '<div style="margin:0px">' . $btn . '</div>';                
                                     return $size;
                        })  ->editColumn('user_id', function ($row) {

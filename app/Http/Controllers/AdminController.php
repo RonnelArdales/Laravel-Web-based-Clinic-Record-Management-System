@@ -15,6 +15,7 @@ use App\Models\Billing;
 use App\Models\BusinessHour;
 use App\Models\Consultation;
 use App\Models\Consultationfile;
+use App\Models\Dayoff_date;
 use App\Models\Discount;
 use App\Models\Guestpage;
 use App\Models\Modeofpayment;
@@ -1182,9 +1183,11 @@ public function index_discount(){
  // ---------------- business hours ---------------------------//
  public function show_businesshours(){
         $hours = BusinessHour::where('day', 'Monday')->whereNotIn('from', ['23:59:00'])->orderBy('from', 'asc')->get();
-        
         $day = BusinessHour::where('day', 'Monday')->select('day', 'off')->distinct()->get();
-    return view('system_settings.businesshours', ['hours' =>$hours, "days" => $day]);
+        $off_dates = Dayoff_date::select('date')->get();
+
+
+    return view('system_settings.businesshours', ['hours' =>$hours, "days" => $day, 'offdates' => $off_dates]);
  }
 
  
@@ -1246,41 +1249,65 @@ public function get_hours(Request $request){
 }
 
 public function store_businesshours(Request $request){
-    $input = $request->all();
-    $businesshours = new BusinessHour();
-    $businesshours->day = $input['business_date'];
-    $businesshours->from = Carbon::createFromFormat('H:i', $input['business_time'])->format('H:i:s');
-    $businesshours->to = Carbon::createFromFormat('H:i', $input['business_time'])->format('H:i:s');
-    $businesshours->step = 30;
-    $day = BusinessHour::where('day', $input['business_date'])->where('off', '1') ->select('off')->first();
-    if($day){
-        $businesshours->off = 1;
-         $businesshours->save();
-         $audit_trail = new AuditTrail();
-        $audit_trail->user_id = Auth::user()->id;
-        $audit_trail->username = Auth::user()->username;
-        $audit_trail->activity = 'Create new business hour';
-        $audit_trail->usertype = Auth::user()->usertype;
-        $audit_trail->save();
-
-        return response()->json(['status' => 'off day', 'data' => $day]);
-    }else{
-        $businesshours->off = 0;
-         $businesshours->save();
-
-         $audit_trail = new AuditTrail();
-         $audit_trail->user_id = Auth::user()->id;
-         $audit_trail->username = Auth::user()->username;
-         $audit_trail->activity = 'Create new business hour';
-         $audit_trail->usertype = Auth::user()->usertype;
-         $audit_trail->save();
-
-        return response()->json(['status' => 'none', 'data' => $day]);
+    $validator = Validator::make($request->all(), [
+        'business_date'=>'required',
+        'business_time' => 'required',
+    ],[
+        'business_date.required' => 'day is required',
+        'business_time.required' => 'time is required',
+    ]);
+    if($validator->fails())
+    {
+        return response()->json([
+            'status'=>400,
+            'errors'=> $validator->messages(),
+        ]);
     }
-    // $time = Carbon::createFromFormat('H:i', $input['business_time'])->format('H:i:s');
-   
+    else
+    {
 
-    return response()->json(['status' => 'created successfully']);
+        $input = $request->all();
+        $businesshours = new BusinessHour();
+        $businesshours->day = $input['business_date'];
+        $businesshours->from = Carbon::createFromFormat('H:i', $input['business_time'])->format('H:i:s');
+        $businesshours->to = Carbon::createFromFormat('H:i', $input['business_time'])->format('H:i:s');
+        $businesshours->step = 30;
+        $day = BusinessHour::where('day', $input['business_date'])->where('off', '1') ->select('off')->first();
+        if($day){
+            $businesshours->off = 1;
+             $businesshours->save();
+             $audit_trail = new AuditTrail();
+            $audit_trail->user_id = Auth::user()->id;
+            $audit_trail->username = Auth::user()->username;
+            $audit_trail->activity = 'Create new business hour';
+            $audit_trail->usertype = Auth::user()->usertype;
+            $audit_trail->save();
+    
+            return response()->json(['status' => 'off day', 'data' => $day]);
+        }else{
+            $businesshours->off = 0;
+             $businesshours->save();
+    
+             $audit_trail = new AuditTrail();
+             $audit_trail->user_id = Auth::user()->id;
+             $audit_trail->username = Auth::user()->username;
+             $audit_trail->activity = 'Create new business hour';
+             $audit_trail->usertype = Auth::user()->usertype;
+             $audit_trail->save();
+    
+            return response()->json(['status' => 'none', 'data' => $day]);
+        }
+        // $time = Carbon::createFromFormat('H:i', $input['business_time'])->format('H:i:s');
+        return response()->json(['status' => 'created successfully']);
+    }
+
+}
+
+public function store_businesshours_date(Request $request){
+    $day_off = new Dayoff_date();
+    $day_off->date = $request->input('date');
+    $day_off->save();
+    return Response()->json('created successfully');
 }
  public function show_guestpage_setting(){
     $content = Guestpage::all();

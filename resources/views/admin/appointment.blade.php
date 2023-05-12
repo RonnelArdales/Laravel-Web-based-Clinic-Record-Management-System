@@ -466,7 +466,7 @@
                 <div   style="padding:0px; width:800px" >
                   <p style="margin-bottom:5px">Click your preffered Date to view availability</p>
                     <div class="" style=" background-color: #EDDBC0; margin-left:15px; margin-right:15px" id="calendar_res"></div>
-                    <label style="color: red; margin-top:15px; margin-left:20px"  for="">Please note: You can only reschedule appointment once.</label>
+           
                 </div>    
                 <div class="col-sm" style="margin-left: 20px"  >
                     <div >
@@ -715,13 +715,15 @@
 
 
         var day_off = {!! json_encode($day_array) !!} ;
+        var date_off = {!! json_encode($date_array) !!} ;
         var date = new Date();
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
         $('#available-time').empty()
         $('#available-time').append('<option value="0" disabled selected></option>');
-
+        $('#reschedtime').empty()
+        $('#reschedtime').append('<option value="0" disabled selected></option>');
 
 
       $('.show-create').on('click', function(e){
@@ -741,10 +743,10 @@
 
      $("#reschedcalendar").on("hidden.bs.modal", function(e){
         e.preventDefault();
-        $('#reschedcalendar').find('.refresh').html("");
+        $('#reschedcalendar').find('.refresh').val("");
         $('#reschedtime').empty()
-        $('#reschedtime').append('<option value="">-- select --</option>');
-	   $(' #error_resched_date, #error_resched_tim' ).html("");
+        $('#reschedtime').append('<option value="0" disabled selected></option>');
+	      $(' #error_resched_date, #error_resched_tim' ).html("");
         });
 
       
@@ -951,56 +953,50 @@
                 center:'title',
                 right:'month'
             },
-            events:'/admin/appointment',
+            // events:'/admin/appointment',
             selectable:true,
            
             color: 'red',
             contentHeight:"auto",
             selectHelper: true,
             viewRender: function(view, element,) {
+
+
       if(day_off.includes("0")){
-              $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-sun').css('backgroundColor', '#829460');
+        $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
       }
-
       if(day_off.includes("1")){
-              $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-mon').css('backgroundColor', '#829460');
-      }
-
+        $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
+      } 
       if(day_off.includes("2")){
-              $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-tue').css('backgroundColor', '#829460');
+        $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
       }
-
       if(day_off.includes("3")){
-              $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-wed').css('backgroundColor', '#829460');
+        $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
       }
-
-      if(day_off.includes("4")){
-              $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-thu').css('backgroundColor', '#829460');
+       if(day_off.includes("4")){
+        $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
       }
-
-      if(day_off.includes("5")){
-              $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-fri').css('backgroundColor', '#829460');
+      if (day_off.includes("5")){
+        $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
       }
-
-      if(day_off.includes("6")){
-              $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-sat').css('backgroundColor', '#829460');
+      if (day_off.includes("6")){
+        $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
       }
 
       $('.fc-day.fc-today').css('backgroundColor', 'white');
+
+      element.find('.fc-day').each(function() {
+        var date = $(this).data('date');
+        if (date_off.includes(date)) {
+          $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
+        } else {
+          // $(this).css('background-color', '#829460'); // Green for dates not in the array
+        }
+      });
+
+
+
     },
 
     select:function(start, end, allDay)
@@ -1013,29 +1009,23 @@
                     const dayOfWeek = $.fullCalendar.moment(date).day();
 
                     let currentDate = new Date(Date.now());
-let year = currentDate.getFullYear();
-let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
-let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
+                    let year = currentDate.getFullYear();
+                    let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
+                    let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
 
-let formattedDate = `${year}-${month}-${day}`;
+                    let formattedDate = `${year}-${month}-${day}`;
 
-        if(formattedDate == start){
-            // $('#message-error').text("Sorry you cannot book this date");
-            //                 $(".error").show();
-            //                 setTimeout(function() {
-            //                     $(".error").fadeOut(500);
-            //                 }, 3000);
+                  if(formattedDate == start){
+                      return false;
+                    }else{
 
-            return false;
-           }else{
+                        $.ajaxSetup({
+                        headers:{
+                            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
 
-            $.ajaxSetup({
-            headers:{
-                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $.ajax({
+                      $.ajax({
                         url:"/admin/appointment/Calendar-fetch",
                         type:"Get",
                         datatype: "json",
@@ -1051,32 +1041,40 @@ let formattedDate = `${year}-${month}-${day}`;
                         },
                         success:function(response)
                         {   
-                         
-                          $('#date').val("");
-                          $('#available-time').empty();
-                          $('#available-time').append('<option value="0" disabled selected></option>');
-                          if(response.status == "405"){
-                                $('#message-error').text(response.message);
-                            $(".error-calendar").show();
-                            setTimeout(function() {
-                                $(".error-calendar").fadeOut(500);
+                              $('#date').val("");
+                              $('#available-time').empty();
+                              // $('#available-time').append('<option value="0" disabled selected></option>');
+
+                              if(date_off.includes(start)){
+                      $('#message-error').text("Sorry this day is off");
+                                $(".error-calendar").show();
+                                setTimeout(function() {
+                                    $(".error-calendar").fadeOut(500);
                             }, 3000);
-                            
+                    }else{
+                      if(response.status == "405"){
+                                    $('#message-error').text(response.message);
+                                $(".error-calendar").show();
+                                setTimeout(function() {
+                                    $(".error-calendar").fadeOut(500);
+                                }, 3000);
+                                
                             }else{
                            
-                          $('#date').val(start);
-                              $('#viewcalendar').modal('hide');
-                                $('#date').val(response.date);
-                                $('#form-dateselected').val(response.date);
+                              $('#date').val(start);
+                                  $('#viewcalendar').modal('hide');
+                                    $('#date').val(response.date);
+                                    $('#form-dateselected').val(response.date);
+                                    $("#available-time").append("<option value=''>-- select --</option>");
                                 $.each(response.available_time, function(index, val){ 
-                                    $("#available-time").append(" <option value=''>-- select --</option>\
-                                                                  <option value='"+val+"'>"+val+"</option>");
+                                    $("#available-time").append("<option value='"+val+"'>"+val+"</option>");
                                 } )
                             }
+                    }
+                     
                         }
                     })
-
-
+              
 
            }
                     
@@ -1087,7 +1085,7 @@ let formattedDate = `${year}-${month}-${day}`;
         });
 
 
-        var calendar = $('#calendar_res').fullCalendar({
+        var calendar_res = $('#calendar_res').fullCalendar({
             height:470,
             editable:true,
             header:{
@@ -1095,78 +1093,47 @@ let formattedDate = `${year}-${month}-${day}`;
                 center:'title',
                 right:'month'
             },
-            events:'/admin/appointment',
+            // events:'/admin/appointment',
             selectable:true,
            
             color: 'red',
             contentHeight:"auto",
             selectHelper: true,
+  
             viewRender: function(view, element,) {
-      if(day_off.includes("0")){
-              $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-sun').css('backgroundColor', '#829460');
+              if(day_off.includes("0")){
+        $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
       }
-
       if(day_off.includes("1")){
-              $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-mon').css('backgroundColor', '#829460');
-      }
-
+        $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
+      } 
       if(day_off.includes("2")){
-              $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-tue').css('backgroundColor', '#829460');
+        $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
       }
-
       if(day_off.includes("3")){
-              $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-wed').css('backgroundColor', '#829460');
+        $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
       }
-
-      if(day_off.includes("4")){
-              $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-thu').css('backgroundColor', '#829460');
+       if(day_off.includes("4")){
+        $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
       }
-
-      if(day_off.includes("5")){
-              $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-fri').css('backgroundColor', '#829460');
+      if (day_off.includes("5")){
+        $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
       }
-
-      if(day_off.includes("6")){
-              $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-sat').css('backgroundColor', '#829460');
+      if (day_off.includes("6")){
+        $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
       }
 
       $('.fc-day.fc-today').css('backgroundColor', 'white');
 
-      var targetDates = [
-        '2023-05-10', // Example date in the array
-        '2023-05-15',
-        '2023-05-18',
-        '2023-05-24', // Example date in the array
-        '2023-05-26',
-        '2023-05-29',
-        // Add more dates to the array as needed
-      ];
-
       element.find('.fc-day').each(function() {
         var date = $(this).data('date');
-        if (targetDates.includes(date)) {
+        if (date_off.includes(date)) {
           $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
         } else {
           // $(this).css('background-color', '#829460'); // Green for dates not in the array
         }
       });
-
     },
-
 
 
     select:function(start, end, allDay)
@@ -1179,29 +1146,24 @@ let formattedDate = `${year}-${month}-${day}`;
                     const dayOfWeek = $.fullCalendar.moment(date).day();
 
                     let currentDate = new Date(Date.now());
-let year = currentDate.getFullYear();
-let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
-let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
+                    let year = currentDate.getFullYear();
+                    let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
+                    let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
 
-let formattedDate = `${year}-${month}-${day}`;
+                    let formattedDate = `${year}-${month}-${day}`;
 
-if(formattedDate == start){
-            // $('#message-error').text("Sorry you cannot book this date");
-            //                 $(".error").show();
-            //                 setTimeout(function() {
-            //                     $(".error").fadeOut(500);
-            //                 }, 3000);
+                    if(formattedDate == start){
 
-            return false;
-           }else{
+                        return false;
+                      }else{
 
-            $.ajaxSetup({
-            headers:{
-                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+                        $.ajaxSetup({
+                        headers:{
+                            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
 
-        $.ajax({
+                    $.ajax({
                         url:"/admin/appointment/Calendar-fetch",
                         type:"Get",
                         datatype: "json",
@@ -1220,8 +1182,16 @@ if(formattedDate == start){
                          
                           $('#resched_date').val("");
                           $('#reschedtime').empty();
-                          // $('#reschedtime').append('<option value="0" disabled selected></option>');
-                          if(response.status == "405"){
+                         
+                          if(date_off.includes(start)){
+                      $('#message-error').text("Sorry this day is off");
+                                $(".error-calendar").show();
+                                setTimeout(function() {
+                                    $(".error-calendar").fadeOut(500);
+                            }, 3000);
+                    }else{
+
+                      if(response.status == "405"){
                                 $('#message-error').text(response.message);
                             $(".error-calendar").show();
                             setTimeout(function() {
@@ -1231,21 +1201,24 @@ if(formattedDate == start){
                             }else{
                            
                           $('#resched_date').val(start);
-                                $('#date').val(response.date);
                                 $("#reschedtime").append("<option value=''>-- select --</option>");
                                 $.each(response.available_time, function(index, val){ 
                                     $("#reschedtime").append("<option value='"+val+"'>"+val+"</option>");
                                 } )
                             }
+                    }
+
+                     
                         }
                     })
 
 
 
-           }
-            },
-            editable:true,
-        });
+              }
+                },
+                editable:true,
+            });
+
 
         $('.resched_button').on('click', function(e){
           $('#reschedid').val();
@@ -1302,9 +1275,6 @@ if(formattedDate == start){
              
         }
     });
-
-        
-          
         });
 	   
         $('#mode_payment').on('change', function(e){
