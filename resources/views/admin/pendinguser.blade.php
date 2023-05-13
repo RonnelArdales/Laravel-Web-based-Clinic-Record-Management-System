@@ -144,7 +144,7 @@
                     $('#verify').modal('hide');
                 },
                 success: function(response){ 
-        
+        console.log(response);
                     $('#userid').val(" ");
                     $('#userid').val(id);
                    user.draw();

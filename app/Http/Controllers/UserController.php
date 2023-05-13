@@ -42,7 +42,7 @@ class UserController extends Controller
                   "age" => ['required'],
                   "address" => ['required'],
                   "gender" => ['required'],
-                  "mobile_number" =>'required|numeric',
+                  "mobile_number" => ['required','numeric',  Rule::unique('users', 'mobileno') ],
                   "email" => ['required', 'email', Rule::unique('users', 'email') ],
                   "username" => ['required', 'regex:/\w*$/', 'min:8', Rule::unique('users', 'username')],
                   "password" => 'required|confirmed|min:8',

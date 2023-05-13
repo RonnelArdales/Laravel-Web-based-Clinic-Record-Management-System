@@ -79,7 +79,7 @@ class AppointmentController extends Controller
 
             }
 
-            return view('admin.appointment', compact('appointments', 'patients', 'services', 'day', 'days', 'mops', 'fee'))->with('day_array', $day_array) ->with('date_array', $date_array);
+            return view('admin.appointment', compact('appointments', 'patients', 'services', 'day', 'days', 'mops', 'fee'))->with('day_array', $day_array)->with('date_array', $date_array);
         }else{
 
             if ($request->ajax()) {
@@ -113,7 +113,7 @@ class AppointmentController extends Controller
                         ->rawColumns(['action', 'user_id', 'status'])
                         ->make(true);
             }
-            return view('secretary.appointment', compact('appointments', 'patients', 'services', 'day', 'days', 'mops', 'fee' ))->with('day_array', $day_array);
+            return view('secretary.appointment', compact('appointments', 'patients', 'services', 'day', 'days', 'mops', 'fee' ))->with('day_array', $day_array)->with('date_array', $date_array);
   
         }
     }

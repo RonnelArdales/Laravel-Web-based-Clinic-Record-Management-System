@@ -41,10 +41,13 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/register', function () {return view('auth.register');});
     Route::post('/store', [ClinicuserController::class, 'store']);
     Route::get('/confirmemail', [ClinicuserController::class , 'confirmemail']);
-    Route::post('/login/process', [ClinicuserController::class, 'process']);
+ 
 });
 
+Route::get('try', [ClinicuserController::class, 'try']);
 
+
+Route::post('/login/process', [ClinicuserController::class, 'process']);
 
 
 Route::post('/logout', [ClinicuserController::class, 'logout'])->name('logout');
@@ -208,9 +211,10 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
         Route::post('/business_hours/store_date', [AdminController::class, 'store_businesshours_date']);
         
         Route::post('/business_hours/delete', [AdminController::class, 'delete_businesshours']);
+        Route::delete('/business_hours/date/delete', [AdminController::class, 'delete_date_businesshours']);
         Route::get('/business_hours/get_hours', [AdminController::class, 'get_hours']);
         Route::put('/business_hours/off_status', [AdminController::class, 'off_status']);
-
+   
         
         //--------------------mode of payment-----------------------//
         Route::get('/modeofpayment', [AdminController::class, 'index_modeofpayment']);
@@ -324,6 +328,8 @@ Route::prefix('/secretary')->middleware('auth', 'verify' ,'issecretary' )->group
         Route::post('/business_hours/delete', [AdminController::class, 'delete_businesshours']);
         Route::get('/business_hours/get_hours', [AdminController::class, 'get_hours']);
         Route::put('/business_hours/off_status', [AdminController::class, 'off_status']);
+        Route::delete('/business_hours/date/delete', [AdminController::class, 'delete_date_businesshours']);
+        Route::post('/business_hours/store_date', [AdminController::class, 'store_businesshours_date']);
 
             //--------------------Guest page -----------------------//
         Route::get('/guestpage', [SecretaryController::class, 'show_guestpage_setting']);

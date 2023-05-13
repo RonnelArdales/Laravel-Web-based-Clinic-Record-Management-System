@@ -11,6 +11,7 @@ use App\Models\AuditTrail;
 use App\Models\Billing;
 use App\Models\BusinessHour;
 use App\Models\Consultationfile;
+use App\Models\Dayoff_date;
 use App\Models\Guestpage;
 use App\Models\Modeofpayment;
 use App\Models\Reservationfee;
@@ -57,7 +58,13 @@ class PatientController extends Controller
         $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
         // $days = BusinessHour::select('day')->where('off', '1')->whereNot('appointment_method', 'walkin')->groupBy('day')->get();
         $walkins = BusinessHour::select('day')->where('off', '1')->where('appointment_method', 'walkin')->groupBy('day')->get();
+        $dates = Dayoff_date::select('date')->get();
         $day_array = [];
+        $date_array = [];
+        
+        foreach($dates as $date){
+            $date_array[] = $date->date;
+        }
         foreach($days as $day){
             $day_array[] = date('w', strtotime($day->day));
         }
@@ -71,7 +78,7 @@ class PatientController extends Controller
 
         $documents = Consultationfile::where('user_id', Auth::user()->id)->get();
         $appointments = DB::table('appointments')->where('user_id',  Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
-        return view('patient.profile.profile', compact('documents', 'appointments'))->with('day_array', $day_array)->with('walkin_array', $walkin_array);
+        return view('patient.profile.profile', compact('documents', 'appointments'))->with('day_array', $day_array)->with('walkin_array', $walkin_array)->with('date_array', $date_array);
     }
 
     public function image_profile_update($id, Request $request){
@@ -221,6 +228,7 @@ class PatientController extends Controller
             $appointment->reservation_fee = $input['reservation_fee'];
             $appointment->mode_of_payment = $input['mop'];
             $appointment->reference_no = $input['reference_no'] ;
+            $appointment->reschedule_limit = 1;
             $appointment->status = 'pending';
             $appointment->save();
 

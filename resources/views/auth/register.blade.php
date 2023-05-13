@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap" rel="stylesheet">
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     
 
@@ -122,7 +123,7 @@ input[type="number"]::-webkit-outer-spin-button {
                                     <div class="row" style="margin-top:2%;padding-right:0;">
                                             <div class="col">
                                                <label for="inputPassword4" class="form-label">Birth Date</label>
-                                                <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;" style="text-align:center" value="{{old('birthday')}}" type="date" class="form-control"   name="birthday" >
+                                                <input style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0; color: white;font-size: 14px;" style="text-align:center" value="{{old('birthday')}}" type="date"  class="form-control" id="birthday"   name="birthday" >
                                                 @error('birthday')
                                                 <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
                                                 @enderror
@@ -130,7 +131,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
                                             <div class="col">
                                                 <label for="">Age</label>
-                                                <input type="number" style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0;margin-top:8px; color: white;font-size: 14px;"  style="text-align:center" value="{{old('age')}}" type="age" class="form-control"   name="age" >
+                                                <input type="number" readonly style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0;margin-top:8px; color: white;font-size: 14px;"  style="text-align:center" id="age" value="{{old('age')}}" type="age" class="form-control"   name="age" >
                                                   @error('age')
                                                   <span  role="alert" class="block mt-5 pb-4 text-danger">{{$message}}</span>
                                                   @enderror
@@ -251,7 +252,30 @@ input[type="number"]::-webkit-outer-spin-button {
     </form> 
     <x-privacyact/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
+    <script>
+     $(document).ready(function(){
+            $('#birthday').on('change', function(){
+               const birthday = $(this).val();
+        const currentDate = new Date();
+        const dateObject = new Date(birthday);
+        const birthYear = dateObject.getFullYear();
+        const currentYear = currentDate.getFullYear();
+        const birthMonth = dateObject.getMonth();
+        const currentMonth = currentDate.getMonth();
+        const birthDay = dateObject.getDate();
+        const currentDay = currentDate.getDate();
+        let age = currentYear - birthYear;
+
+        if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+            age--; // Adjust age if current month and day are earlier
+        }
+               $('#age').val(" ");
+               $('#age').val(age);
+            })  
+     });
+    </script>
 
 </body>
 </html>

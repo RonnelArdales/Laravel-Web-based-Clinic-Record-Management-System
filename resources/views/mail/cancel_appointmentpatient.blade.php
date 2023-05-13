@@ -8,7 +8,7 @@ This email serves as a notification that you have cancelled your appointment on
 
 
 Best regards,<br>
-Dr.Joseph Marquez,
+JGMarquez, RPsy Clinic.
 </x-mail::message>
 
 

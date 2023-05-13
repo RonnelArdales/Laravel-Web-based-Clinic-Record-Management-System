@@ -7,5 +7,5 @@ Your appointment has been cancelled on {{ date('M d,Y', strtotime($date)) }} at 
 
 
 Best regards,<br>
-Dr.Joseph Marquez,
+JGMarquez, RPsy Clinic.
 </x-mail::message>

@@ -371,7 +371,24 @@
 
             });
             
-        } )
+        } );
+
+        $('#payment').on('hidden.bs.modal', function() {
+
+        $('#payment_billingno').val("");
+                        $('#payment_userid').val("");
+                        $('#payment_fullname').val("");
+                        $('#compute_subtotal').val(""); //dito cocompute
+                        $('#payment_subtotal').val("");
+                        $('#total_price').val("");
+                        $('#totalprice_nosymbol').val("");
+                        $('#status').val("");
+                        $('#payment').modal('hide');
+                        $('#payment_cash, #change, #reference_no').val(" ");
+                        $('#cash').hide();
+                        $('#gcash').hide();   
+
+  });
     
         $(document).on('change', '.getservice', function(e){
             e.preventDefault();

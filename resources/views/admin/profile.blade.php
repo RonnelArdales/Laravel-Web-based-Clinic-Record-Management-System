@@ -247,14 +247,14 @@
         
 
               <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Birthday</label>
-              <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="date"> 
+              <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="date" id="birthday"> 
               <div class="mt-0 mb-2">
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="birthday"></span>
               </div>
 
               
               <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Age</label>
-              <input class=" age rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="number"> 
+              <input class=" age rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" readonly type="number" id="age"> 
               <div class="mt-0 mb-2">
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="age"></span>
               </div>
@@ -571,35 +571,54 @@
     $(document).ready(function (){
 
       refresh_table();
-      deleteall();
+      // deleteall();
         
-        function deleteall () {
-            if (window.location.href) {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "post",
-                url: "/admin/billing/addtocart/deleteall",
-                datatype: "json",
-                success: function(response){ 
-                }
-            });
+      //   function deleteall () {
+      //       if (window.location.href) {
+      //           $.ajaxSetup({
+      //           headers: {
+      //               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      //           }
+      //       });
+      //       $.ajax({
+      //           type: "post",
+      //           url: "/admin/billing/addtocart/deleteall",
+      //           datatype: "json",
+      //           success: function(response){ 
+      //           }
+      //       });
                 
-            }
+      //       }
+      //   }
+
+      $('#birthday').on('change', function(){
+               const birthday = $(this).val();
+        const currentDate = new Date();
+        const dateObject = new Date(birthday);
+        const birthYear = dateObject.getFullYear();
+        const currentYear = currentDate.getFullYear();
+        const birthMonth = dateObject.getMonth();
+        const currentMonth = currentDate.getMonth();
+        const birthDay = dateObject.getDate();
+        const currentDay = currentDate.getDate();
+        let age = currentYear - birthYear;
+
+        if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+            age--; // Adjust age if current month and day are earlier
         }
+               $('#age').val(" ");
+               $('#age').val(age);
+            }) 
   
       function refresh_table(){
         var usertype = $('#usertypetable').val()
         if( usertype == 'secretary' ){
-          $('#fullname').val("");
+                 $('#fullname').val("");
                 $('.secretary').load(location.href+' .secretary');
                } else if (usertype == 'patient') {
                 $('#fullname').val("");
                 $('.patient').load(location.href+' .patient');
-               } else {
+               } else if(usertype == 'admin') {
                 $('#fullname').val("");
                 $('.admin').load(location.href+' .admin');
                }

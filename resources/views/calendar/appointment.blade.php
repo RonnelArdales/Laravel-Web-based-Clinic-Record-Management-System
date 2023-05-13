@@ -181,6 +181,7 @@
                             }, 3000);
 
         var day_off = {!! json_encode($day_array) !!} ;
+        var date_off = {!! json_encode($date_array) !!} ;
         var walkin = {!! json_encode($walkin_array) !!} ;
 
         var date = new Date();
@@ -204,50 +205,44 @@
     selectable:true,
     selectHelper: true,
     viewRender: function(view, element,) {
-      if(day_off.includes("0")){
-              $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-sun').css('backgroundColor', '#829460');
-      }
 
-      if(day_off.includes("1")){
-              $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-mon').css('backgroundColor', '#829460');
-      }
 
-      if(day_off.includes("2")){
-              $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-tue').css('backgroundColor', '#829460');
-      }
+if(day_off.includes("0")){
+  $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
+}
+if(day_off.includes("1")){
+  $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
+} 
+if(day_off.includes("2")){
+  $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
+}
+if(day_off.includes("3")){
+  $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
+}
+ if(day_off.includes("4")){
+  $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
+}
+if (day_off.includes("5")){
+  $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
+}
+if (day_off.includes("6")){
+  $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
+}
 
-      if(day_off.includes("3")){
-              $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-wed').css('backgroundColor', '#829460');
-      }
+$('.fc-day.fc-today').css('backgroundColor', 'white');
 
-      if(day_off.includes("4")){
-              $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-thu').css('backgroundColor', '#829460');
-      }
+element.find('.fc-day').each(function() {
+  var date = $(this).data('date');
+  if (date_off.includes(date)) {
+    $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
+  } else {
+    // $(this).css('background-color', '#829460'); // Green for dates not in the array
+  }
+});
 
-      if(day_off.includes("5")){
-              $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-fri').css('backgroundColor', '#829460');
-      }
 
-      if(day_off.includes("6")){
-              $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-sat').css('backgroundColor', '#829460');
-      }
 
-      $('.fc-day.fc-today').css('backgroundColor', 'white');
-    },
+},
 
 
 
@@ -260,8 +255,10 @@
     }
   },
     
-    select:function(start, end, allDay)
+    select:function(start, end, allDay, jsEvent,)
             {
+
+              // jsEvent.preventDefault();
                 var startDate = moment(start);
                 date = startDate.clone();
                 var start = $.fullCalendar.formatDate(start, 'Y-MM-DD');
@@ -307,46 +304,35 @@ let formattedDate = `${year}-${month}-${day}`;
                         },
                         complete: function(){
                             $(".main-spinner").hide();
+                            $('#available-time').focus(); 
                         },
                         success:function(response)
                         {   
                             $('#date').val("");
-                            $('#available-time').empty()
-                            $('#available-time').append('<option value="0" disabled selected></option>')
-                            if(response.status == "405"){
-                            //     $('#message-error').text(response.message);
-                            // $(".error").show();
-                            // setTimeout(function() {
-                            //     $(".error").fadeOut(500);
-                            // }, 3000);
-
-                            // Swal.fire({
-                            //       title: 'error!',
-                            //       text: response.message,
-                            //       icon: 'error',
-                            //       confirmButtonText: 'OK',
-                            //       confirmButtonColor: '#829460',
-                            //       confirmButtonBorder: '#829460',
-                            //   });
-                        
+                            $('#available-time').empty()            
+                            if(date_off.includes(start)){
+                                    $('#available-time').append('<option value="0" disabled selected></option>');
+                                    $('#available-time').append('<option value="0" disabled selected></option>')
+                                    $('#errormodal').modal('show');
+                                    $('#errormessage').text(" ");
+                                    $('#errormessage').text("Sorry this day is off");
+                    }else{
+                      if(response.status == "405"){
+                        $('#available-time').append('<option value="0" disabled selected></option>')
                             $('#errormodal').modal('show');
                             $('#errormessage').text(" ");
                             $('#errormessage').text(response.message);
-                            
-                            
                             }else{
-                            
                                 $('#date').val(response.date);
+                                $("#available-time").append("<option value=''>-- select --</option>");
                                 $.each(response.available_time, function(index, val){ 
                                     $("#available-time").append("<option value='"+val+"'>"+val+"</option>");
-                                } )
+                                } );
                             }
+                    }
                         }
                     })
-           
            }
-  
-     
             },
         });
 

@@ -9,5 +9,5 @@ Button Text
 </x-mail::button> --}}
 
 Thanks,<br>
-JGMarquez, Rpsy
+JGMarquez, RPsy Clinic.
 </x-mail::message>

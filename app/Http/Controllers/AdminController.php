@@ -8,6 +8,8 @@ use App\Mail\Cancelappointment;
 use App\Mail\newAccount;
 use App\Mail\patientbook;
 use App\Mail\PatientDocument;
+use App\Mail\reschedule_admintopatient;
+use App\Mail\reschedule_patienttoadmin;
 use App\Models\Addtocartservice;
 use App\Models\Appointment;
 use App\Models\AuditTrail;
@@ -462,12 +464,19 @@ public function fetch_service(){
             ]);
         }else{
 
-       
             $time = Carbon::createFromFormat('h:i A', $request->input('time'))->format('H:i:s');
+        
             if(Auth::user()->usertype ==  "admin" || Auth::user()->usertype == "secretary"){
                 $appointment = Appointment::where('id', $request->input('id'))->update(["date" => $request->input('date'),
                                                                                         "time" => $time,
                                                                                         ]);
+                $patient = Appointment::where('id', $request->input('id'))->first();
+                $fullname = $patient->fullname;
+                $date = $request->input('date');
+          
+        
+                Mail::to($patient->email)->send(new reschedule_admintopatient($fullname, $date, $time));
+                return  response()->json($fullname);
         
             }else{
                 $date = Carbon::createFromFormat('m-d-Y',$request->input('date'))->format('Y-m-d');
@@ -475,9 +484,18 @@ public function fetch_service(){
                                                                                         "time" => $time,
                                                                                         "reschedule_limit" => 0,
                                                                                         ]);
+                 $users = User::where(function ($query) {
+                $query->where('usertype', 'admin')->orWhere('usertype', 'secretary');})->where('status', 'verified')->get();
+                $patient = Appointment::where('id', $request->input('id'))->first();
+                
+
+                foreach ($users as $user) {
+                    Mail::to($user->email)->send(new reschedule_patienttoadmin($patient->fullname, $date, $time));
+                }
+                                
             }
      
-            return response()->json('Reschedule Successfully');
+            return response()->json($users);
 
         }
 
@@ -1184,7 +1202,7 @@ public function index_discount(){
  public function show_businesshours(){
         $hours = BusinessHour::where('day', 'Monday')->whereNotIn('from', ['23:59:00'])->orderBy('from', 'asc')->get();
         $day = BusinessHour::where('day', 'Monday')->select('day', 'off')->distinct()->get();
-        $off_dates = Dayoff_date::select('date')->get();
+        $off_dates = Dayoff_date::all();
 
 
     return view('system_settings.businesshours', ['hours' =>$hours, "days" => $day, 'offdates' => $off_dates]);
@@ -1195,6 +1213,23 @@ public function index_discount(){
     $checked_array = $request->day_id;
 
     $data = BusinessHour::whereIn('id', $checked_array)->delete();
+
+    $audit_trail = new AuditTrail();
+    $audit_trail->user_id = Auth::user()->id;
+    $audit_trail->username = Auth::user()->username;
+    $audit_trail->activity = 'Delete business hours';
+    $audit_trail->usertype = Auth::user()->usertype;
+    $audit_trail->save();
+
+          return response()->json([
+                "status" => "deleted successfully",
+            ]);
+}
+
+public function delete_date_businesshours(Request $request){
+    $checked_array = $request->date_id;
+
+    $data = Dayoff_date::whereIn('id', $checked_array)->delete();
 
     $audit_trail = new AuditTrail();
     $audit_trail->user_id = Auth::user()->id;

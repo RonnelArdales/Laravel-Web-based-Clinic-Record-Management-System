@@ -9,5 +9,5 @@ Thank you again for choosing to work with us. We are excited to speak with you s
 
 
 Best regards,<br>
-Dr.Joseph Marquez,
+JGMarquez, RPsy Clinic.
 </x-mail::message>

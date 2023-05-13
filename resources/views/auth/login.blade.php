@@ -18,12 +18,13 @@
         </div>
       @endif 
 
+
       <!-- Sign In Form -->
 <form action="/login/process" method="POST">
         @csrf
   
-          <input style="font-family:Poppins; margin-bottom:5%; border:none; border-bottom: 2px solid rgba(0, 0, 0, 0.5);;background-color:#EDDBC0; width:100%"  placeholder="E-mail" name="email" value="{{old('email')}}" >  
-          <input style="font-family:Poppins; margin-bottom:5%;border:none; border-bottom: 2px solid rgba(0, 0, 0, 0.5);;background-color:#EDDBC0; width:100% " placeholder="Password" type="password" autocomplete="off"  id="floatingPassword" name="password" >  
+          <input style="font-family:Poppins; margin-bottom:5%; border:none; border-bottom: 2px solid rgba(0, 0, 0, 0.5);;background-color:#EDDBC0; width:100%"  placeholder="E-mail" name="email" value="{{ old('email') }}" >  
+          <input style="font-family:Poppins; margin-bottom:5%;border:none; border-bottom: 2px solid rgba(0, 0, 0, 0.5);;background-color:#EDDBC0; width:100% " placeholder="Password" type="password" autocomplete="off" value="{{old('password')}}" id="floatingPassword" name="password" >  
           @foreach ($errors->all() as $message) 
           <span  role="alert" class="block  text-danger">{{ $message }}</span>
           @endforeach

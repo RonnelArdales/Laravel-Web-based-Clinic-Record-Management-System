@@ -407,10 +407,21 @@ th, td{
     $(document).ready(function(e){
 
       var day_off = {!! json_encode($day_array) !!} ;
+      var date_off = {!! json_encode($date_array) !!} ;
+      $('#reschedtime').empty()
+        $('#reschedtime').append('<option value="0" disabled selected></option>');
 
       setTimeout(function() {
             $(".success").fadeOut(800);
             }, 2000);
+
+            $("#calendar").on("hidden.bs.modal", function(e){
+        e.preventDefault();
+        $('#reschedcalendar').find('.refresh').val("");
+        $('#reschedtime').empty()
+        $('#reschedtime').append('<option value="0" disabled selected></option>');
+	      $(' #error_resched_date, #error_resched_tim' ).html("");
+        });
 
 
             $('#calendar').fullCalendar({
@@ -428,48 +439,38 @@ contentHeight:"auto",
             selectHelper: true,
 viewRender: function(view, element,) {
   if(day_off.includes("0")){
-          $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
-  }else{
-    $('.fc-day.fc-sun').css('backgroundColor', '#829460');
-  }
+        $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
+      }
+      if(day_off.includes("1")){
+        $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
+      } 
+      if(day_off.includes("2")){
+        $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
+      }
+      if(day_off.includes("3")){
+        $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
+      }
+       if(day_off.includes("4")){
+        $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
+      }
+      if (day_off.includes("5")){
+        $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
+      }
+      if (day_off.includes("6")){
+        $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
+      }
 
-  if(day_off.includes("1")){
-          $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
-  }else{
-    $('.fc-day.fc-mon').css('backgroundColor', '#829460');
-  }
+      $('.fc-day.fc-today').css('backgroundColor', 'white');
 
-  if(day_off.includes("2")){
-          $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
-  }else{
-    $('.fc-day.fc-tue').css('backgroundColor', '#829460');
-  }
+      element.find('.fc-day').each(function() {
+        var date = $(this).data('date');
+        if (date_off.includes(date)) {
+          $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
+        } else {
+          // $(this).css('background-color', '#829460'); // Green for dates not in the array
+        }
+      });
 
-  if(day_off.includes("3")){
-          $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
-  }else{
-    $('.fc-day.fc-wed').css('backgroundColor', '#829460');
-  }
-
-  if(day_off.includes("4")){
-          $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
-  }else{
-    $('.fc-day.fc-thu').css('backgroundColor', '#829460');
-  }
-
-  if(day_off.includes("5")){
-          $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
-  }else{
-    $('.fc-day.fc-fri').css('backgroundColor', '#829460');
-  }
-
-  if(day_off.includes("6")){
-          $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
-  }else{
-    $('.fc-day.fc-sat').css('backgroundColor', '#829460');
-  }
-
-  $('.fc-day.fc-today').css('backgroundColor', 'white');
 },
 
 
@@ -534,8 +535,19 @@ let formattedDate = `${year}-${month}-${day}`;
                     {   
                       $('#resched_date').val("");
                           $('#reschedtime').empty();
-                          // $('#reschedtime').append('<option value="0" disabled selected></option>');
-                          if(response.status == "405"){
+                
+
+                          $('#reschedtime').empty();
+                         
+                          if(date_off.includes(start)){
+                            $('#reschedtime').append('<option value="0" disabled selected></option>');
+                            $('#errormodal').modal('show');
+                            $('#errormessage').text(" ");
+                            $('#errormessage').text("Sorry this day is off");
+                    }else{
+
+                      if(response.status == "405"){
+                        $('#reschedtime').append('<option value="0" disabled selected></option>');
                             $('#errormodal').modal('show');
                             $('#errormessage').text(" ");
                             $('#errormessage').text(response.message);
@@ -548,6 +560,10 @@ let formattedDate = `${year}-${month}-${day}`;
                                 $('#reschedtime').append("<option value='"+val+"'>"+val+"</option>");
                             } )
                         }
+
+                    }
+
+                        
                     }
                 })
        }
@@ -688,6 +704,7 @@ let formattedDate = `${year}-${month}-${day}`;
                     $(".main-spinner").hide();
                 },
                 success: function(response){ 
+                  console.log(response);
                   if(response.status == 400){
                     $('#error_date, #error_time' ).html("");
                     $.each(response.errors.date, function (key, err_values){
@@ -699,6 +716,7 @@ let formattedDate = `${year}-${month}-${day}`;
                   }else{
                   $('.appointment_table').load(location.href+' .appointment_table');
                   $('#viewcalendar').modal('hide');   
+
                   }
          
         }

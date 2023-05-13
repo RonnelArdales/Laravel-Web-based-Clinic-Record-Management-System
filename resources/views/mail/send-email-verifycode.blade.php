@@ -7,5 +7,5 @@ Please use the verification code to verify your email
 
 
 Thanks,<br>
-JG Marquez, Rpsy
+JGMarquez, RPsy Clinic.
 </x-mail::message>

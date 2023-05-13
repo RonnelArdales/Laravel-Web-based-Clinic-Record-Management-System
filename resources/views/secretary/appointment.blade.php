@@ -700,12 +700,15 @@
 
 
         var day_off = {!! json_encode($day_array) !!} ;
+        var date_off = {!! json_encode($date_array) !!} ;
         var date = new Date();
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
         $('#available-time').empty()
         $('#available-time').append('<option value="0" disabled selected></option>');
+        $('#reschedtime').empty()
+        $('#reschedtime').append('<option value="0" disabled selected></option>');
 
     
 
@@ -727,10 +730,10 @@
 
         $("#reschedcalendar").on("hidden.bs.modal", function(e){
         e.preventDefault();
-        $('#reschedcalendar').find('#resched_date').val("");
+        $('#reschedcalendar').find('.refresh').val("");
         $('#reschedtime').empty()
-        $('#reschedtime').append('<option value="">-- select --</option>');
-	   $(' #error_resched_date, #error_resched_tim' ).html("");
+        $('#reschedtime').append('<option value="0" disabled selected></option>');
+	      $(' #error_resched_date, #error_resched_tim' ).html("");
         });
 
         
@@ -903,6 +906,7 @@
                                 $("#success").fadeOut(500);
                             }, 2000);
                    pendings.draw();
+                    cancel.draw();
         }
     });
         });
@@ -981,49 +985,38 @@
             contentHeight:"auto",
             selectHelper: true,
             viewRender: function(view, element,) {
-      if(day_off.includes("0")){
-              $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-sun').css('backgroundColor', '#829460');
+              if(day_off.includes("0")){
+        $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
       }
-
       if(day_off.includes("1")){
-              $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-mon').css('backgroundColor', '#829460');
-      }
-
+        $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
+      } 
       if(day_off.includes("2")){
-              $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-tue').css('backgroundColor', '#829460');
+        $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
       }
-
       if(day_off.includes("3")){
-              $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-wed').css('backgroundColor', '#829460');
+        $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
       }
-
-      if(day_off.includes("4")){
-              $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-thu').css('backgroundColor', '#829460');
+       if(day_off.includes("4")){
+        $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
       }
-
-      if(day_off.includes("5")){
-              $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-fri').css('backgroundColor', '#829460');
+      if (day_off.includes("5")){
+        $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
       }
-
-      if(day_off.includes("6")){
-              $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-sat').css('backgroundColor', '#829460');
+      if (day_off.includes("6")){
+        $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
       }
 
       $('.fc-day.fc-today').css('backgroundColor', 'white');
+
+      element.find('.fc-day').each(function() {
+        var date = $(this).data('date');
+        if (date_off.includes(date)) {
+          $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
+        } else {
+          // $(this).css('background-color', '#829460'); // Green for dates not in the array
+        }
+      });
     },
 
     select:function(start, end, allDay)
@@ -1034,12 +1027,24 @@
                     var start = $.fullCalendar.formatDate(start, 'Y-MM-DD');
                     var end = $.fullCalendar.formatDate(end, 'Y-MM-DD HH:mm:ss');
                     const dayOfWeek = $.fullCalendar.moment(date).day();
+
+                    let currentDate = new Date(Date.now());
+                    let year = currentDate.getFullYear();
+                    let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
+                    let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
+                    let formattedDate = `${year}-${month}-${day}`;
                     
-        $.ajaxSetup({
-            headers:{
-                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+  
+
+        if(formattedDate == start){
+                      return false;
+                    }else{
+                      $.ajaxSetup({
+                        headers:{
+                            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
                     $.ajax({
                         url:"/secretary/appointment/Calendar-fetch",
                         type:"Get",
@@ -1056,28 +1061,43 @@
                         },
                         success:function(response)
                         {   
-                         
-                          $('#resched_date').val("");
-                          $('#reschedtime').empty();
-                          // $('#reschedtime').append('<option value="0" disabled selected></option>');
-                          if(response.status == "405"){
-                                $('#message-error').text(response.message);
-                            $(".error-calendar").show();
-                            setTimeout(function() {
-                                $(".error-calendar").fadeOut(500);
+                              $('#date').val("");
+                              $('#available-time').empty();
+                              // $('#available-time').append('<option value="0" disabled selected></option>');
+
+                              if(date_off.includes(start)){
+                                    $('#available-time').append('<option value="0" disabled selected></option>');
+                      $('#message-error').text("Sorry this day is off");
+                                $(".error-calendar").show();
+                                setTimeout(function() {
+                                    $(".error-calendar").fadeOut(500);
                             }, 3000);
-                            
+                    }else{
+                      if(response.status == "405"){
+                        $('#available-time').append('<option value="0" disabled selected></option>');
+                                    $('#message-error').text(response.message);
+                                $(".error-calendar").show();
+                                setTimeout(function() {
+                                    $(".error-calendar").fadeOut(500);
+                                }, 3000);
+                                
                             }else{
                            
-                          $('#resched_date').val(start);
-                                $('#date').val(response.date);
-                                $("#reschedtime").append("<option value=''>-- select --</option>");
+                              $('#date').val(start);
+                                  $('#viewcalendar').modal('hide');
+                                    $('#date').val(response.date);
+                                    $('#form-dateselected').val(response.date);
+                                    $("#available-time").append("<option value=''>-- select --</option>");
                                 $.each(response.available_time, function(index, val){ 
-                                    $("#reschedtime").append("<option value='"+val+"'>"+val+"</option>");
+                                    $("#available-time").append("<option value='"+val+"'>"+val+"</option>");
                                 } )
                             }
+                    }
                         }
                     })
+                      
+                    }
+              
             },
             editable:true,
   
@@ -1102,66 +1122,38 @@
     viewRender: function(view, element) {
 
       if(day_off.includes("0")){
-              $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-sun').css('backgroundColor', '#829460');
+        $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
       }
       if(day_off.includes("1")){
         $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-mon').css('backgroundColor', '#829460');
-      }
-
+      } 
       if(day_off.includes("2")){
-              $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-tue').css('backgroundColor', '#829460');
+        $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
       }
-
       if(day_off.includes("3")){
-              $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-wed').css('backgroundColor', '#829460');
+        $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
+      }
+       if(day_off.includes("4")){
+        $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
+      }
+      if (day_off.includes("5")){
+        $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
+      }
+      if (day_off.includes("6")){
+        $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
       }
 
-      if(day_off.includes("4")){
-              $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-thu').css('backgroundColor', '#829460');
-      }
-
-      if(day_off.includes("5")){
-              $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-fri').css('backgroundColor', '#829460');
-      }
-
-      if(day_off.includes("6")){
-              $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
-      }else{
-        $('.fc-day.fc-sat').css('backgroundColor', '#829460');
-      }
-
-      var targetDates = [
-        '2023-05-10', // Example date in the array
-        '2023-05-15',
-        '2023-05-18',
-        '2023-05-24', // Example date in the array
-        '2023-05-26',
-        '2023-05-29',
-        // Add more dates to the array as needed
-      ];
+      $('.fc-day.fc-today').css('backgroundColor', 'white');
 
       element.find('.fc-day').each(function() {
         var date = $(this).data('date');
-        if (targetDates.includes(date)) {
+        if (date_off.includes(date)) {
           $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
         } else {
           // $(this).css('background-color', '#829460'); // Green for dates not in the array
         }
       });
 
-      $('.fc-day.fc-today').css('backgroundColor', 'white');
     },
 
 
@@ -1214,10 +1206,21 @@ if(formattedDate == start){
                         success:function(response)
                         {   
                          
-                          $('#resched_date').val("");
+                              $('#resched_date').val("");
                           $('#reschedtime').empty();
-                          $('#reschedtime').append('<option value="0" disabled selected></option>');
-                          if(response.status == "405"){
+                          
+                         
+                          if(date_off.includes(start)){
+                              $('#reschedtime').append('<option value="0" disabled selected></option>');
+                      $('#message-error').text("Sorry this day is off");
+                                $(".error-calendar").show();
+                                setTimeout(function() {
+                                    $(".error-calendar").fadeOut(500);
+                            }, 3000);
+                    }else{
+
+                      if(response.status == "405"){
+                        $('#reschedtime').append('<option value="0" disabled selected></option>');
                                 $('#message-error').text(response.message);
                             $(".error-calendar").show();
                             setTimeout(function() {
@@ -1227,12 +1230,12 @@ if(formattedDate == start){
                             }else{
                            
                           $('#resched_date').val(start);
-                                $('#date').val(response.date);
-         
+                                $("#reschedtime").append("<option value=''>-- select --</option>");
                                 $.each(response.available_time, function(index, val){ 
                                     $("#reschedtime").append("<option value='"+val+"'>"+val+"</option>");
                                 } )
                             }
+                    }
                         }
                     })
 
@@ -1241,6 +1244,65 @@ if(formattedDate == start){
            }  
             },
             editable:true,
+        });
+
+
+
+        $('.resched_button').on('click', function(e){
+          $('#reschedid').val();
+          $('#resched_date').val();
+          $('#reschedtime').val();
+
+          data = {
+            "id": $('#reschedid').val(),
+            "date": $('#resched_date').val(),
+            "time": $('#reschedtime').val(),
+          }
+          
+          $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+                type: "PUT",
+                url: "/secretary/appointment/resched",
+                datatype: "json",
+                data: data,
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+				 
+                    $(".main-spinner").hide();
+                },
+                success: function(response){ 
+               
+                  if(response.status == 400){
+                    $('#error_resched_date, #error_resched_tim' ).html("");
+                        $.each(response.errors.date, function (key, err_values){
+                            $('#error_resched_date').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.time, function (key, err_values){
+                            $('#error_resched_tim').append('<span>'+err_values+'</span>');
+                        })
+                    
+                  }else{
+              
+                  $('#reschedcalendar').modal('hide');
+                  $('#success').html();
+                    $('#success').text('Reschedule successfully');
+                      $('#success').show();
+                      setTimeout(function() {
+                                $("#success").fadeOut(500);
+                            }, 2000);
+                          pendings.draw();
+                          complete.draw();
+                  }
+             
+        }
+    });
         });
 
 

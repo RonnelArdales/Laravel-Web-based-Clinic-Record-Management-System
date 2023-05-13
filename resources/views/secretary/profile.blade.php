@@ -125,13 +125,13 @@
         
 
               <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Birthday</label>
-              <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="date"> 
+              <input id="birthday" class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="date"> 
               <div class="mt-0 mb-2">
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="birthday"></span>
               </div>
 
               <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Age</label>
-              <input class=" age rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="number"> 
+              <input id="age"readonly class=" age rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="number"> 
               <div class="mt-0 mb-2">
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="age"></span>
               </div>
@@ -154,7 +154,7 @@
               </div>
 
               <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Mobile No.</label>
-              <input class=" mobileno  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="text"> 
+              <input class=" mobileno  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="number"> 
               <div class="mt-0 mb-2">
                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="mobileno"></span>
               </div>
@@ -249,7 +249,7 @@
                 </div>
 
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Age</label>
-                <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_age" style="background: #D0B894;" type="text"> 
+                <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_age" style="background: #D0B894;" type="number"> 
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_age"></span>
                 </div>
@@ -274,7 +274,7 @@
                 </div>
   
                 <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Mobile No.</label>
-                <input class=" mobileno  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_mobileno" style="background: #D0B894;" type="text"> 
+                <input class=" mobileno  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_mobileno" style="background: #D0B894;" type="number"> 
                 <div class="mt-0 mb-2">
                   <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_mobileno"></span>
                 </div>
@@ -447,20 +447,26 @@
                 
         //     }
         // }
-  
-      // function refresh_table(){
-      //   var usertype = $('#usertypetable').val()
-      //   if( usertype == 'secretary' ){
-      //     $('#fullname').val("");
-      //           $('.secretary').load(location.href+' .secretary');
-      //          } else if (usertype == 'patient') {
-      //           $('#fullname').val("");
-      //           $('.patient').load(location.href+' .patient');
-      //          } else {
-      //           $('#fullname').val("");
-      //           $('.admin').load(location.href+' .admin');
-      //          }
-      // }
+
+
+      $('#birthday').on('change', function(){
+               const birthday = $(this).val();
+        const currentDate = new Date();
+        const dateObject = new Date(birthday);
+        const birthYear = dateObject.getFullYear();
+        const currentYear = currentDate.getFullYear();
+        const birthMonth = dateObject.getMonth();
+        const currentMonth = currentDate.getMonth();
+        const birthDay = dateObject.getDate();
+        const currentDay = currentDate.getDate();
+        let age = currentYear - birthYear;
+
+        if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+            age--; // Adjust age if current month and day are earlier
+        }
+               $('#age').val(" ");
+               $('#age').val(age);
+            }) 
 
         $(".modal").on("hidden.bs.modal", function(){
             $('#create, #edit, #delete').find('input').val("");

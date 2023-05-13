@@ -8,6 +8,7 @@ use App\Models\Appointment;
 use App\Models\AuditTrail;
 use App\Models\BusinessHour;
 use App\Models\Consultation;
+use App\Models\Dayoff_date;
 use App\Models\Discount;
 use App\Models\Guestpage;
 use App\Models\Modeofpayment;
@@ -702,9 +703,11 @@ public function addtocart_getalldata($id){
 
         public function show_businesshours(){
             $hours = BusinessHour::where('day', 'Monday')->whereNotIn('from', ['23:59:00'])->orderBy('from', 'asc')->get();
+            $day = BusinessHour::where('day', 'Monday')->select('day', 'off')->distinct()->get();
+            $off_dates = Dayoff_date::all();
             
             $day = BusinessHour::where('day', 'Monday')->select('day', 'off')->distinct()->get();
-        return view('secretary.system_settings.businesshours', ['hours' =>$hours, "days" => $day]);
+        return view('secretary.system_settings.businesshours', ['hours' =>$hours, "days" => $day, 'offdates' => $off_dates]);
      }
 
      public function index_modeofpayment(){

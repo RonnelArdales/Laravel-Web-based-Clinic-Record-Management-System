@@ -25,10 +25,10 @@
  
                   <div class="col-md-12 mt-3">
                       <label for="inputEmail4" class="form-label">New Password</label>
-                      <input type="password" autocomplete="off"  class="form-control"   name="new_password" style="background: #D0B894;
+                      <input type="password" autocomplete="off"  class="form-control"   name="password" style="background: #D0B894;
                       border-radius: 10px;">
                     </div>
-                    @error('new_password')  <span  role="alert" class="block  text-danger">{{$message}}</span> @enderror
+                    @error('password')  <span  role="alert" class="block  text-danger">{{$message}}</span> @enderror
                     <div class="col-md-12 mt-3">
                       <label for="inputEmail4" class="form-label">Confirm Password</label>
                       <input type="password" autocomplete="off"  class="form-control"  name="password_confirmation" style="background: #D0B894;

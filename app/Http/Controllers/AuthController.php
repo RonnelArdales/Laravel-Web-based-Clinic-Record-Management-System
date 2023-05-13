@@ -346,13 +346,14 @@ class AuthController extends Controller
 
     public function update_password(Request $request){
         $validated = $request->validate([
-            'new_password' => ['required', 'min:8'],
+            'password' => ['required', 'min:8', 'confirmed'],
         ], [
-            'new_password.required' => 'Password is required',
-            'new_password.min' => 'Password is minimun of 8 characters',
+            'password.required' => 'Password is required',
+            'password.min' => 'Password is minimun of 8 characters',
+            'password.confirmed' => 'Password did not match',
         ]);
 
-                    $password = bcrypt($validated['new_password']);
+                    $password = bcrypt($validated['password']);
                     User::where('id', Auth::user()->id)->update([
                         'password' => $password,
                     ]);

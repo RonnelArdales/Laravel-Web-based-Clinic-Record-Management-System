@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Mail\SendVerifycode;
 use App\Models\AuditTrail;
+use App\Models\Consultation;
 use App\Models\EmailOtp;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
@@ -55,15 +57,15 @@ class ClinicuserController extends Controller {
       
       $validator = Validator::make($request->all(), [
           // "content" => 'bail|required',
-          'email' => 'bail|required',
-          'password' => 'bail|required',
+          'email' => 'required',
+          'password' => 'required',
           ],[
             'email.required' => 'email is required',
             'password.required' => 'password is required',
               ])->stopOnFirstFailure(true);
 
           if($validator->fails()){
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withErrors($validator)->withInput();
           }else{
 
               $email = $request->input('email');
@@ -114,10 +116,10 @@ class ClinicuserController extends Controller {
                     }
                  }
                 }else{
-                  return redirect()->back()->with('error', 'Password not matches' );
+                  return redirect()->back()->withInput()->with('error', 'Password not matches' );
                 }
               }else{
-                return redirect()->back()->with('error', 'The email is not registered' );
+                return redirect()->back()->withInput()->with('error', 'The email is not registered' );
               }
 
           }
@@ -216,5 +218,39 @@ class ClinicuserController extends Controller {
             Mail::to($request->input('email'))->send(new SendVerifycode($otp));
 
             return redirect('/verify-email');
+    }
+
+
+
+    public function try(){
+      $sevenYears = Carbon::now()->subYears(7);
+      $sevenYearsAgo =  $sevenYears->format('Y-m-d H:i:s');
+    //   return $sevenYearsAgo;
+    //   $userIDsToDelete = Consultation::where('created_at', '<', $sevenYearsAgo)
+    // ->pluck('user_id')
+    // ->toArray();
+
+    // $users = DB::table('consultations')
+    // ->select('user_id')
+    // ->whereIn('id', function ($query) use ($sevenYearsAgo) {
+    //     $query->select(DB::raw('MAX(id)'))
+    //         ->from('consultations')
+    //         ->groupBy('user_id')
+    //         ->havingRaw("MAX(created_at) < '{$sevenYearsAgo}'");
+    // })
+    // ->get();
+
+    $latestConsultations = DB::table('consultations')
+    ->select('user_id', DB::raw('MAX(created_at) as latest_created_at'))
+    ->groupBy('user_id')
+    ->having('latest_created_at', '<=', $sevenYears)
+    ->get();
+
+    dd($latestConsultations);
+
+  //   foreach ($users as $user) {
+  //     echo $user->user_id . '<br>';
+  // }
+      // dd($userIDsToDelete);
     }
 }

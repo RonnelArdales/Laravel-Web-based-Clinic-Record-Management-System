@@ -1,4 +1,5 @@
 @extends('layouts.admin_navigation')
+@section('title', 'Billing')
 @section('content')
 <style>
     label{
@@ -225,12 +226,6 @@
         ]
     });
 
-    // <th>Trans no.</th>
-    //                                 <th >User ID</th>
-    //                                 <th>Fullname</th>
-    //                                 <th>Sub-total</th>
-    //                                 <th>Status</th>
-    //                                 <th style="width: 230px">Action</th>
  
     $("#payment_cash").on('change', function(e){
         e.preventDefault();
@@ -376,56 +371,7 @@
             
         } )
       
-        $(document).on('click', '.saveaddtocart', function(e){
-            e.preventDefault();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "POST",   
-                url: "/secretary/billing/addtocart/billing_store", 
-                    datatype: "json",
-                    data: {billingno : $('#getid').val() },
-                    success: function(response){ //return galing sa function sa controller
-                        get_maxid();
-                        $('.subtotal').load(location.href+' .subtotal');
-                            $('.data-table').load(location.href+' .data-table');
-                            $('#userid').val("");
-                            $('#fullname').val("");
-                            $('#servicename').val("");
-                            $('#getservice').val("");
-                            $('#price').val("");
-                            $('.billing').load(location.href+' .billing');
-                 
-                }
-            });
-        });
 
-
-        // -------- select patient in modal ------------// 
-        $(document).on('click', '.select', function(e){
-            e.preventDefault();
-            var id = $(this).val();
-console.log(id);
-            $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-            $.ajax({
-                type: "GET",   
-                url: "/secretary/appointment/getuser/"+ id, 
-                    datatype: "json",
-                    success: function(response){ //return galing sa function sa controller
-                    $(' #userid, #fullname').html("");
-                    $('#userid').val(response.users[0].id);
-                    $('#fullname').val(response.fullname[0].fullname);
-                    $('#viewpatients').modal('hide');
-                }
-            });
-        });
 
         //------------ close patient modal --------------------------------//
         $(".viewpatients").on("hidden.bs.modal", function(e){
@@ -454,67 +400,12 @@ console.log(id);
 
         });
         
-        $(document).on('click','.store_addtocart' ,function(e){
-            e.preventDefault();
-            var data ={
-                'billingno' : $('#getid').val(),
-                'userid': $('#userid').val(),
-                'fullname': $('#fullname').val(),
-                'servicecode': $('#getservice').val(),
-                'service': $('#servicename').val(),
-                'price': $('#price').val(),
-            }
-
-            console.log(data);
-            $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-
-            $.ajax({
-                type: "POST",   
-                url: "/secretary/billing/addtocart/store", 
-                data: data,
-                datatype: "json",
-                beforeSend: function(){
-                    $(".loading").show();
-                },
-                complete: function(){
-                    $(".loading").hide();
-                },
-                success: function(response){ 
-                        if(response.status == 200){     
-                            $('#sub-total').val(response.subtotal);
-                            $('#message').text(response.message);
-                            $('.subtotal').load(location.href+' .subtotal');
-                            $('.data-table').load(location.href+' .data-table');
-                            $('.billing').load(location.href+' .billing');
-                            $('#servicename').val("");
-                            $('#getservice').val("");
-                            $('#price').val("");
-                            message_success();
-                            setTimeout(function() {
-                                $(".success").fadeOut(500);
-                            }, 2000);
-                        }else if(response.status == 400){
-                            $('#message-error').text(response.message);
-                            $(".error").show();
-                            setTimeout(function() {
-                                $(".error").fadeOut(500);
-                            }, 2000);
-                        }
-                        
-                    }
-                });
-        });
 
 
 
         $('#mode_payment').on('change', function(e){
             var payment = $(this).val();
-
-            $('#payment_cash, #reference_no').val(" ");
+            $('#payment_cash, #reference_no, #change').val(" ");
             $(' #error_payment, #error_reference_no').html(' ');
             if(payment == "Cash"){
                 $('#cash').show();
@@ -640,6 +531,24 @@ console.log(id);
             }); 
 
         })
+
+        
+        $('#payment').on('hidden.bs.modal', function() {
+
+$('#payment_billingno').val("");
+                $('#payment_userid').val("");
+                $('#payment_fullname').val("");
+                $('#compute_subtotal').val(""); //dito cocompute
+                $('#payment_subtotal').val("");
+                $('#total_price').val("");
+                $('#totalprice_nosymbol').val("");
+                $('#status').val("");
+                $('#payment').modal('hide');
+                $('#payment_cash, #change, #reference_no').val(" ");
+                $('#cash').hide();
+                $('#gcash').hide();   
+
+});
         
 });
 </script>

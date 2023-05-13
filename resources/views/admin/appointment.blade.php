@@ -63,7 +63,7 @@
 				<th>id</th>
 				<th style="width:30px">Patient Id</th>
 				<th>Fullname</th>
-				<th>Contact no.</th>
+				<th style="width: 100px" >Contact no.</th>
 				<th>Email</th>
 				<th>Date</th>
 				<th >Time</th>
@@ -250,8 +250,8 @@
 		 </div>
 
 	    <div  id="gcash" style="display:none; margin-top: 10px">
-		 <label for=""><b>Reference no:</b></label>
-		 <input type="text" style="width:  px" class="refresh" id="reference_no" name="reference_no"><br>
+		 <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" for="">Reference no:</label><br>
+		 <input type="text" class="refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="reference_no" name="reference_no"><br>
 
 		 <div class="mt-0 mb-2">
 			<span  role="alert" class="block mt-5   text-danger" id="error_reference_no"></span>
@@ -1033,7 +1033,6 @@
                             start: start,
                         },
                         beforeSend: function(){
-                        $('#complete-confirmation').modal('hide');
                             $(".main-spinner").show();
                         },
                         complete: function(){
@@ -1043,9 +1042,10 @@
                         {   
                               $('#date').val("");
                               $('#available-time').empty();
-                              // $('#available-time').append('<option value="0" disabled selected></option>');
+                         
 
                               if(date_off.includes(start)){
+                                     $('#available-time').append('<option value="0" disabled selected></option>');
                       $('#message-error').text("Sorry this day is off");
                                 $(".error-calendar").show();
                                 setTimeout(function() {
@@ -1053,6 +1053,7 @@
                             }, 3000);
                     }else{
                       if(response.status == "405"){
+                             $('#available-time').append('<option value="0" disabled selected></option>');
                                     $('#message-error').text(response.message);
                                 $(".error-calendar").show();
                                 setTimeout(function() {
@@ -1184,6 +1185,7 @@
                           $('#reschedtime').empty();
                          
                           if(date_off.includes(start)){
+                            $('#reschedtime').append('<option value="0" disabled selected></option>');
                       $('#message-error').text("Sorry this day is off");
                                 $(".error-calendar").show();
                                 setTimeout(function() {
@@ -1192,6 +1194,7 @@
                     }else{
 
                       if(response.status == "405"){
+                        $('#reschedtime').append('<option value="0" disabled selected></option>');
                                 $('#message-error').text(response.message);
                             $(".error-calendar").show();
                             setTimeout(function() {
@@ -1250,7 +1253,7 @@
                     $(".main-spinner").hide();
                 },
                 success: function(response){ 
-                  console.log(response);
+
                   if(response.status == 400){
                     $('#error_resched_date, #error_resched_tim' ).html("");
                         $.each(response.errors.date, function (key, err_values){
@@ -1259,9 +1262,9 @@
                         $.each(response.errors.time, function (key, err_values){
                             $('#error_resched_tim').append('<span>'+err_values+'</span>');
                         })
-                        console.log(response.errors.time);
+           
                   }else{
-                    console.log(response);
+                    
                     $('#reschedcalendar').modal('hide');
                   $('#success').html();
                     $('#success').text('Reschedule successfully');

@@ -6,7 +6,9 @@
  <h1><B>BUSINESS HOURS</B></h1>
 </div>   
 
-<div id="success"></div>
+<div id="success" class="success alert alert-success" role="alert" style="display:none">
+    <p style="margin-bottom: 0px" id="message-success"></p> 
+</div>
 
 <div class="main-spinner" style="
 	  position:fixed;
@@ -70,7 +72,7 @@
                 <div id="" style="height:300px; padding:10px; background-color:aliceblue; border-radius:10px; " >
                     <div class="label-container">
                         @foreach ($hours as $hour)
-                            <label style="margin-bottom: 10px">
+                            <label style="margin-bottom: 10px; display: flex; align-items: ">
                                 <input type="checkbox" class="day_id" name="day_id[]" id="day_id" value="{{$hour->id}}" id="time-checkbox">
                                 <div style="margin-left: 10px" class="btn btn-primary ml-20">{{$hour->from}}</div>
                             </label>
@@ -81,7 +83,7 @@
                 @foreach ($days as $day)
                 <div class="refresh_off" style="margin-top:10px">
                     <button class="delete btn btn-danger ml-20 delete" id="delete">Delete</button>
-                    <button style="padding-left:30px; padding-right:30px" class=" btn btn-primary ml-0 off_day" value="{{$day->day}}" id="off_day"><label for=""><input onclick="this.checked=!this.checked;" type="checkbox" {{ $day->off == 1  ? 'checked' : '' }} class="checked_off" name="checked_off" id="checked_off"  > </label> <label for="">Off</label></button>
+                    <button style="padding-left:30px; padding-right:30px" class=" btn btn-primary ml-0 off_day" value="{{$day->day}}" id="off_day"><label for=""><input onclick="this.checked=!this.checked;" type="checkbox" {{ $day->off == 1  ? 'checked' : '' }} class="checked_off" name="checked_off" id="checked_off"  > </label> <label for="">Day Off</label></button>
                 </div>
                 @endforeach
               
@@ -110,20 +112,20 @@
             <div class="card-body" style="width:100%; min-height:50vh; display: flex; overflow-x: auto;padding:0px ; font-size: 15px;margin-top:14px">
               <div  style="width:100%; " class="dayoff_dates" >
                 <div id="" style="height:300px; padding:10px; background-color:aliceblue; border-radius:10px" >
-                    @foreach ($offdates as $offdate)
-                    <table >
-                        <tr >
-                            <td>  
-                                <label  style="margin-bottom: 10px"><input type="checkbox" class="day_id" name="day_id[]" id="day_id"  value="{{$offdate->id}}" id="time-checkbox"><div style="margin-left: 10px" class=" btn btn-primary ml-20">{{date('m-d-Y', strtotime($offdate->date))}}</div></label>
-                            </td>
-                        </tr>
-                     
-                    </table>
-                    @endforeach
+
+                    <div class="label-container">
+                        @foreach ($offdates as $offdate)
+                            <label style="margin-bottom: 10px; display: flex; align-items: ">
+                                <input type="checkbox" class="date_id" name="date_id[]" id="date_id" value="{{$offdate->id}}">
+                                <div style="margin-left: 10px" class="btn btn-primary ml-20">{{date('m-d-Y', strtotime($offdate->date))}}</div>
+                            </label>
+                        @endforeach
+                    </div>
+
                 </div>
         
                 <div style="margin-top:10px">
-                    <button class="delete btn btn-danger ml-20 delete" id="delete">Delete</button>
+                    <button class="delete_date btn btn-danger ml-20 " id="delete_date">Delete</button>
                 </div>
          
               
@@ -200,26 +202,26 @@
 <script>
     $(document).ready(function (){
 
-      deleteall();
+    //   deleteall();
     
         
-        function deleteall () {
-            if (window.location.href) {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "post",
-                url: "/admin/billing/addtocart/deleteall",
-                datatype: "json",
-                success: function(response){ 
-                }
-            });
+    //     function deleteall () {
+    //         if (window.location.href) {
+    //             $.ajaxSetup({
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //             }
+    //         });
+    //         $.ajax({
+    //             type: "post",
+    //             url: "/admin/billing/addtocart/deleteall",
+    //             datatype: "json",
+    //             success: function(response){ 
+    //             }
+    //         });
                 
-            }
-        }
+    //         }
+    //     }
 
         $('.add_businesshours').on('click', function(e){
                 e.preventDefault();
@@ -242,15 +244,21 @@
                     $(".main-spinner").hide();
                 },
                 success: function(response){
+                    console.log(response);
                     if(response.status == 400){
                     $('#error_day, #error_time' ).html("");
-                        $.each(response.errors.day, function (key, err_values){
+                        $.each(response.errors.business_date, function (key, err_values){
                             $('#error_day').append('<span>'+err_values+'</span>');
                         })
-                        $.each(response.errors.time, function (key, err_values){
+                        $.each(response.errors.business_time, function (key, err_values){
                             $('#error_time').append('<span>'+err_values+'</span>');
                         });
                   }else{
+                    $('#message-success').text('Created successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                     $('.modal-asd').load(location.href+' .modal-asd');
                     $('.businessHours').load(location.href+' .businessHours');
                     $('#businessdays').val('Monday');
@@ -296,6 +304,11 @@
                 },
                 success: function(response){
                     $('#days').find('select').val("Monday");
+                    $('#message-success').text('Deleted successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                     $('.businessHours').load(location.href+' .businessHours');
                   
                 }
@@ -349,6 +362,11 @@
                     $(".main-spinner").hide();
                 },
                             success: function(response){
+                                $('#message-success').text('Updated successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                                 $('#days').find('select').val("Monday");
                                 $('.businessHours').load(location.href+' .businessHours');
                                 $('.refresh_off').load(location.href+' .refresh_off');
@@ -369,10 +387,14 @@
                     $(".main-spinner").show();
                 },
                 complete: function(){
-
                     $(".main-spinner").hide();
                 },
                             success: function(response){
+                                $('#message-success').text('Updated successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
                                 $('#days').find('select').val("Monday");
                                 $('.businessHours').load(location.href+' .businessHours');
                                 $('.refresh_off').load(location.href+' .refresh_off');
@@ -417,6 +439,53 @@
             $('#create_businessday').val("");
             $('#error_day, #error_time').html("");
         });
+
+        $(document).on('click', '.delete_date'  ,function(e){
+                e.preventDefault();
+                const date_id = [];
+                $('.date_id').each(function (){
+                    if($(this).is(":checked")){
+                        date_id.push($(this).val());
+                    }
+                })
+
+            
+                
+                $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+
+                if(date_id == ""){
+                    console.log(date_id);
+                }else{
+                      
+            $.ajax({
+                type: "DELETE",
+                url: "/admin/business_hours/date/delete",
+                data: {date_id : date_id},
+                datatype: "json",
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+
+                    $(".main-spinner").hide();
+                },
+                success: function(response){
+                    console.log(response);
+                    $('#message-success').text('Deleted successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
+                        $('.dayoff_dates').load(location.href+' .dayoff_dates');
+                  
+                }
+            });
+                }
+            })
 
     });
 </script>

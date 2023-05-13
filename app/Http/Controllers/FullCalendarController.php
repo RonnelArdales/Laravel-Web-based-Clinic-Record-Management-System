@@ -6,6 +6,7 @@ use App\Mail\patientbook;
 use App\Models\Appointment;
 use App\Models\Appointmentnew;
 use App\Models\BusinessHour;
+use App\Models\Dayoff_date;
 use App\Models\Discount;
 use App\Models\Reservationfee;
 use App\Models\Service;
@@ -22,11 +23,15 @@ class FullCalendarController extends Controller
         $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
         // $days = BusinessHour::select('day')->where('off', '1')->whereNot('appointment_method', 'walkin')->groupBy('day')->get();
         $walkins = BusinessHour::select('day')->where('off', '1')->where('appointment_method', 'walkin')->groupBy('day')->get();
-        $services = Service::all();
-        $discounts = Discount::all();
+        $dates = Dayoff_date::select('date')->get();
         $day_array = [];
+        $date_array = [];
         foreach($days as $day){
             $day_array[] = date('w', strtotime($day->day));
+        }
+
+        foreach($dates as $date){
+            $date_array[] = $date->date;
         }
 
         $walkin_array = [];
@@ -35,7 +40,7 @@ class FullCalendarController extends Controller
         } 
 
         $day = BusinessHour::select('day', 'off')->distinct()->get();
-        return view('calendar.appointment', compact('day', 'days', 'services', 'discounts'))->with('day_array', $day_array)->with('walkin_array', $walkin_array);
+        return view('calendar.appointment', compact('day', 'days'))->with('day_array', $day_array)->with('walkin_array', $walkin_array)->with('date_array', $date_array);
     }
 
     public function index_businesshour(){

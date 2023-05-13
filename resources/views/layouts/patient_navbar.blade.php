@@ -146,10 +146,9 @@
     margin-right: 20px;
     width: 100px;
   }
-
   .fc-body{
-    border-color: #555;
-  }
+     background-color: #829460;
+}
 
   .fc td {
     border-color: black;
