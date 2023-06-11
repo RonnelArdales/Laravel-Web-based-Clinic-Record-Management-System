@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap" rel="stylesheet">
-    {{-- <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet"> --}}
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
@@ -20,11 +16,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
-    {{-- <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script> --}}
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-  
-
 
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     
@@ -190,18 +183,7 @@
   /* Some media queries for responsiveness */
   
   .side-navbar  a {
-    /* padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    font-size: 20px;
-    color: black;
-    display: block;
-    border: none;
-    background: none;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-    outline: none; */
-  
+
     /* new */
     padding: 12px 15px;
     text-decoration: none;
@@ -643,6 +625,12 @@
                   <span>User</span> 
               </a>
          </li>
+         <li class=" my-1 mx-3  {{Request::is('secretary/pendinguser') ? 'active-bar' : '';}}">
+          <a href="/secretary/pendinguser"> 
+               <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" alt=""> 
+              <span>Pending User</span> 
+          </a>
+     </li>
 
          <li class="  my-1 mx-3  {{Request::is('secretary/appointment') ? 'active-bar' : '';}}">
               <a href="/secretary/appointment"> 
@@ -806,7 +794,7 @@
                           Logout
                          </button>
                     </li>
-                    </form>
+               </form>
 
                     @if (Auth::user()->usertype == "admin")
                     <li class="my-1 mx-3">
@@ -827,15 +815,6 @@
                         
                     @endif
                  
-                    {{-- <li class="my-1 mx-3" >
-                         <a href=""></a>
-                    </li> --}}
-                    {{-- <li class=" my-1 mx-3 {{Request::is('admin/guestpage') ? 'active-bar' : '';}}">
-                         <a href="/admin/guestpage"> 
-                               <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296805/JG%20marquez/guestpage_zylemm.png" alt=""> 
-                               <span>Guestpage</span>
-                         </a>
-                     </li> --}}
           </ul>
         </div>
  
@@ -850,33 +829,25 @@
                @yield('content')       
           </div>
         
-       
-  {{-- <main class="main overflow-auto ">
-      
-  </main> --}}
         </div>
 
         <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-        {{-- <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> --}}
+
         @yield('scripts')
 
   <script>
      var menu_btn = document.querySelector("#menu-btn");
-var sidebar = document.querySelector("#sidebar");
-var container = document.querySelector(".my-container");
-var main = document.querySelector(".main");
-menu_btn.addEventListener("click", () => {
-  sidebar.classList.toggle("active-nav") + main.classList.toggle("add-left") ;
-  container.classList.toggle("active-cont") ;
-});
+     var sidebar = document.querySelector("#sidebar");
+     var container = document.querySelector(".my-container");
+     var main = document.querySelector(".main");
+     menu_btn.addEventListener("click", () => {
+     sidebar.classList.toggle("active-nav") + main.classList.toggle("add-left") ;
+     container.classList.toggle("active-cont") ;
+     });
   </script>
 
-
-  
-
-    
 </body>
 </html>
 

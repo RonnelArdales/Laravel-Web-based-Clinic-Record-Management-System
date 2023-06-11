@@ -229,7 +229,7 @@ if (day_off.includes("6")){
   $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
 }
 
-$('.fc-day.fc-today').css('backgroundColor', 'white');
+
 
 element.find('.fc-day').each(function() {
   var date = $(this).data('date');
@@ -241,19 +241,25 @@ element.find('.fc-day').each(function() {
 });
 
 
+element.find('.fc-day').each(function() {
+  var currentDate = new Date();
+  var date = $(this).data('date');
+    var day = new Date(date);
+
+    // Check if the date is in the past
+    if (day < currentDate) {
+      $(this).css('backgroundColor', '#cc6666'); 
+      $('.fc-day.fc-today').css('backgroundColor', 'white');
+    } 
+    
+  });
+
+  $('.fc-day.fc-today').css('backgroundColor', 'white');
 
 },
 
 
 
-    dayRender: function (date, cell) {
-
-    var currentDate = moment();
-
-    if (date.isSame(currentDate, 'day')) {
-      cell.addClass('fc-state-disabled');
-    }
-  },
     
     select:function(start, end, allDay, jsEvent,)
             {
@@ -266,23 +272,22 @@ element.find('.fc-day').each(function() {
                 const dayOfWeek = $.fullCalendar.moment(date).day();
 
                 let currentDate = new Date(Date.now());
-let year = currentDate.getFullYear();
-let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
-let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
+                let year = currentDate.getFullYear();
+                let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
+                let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
 
-let formattedDate = `${year}-${month}-${day}`;
+                let formattedDate = `${year}-${month}-${day}`;
+
+                var selected_date = new Date(start);
 
 
+              if(formattedDate == start){
 
-           if(formattedDate == start){
-            // $('#message-error').text("Sorry you cannot book this date");
-            //                 $(".error").show();
-            //                 setTimeout(function() {
-            //                     $(".error").fadeOut(500);
-            //                 }, 3000);
+                return false;
+              }else{
 
-            return false;
-           }else{
+
+            
 
             $.ajaxSetup({
             headers:{
@@ -304,7 +309,7 @@ let formattedDate = `${year}-${month}-${day}`;
                         },
                         complete: function(){
                             $(".main-spinner").hide();
-                            $('#available-time').focus(); 
+                   
                         },
                         success:function(response)
                         {   
@@ -315,20 +320,33 @@ let formattedDate = `${year}-${month}-${day}`;
                                     $('#available-time').append('<option value="0" disabled selected></option>')
                                     $('#errormodal').modal('show');
                                     $('#errormessage').text(" ");
-                                    $('#errormessage').text("Sorry this day is off");
+                                    $('#errormessage').text("This day is not available");
+
+                   
                     }else{
-                      if(response.status == "405"){
-                        $('#available-time').append('<option value="0" disabled selected></option>')
+
+                      if (selected_date < currentDate) {
+                                    $('#available-time').append('<option value="0" disabled selected></option>');
+                                    $('#available-time').append('<option value="0" disabled selected></option>')
+                                    $('#errormodal').modal('show');
+                                    $('#errormessage').text(" ");
+                                    $('#errormessage').text("This day is not available");
+                        } else {
+                          if(response.status == "405"){
+                            $('#available-time').append('<option value="0" disabled selected></option>')
                             $('#errormodal').modal('show');
                             $('#errormessage').text(" ");
-                            $('#errormessage').text(response.message);
+                            $('#errormessage').text("This day is not available");
                             }else{
+                              $('#available-time').focus(); 
                                 $('#date').val(response.date);
                                 $("#available-time").append("<option value=''>-- select --</option>");
                                 $.each(response.available_time, function(index, val){ 
                                     $("#available-time").append("<option value='"+val+"'>"+val+"</option>");
                                 } );
                             }
+                        }
+             
                     }
                         }
                     })

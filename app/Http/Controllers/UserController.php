@@ -47,6 +47,7 @@ class UserController extends Controller
                   "username" => ['required', 'regex:/\w*$/', 'min:8', Rule::unique('users', 'username')],
                   "password" => 'required|confirmed|min:8',
                   "usertype" => ['required'],
+                  "status" => ['required'],
               ],[
                   'first_name.required' => 'First name is required',
                   'last_name.required' => 'Last name is required',
@@ -60,7 +61,8 @@ class UserController extends Controller
                   'password.required' => 'Password is required',
                   'password.confirmed' => 'Password did not match',
                   'usertype.required' => 'Usertype is required',
-              
+                  'status.required' => 'Status is required',
+                
                 ]);
       
               if($validator->fails())
@@ -83,7 +85,7 @@ class UserController extends Controller
                   $user->email = $request->input('email');
                   $user->username = $request->input('username');
                   $user->password = $encrypt;
-                  $user->status = "verified";
+                  $user->status = $request->input('status');
                   $user->emailstatus = "unverified";
                   $user->usertype = $request->input('usertype');
                   $user->save();
@@ -118,6 +120,8 @@ class UserController extends Controller
                 "email" => ['required', 'email', Rule::unique('users', 'email') ],
                 "username" => ['required', 'regex:/\w*$/', 'min:8', Rule::unique('users', 'username')],
                 "password" => 'required|confirmed|min:8',
+                "status" => ['required'],
+                "usertype" => ['required'],
              
             ],[
                 'first_name.required' => 'First name is required',
@@ -131,7 +135,8 @@ class UserController extends Controller
                 'username.required' => 'Username name is required',
                 'password.required' => 'Password is required',
                 'password.confirmed' => 'Password did not match',
-          
+                'status.required' => 'Status is required',
+                'usertype.required' => 'Usertype is required',
               ]);
     
             if($validator->fails())
@@ -155,7 +160,7 @@ class UserController extends Controller
                 $user->email = $request->input('email');
                 $user->username = $request->input('username');
                 $user->password = $encrypt;
-                $user->status = "verified";
+                $user->status = $request->input('status');
                 $user->emailstatus = "unverified";
                 $user->usertype = "patient";
                 $user->save();

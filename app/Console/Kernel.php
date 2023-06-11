@@ -21,7 +21,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('appointment:reminder')->dailyAt('00:01')->dailyAt('18:00');
-
+        $schedule->command('dayoff:dates')->dailyAt('00:01');
+        $schedule->command('delete:consultation')->dailyAt('00:01');
         // $schedule->call(function () {
         //     $appointments = Appointment::where('date', Carbon::tomorrow())->get();
 

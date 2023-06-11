@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Approveaccount;
 use App\Models\Addtocartservice;
 use App\Models\Admin;
 use App\Models\Appointment;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use DataTables;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Mail;
 
 class SecretaryController extends Controller
 {
@@ -928,6 +929,57 @@ public function show_guestpage_setting(){
     }
 
  }
+
+ public function index_pendinguser(Request $request){
+        
+    if ($request->ajax()) {
+        $data = DB::table('users')->where('status', 'pending')->orderby('created_at','desc');
+        return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('created_at', function ($event) {
+                    // Convert the start_time to a Carbon instance
+                    $date = Carbon::parse($event->created_at);
+        
+                    // Format the time as desired, e.g. "h:i A" for 12-hour time format
+                    return $date->format('M j, Y H:i A');
+                })
+                ->addColumn('action', function($row){
+                    $btn = '<button class="verify btn btn-sm btn-primary" style="text-align:center" data-id="' . $row->id . '">Verify</button>';
+                    // $btn = $btn.'<button class="edit btn btn-sm btn-primary" style="margin-left: 5px; margin-right: 5px;" data-id="' . $row->id . '">Edit</button>';
+                    // $btn = $btn.'<button class="delete btn btn-sm btn-danger" data-id="' . $row->id . '">Delete</button>';
+                    // $size = '<div style="width: 150px; text-align:center">' . $btn . '</div>';                
+                        return $btn;
+                })
+                ->addColumn('fullname', function ($row){
+                    return $row->fname . ' ' . $row->lname;
+                })
+
+                ->rawColumns(['action', 'fullname'])
+                
+                ->make(true);
+    }
+    return view('secretary.pendinguser');
+}
+
+public function update_pendinguser($id){
+
+    $user = User::where('id', $id)->first();
+    $user->status = "verified";
+    $user->save();
+
+    Mail::to($user->email)->send(new Approveaccount);
+
+    $audit_trail = new AuditTrail();
+    $audit_trail->user_id = Auth::user()->id;
+    $audit_trail->username = Auth::user()->username;
+    $audit_trail->activity = 'Verify user';
+    $audit_trail->usertype = Auth::user()->usertype;
+    $audit_trail->save();
+    
+    return response()->json($user->email);
+
+
+}
 
 
 }

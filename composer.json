@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
         "realrashid/sweet-alert": "^7.0",
+        "spatie/db-dumper": "^3.3",
         "twilio/sdk": "^7.3",
         "yajra/laravel-datatables-oracle": "^10.4"
     },

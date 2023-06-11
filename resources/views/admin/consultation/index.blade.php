@@ -22,6 +22,10 @@
         
             <h1> <b>CONSULTATION</b> </h1>
             </div>
+            <form style="margin-right:15px;" action="/backup-database" method="GET">
+
+              <button  style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" class="btn btn-primary ml-6 show-create " type="submit">Backup data</button>
+          </form>
             <a href="/admin/consultation/create" style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" class="btn btn-primary ml-6 show-create">Create</a>
             </div>
 

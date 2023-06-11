@@ -155,21 +155,6 @@ class ClinicuserController extends Controller {
           'password.confirmed' => 'Password did not match',
         ]);
 
-        // $userinfo = array( 'first_name' => $request->input('first_name'),
-        //                   'mname' => $request->input('mname'),
-        //                   'last_name' => $request->input('last_name'),
-        //                   'birth_date' => $request->input('birthday'),
-        //                   'age' => $request->input('age'),
-        //                   'address' => $request->input('address'),
-        //                   'gender' => $request->input('gender'),
-        //                   'mobile_number' => $request->input('mobile_number'),
-        //                   'email' => $request->input('email'),
-        //                   'username' => $request->input('username'),
-        //                   'password' => $request->input('password'),
-        //                   'usertype' => 'patient',
-        //                   'status' => 'pending',
-        //                 );
-
           session(['first_name' => $request->input('first_name'),
           'mname' => $request->input('mname'),
           'last_name' => $request->input('last_name'),
@@ -185,29 +170,7 @@ class ClinicuserController extends Controller {
           'status' => 'pending',
           'emailstatus' => "unverified", 
                       ]);
-          //   $billinginfo = array(
-          //     'modeofpayment' => "Gcash",
-          // );
-        //     $encrypt = bcrypt($request->input('password'));
-        //     $user = new User();
-        //     $user->fname = $request->input('first_name');
-        //     $user->mname = $request->input('mname');
-        //     $user->lname = $request->input('last_name');
-        //     $user->birthday = $request->input('birthday');
-        //     $user->age = $request->input('age');
-        //     $user->address = $request->input('address');
-        //     $user->gender = $request->input('gender');
-        //     $user->mobileno = $request->input('mobile_number');
-        //     $user->email = $request->input('email');
-        //     $user->username = $request->input('username');
-        //     $user->password = $encrypt;
-        //     $user->usertype = 'patient'; //usertype
-        //     $user->status = "pending";
-        //     $user->emailstatus = "unverified"; //emailstatus
-        //     $user->save();
 
-        // $userauth = User::where('email','=', $request->input('email'))->first(); 
-        // auth()->login($userauth);
         $otp = rand(10, 99999);
         $time = Carbon::now()->addMinute(5);
              EmailOtp::create([
@@ -220,37 +183,4 @@ class ClinicuserController extends Controller {
             return redirect('/verify-email');
     }
 
-
-
-    public function try(){
-      $sevenYears = Carbon::now()->subYears(7);
-      $sevenYearsAgo =  $sevenYears->format('Y-m-d H:i:s');
-    //   return $sevenYearsAgo;
-    //   $userIDsToDelete = Consultation::where('created_at', '<', $sevenYearsAgo)
-    // ->pluck('user_id')
-    // ->toArray();
-
-    // $users = DB::table('consultations')
-    // ->select('user_id')
-    // ->whereIn('id', function ($query) use ($sevenYearsAgo) {
-    //     $query->select(DB::raw('MAX(id)'))
-    //         ->from('consultations')
-    //         ->groupBy('user_id')
-    //         ->havingRaw("MAX(created_at) < '{$sevenYearsAgo}'");
-    // })
-    // ->get();
-
-    $latestConsultations = DB::table('consultations')
-    ->select('user_id', DB::raw('MAX(created_at) as latest_created_at'))
-    ->groupBy('user_id')
-    ->having('latest_created_at', '<=', $sevenYears)
-    ->get();
-
-    dd($latestConsultations);
-
-  //   foreach ($users as $user) {
-  //     echo $user->user_id . '<br>';
-  // }
-      // dd($userIDsToDelete);
-    }
 }

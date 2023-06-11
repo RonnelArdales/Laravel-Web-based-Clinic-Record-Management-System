@@ -24,7 +24,7 @@ class AppointmentController extends Controller
     public function appointment_show(Request $request){
         $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
         $dates = Dayoff_date::select('date')->get();
-
+            
         $date_array = [];
         $day_array = [];
 
@@ -47,25 +47,12 @@ class AppointmentController extends Controller
                 return Datatables::of($data)
                         ->addIndexColumn()
                         ->addColumn('action', function($row){
-
-                            // $currentDate = now()->toDateString();
-                            // $appointmentDate = date('Y-m-d', strtotime($row->date));
-                            // $btn = '';
-                    
-                            // $oneDayBefore = date('Y-m-d', strtotime('-1 day', strtotime($appointmentDate)));
-                            
-
-                            // if ($currentDate >= $oneDayBefore) {
-                            //     $btn = '<button style="margin-right:5px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
-                            //     $btn = $btn.'<button class="cancel btn btn-sm btn-danger" data-id="' . $row->id . '">Cancel</button>';
-                         
-                            // }else{
                                 $btn = '<button style="margin-right:5px; padding-left:4px; padding-right:4px; font-size:14px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
                                 $btn = $btn.'<button class="resched btn btn-sm btn-info" style="color:white; padding-left:4px; padding-right:4px; font-size:14px" data-id="' . $row->id . '">Reschedule</button> ' ;
                                 $btn = $btn.'<button class="cancel btn btn-sm btn-danger" style="padding-left:4px;</br> padding-right:4px; font-size:14px" data-id="' . $row->id . '">Cancel</button>';
-                            // }
-                                $size = '<div style="margin:0px">' . $btn . '</div>';                
-                                    return $size;
+                                $size = '<div style="margin:0px">' . $btn . '</div>'; 
+
+                                return $size;
                                     
                         })    ->editColumn('user_id', function ($row) {
                             return '<div style="width: 50px">' . $row->user_id . '</div>';
@@ -94,15 +81,11 @@ class AppointmentController extends Controller
                             $oneDayBefore = date('Y-m-d', strtotime('-2 day', strtotime($appointmentDate)));
                             
 
-                            // if ($currentDate >= $oneDayBefore) {
-                            //     $btn = '<button style="margin-right:5px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
-                            //     $btn = $btn.'<button class="cancel btn btn-sm btn-danger" data-id="' . $row->id . '">Cancel</button>';
-                         
-                            // }else{
+         
                                 $btn = '<button style="margin-right:5px; padding-left:4px; padding-right:4px; font-size:14px" class="complete btn btn-sm btn-primary" data-id="' . $row->id . '" >Complete</button>';
                                 $btn = $btn.'<button class="resched btn btn-sm btn-info" style="color:white; padding-left:4px; padding-right:4px; font-size:14px" data-id="' . $row->id . '">Reschedule</button> ' ;
                                 $btn = $btn.'<button class="cancel btn btn-sm btn-danger" style="padding-left:4px;</br> padding-right:4px; font-size:14px" data-id="' . $row->id . '">Cancel</button>';
-                            // }
+    
                                 $size = '<div style="margin:0px">' . $btn . '</div>';                
                                     return $size;
                        })  ->editColumn('user_id', function ($row) {
@@ -256,7 +239,7 @@ class AppointmentController extends Controller
             $appointment->mode_of_payment = $input['modepayment'];
             if($input['modepayment'] == "Cash"){
                 $validator = Validator::make($request->all(), [
-                    'payment'=>'required',
+                    'payment'=>'required|gte:reservation_fee',
                 ],[
                     'payment.required'=> 'Payment  is required',
                 ]);
@@ -295,9 +278,7 @@ class AppointmentController extends Controller
             $audit_trail->activity = 'Create an appointment';
             $audit_trail->usertype = Auth::user()->usertype;
             $audit_trail->save();
-            //send to patient
-            // Mail::to('ronnelardales2192@gmail.com')->send(new patientbook);
-      
+            
             return response()->json([
                 'status' => 200,
                 'message' => "Created Successfully",

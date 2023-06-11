@@ -262,7 +262,7 @@ class PrintController extends Controller
             return $pdf->download($filename . '.pdf');
         }else{
             $pdf = PDF::loadView('print.consultation_result', compact('consultations', 'userinfo'));
-             return $pdf->download( $filename . '.pdf');
+             return $pdf->stream( $filename . '.pdf');
         }
         
     }

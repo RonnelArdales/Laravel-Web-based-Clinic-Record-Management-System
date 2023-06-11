@@ -37,26 +37,6 @@
 <input type="file" name="profilepic"  style="width:180px ; "  >  
 <button style="border-radius:3px; padding-left:7px;padding-right:7px ; padding-bottom:3px; padding-top:3px;background-color: #829460; border:none; color:white" type="submit">Change</button>
 </form> 
-        {{-- <form>
-            <div class="form-group">
-              <label for="exampleFormControlInput1">Email address</label>
-              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-            </div>
-            <div class="form-group">
-              <label for="exampleFormControlSelect1">Example select</label>
-              <select class="form-control" id="exampleFormControlSelect1">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="exampleFormControlTextarea1">Example textarea</label>
-              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-            </div>
-          </form> --}}
       </div>
     </div>
   </div>
@@ -84,7 +64,7 @@
             <label style="font-size: 18px; text-align: justify; text-justify: inter-word; "  for="">{{Auth::user()->lname}}</label>
       </div>
       <div class="col-md-3">
-            <label style="font-size: 15px; margin-top:15px" for="">Gender</label><br>
+            <label style="font-size: 15px; margin-top:15px" for="">Sex</label><br>
             <label style="font-size: 18px; text-align: justify; text-justify: inter-word; "  for="">{{Auth::user()->gender}}</label>
       </div>
 </div>

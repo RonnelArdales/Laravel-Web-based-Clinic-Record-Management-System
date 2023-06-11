@@ -66,7 +66,7 @@
                   @enderror
                 </div>
                 <div class="col-md-4" style="margin-top:10px">
-                    <label for="inputPassword4" class="form-label">Gender:</label>
+                    <label for="inputPassword4" class="form-label">Sex:</label>
                    <select name="gender" class="form-control">
                      <option style="text-align:center" value="">--select--</option>
                      <option value="Male" {{Auth::user()->gender == "Male" ? 'selected' : ''}}>Male</option>

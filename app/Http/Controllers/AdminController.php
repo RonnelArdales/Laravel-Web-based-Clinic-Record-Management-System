@@ -527,7 +527,6 @@ public function fetch_service(){
         $date = date('m-d-Y', strtotime($start));
         $day = date('l', strtotime($start));
         $day_numeric = date('w', strtotime($start));
-
         $workinghours = BusinessHour::where('day', $day)->whereNotIn('from', ['23:59:00'])->pluck('from')->toArray();
         $currentappointment = Appointment::where('date', $start)->where('status', 'pending' )->pluck('time')->toArray();
         $availablehours = array_diff($workinghours, $currentappointment);
@@ -539,7 +538,7 @@ public function fetch_service(){
 
         if(in_array($day_numeric, $day_array)){
 
-            return response()->json(['status' => 405, 'message' => 'Sorry, this day is off' ]);
+            return response()->json(['status' => 405, 'message' => 'This date is not available' ]);
 
         }else{
             if( empty($availablehours) ){
@@ -559,23 +558,11 @@ public function fetch_service(){
             }
     
         }
-        
-
-        // $day = date('l', strtotime($date));
-        // $workinghours = BusinessHour::where('day', '=', $day)->whereNotIn('from', ['23:59:00'])->select('from')->get();
-
-        // return response()->json([
-        //     'day' => $day,
-        //     'working_hours' => $workinghours,
-        // ]);
     }
 
     public function delete_appointment($id){
         DB::table('appointments')->where('id', $id)->delete();
     }
-
-
-
 
   //-------------------------------- transaction --------------------------------//
     public function view_transaction(){
@@ -590,9 +577,6 @@ public function fetch_service(){
                                         'sum'=>$sum,
                                         'patients'=>$patients, 
                                       ]);
-        // $appointment = Appointment::all();
-        // $transaction = DB::table('transactions')->paginate(2) ;
-        // return view('admin.transaction', [ 'appointments'=> $appointment, 'transactions' => $transaction]);
     }
 
     public function store_transaction(Request $request){
@@ -940,7 +924,7 @@ public function fetch_service(){
 $input = $request->all();
         if($input['mode_of_payment'] == "Cash"){
             $validator = Validator::make($request->all(), [
-                'payment'=>'required',
+                'payment'=>'required|gte:total',
             ],[
                 'payment.required'=> 'Payment  is required',
             ]);
@@ -1916,10 +1900,10 @@ public function store_businesshours_date(Request $request){
             $audit_trail->usertype = Auth::user()->usertype;
             $audit_trail->save();
 
-            return redirect()->back()->with('success', 'Updated successfully');
+            return redirect()->back()->with('success', 'Updated successfully')->withInput();
              
         }else{
-            return redirect()->back()->with('oldpassword', 'The password did not match with the current password.');
+            return redirect()->back()->with('oldpassword', 'The password did not match with the current password.')->withInput();
         }
 
     }

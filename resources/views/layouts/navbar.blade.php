@@ -85,51 +85,7 @@ background-color: #EDDBC0;
 }
 
   
-  /* .billing-cancel{
-    background: transparent;
-    text-decoration:none;
-    border-radius: 30px; 
-    color:#829460; 
-    border: 2px solid #829460;
-    display:inline-block;
-    text-align:center;
-    vertical-align:top;
-    width: 110px;
-    height: 37px; 
-    margin-right:20px
 
-  } */
-
-  /* Default font sizes */
-/* body {
-  font-size: 16px;
-}
-
-h1 {
-  font-size: 32px;
-} */
-
-/* Media query for smaller screens */
-/* @media only screen and (max-width: 767px) {
-  body {
-    font-size: 14px;
-  }
-
-  h1 {
-    font-size: 28px;
-  }
-} */
-
-/* Media query for larger screens */
-/* @media only screen and (min-width: 1200px) {
-  body {
-    font-size: 18px;
-  }
-
-  h1 {
-    font-size: 36px;
-  }
-} */
     body{
         margin: 0%;
         padding: 0%;
@@ -236,38 +192,6 @@ h1 {
   }
 }
 
-@media (min-width: 768px) {
-    .button-size{
-      font-size: 1.5vw;
-    }
-    .title{
-  font-size: 1.75rem;
- }
-  
-}
-
-@media (max-width: 768px) {
-    .button-size{
-      font-size: 10px;
-    }
-    .title{
-     padding-top: 7px;
-  font-size: 1.4rem;
- }
-}
-
-@media (max-width: 767px) {
-    .button-size{
-      font-size: 10px;
-    }
-
-}
-
-@media (max-width: 992px) {
-    .button-size{
-      font-size: 10px;
-    }
-}
 
 @media (min-width: 1120px) {
     .speakforyou{
@@ -300,6 +224,317 @@ h1 {
   }
 
 
+
+  /* ---------------------HOMEPAGE CSSS------------------------------------- */
+  .bgpic{
+        height:50vw;
+        width:100%;
+        background-image:url('https://res.cloudinary.com/uhno-dos-tres/image/upload/v1683471986/asdasdasada_beggm7.png');
+        background-repeat: no-repeat;
+        background-size:cover;
+        background-position:center;
+        background-attachment:scroll;
+    }
+    .btnregister{
+      font-size: 1.5vw;
+      text-decoration:none; font-weight:900; font-family:Poppins; background-color: #829460; text-align:center; color:white;   line-height: 1vw; border-radius: 2vw 0vw;margin-left: 5%; padding:0.5vw 1vw 0.5vw 1vw;
+    }
+    .btnlogin{
+        font-size: 1.5vw;
+        text-decoration:none; font-family:Poppins; font-weight:900; text-align:center; color:#829460; border: 0.2vw solid; line-height: 1vw;  border-radius: 2vw 0vw; margin-left: 0.5%; padding:0.4vw 2vw 0.4vw 2vw;
+    }
+    .title{
+  font-size: 1.75rem;
+ }
+    .textpage1{
+        margin-left:3%;margin-top:5%; margin-right:3%;
+    }
+    .speak{
+    font-size: 6vw; margin-left:3%; margin-top:2.5rem; font-family:Song Myung; color:black;
+    }
+    .werehere{
+        font-size:2.8vw; margin-left:8.5%; margin-top: -2%; font-family:Song Myung; color:black;
+    }
+    .speakforyou{
+        margin-left:1.25rem; margin-right:1.25rem ;  margin-bottom: 3%;
+    }
+    .btnloginregister{
+        margin-top: 25px;
+    }
+    .whatwe{
+        color: white; font-size: 2vw;font-weight:700;
+    }
+    .servicescontainer{
+        width: 100%; height: 55vw; background-color:#829460; text-align:center; font-family:Poppins;color:white;
+    }
+    .servicescontainer2{
+        display: flex;flex-direction:row; justify-content: center;
+    }
+    .servicestitle{
+        padding-top: 3vw; font-size:1.2vw;color:#EDDBC0;font-weight:700;
+    }
+    .brownshape{
+        margin-left:1% ;margin-right:1%;background-color: #AA8B56;  border-radius:500px 500px 0 0; height:25vw ; width:15vw;padding:2%; padding-top:0%;box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    }
+    .whiteline{
+        margin:auto; height: 0.5%; width:35%; border: 0; background: white;
+    }
+    .servicesimg{
+        height:5vw; width:5vw; margin-bottom:5%;
+    }
+    .txtbrown124{
+        text-align: left;font-size:1vw;
+    }
+    .txtbrown3{
+        text-align:center; font-size:1.5vw; 
+    }
+    .undertxt{
+        margin-top:3%;font-size:1.3vw;
+    } 
+    .colcontainer{
+        display: flex;flex-direction:row; justify-content: center;margin-top:5%; 
+    }
+    .colcontainer2{
+        display: flex; justify-content: center;margin-top:5%; 
+    }
+    .gettoknow{
+        padding-top: 3vw; font-size:1.2vw;color:#395144;font-weight:700;
+    }
+    .aboutimg{
+        height: 19vw; width:20vw; margin-bottom:5%;
+    }
+    .abouttxtcontainer{
+        font-family:'Song Myung';font-weight: 400;  margin-bottom:20px;
+    }
+    .abouttxt{
+        font-size: 1.3vw; margin-bottom:1%;text-align:justify;
+    }
+    .blackline{
+        margin:auto;  width:35%; border: 0;border: 2px solid #000000;
+    }
+    .aboutreadmore{
+        font-size: 1.5vw; text-decoration:none;color:black;font-weight: 900; text-align:center;
+    }
+    .aboutus{
+        color: black ; font-size: 2vw;font-weight:700;
+    }
+    .docimg{
+        height: 35vw; width:31vw;border-radius: 10% 0px;vertical-align: middle;
+    }
+    .doccontainer1{
+        display: flex;flex-direction:row; justify-content:right;align-items:center;
+         flex-wrap: wrap;
+    }
+    .doccontainer2{
+        display: flex;flex-direction:row; justify-content:left;align-items:center;
+         flex-wrap: wrap; 
+         
+    }
+    .doctxt{
+       text-align: justify; margin-bottom: 3%; color:white; font-family:'Song Myung';font-weight: 400;
+    }
+    .whyspeakimg{
+        height: 28vw; width:38vw;
+    }
+    .whycontent{
+         font-weight: 400; ;margin-top:8%; margin-bottom:5%;
+    }
+    .imgwhycontainer{
+        align-self:auto
+    }
+    .whytitle{
+        font-family: 'Poppins'; font-style: normal; font-weight: 700; color:black; font-size:2.5vw;margin-bottom:0%; text-align:center;
+    }
+    @media(max-width: 1269px) {
+        .bgpic {
+            background-size:contain;
+            height: auto;
+        }
+        .textpage1{
+        background-color:#eddbc0bb;
+        }
+        .btnlogin{
+        line-height: 30px;
+        font-size: 20px; 
+    }
+    .btnregister{
+        line-height: 30px;
+        font-size: 20px;
+    }
+    .btnloginregister{
+        margin-bottom: 5%;
+    }
+    .servicescontainer{
+        height: auto;
+
+    }
+    .whiteline{
+        border: 1px solid #FFFFFF;
+    }
+    .brownshape{
+        margin-top:5%;
+    }
+    .undertxt{
+        font-size: 15px;
+        padding-bottom: 5%;
+    }
+    .docimg{
+        width: 391px;
+        height: 456px;
+    }
+  
+    .doccontainer1{
+        justify-content:center;
+     }
+     .whyspeakimg{
+        height: 386px;
+        width: 586px;
+     }
+  
+}   
+
+    @media(max-width: 769px ) {
+        .speak{
+            font-size: 80px;
+        }
+        .werehere{
+            font-size: 45px;
+        }
+        .servicestitle{
+            font-size: 15px;
+            line-height: 0 ;
+        }
+        .servicescontainer{
+            padding-top: 35px;
+        }
+         .brownshape{
+            height: 315px ; width:224px;
+        }
+        .servicesimg{
+            height: 71px;width: 77px;
+        }
+        .txtbrown124{
+            font-size: 15px;
+        }
+        .txtbrown3{
+            font-size: 24px;
+        } 
+        .whatwe{
+            font-size: 25px;
+            line-height: 20px;
+        }
+        .aboutimg{
+            width: 291px;
+            height: 235px;
+        }
+        .abouttxt{
+            font-size: 15px;
+            padding: 0 3% 0 3%;
+        }
+        .aboutreadmore{
+            font-size: 15px;
+            line-height: 60px;
+        }
+        .aboutus{
+            font-size: 25px;
+            line-height: 20px;
+        }
+        .gettoknow{
+            font-size: 10px;
+            line-height: 0;
+        }
+        .docimg{
+        width: 291px;
+        height: 356px;
+    }
+    .whyspeakimg{
+        width: 455px;
+        height: 265px;
+
+    }
+    .imgwhycontainer{
+        text-align: center;
+    }
+    .whytitle{
+        font-size: 25px;
+    }
+     }
+     @media(max-width: 481px ) {
+        .speak{
+            font-size: 70px;
+        }
+        .werehere{
+            font-size: 30px;
+        }
+        }
+        @media (max-width:451px){
+            .brownshape{
+            height: 315px ; width:154px;
+        }
+        .servicesimg{
+            height: 51px;width: 57px;
+        }
+        .txtbrown124{
+            font-size: 13px;
+        }
+        .txtbrown3{
+            font-size: 24px;
+        }
+        .undertxt{
+          font-size: 13px;
+          padding:0 2% 10% 2%;
+        }
+        .whatwe{
+            font-size: 20px;
+        }
+        }
+        @media(max-width: 327px) {
+            .speakforyou{
+            margin: 0;
+            font-size: 15px;
+        }
+        .speak{
+            font-size: 50px;
+        }
+        .werehere{
+            font-size: 25px;
+        }
+        .brownshape{
+            height: 400px ; width:134px;
+        }
+        .servicesimg{
+            height: 51px;width: 57px;
+        }
+        .txtbrown124{
+            font-size: 15px;
+        }
+        .txtbrown3{
+            font-size: 24px;
+        }  
+        .docimg{
+            width: 191px;
+            height: 256px;
+    } 
+      
+    }
+        @media(max-width:288px) {
+            .speakforyou{
+                display: none;
+            }
+            .docimg{
+        width: 141px;
+        height: 206px;
+    }
+
+        }
+
+        @media(max-width:400px) {
+            .whyspeakimg{
+                width: 300px;
+                height: 250px;
+            }
+        }
+    /* -------------------HOMEPAGE CSS END------------------------------------------- */
 </style>
 <body>
     <nav class="navbar navbar-expand-md flex" style="background-color: #EDDBC0; margin-left:2%;">
@@ -390,13 +625,14 @@ h1 {
     <!--Grid row-->
     <div class="row">
       <!-- Grid column -->
-      <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3" style="text-align:center">
+      <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3" style="text-align:center; color:white">
         <h6 class="text-uppercase mb-4 font-weight-bold">
           ADDRESS
         </h6>
-        <p>
+        {{-- <p>
           2nd Flr. Everlasting Bldg., #172 Rizal Avenue, Brgy. San Isidro, Taytay, Philippines
-        </p>
+        </p> --}}
+        {!! $address->content !!}
       </div>
       <!-- Grid column -->
 

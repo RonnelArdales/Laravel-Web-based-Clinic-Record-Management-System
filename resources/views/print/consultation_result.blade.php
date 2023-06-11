@@ -24,6 +24,15 @@
         .column2 {
             padding-left: 15px;
         }
+
+        .docname{
+   margin: 0%;
+   padding:0;
+   font-size: 16px;
+    text-align: center;
+     
+}
+
 </style>
 <body>
     <header  style="width:100%; text-align: center;" >
@@ -78,30 +87,40 @@
  
         <div style="text-align:left; margin-top:120px" >
             <label  for="">Behavioral Observation</label>
-            <textarea class="addtocart_input" style="width: 98%;text-align:justify ;min-height:70px ; height:auto ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; margin-bottom:20px; border-radius:5px" name="observation" id=""  rows="10">{{$consultations->behavioral_observation}}</textarea>
+            <textarea class="addtocart_input" style="width: 98%;text-align:justify ;min-height:65px ; height:auto ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; margin-bottom:20px; border-radius:5px" name="observation" id=""  rows="10">{{$consultations->behavioral_observation}}</textarea>
 
             <label for="">Brief Summary Encounter</label>
-            <textarea class="addtocart_input" style="width: 98%;text-align:justify ;height:auto ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; margin-bottom:20px;min-height:70px; border-radius:5px" name="observation" id=""  rows="10">{{ $consultations->brief_summary_encounter }}</textarea>
+            <textarea class="addtocart_input" style="width: 98%;text-align:justify ;height:auto ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; margin-bottom:20px;min-height:65px; border-radius:5px" name="observation" id=""  rows="10">{{ $consultations->brief_summary_encounter }}</textarea>
 
             <label for="">Clinical Impression</label>
-            <textarea class="addtocart_input" style="width: 98%;text-align:justify ;height:auto ; padding:10px; text-justify: inter-word;  white-space: pre-wrap; margin-bottom:20px;min-height:70px;  border-radius:5px" name="observation" id=""  rows="10">{{$consultations->clinical_impression}}</textarea>
+            <textarea class="addtocart_input" style="width: 98%;text-align:justify ;height:auto ; padding:10px; text-justify: inter-word;  white-space: pre-wrap; margin-bottom:20px;min-height:65px;  border-radius:5px" name="observation" id=""  rows="10">{{$consultations->clinical_impression}}</textarea>
 
             <label for="">Treatment Given</label>
-            <textarea class="addtocart_input" style="width: 98%;text-align:justify; height:auto ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; margin-bottom:20px;min-height:70px;  border-radius:5px" name="observation" id=""  rows="10">{{$consultations->treatment_given}}</textarea>
+            <textarea class="addtocart_input" style="width: 98%;text-align:justify; height:auto ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; margin-bottom:20px;min-height:65px;  border-radius:5px" name="observation" id=""  rows="10">{{$consultations->treatment_given}}</textarea>
 
             <label for="">Recommendation</label>
-            <textarea class="addtocart_input" style="width: 98%;text-align:justify ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; margin-bottom:20px;min-height:70px;  border-radius:5px" name="observation" id=""  rows="10">{{$consultations->recommendation}}</textarea>
+            <textarea class="addtocart_input" style="width: 98%;text-align:justify ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; margin-bottom:10px;min-height:65px;  border-radius:5px" name="observation" id=""  rows="10">{{$consultations->recommendation}}</textarea>
         </div>
-        <div>
-            <div>
-                <label for="">Date: </label>
-                {{-- <label for=""> {{now()->format ("M d, Y")}}</label>   --}}
+
+        <div class="container" >
+                    
+            <div class="column column1">
+    
+             
+             
             </div>
-            <div>
-           
-                <label for="">Doctor Signature</label>
+    
+            <div class="column column2" >
+                <div style="text-align: center">
+                    <img height="60" width="120"  style="margin-bottom:0px; padding-bottom:0px; margin-bottom:-25px" src="{{ "data:image/png;base64,".base64_encode(file_get_contents(public_path('signature.png'))) }}" alt="Psychologist Signature">
+                    <p style="" class="docname">JOSEPH G. MARQUEZ</p>
+                    <label style="   margin-top:-50px;" for="">License # 0987364</label>
+                            <p style="margin:0;padding:0;
+                            text-align: center;font-style: italic;">Psychologists</p>
+                  </div>
             </div>
-        </div>
+            </div> 
+     
         
 <script>
 

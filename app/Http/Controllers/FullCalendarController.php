@@ -55,7 +55,7 @@ class FullCalendarController extends Controller
         $day = date('l', strtotime($start));
         $day_numeric = date('w', strtotime($start));
         $workinghours = BusinessHour::where('day', $day)->whereNotIn('from', ['23:59:00'])->pluck('from')->toArray();
-        $currentappointment = Appointment::where('date', $start)->pluck('time')->toArray();
+        $currentappointment = Appointment::where('date', $start)->where('status', 'pending' )->pluck('time')->toArray();
         $availablehours = array_diff($workinghours, $currentappointment);
         $offday = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
         $day_array = [];

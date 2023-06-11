@@ -294,7 +294,7 @@ table, td, th {
     </head>
       
          
-    <div class="container"  style="margin:8% 0 5% 0;width:100%;">
+    <div class="container"  style="margin:3% 0 5% 0;width:100%;">
                 
         <div class="column column1" style="padding:0 0 0 10%;">
 
@@ -330,7 +330,7 @@ table, td, th {
         <div style="padding-left: 5%;">
             <h2 style="font-weight: 800;
             font-size: 24px;
-            line-height: 29px;">SERVICES.</h2>
+            line-height: 20px;">SERVICES.</h2>
         </div>
         <table >
             <thead>

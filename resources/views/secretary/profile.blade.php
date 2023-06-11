@@ -1,6 +1,35 @@
 @extends('layouts.admin_navigation')
 @section('title', 'User')
 @section('content')
+
+<style>
+  .input-box{
+        background-color: #D0B894;
+        border-radius: 6px;
+        padding-left: 5px;
+        border-bottom: solid gray 2px;
+        border-right:solid gray 2px;
+        border-top:solid black 2px;
+        border-left: solid black 2px;
+        /* height: 30px; */
+  }
+
+  .input-box input{
+        background-color: #D0B894;
+        border: none;
+        outline: none;
+        width: 90%;
+  }
+  .custom-select{
+        height: 30px;
+        padding-left: 5px;
+        border-bottom: solid gray 2px;
+        border-right:solid gray 2px;
+        border-top:solid black 2px;
+        border-left: solid black 2px;
+  }
+</style>
+
 <div class="row m-4">
     <div class="col-md-8 col-md-offset-5">
         <h1><b>USER</b> </h1>
@@ -49,7 +78,7 @@
                       <th>Middle name</th>
                       <th>Last name</th> 
                       <th>Age</th>
-                      <th>Gender</th>
+                      <th>Sex</th>
                       <th>Status</th>
                       <th>Action</th>
       
@@ -70,7 +99,7 @@
                         
                         <td style="text-align: center">
                         <button type="button" value="{{$user->id}}" class="view btn btn-sm btn-primary ">view</button>
-                        <button type="button" value="{{$user->id}}" class="edit  btn btn-sm btn-primary ">Edit</button>
+                        <button type="button" style="color: white;" value="{{$user->id}}" class="edit  btn btn-sm btn-info ">Edit</button>
                     </tr>
                     @endforeach
                     @else
@@ -91,222 +120,317 @@
       
 </div>
 
-{{--create--}}
 
+{{--create--}}
 <div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog" >
+  <div class="modal-dialog modal-dialog-centered modal-lg " >
     <div class="modal-content" style="background: #EDDBC0;">
       <div class="modal-header" style="border-bottom-color: black" >
         <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Create User</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <div class="mb-5 pt-6  ">
-              <div class=" columns-1 sm:columns-2 modal-create">
-              <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >First Name</label>
-              <input class=" fname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" style="background: #D0B894;">
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="fname"></span>
-              </div>
-         
-              
-              <label class=" rounded bg-[#EDDBC0] ml-3">Middle Name</label>
-              <input class="mname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894;" type="text">
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="mname"></span>
-              </div>
-           
+            <div class="mb-3 pt-6  ">
+            <div class="container">
+                  <div class="row">
+                        <div class="col-sm-4  ">
+                              <label class="rounded bg-[#EDDBC0] ml-3" >First Name</label>
+                              <input class=" fname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" style="background: #D0B894;">
+                              
+                              <div class="mt-0 mb-2">
+                                <span  role="alert" class="block mt-5 pb-4 text-danger" id="fname"></span>
+                              </div>
+                        </div>
+            
+                        <div class="col-sm-4  "  >
+                              <label class=" rounded bg-[#EDDBC0] ml-3">Middle Name (Optional)</label>
+                              <input class="mname  w-100 rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894;" type="text">
+                              
+                              <div class="mt-0 mb-2">
+                              <span  role="alert" class="block mt-5 pb-4 text-danger" id="mname"></span>
+                              </div>                   
+                        </div>
+            
+                        <div class="col-sm-4  " >
+                              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Last Name</label>
+                              <input class=" lname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" type="text"> 
+                              
+                              <div class="mt-0 mb-2">
+                              <span  role="alert" class="block mt-5 pb-4 text-danger" id="lname"></span>
+                              </div>
+                        </div>
 
-              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Last Name</label>
-              <input class=" lname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" type="text"> 
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="lname"></span>
-              </div>
-        
+                        <div class="row" style="margin-top:1%;padding-right:0;">
 
-              <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Birthday</label>
-              <input id="birthday" class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="date"> 
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="birthday"></span>
-              </div>
+                                 <div class="col">
+                                    <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Birthday</label>
+                                    <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="date" id="birthday"> 
 
-              <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Age</label>
-              <input id="age"readonly class=" age rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="number"> 
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="age"></span>
-              </div>
-              
-              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Address</label>
-              <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" type="text"> 
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="address"></span>
-              </div>
-      
-              
-              <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Gender:</label>
-              <select name="gender" class="gender rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;"  >
-                <option value="">--select--</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="gender"></span>
-              </div>
+                                    <div class="mt-0 mb-2">
+                                      <span  role="alert" class="block mt-5 pb-4 text-danger" id="create_error_birthday"></span>
+                                    </div>
+                              </div>
 
-              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Mobile No.</label>
-              <input class=" mobileno  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="number"> 
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="mobileno"></span>
-              </div>
+                              <div class="col">
+                                    <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Age</label>
+                                    <input class=" age rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" readonly type="number" id="age"> 
 
-              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Email</label>
-              <input class=" email rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;"type="text"> 
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="email"></span>
-              </div>
-        
-              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Username</label>
-              <input class=" username rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="text"> 
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="username"></span>
-              </div>
-        
-              <input type="text" name="usertype"  class="usertype " hidden>
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="usertype"></span>
-              </div>
+                                    <div class="mt-0 mb-2">
+                                          <span  role="alert" class="block mt-5 pb-4 text-danger" id="create_error_age"></span>
+                                    </div>
+                              </div>
 
-              {{-- <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
-              <select name="status" class="status rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"style="background: #D0B894;" >
-                <option value="">--select--</option>
-                <option value="not verified">Not verified</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="status"></span>
-              </div> --}}
+                              <div class="col-sm" style="padding-right: 0;">
+                                    <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Sex:</label>
+                                    <select name="gender" class="gender custom-select rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;"  style="height:200px" >
+                                    <option value="">--select--</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    </select>
+                                    <div class="mt-0 mb-2">
+                                    <span  role="alert" class="block mt-5 pb-4 text-danger" id="gender"></span>
+                                    </div>
+                              </div>
+                              
+                        </div>
+                  </div>
+                  <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Address</label>
+                  <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" type="text"> 
+                  <div class="mt-0 mb-2">
+                    <span  role="alert" class="block mt-5 pb-4 text-danger" id="address"></span>
+                  </div>
 
-              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Password</label>
-              <input autocomplete="off" class=" password rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" name="password" type="password"> 
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="password"></span>
-              </div>
+                  <div class="row" style="margin-top:1%">
+                        <div class="col-sm" style="">
+                              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Mobile No.</label>
+                              <input class=" mobileno  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="text"> 
+                              <div class="mt-0 mb-2">
+                                <span  role="alert" class="block mt-5 pb-4 text-danger" id="mobileno"></span>
+                              </div>
+                        </div>
 
-              <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Confirm Password</label>
-              <input autocomplete="off" class="password_confirmation rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="password"> 
-              <div class="mt-0 mb-2">
-                <span  role="alert" class="block mt-5 pb-4 text-danger" id="confirmpassword"></span>
-              </div>
+                        <div class="col-sm-7">
+                              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Email</label>
+                              <input class=" email rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;"type="text"> 
+                              <div class="mt-0 mb-2">
+                                <span  role="alert" class="block mt-5 pb-4 text-danger" id="email"></span>
+                              </div>
+                        </div>
+                  </div>
 
+                  <div class="row" style="margin-top:1%">
+                        <div class="col-sm-4" style="">
+                              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Username</label>
+                              <input class=" username rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="text"> 
+                              <div class="mt-0 mb-2">
+                              <span  role="alert" class="block mt-5 pb-4 text-danger" id="username"></span>
+                              </div>
+                        </div>
 
-      </div>
-      </div>
+                        <div class="col-sm-4">
+                              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Usertype:</label>
+                              <select name="usertype" class="usertype custom-select rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"style="background: #D0B894;" >
+                                <option value="">--select--</option>
+                                <option value="patient">Patient</option>
+                                <option value="secretary">Secretary</option>
+                                <option value="admin">Admin</option>
+                              </select>
+                              <div class="mt-0 mb-2">
+                                <span  role="alert" class="block mt-5 pb-4 text-danger" id="usertype"></span>
+                              </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                              <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
+                              <select name="status" class="status custom-select rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"style="background: #D0B894;" >
+                              <option value="">--select--</option>
+                              <option value="pending">Pending</option>
+                              <option value="verified">Verified</option>
+                              </select>
+                              <div class="mt-0 mb-2">
+                              <span  role="alert" class="block mt-5 pb-4 text-danger" id="status"></span>
+                              </div>
+                        </div>
+                  </div>
+
+                  <div class="row" style="margin-top:1%">
+                        <div class="col-sm-6">
+                             <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Password</label>
+                              <div class="input-box">
+                                    <input type="password" class="create_password">
+                                    <i class="create_show_password fa-regular fa-eye-slash"></i>
+                                    <i class="create_hidden_password fa fa-eye" style="display: none;" ></i>
+                              </div>
+
+                              <div class="mt-0 mb-2">
+                                <span  role="alert" class="block mt-5 pb-4 text-danger" id="password"></span>
+                              </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                              <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Confirm Password</label>
+
+                              <input autocomplete="off" class="password_confirmation rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="password">  
+
+                              <div class="mt-0 mb-2">
+                                <span  role="alert" class="block mt-5 pb-4 text-danger" id="confirmpassword"></span>
+                              </div>
+                        </div>
+
+                  </div>
+            </div>
+            </div>
+
       <div class="modal-footer" style="border-top-color: black"> 
         <button type="button" data-bs-dismiss="modal" style="background: #829460;
         border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Close</button>
-        <button  class=" add_user " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Submit</button>
+        <button  class=" add_user " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Create</button>
       </div>
     </div>
   </div>
 </div>
 </div>
 
-  {{-- edit modal --}}
+   {{-- edit modal --}}
 
-  <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-    <div class="modal-dialog" >
+   <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered modal-lg " >
       <div class="modal-content" style="background: #EDDBC0;">
         <div class="modal-header" style="border-bottom-color: black" >
           <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Edit User</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="mb-5 pt-6  ">
-                <div class=" columns-1 sm:columns-2 modal-update">
-                  <input type="text" hidden id="usercode">
-                <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >First Name</label>
-                <input class=" fname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" id="edit_fname" style="background: #D0B894;">
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_fname"></span>
-                </div>
-                
-                <label class=" rounded bg-[#EDDBC0] ml-3">Middle Name</label>
-                <input class="mname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894;" id="edit_mname" type="text">
-             
-  
-                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Last Name</label>
-                <input class=" lname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_lname" type="text"> 
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_lname"></span>
-                </div>
-          
-  
-                <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Birthday</label>
-                <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_birthday" style="background: #D0B894;text-decoration:aliceblue;" type="date"> 
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_birthday"></span>
-                </div>
+            <div class="mb-3 pt-6  ">
+                  <div class="container">
+                        <div class="row">
+                              <div class="col-sm-4  ">
+                                    <input type="text" hidden id="usercode">
+                                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >First Name</label>
+                                    <input class=" fname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" id="edit_fname" style="background: #D0B894;">
+                                    <div class="mt-0 mb-2">
+                                      <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_fname"></span>
+                                    </div>
+                              </div>
+                  
+                              <div class="col-sm-4  "  >
+                                    <label class=" rounded bg-[#EDDBC0] ml-3">Middle Name (Optional)</label>
+                                    <input class="mname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894;" id="edit_mname" type="text">
 
-                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Age</label>
-                <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_age" style="background: #D0B894;" type="number"> 
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_age"></span>
-                </div>
-                
-                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Address</label>
-                <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_address" style="background: #D0B894;" type="text"> 
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_address"></span>
-                </div>
+                              </div>
+                  
+                              <div class="col-sm-4  " >
+                                    <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Last Name</label>
+                                    <input class=" lname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_lname" type="text"> 
 
+                                    <div class="mt-0 mb-2">
+                                          <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_lname"></span>
+                                    </div>
+                              </div>
       
-        
-                
-                <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Gender:</label>
-                <select name="gender" class="gender rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_gender"  style="background: #D0B894;"  >
-                  <option value="" {{$user->gender == "" ? 'selected' : ''}}></option>
-                  <option value="Male" {{$user->gender == "Male" ? 'selected' : ''}}>Male</option>
-                  <option value="Female" {{$user->gender == "Female" ? 'selected' : ''}}>Female</option>
-                </select>
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_gender"></span>
-                </div>
-  
-                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Mobile No.</label>
-                <input class=" mobileno  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_mobileno" style="background: #D0B894;" type="number"> 
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_mobileno"></span>
-                </div>
-  
-                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Email</label>
-                <input readonly class=" email rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_email" style="background: #D0B894;"type="text"> 
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_email"></span>
-                </div>
-          
-                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Username</label>
-                <input class=" username rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_username" readonly style="background: #D0B894;" type="text"> 
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_username"></span>
-                </div>
-            
+                              <div class="row" style="margin-top:1%;padding-right:0;">
       
+                                    <div class="col">
+                                          <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Birthday</label>
+                                          <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_birthday" style="background: #D0B894;text-decoration:aliceblue;" type="date"> 
+                                          
+                                          <div class="mt-0 mb-2">
+                                            <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_birthday"></span>
+                                          </div>
+                                    </div>
+      
+                                    <div class="col">
+                                          <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Age</label>
+                                          <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_age" style="background: #D0B894;" type="text"> 
 
-                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
-                <select name="usertype" class="usertype rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_status" >
-                  <option value="" {{$user->status == "" ? 'selected' : ''}}></option>
-                  <option value="verified" {{$user->status == "verified" ? 'selected' : ''}}>verified</option>
-                  <option value="inactive" {{$user->status == "inactive" ? 'selected' : ''}}>Inactive</option>
-                </select>
-                <div class="mt-0 mb-2">
-                  <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_status"></span>
-                </div>
+                                          <div class="mt-0 mb-2">
+                                            <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_age"></span>
+                                          </div>
+                                    </div>
+      
+                                    <div class="col-sm" style="padding-right: 0;">
+                                          <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Sex:</label>
+                                          <select name="gender" class="gender rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_gender"  style="background: #D0B894;"  >
+                                                <option value="" {{$user->gender == "" ? 'selected' : ''}}></option>
+                                                <option value="Male" {{$user->gender == "Male" ? 'selected' : ''}}>Male</option>
+                                                <option value="Female" {{$user->gender == "Female" ? 'selected' : ''}}>Female</option>
+                                          </select>
 
-  
-  
-        </div>
-        </div>
+                                          <div class="mt-0 mb-2">
+                                            <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_gender"></span>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+
+                        <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Address</label>
+                        <input class=" address rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_address" style="background: #D0B894;" type="text">
+
+                        <div class="mt-0 mb-2">
+                            <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_address"></span>
+                        </div>
+      
+                        <div class="row" style="margin-top:1%">
+                              <div class="col-sm" style="">
+                                    <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Mobile No.</label>
+                                    <input class=" mobileno  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_mobileno" style="background: #D0B894;" type="text"> 
+
+                                    <div class="mt-0 mb-2">
+                                        <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_mobileno"></span>
+                                    </div>
+                              </div>
+      
+                              <div class="col-sm-7">
+                                    <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Email</label>
+                                   <input class=" email rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_email" style="background: #D0B894;"type="text"> 
+
+                                    <div class="mt-0 mb-2">
+                                        <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_email"></span>
+                                    </div>
+                              </div>
+                        </div>
+      
+                        <div class="row" style="margin-top:1%">
+                              <div class="col-sm-4" style="">
+                                    <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Username</label>
+
+                                    <input readonly class=" username rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_username" style="background: #D0B894;" type="text"> 
+                                    <div class="mt-0 mb-2">
+                                      <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_username"></span>
+                                    </div>
+                              </div>
+      
+                              <div class="col-sm-4">
+                                    <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Usertype:</label>
+                                    <select name="usertype" class="usertype rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_usertype" >
+                                    <option value="" {{$user->usertype == "" ? 'selected' : ''}}></option>
+                                    <option value="patient" {{$user->usertype == "patient" ? 'selected' : ''}}>Patient</option>
+                                    <option value="secretary" {{$user->usertype == "secretary" ? 'selected' : ''}}>Secretary</option>
+                                    <option value="admin" {{$user->usertype == "admin" ? 'selected' : ''}}>Admin</option>
+                                    </select>
+
+                                    <div class="mt-0 mb-2">
+                                        <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_usertype"></span>
+                                    </div>
+                              </div>
+      
+                              <div class="col-sm-4">
+                                    <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
+                                    <select class=" rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_status" >
+                                    <option value="" {{$user->status == "" ? 'selected' : ''}}></option>
+                                    <option value="verified" {{$user->status == "verified" ? 'selected' : ''}}>Verfied</option>
+                                    <option value="inactive" {{$user->status == "inactive" ? 'selected' : ''}}>Inactive</option>
+                                    </select>
+
+                                      <div class="mt-0 mb-2">
+                                        <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_status"></span>
+                                      </div>
+                              </div>
+                        </div>
+      
+                  </div>
+                  </div>
+                  
         <div class="modal-footer" style="border-top-color: black"> 
           <button type="button" data-bs-dismiss="modal" style="background: #829460;
           border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Close</button>
@@ -349,11 +473,11 @@
           <input class="view1 lname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_address" readonly  type="text"> 
      
           <br>
-          <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Gender: </label>
+          <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Sex: </label>
           <select name="gender" readonly class=" view1 gender" id="view_gender" >
-            <option value="" {{$user->gender == "" ? 'selected' : ''}}></option>
-            <option value="Male" {{$user->gender == "Male" ? 'selected' : ''}}>Male</option>
-            <option value="Female" {{$user->gender == "Female" ? 'selected' : ''}}>Female</option>
+              <option value="" {{$user->gender == "" ? 'selected' : ''}}></option>
+              <option value="Male" {{$user->gender == "Male" ? 'selected' : ''}}>Male</option>
+              <option value="Female" {{$user->gender == "Female" ? 'selected' : ''}}>Female</option>
           </select>
       
           <br>
@@ -468,13 +592,11 @@
                $('#age').val(age);
             }) 
 
-        $(".modal").on("hidden.bs.modal", function(){
-            $('#create, #edit, #delete').find('input').val("");
-            $('.modal-create').load(location.href+' .modal-create');
-            $('.modal-update').load(location.href+' .modal-update');
+            $(".modal").on("hidden.bs.modal", function(){ 
+            $('#create, #edit, #delete').find('input, select').val("");
+            $('#fname, #mname, #lname,#gender, #usertype, #create_error_birthday, #address, #mobileno, #email, #username, #confirmpassword, #password, #status, #age '  ).html("");
+            $('#error_fname, #error_lname, #error_gender, #error_usertype, #error_birthday, #error_address, #error_mobileno, #error_email, #error_password, #error_status'  ).html("");
         });
-
-        //show and hide table
 
         //store data
         $(document).on('click', '.add_user', function(e){
@@ -485,18 +607,18 @@
                 'mname': $('.mname').val(), 
                 'last_name': $('.lname').val(),
                 'birthday': $('.birthday').val(),
-                'address': $('.address').val(),
                 'age': $('.age').val(),
+                'address': $('.address').val(),
                 'gender': $('.gender').val(),
                 'mobile_number': $('.mobileno').val(), 
                 'email': $('.email').val(),
                 'username': $('.username').val(),
                 'address': $('.address').val(),
-                'password': $('.password').val(),
+                'password': $('.create_password').val(),
                 'password_confirmation': $('.password_confirmation').val(),
+                'usertype': $('.usertype').val(),
+                'status': $('.status').val(),
             }
-            // console.log(data);
-            //always add csrf token
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -517,7 +639,7 @@
                 success: function(response){
                   console.log(response);
                     if(response.status == 400){
-                      $('#fname, #mname, #lname,#gender, #usertype, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password, #status,#age '  ).html("");
+                      $('#fname, #mname, #lname,#gender, #usertype,#create_error_birthday, #address, #mobileno, #email, #username, #confirmpassword, #password, #status,#age '  ).html("");
                         $.each(response.errors.first_name, function (key, err_values){
                         $('#fname').append('<span>'+err_values+'</span>');
                         })
@@ -525,7 +647,7 @@
                         $('#lname').append('<span>'+err_values+'</span>');
                         })
                         $.each(response.errors.birthday, function (key, err_values){
-                        $('#birthday').append('<span>'+err_values+'</span>');
+                          $('#create_error_birthday').append('<span>'+err_values+'</span>');
                         })
                         $.each(response.errors.address, function (key, err_values){
                         $('#address').append('<span>'+err_values+'</span>');
@@ -553,6 +675,9 @@
                         })
                         $.each(response.errors.status, function (key, err_values){
                         $('#status').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.usertype, function (key, err_values){
+                          $('#usertype').append('<span>'+err_values+'</span>');
                         })
                     }else{
                       $('#success').html();
@@ -847,6 +972,30 @@
             }
           });
         })
+
+        $(document).on('click','.create_show_password', function(){
+                  $('.create_show_password').hide();
+                  $('.create_password').attr('type', 'text');
+                  $('.create_hidden_password').show();
+            });
+
+            $(document).on('click','.create_hidden_password', function(){
+                  $('.create_show_password').show();
+                  $('.create_password').attr('type', 'password');
+                  $('.create_hidden_password').hide();
+            });
+
+            $(document).on('click','.create_show_confirm_password', function(){
+                  $('.create_show_confirm_password').hide();
+                  $('.create_password_confirmation').attr('type', 'text');
+                  $('.create_hidden_confirm_password').show();
+            });
+
+            $(document).on('click','.create_hidden_confirm_password', function(){
+                  $('.create_show_confirm_password').show();
+                  $('.create_password_confirmation').attr('type', 'password');
+                  $('.create_hidden_confirm_password').hide();
+            });
 });
 </script>
 
