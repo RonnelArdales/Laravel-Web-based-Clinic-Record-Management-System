@@ -9,11 +9,11 @@
       }
 
       @media (max-width: 480px) {
-      .boxlogin{
-            margin: 0%;
-            width: 100%;
-            padding: 0;
-      }
+            .boxlogin{
+                  margin: 0%;
+                  width: 100%;
+                  padding: 0;
+            }
       }
 
       input:focus{
@@ -21,10 +21,10 @@
       }
 
       @media (max-width: 767px) {
-      .hidelogo {
-      display: none;
+            .hidelogo {
+                  display: none;
+            }
       }
-}
 </style>
 
 <div class="container-fluid main" >
@@ -35,9 +35,9 @@
             </div>
 
             @if(Session::has('success'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                  <span class="block sm:inline">{{Session::get('success')}}</span>
-            </div>
+                  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">{{Session::get('success')}}</span>
+                  </div>
             @endif 
 
                   <!-- Sign In Form -->
@@ -52,22 +52,22 @@
                   </div>
 
                   @foreach ($errors->all() as $message) 
-                  <span  role="alert" class="block  text-danger">{{ $message }}</span>
+                        <span  role="alert" class="block  text-danger">{{ $message }}</span>
                   @endforeach
 
                   @if(Session::has('error'))
-                  <span  role="alert" class="block  text-danger">{{Session::get('error')}}</span>
+                        <span  role="alert" class="block  text-danger">{{Session::get('error')}}</span>
                   @endif
 
                   <div style="text-align: center; margin-top: 7%">
 
-                        <button type="submit"    style="text-align:center; background: #829460; border-radius: 20px; width:85%; border:none; color:white; font-family: Poppins;font-weight:700; font-size:15px;" >Log In</button>
+                        <button type="submit" style="text-align:center; background: #829460; border-radius: 20px; width:85%; border:none; color:white; font-family: Poppins;font-weight:700; font-size:15px;" >Log In</button>
                         
                         <p style="margin-top: 10px"> --------- or ---------</p>
 
                         <a href="/register" style="text-decoration:none; font-family:Poppins; text-align:center; color:#829460; line-height: 1vw;border-radius: 20px; width: px; border: 2px solid #829460; padding:0 68px 0 68px;font-weight:700;font-size:15px " >Sign Up</a> 
                         
-                        <div  style="margin-top: 5%; display:flex; flex-direction:row;font-size: 13px;justify-content:center;">
+                        <div style="margin-top: 5%; display:flex; flex-direction:row;font-size: 13px;justify-content:center;">
                               <p style="font-family: 'Poppins';
                               font-style: normal;
                               font-weight: 400;">Forgot Password?</p>
@@ -75,7 +75,6 @@
                               font-style: normal;
                               font-weight: 400;margin-left:3px;color:#829460;" href="/identify">Click Here</a>
                         </div>
-                        
                   </div>
             </form> 
       </div>
@@ -90,16 +89,16 @@ border-radius: 200px;
 text-align:center; padding-top:10%;
 ">
 
-<img  style=" height: 13vw; width: 13vw; margin-left:auto; margin-right: auto; border-radius: 9999px;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt="logo">
-<p style="font-family: 'Noto Serif Gujarati';
-font-style: normal;
-font-weight: 600;
-font-size: 20px;
-line-height: 16px;
-text-align: center;
-text-transform: uppercase;
-margin-top:6%;
-color: #FFFFFF;"> JGMarquez, RPsy</p>
+      <img  style=" height: 13vw; width: 13vw; margin-left:auto; margin-right: auto; border-radius: 9999px;" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt="logo">
+      <p style="font-family: 'Noto Serif Gujarati';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 16px;
+      text-align: center;
+      text-transform: uppercase;
+      margin-top:6%;
+      color: #FFFFFF;"> JGMarquez, RPsy</p>
 
 </div>        
 
@@ -121,5 +120,4 @@ color: #FFFFFF;"> JGMarquez, RPsy</p>
             });
       });
 </script>
-
 @endsection

@@ -84,22 +84,6 @@ class FullCalendarController extends Controller
             }
     
         }
-
-       
-        // return response()->json(['status' => '405',
-        //                          'message' => 'this day is off',
-        //                          'day-numeric' => $day_numeric,
-        //                         ]);
-
-        
-    // session([
-    //     'datetodays' => $request->start,
-    //     'workinghours' => $availablehours,
-    //          'datetoday' => date('m-d-Y', strtotime($request->start)),
-            
-    //                                         ]);                                      
-
-    // return url('/patient/appointment/business-hour');
             
     }
 

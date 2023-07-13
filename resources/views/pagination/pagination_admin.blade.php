@@ -1,10 +1,5 @@
 <div class="card-body " style="width:100%; min-height:65vh; display: flex; overflow-x: auto;  font-size: 15px; " >
-  {{-- <div class="d-flex justify-content-center">
-    <h4>Admin</h4>
-  </div> --}}
- 
     <table class="table table-bordered table-striped"  style="background-color: white">
-
         <thead>
             <tr>
               <th>id</th>

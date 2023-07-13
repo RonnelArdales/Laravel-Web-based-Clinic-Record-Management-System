@@ -89,13 +89,13 @@
             pageLength: 10,
             responsive: true,
             columns: [
-            {data: 'id', name: 'id' , orderable: false, searchable: false},
-            {data: 'fullname', name: 'fullname' , orderable: false},
-            {data: 'gender', name: 'gender' , orderable: false, searchable: false},
-            {data: 'age', name: 'age' , orderable: false, searchable: false},
-            {data: 'created_at', name: 'created_at' , orderable: false, searchable: false},
-            {data: 'status', name: 'status', orderable: false, searchable: false},
-            { data: 'action', name: 'action', orderable: false, searchable: false},
+                {data: 'id', name: 'id' , orderable: false, searchable: false},
+                {data: 'fullname', name: 'fullname' , orderable: false},
+                {data: 'gender', name: 'gender' , orderable: false, searchable: false},
+                {data: 'age', name: 'age' , orderable: false, searchable: false},
+                {data: 'created_at', name: 'created_at' , orderable: false, searchable: false},
+                {data: 'status', name: 'status', orderable: false, searchable: false},
+                { data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
 
@@ -109,33 +109,35 @@
         });
 
         $(document).on('click', '.verify_user', function(e) {
+            e.preventDefault();
             id = $('#userid').val();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $.ajax({
-                    type: "POST",   
-                    url: "/admin/pendinguser/status/" + id, 
-                    datatype: "json",
-                    beforeSend: function(){
-                        $(".main-spinner").show();
-                    },
-                    complete: function(){
-                        $(".main-spinner").hide();
-                        $('#verify').modal('hide');
-                    },
-                    success: function(response){ 
-                        $('#userid').val(" ");
-                        $('#userid').val(id);
-                        user.draw();
-                        $('#message-success').text("Updated Successfully");
-                        $(".success").show();
-                        setTimeout(function() {
-                            $(".success").fadeOut(500);
-                        }, 3000);
-                    }
+                type: "POST",   
+                url: "/admin/pendinguser/status/" + id, 
+                datatype: "json",
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+                    $(".main-spinner").hide();
+                    $('#verify').modal('hide');
+                },
+                success: function(response){ 
+                    $('#userid').val(" ");
+                    $('#userid').val(id);
+                    $('#message-success').text("Updated Successfully");
+                    $(".success").show();
+                    setTimeout(function() {
+                        $(".success").fadeOut(500);
+                    }, 3000);
+                    user.draw();
+                }
             });
         })
     });

@@ -70,27 +70,23 @@
 
             <tbody class="patient-error" >
                 @if (count($services)> 0 )
-                @foreach ($services as $service)
-                <tr class="overflow-auto">
-                    <td style="text-align: center;">{{$service->service}}</td>
-                    <td style="text-align: center;">{{$service->price}}</td>
-               
-                </tr>
-                @endforeach
+                    @foreach ($services as $service)
+                    <tr class="overflow-auto">
+                        <td style="text-align: center;">{{$service->service}}</td>
+                        <td style="text-align: center;">{{$service->price}}</td>
+                
+                    </tr>
+                    @endforeach
                 @else
-                <tr>
-                    <td colspan="9" style="text-align: center; ">No Service Found</td>
-                  </tr>
+                    <tr>
+                        <td colspan="9" style="text-align: center; ">No Service Found</td>
+                    </tr>
                 @endif
             </tbody>
         </table>
 
-        <form class="row" >
-                
+        <form class="row" >     
             <div class="col-sm-8 ">
-        
-        
-             
             </div>
         
             <div class="col-sm " >
@@ -119,12 +115,8 @@
                     <input type="text"  class="view1 rounded "  id="fullname" value="{{$infos->reference_no}}" name="fullname" readonly>
                     @endif
                     @endif
-                  </div>
-        
-                  
+                </div>  
             </div>
-            </form> 
-
-
+        </form> 
 </div>
 @endsection

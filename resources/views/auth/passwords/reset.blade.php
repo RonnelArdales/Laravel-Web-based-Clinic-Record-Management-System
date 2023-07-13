@@ -2,10 +2,6 @@
 @extends('layouts.auth')
 @section('content')
 
-<style>
-
-</style>
-
 <div class="container" style="font-family: Poppins;">
   <div class="row" style="margin-top:5%;">
     <div class="col-sm-9 col-md-7 col-lg-5 mx-auto" >
@@ -41,21 +37,20 @@
                         <label for="inputEmail4" class="form-label">Confirm Password</label>
 
                         <div class="input-box" >
-                              <input type="password" autocomplete="off" id="password_confirmation" name="password_confirmation">
-                              <i class="show_confirm_password fa-regular fa-eye-slash"></i>
-                              <i class="hidden_confirm_password fa fa-eye" style="display: none;" ></i>
+                            <input type="password" autocomplete="off" id="password_confirmation" name="password_confirmation">
+                            <i class="show_confirm_password fa-regular fa-eye-slash"></i>
+                            <i class="hidden_confirm_password fa fa-eye" style="display: none;" ></i>
                         </div>
 
                         </div>
 
                         @if(Session::has('error'))
-                        <span  role="alert" class="block  text-danger">{{Session::get('error')}}</span>
+                            <span  role="alert" class="block  text-danger">{{Session::get('error')}}</span>
                         @endif
   
                         <div class="d-grid" style="margin-top:5%;justify-content:center;">
-                              <button style="background: #829460; border-radius: 15px; color:white; border:#829460;width: 100%;height: 37px;" type="submit">Reset Password</button>
+                            <button style="background: #829460; border-radius: 15px; color:white; border:#829460;width: 100%;height: 37px;" type="submit">Reset Password</button>
                         </div>
-  
                 </form>
               </div>
             </div>
@@ -69,30 +64,30 @@
 
 @section('scripts')    
 <script>
-      $(document).ready(function () {
-            $(document).on('click','.show_password', function(){
-                  $('.show_password').hide();
-                  $('#password').attr('type', 'text');
-                  $('.hidden_password').show();
-            });
+    $(document).ready(function () {
+        $(document).on('click','.show_password', function(){
+                $('.show_password').hide();
+                $('#password').attr('type', 'text');
+                $('.hidden_password').show();
+        });
 
-            $(document).on('click','.hidden_password', function(){
-                  $('.show_password').show();
-                  $('#password').attr('type', 'password');
-                  $('.hidden_password').hide();
-            });
+        $(document).on('click','.hidden_password', function(){
+                $('.show_password').show();
+                $('#password').attr('type', 'password');
+                $('.hidden_password').hide();
+        });
 
-            $(document).on('click','.show_confirm_password', function(){
-                  $('.show_confirm_password').hide();
-                  $('#password_confirmation').attr('type', 'text');
-                  $('.hidden_confirm_password').show();
-            });
+        $(document).on('click','.show_confirm_password', function(){
+                $('.show_confirm_password').hide();
+                $('#password_confirmation').attr('type', 'text');
+                $('.hidden_confirm_password').show();
+        });
 
-            $(document).on('click','.hidden_confirm_password', function(){
-                  $('.show_confirm_password').show();
-                  $('#password_confirmation').attr('type', 'password');
-                  $('.hidden_confirm_password').hide();
-            });
-      });
+        $(document).on('click','.hidden_confirm_password', function(){
+                $('.show_confirm_password').show();
+                $('#password_confirmation').attr('type', 'password');
+                $('.hidden_confirm_password').hide();
+        });
+    });
 </script>
 @endsection

@@ -42,21 +42,8 @@ class PatientController extends Controller
     }
     public function profileshow(){
         
-        // $users = User::all();
 
-        // $view = view()->make('pdfSample', ['users' => $users]);
-        // $html_content = $view->render();
-        // PDF::SetTitle("List of users");
-        // PDF::AddPage();
-        // PDF::writeHTML($html_content, true, false, true, false, '');
-        // // userlist is the name of the PDF downloading
-        // PDF::Output('userlist.pdf');    
-
-        // return response()->download(public_path($filename));
-        // $client = new Client('SEMAPHORE API KEY', 'Sender Name');
-        // $client->message()->send('0917xxxxxxx', 'Your message here');
         $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
-        // $days = BusinessHour::select('day')->where('off', '1')->whereNot('appointment_method', 'walkin')->groupBy('day')->get();
         $walkins = BusinessHour::select('day')->where('off', '1')->where('appointment_method', 'walkin')->groupBy('day')->get();
         $dates = Dayoff_date::select('date')->get();
         $day_array = [];
@@ -250,7 +237,6 @@ class PatientController extends Controller
             $audit_trail->usertype = Auth::user()->usertype;
             $audit_trail->save();
             
-
             return redirect('patient/homepage')->with('success', 'Created Successfully, Please wait for your appointment');
     }
 

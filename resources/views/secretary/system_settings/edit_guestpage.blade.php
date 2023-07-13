@@ -2,10 +2,12 @@
 @section('content')
 <div class="row m-4">
     <div class="col-md-8 col-md-offset-5">
-        <h1>Guest Page</h1>
+        <h1><b>GUEST PAGE</b></h1>
     </div>
     <p style="font-size: 18px; margin-bottom:10px">Edit page</p>
-<hr>
+
+    <hr>
+
     <div class="container">
         @foreach ($errors->all() as $message) 
         <div class="alert alert-danger error" id="error">{{ $message }}</div>
@@ -20,11 +22,11 @@
                             <input  type="text" value="" class="image_status" id="image_status" name="image_status" hidden>
                             <input type="text" class=" text-gray-700 focus:outline-none border-b-4 border-gray-400" name="title" style="width:500px; border-radius:10px  ;border:none ;background: rgba(208, 184, 148, 1);
                             ; padding:6px" readonly style="" value="{{$guestpages->title}}">
-                            </div>
-                            <div class="form-group" style="width:800px; margin-top: 40px">
+                        </div>
+                        <div class="form-group" style="width:800px; margin-top: 40px">
                             <label style="font-size: 20px" for="">Content</label><br>
                             <textarea name="content" style="padding: 30px" id="content" cols="30" rows="10" value=" {{$guestpages->content}}"> {{$guestpages->content}}</textarea>
-                            </div>
+                        </div>
                     </div>
                     <div class="col-sm " style="width:50px; margin-left:20px; margin-right:20px">
                         <div class=" d-flex justify-content-center"> 
@@ -61,9 +63,7 @@
                                 <button type="button" style="color: red; text-decoration:none"  class="remove btn btn-link" >Remove</button>
                                 <button type="button" style="color: chocolate; text-decoration:none"  class="btn btn-link change" >change</button>
                                 <input style="border:1px; border-color:black; display:none" class="image" type="file" style="width: 450px" id="image" name="image"><br>
-                            
                             </div>  
-                          
                             @endif
                     </div>
                 </div>
@@ -75,32 +75,37 @@
 
 @section('scripts')
 <script>
- $('#content').summernote({
+    $('#content').summernote({
         placeholder: 'Hello stand alone ui',
         tabsize: 2,
         lineHeights: ['0.5', '1.0'],
-        fontNames: ['Arial', 'Arial Black', 'Song Myung'],
+        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48' , '64', '82', '150'],
+        fontNames: ['Arial', 'Arial Black', 'Song Myung', 'Inter', 'Poppins'],
         toolbar: [
             ['height', ['height']],
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'clear','italic',]],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['fontname', ['fontname']],
-        ['fontsize', ['fontsize']],
-
-          ['table', ['table']],
-        //   ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview', 'help']]
-        ]
-       
-      });
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear', 'italic']],
+            ['forecolor', ['color']], // Use 'forecolor' instead of 'color'
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            // ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ],
+        callbacks: {
+            onInit: function() {
+            // Find the background color button and remove it
+            $('.note-color').parent().remove();
+            }
+        }
+    });
     $(document).ready(function (){
         setTimeout(function() {
             $(".error").fadeOut(800);
-            }, 2000);
+        }, 2000);
 
-      deleteall();
+        deleteall();
+        
         function deleteall () {
             if (window.location.href) {
                 $.ajaxSetup({
@@ -110,7 +115,7 @@
             });
             $.ajax({
                 type: "post",
-                url: "/admin/billing/addtocart/deleteall",
+                url: "/secretary/billing/addtocart/deleteall",
                 datatype: "json",
                 success: function(response){ 
                 }

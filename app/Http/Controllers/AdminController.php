@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\Approveaccount;
-use App\Mail\bookconfirmation;
 use App\Mail\Cancelappointment;
-use App\Mail\newAccount;
-use App\Mail\patientbook;
 use App\Mail\PatientDocument;
 use App\Mail\reschedule_admintopatient;
 use App\Mail\reschedule_patienttoadmin;
@@ -36,48 +33,35 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
-use PDO;
 use DataTables;
 use GuzzleHttp\Client;
 
-use function GuzzleHttp\Promise\all;
-
 class AdminController extends Controller
 {
-
-    // view urls
     public function dashboard(){
 
         $appointments =  DB::table('appointments')->where('status', 'Booked')->whereDate('date', '>', date('Y-m-d'))
         ->orderBy('date', 'asc')->limit(3)->get();
+
         $latestuser = User::orderBy('created_at', 'desc')->take(7)->get();
 
+        $transaction = Transaction::select(DB::raw('SUM(total) as total'))->whereYear('created_at', date('Y'))->groupBy(DB::raw('MONTH(created_at)'))->pluck('total');
 
-        $transaction = Transaction::select(DB::raw('SUM(total) as total'))
-    ->whereYear('created_at', date('Y'))
-    ->groupBy(DB::raw('MONTH(created_at)'))
-    ->pluck('total');
+        $transactionArray = $transaction->map(function ($item) {
+            return (string) $item;
+        })->toArray();
 
-    
-$transactionArray = $transaction->map(function ($item) {
-    return (string) $item;
-})->toArray();
+        $try = DB::select(DB::raw('
+            SELECT SUM(total) as total, MONTH(created_at) as month FROM (
+                SELECT total, created_at FROM transactions WHERE YEAR(created_at) = YEAR(NOW())
+                UNION ALL
+                SELECT reservation_fee, created_at FROM appointments WHERE YEAR(created_at) = YEAR(NOW())
+            ) as combined_totals
+            GROUP BY MONTH(created_at)
+            ORDER BY MONTH(created_at)
+        '));
 
-$try = DB::select(DB::raw('
-    SELECT SUM(total) as total, MONTH(created_at) as month FROM (
-        SELECT total, created_at FROM transactions WHERE YEAR(created_at) = YEAR(NOW())
-        UNION ALL
-        SELECT reservation_fee, created_at FROM appointments WHERE YEAR(created_at) = YEAR(NOW())
-    ) as combined_totals
-    GROUP BY MONTH(created_at)
-    ORDER BY MONTH(created_at)
-'));
-
-
-
-$totals = array_column($try, 'total', 'month');
-
-
+        $totals = array_column($try, 'total', 'month');
 
 $gender_records = Consultation::selectRaw('primary_diag, 
     MONTH(created_at) as month, 
@@ -130,21 +114,6 @@ $female[]=$gender->female;
         $response = $client->get('https://api.example.com/twitter');
         return json_decode($response->getBody(), true);
     }
-
-
-// $users = User::all()->count();
-// $pending = Appointment::where('status', 'Pending')->count();
-// $name= auth()->user()->fname;
-// // dd($data);
-// $patient = User::select('fname')->distinct()->get();
-// return view('admin.dashboard', ['services' => $service, 'males' => $male, 'females' =>$female])->with('name', $name)
-//                               ->with('patients', $patient)
-//                               ->with('users', $users)
-//                               ->with('pending', $pending)
-//                               ->with('datas', $gender_records)
-//                              ->with('appointments', $appointments)
-//                               ;
-
 
 
     //------------------- discount ---------------------------//
@@ -1023,33 +992,6 @@ $input = $request->all();
         $infos = Billing::with('user')->where('billing_no', $id)->first();
         $services = Billing::where('billing_no', $id)->get();
 
-        //
-        
-        // $sum = Addtocartservice::sum('price');
-        // // $insert = Addtocartservice::where('billing_no', $request->billingno)->update(['sub_total' => $sum])
-
-        // $addtocart = Addtocartservice::all();
-
-        // foreach ($addtocart as $data) {
-
-        //     $billing = new Billing();
-        //     $billing->billing_no = $data->billing_no;
-        //     $billing->user_id = $data->user_id;
-        //     $billing->fullname = $data->fullname;
-        //     $billing->servicecode = $data->servicecode;
-        //     $billing->service = $data->service;
-        //     $billing->price = $data->price;
-        //     $billing->sub_total = $sum;
-        //     $billing->total = $sum;
-        //     $billing->status = 'Pending';
-        //     $billing->save();
-        // }
-        // Addtocartservice::truncate();  
-
-        // return response()->json([
-        //    'status' => 200,
-        //    'message' => 'Saved successfully',
-        // ]);
 
         return view('admin.editBilling', compact('services', 'infos'));
     }
@@ -2105,13 +2047,22 @@ public function store_businesshours_date(Request $request){
         
         return response()->json($user->email);
 
-
     }
 
     public function fetch_user(Request $request){
 
         if ($request->ajax()) {
             $data =  DB::table('users')->where('usertype', 'patient')->where('status', 'verified')->orderBy('created_at', 'desc');
+
+                 // Apply search filter if provided
+        if (!empty($request->input('search.value'))) {
+            $searchValue = $request->input('search.value');
+            $data->where(function ($query) use ($searchValue) {
+                $query->where('fname', 'like', '%' . $searchValue . '%')
+                      ->orWhere('lname', 'like', '%' . $searchValue . '%');
+            });
+        }
+        
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('fullname', function($row){

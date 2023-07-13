@@ -14,7 +14,7 @@ Route::prefix('/patient')->middleware('auth','ispatient', 'verify')->group(funct
     Route::get('/about_us', [GuestpageController::class, 'aboutus']);
     //--------------profile-------------------------//
     Route::get('/profile', [PatientController::class, 'profileshow'])->name('patient.profile') ;
-    Route::get('/profile/edit', [PatientController::class, 'edit_profile']);
+    Route::get('/profile/edit/user={id}', [PatientController::class, 'edit_profile']);
     Route::put('/profile/update/{id}', [PatientController::class, 'update_profile']);
     Route::put('/appointment/cancel/{id}', [PatientController::class, 'cancel_appointment']);
     Route::get('/document/view/{id}', [PatientController::class, 'document_view']);

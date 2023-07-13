@@ -156,6 +156,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Create Appointment</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                 </div>
+
                 <div class="modal-body">
                     <div class="mb-5 pt-6  ">
                         <div class=" columns-1 sm:columns-2 create-refresh" >
@@ -309,216 +310,177 @@
 
 {{--------------- View patients ---------------------}}
 
-<div class="modal fade viewpatients " id="viewpatients" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content viewbody" style="background: #EDDBC0;">
-
-      <!-- Modal Header -->
-      <div class="modal-header" style="border-bottom-color: gray">
-        <h4 class="modal-title">Patients</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body " >
-        <div class="patient patient-remove overflow-auto container-fluid" style="height:420px" >
-          <table class="table table-bordered users table-striped" id="users"  style="background-color: white; width:100%" >
-
-            <thead>
-              <tr>
-                  <th>Id</th>
-                  <th>fullname</th>
-                  <th>Gender</th>
-                  <th>Age</th> 
-                  <th >Action</th>
-              </tr>
-          </thead>
-          <tbody class="nofound" >
-          
-          </tbody>
-
-          </table>
-        </div>    
-
-    <div class="modal-footer w-5" style="position:absolute; bottom:1%; width:97% ;border-top-color: gray" >
-      <button type="button" class="  " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
-    </div>
-  </div>
-    </div>
-  </div>
-</div>
-
-
-
-{{---------------------- View calendar -----------------------}}
-
-<div class="alert error-calendar alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:9999;">
-  <p id="message-error">sdfsdf</p> 
-</div>
-
-
-
-<div class="modal" id="viewcalendar">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content" style="height: 650px; background:#EDDBC0;">
-
-      <!-- Modal Header -->
-      <div class="modal-header" style="border-bottom-color: gray">
-        <h4 class="modal-title"  style="font-weight: 700;">Calendar</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body ">
-        <div class="mb-5 pt-6  ">
-
-          <div class="">
-            <div id="calendar"  style="background: #EDDBC0;"></div>
-        </div>
-
-
-    </div>
-    <div class="modal-footer w-5 col-sm" style="position:absolute;justify-content:space-between ; bottom:1%; width:97% ;border-top-color: gray" >
-      <table>
-      <td class="border-end border-dark" style="justify-content: center; padding-right:10px; padding-top:20px"> 
-        <p>
-         <b>Legends:</b> 
-        </p>
-   
-      </td>
-      <td style="text-align: center; "  >
-        <div class="col-sm" style="text-align: center; margin-left:5px; margin-right:5px;" >
-          <p style="margin-bottom: 10px ">Available day</p>
-          <div  style="height: 30px;margin-left:30% ;width:30px; background-color:#829460; " >
-          </div>
-        </div>
-      </td>
-
-      <td >
-        <div class="col-sm  justify-content-center" style="text-align: center; margin-right:5px;" >
-          <p style="margin-bottom: 10px">Not available</p>
-          <div  style="height: 30px;margin-left:30%  ;width:30px; background-color: #cc6666;  text-align: center;" >
-
-          </div>
-        </div>
-      </td>
-
-      <td>
-        <div class="col-sm" style="text-align: center; " >
-          <p style="margin-bottom: 10px">Date today</p>
-          <div  style="height: 30px;margin-left:30% ;width:30px; background-color: white ;  text-align: center;" >
-
-          </div>
-        </div>
-      </td>
-    </table>
-        {{-- <div class="col">
-          <div>
-            legends:
-          </div>
-      
-        </div> --}}
-      <button type="button" class=" " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal" data-bs-dismiss="modal">Close</button>
-    </div>
-  </div>
-
-    </div>
-  </div>
-</div>
-
-{{-------------- Reschedule appointment------------------}}
-<div class="modal fade" id="reschedcalendar">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content" style="height: 650px; background:#EDDBC0;">
-
-      <!-- Modal Header -->
-      <div class="modal-header" style="border-bottom-color: gray">
-        <h4 class="modal-title"  style="font-weight: 700;">Reschedule</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body ">
-        <div class="mb-5 pt-6  ">
-
-          <div class="container ">
-            <div class="row"  >
-
-                <div   style="padding:0px; width:800px" >
-                  <p style="margin-bottom:5px">Click your preffered Date to view availability</p>
-                    <div class="" style=" background-color: #EDDBC0; margin-left:15px; margin-right:15px" id="calendar_res"></div>
-           
-                </div>    
-                <div class="col-sm" style="margin-left: 20px"  >
-                    <div >
-                        {{-- justify-content-center  --}}
-                        <h3>Legends:</h3>
-                        <hr class="line">
-        
-                        <div class="row  d-flex  align-items-center" style="margin-left:12px">
-                            <div style="background-color: #cc6666; height:35px; width:35px; margin-right:5px  "  class="border border-dark">
-                            </div>
-                            Not Available.
-                        </div>
-                        <div class="row  d-flex  align-items-center" style="margin-left:12px; margin-top:10px">
-                            <div style="background-color: #829460 ;  height:35px; width:35px; margin-right:5px  "  class="border border-dark">
-                            </div>
-                            Available day.
-                        </div>
-                        <div class="row  d-flex  align-items-center" style="margin-left:12px; margin-top:10px">
-                            <div style="background-color: white ;  height:35px; width:35px; margin-right:5px  "  class="border border-dark">
-                            </div>
-                            Date Today.
-                        </div>
-
-                        <div class="row  d-flex  align-items-center" style="margin-left:12px; margin-top:25px">
-                            <label style="padding-left: 0px" for="">Date selected:</label>
-                            <input type="text" class="date refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:250px" readonly id="resched_date">
-                            <div class="mt-0 mb-1">
-                              <span  role="alert" class="block   text-danger" id="error_resched_date"></span>
-                          </div>
-                            <br>
-                            <label style="padding-left: 0px; margin-top:10px" for="">Time selected:</label>
-                            <select name="" id="reschedtime" class="rounded text-gray-700  focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:250px" >
-                              <option value="">--select--</option>
-                          </select>
-
-                          <div class="mt-0 mb-1">
-                            <span  role="alert" class="block mt-5   text-danger" id="error_resched_tim"></span>
-                        </div>
-
-                          <input hidden type="text" class="refresh" id="reschedid">
-                      </div>
-                     
-
-                      <div style="margin-top: 65px" class="row  d-flex  justify-content-center">
-
-                        <button type="button" class=" " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; margin-right:10px" data-bs-dismiss="modal" data-bs-dismiss="modal">Close</button>
-
-                        <button type="button" class="resched_button" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Reschedule</button>
-
-                      </div>
-                
-
-                    </div>
-                 
-                
+    <div class="modal fade viewpatients " id="viewpatients" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content viewbody" style="background: #EDDBC0;">
+                <!-- Modal Header -->
+                <div class="modal-header" style="border-bottom-color: gray">
+                    <h4 class="modal-title">Patients</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-            
+                <div class="modal-body " >
+                    <div class="patient patient-remove overflow-auto container-fluid" style="height:420px" >
+                        <table class="table table-bordered users table-striped" id="users"  style="background-color: white; width:100%" >
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>fullname</th>
+                                    <th>Gender</th>
+                                    <th>Age</th> 
+                                    <th >Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="nofound" >
+                            </tbody>
+                        </table>
+                    </div>    
+                    <div class="modal-footer w-5" style="position:absolute; bottom:1%; width:97% ;border-top-color: gray" >
+                        <button type="button" class="  " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
-         
     </div>
 
-  </div>
-
+{{---------------------- View calendar -----------------------}}
+    <div class="alert error-calendar alert-danger" role="alert" style="width:250px; right:25px; display:none;  position:fixed; z-index:9999;">
+        <p id="message-error"></p> 
     </div>
-  </div>
-</div>
 
+    <div class="modal" id="viewcalendar">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content" style="height: 650px; background:#EDDBC0;">
+                <!-- Modal Header -->
+                <div class="modal-header" style="border-bottom-color: gray">
+                    <h4 class="modal-title"  style="font-weight: 700;">Calendar</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
+            <!-- Modal body -->
+                <div class="modal-body ">
+                    <div class="mb-5 pt-6  ">
+                        <div class="">
+                            <div id="calendar"  style="background: #EDDBC0;"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer w-5 col-sm" style="position:absolute;justify-content:space-between ; bottom:1%; width:97% ;border-top-color: gray" >
+                        <table>
+                            <td class="border-end border-dark" style="justify-content: center; padding-right:10px; padding-top:20px"> 
+                                <p> <b>Legends:</b> </p>
+                            </td>
+
+                            <td style="text-align: center; "  >
+                                <div class="col-sm" style="text-align: center; margin-left:5px; margin-right:5px;" >
+                                    <p style="margin-bottom: 10px ">Available day</p>
+                                    <div  style="height: 30px;margin-left:30% ;width:30px; background-color:#829460; " >
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td >
+                                <div class="col-sm  justify-content-center" style="text-align: center; margin-right:5px;" >
+                                    <p style="margin-bottom: 10px">Not available</p>
+                                    <div  style="height: 30px;margin-left:30%  ;width:30px; background-color: #cc6666;  text-align: center;" >
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="col-sm" style="text-align: center; " >
+                                    <p style="margin-bottom: 10px">Date today</p>
+                                    <div  style="height: 30px;margin-left:30% ;width:30px; background-color: white ;  text-align: center;" >
+                                    </div>
+                                </div>
+                            </td>
+                        </table>
+
+                        <button type="button" class=" " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-------------- Reschedule appointment------------------}}
+    <div class="modal fade" id="reschedcalendar">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content" style="height: 650px; background:#EDDBC0;">
+                <!-- Modal Header -->
+                <div class="modal-header" style="border-bottom-color: gray">
+                    <h4 class="modal-title"  style="font-weight: 700;">Reschedule</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body ">
+                    <div class="mb-5 pt-6  ">
+                        <div class="container ">
+                            <div class="row"  >
+                                <div   style="padding:0px; width:800px" >
+                                    <p style="margin-bottom:5px">Click your preffered Date to view availability</p>
+                                    <div class="" style=" background-color: #EDDBC0; margin-left:15px; margin-right:15px" id="calendar_res"></div>
+                                </div>    
+                                <div class="col-sm" style="margin-left: 20px"  >
+                                    <div >
+                                        {{-- justify-content-center  --}}
+                                        <h3>Legends:</h3>
+                                        <hr class="line">
+
+                                        <div class="row  d-flex  align-items-center" style="margin-left:12px">
+                                            <div style="background-color: #cc6666; height:35px; width:35px; margin-right:5px  "  class="border border-dark">
+                                            </div>
+                                            Not Available.
+                                        </div>
+
+                                        <div class="row  d-flex  align-items-center" style="margin-left:12px; margin-top:10px">
+                                            <div style="background-color: #829460 ;  height:35px; width:35px; margin-right:5px  "  class="border border-dark">
+                                            </div>
+                                            Available day.
+                                        </div>
+                                        <div class="row  d-flex  align-items-center" style="margin-left:12px; margin-top:10px">
+                                            <div style="background-color: white ;  height:35px; width:35px; margin-right:5px  "  class="border border-dark">
+                                            </div>
+                                            Date Today.
+                                        </div>
+
+                                        <div class="row  d-flex  align-items-center" style="margin-left:12px; margin-top:25px">
+                                            <label style="padding-left: 0px" for="">Date selected:</label>
+                                            <input type="text" class="date refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:250px" readonly id="resched_date">
+
+                                            <div class="mt-0 mb-1">
+                                                <span  role="alert" class="block   text-danger" id="error_resched_date"></span>
+                                            </div>
+                                            <br>
+
+                                            <label style="padding-left: 0px; margin-top:10px" for="">Time selected:</label>
+                                            <select name="" id="reschedtime" class="rounded text-gray-700  focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; width:250px" >
+                                            <option value="">--select--</option>
+                                            </select>
+
+                                            <div class="mt-0 mb-1">
+                                                <span  role="alert" class="block mt-5   text-danger" id="error_resched_tim"></span>
+                                            </div>
+                                            <input hidden type="text" class="refresh" id="reschedid">
+                                        </div>
+                                    
+                                        <div style="margin-top: 65px" class="row  d-flex  justify-content-center">
+
+                                            <button type="button" class=" " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; margin-right:10px" data-bs-dismiss="modal" data-bs-dismiss="modal">Close</button>
+
+                                            <button type="button" class="resched_button" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Reschedule</button>
+                                        </div>
+                                
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
-
-
 
 @section('scripts')
 <script>
@@ -534,6 +496,7 @@
         $('#available-time').append('<option value="0" disabled selected></option>');
         $('#reschedtime').empty()
         $('#reschedtime').append('<option value="0" disabled selected></option>');
+        var usertable = null;
 
         setTimeout(function() {
                                     $(".success").fadeOut(500);
@@ -615,8 +578,6 @@
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
-
-        var usertable = null;
   
         $('.viewpatients').on('shown.bs.modal', function() {
             if (!usertable) {
@@ -638,7 +599,7 @@
             }else{
                 usertable.ajax.reload();
             }
-          });
+        });
 
         $('.viewpatients').on('hidden.bs.modal', function() {
             if (usertable) {
@@ -692,10 +653,10 @@
         });
 
         $('.show-create').on('click', function(e){
-                e.preventDefault();
-                $('.create-form').modal('show')
-                $('#available-time').empty()
-                $('#available-time').append('<option value="0" disabled selected></option>');
+            e.preventDefault();
+            $('.create-form').modal('show')
+            $('#available-time').empty()
+            $('#available-time').append('<option value="0" disabled selected></option>');
         })
 
         $(".create-form").on("hidden.bs.modal", function(e){
@@ -714,11 +675,13 @@
         });
 
         $(document).on('click', '.patients', function(e){
+            e.preventDefault();
             $('#viewpatients').modal('show');
             $('#modal-status').val('show')
         })
         
         $(document).on('click', '.calendar', function(e){
+            e.preventDefault();
             $('#viewcalendar').modal('show');
         })
 
@@ -736,7 +699,7 @@
                     'time': $('#available-time').val(),
                     'reservation_fee' : $('#reservationfee').val(),  
                     'modepayment': $('#mode_payment').val(),
-                        'payment': $('#payment_cash').val(),
+                    'payment': $('#payment_cash').val(),
                     'change': $('#change').val(),
                     'reference_no': $('#reference_no').val(),
                 }
@@ -747,60 +710,60 @@
                 });
 
             $.ajax({
-            type: "POST",
-            url: "/admin/appointment/create/",
-            data: data,
-            datatype: "json",
-            beforeSend: function(){
-                $(".main-spinner").show();
-            },
-            complete: function(){
-                $(".main-spinner").hide();
-            },
-            success: function(response){ 
+                type: "POST",
+                url: "/admin/appointment/create/",
+                data: data,
+                datatype: "json",
+                beforeSend: function(){
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+                    $(".main-spinner").hide();
+                },
+                success: function(response){ 
                     if(response.status == 400){
                         $('#error_user, #error_date, #error_time, #error_modepayment, #error_payment, #error_reference_no ' ).html("");
-                            $.each(response.errors.userid, function (key, err_values){
-                            $('#error_user').append('<span>'+err_values+'</span>');
-                            })
-                            $.each(response.errors.date, function (key, err_values){
-                                $('#error_date').append('<span>'+err_values+'</span>');
-                            })
-                            $.each(response.errors.time, function (key, err_values){
-                                $('#error_time').append('<span>'+err_values+'</span>');
-                            })
-                            $.each(response.errors.modepayment, function (key, err_values){
-                                $('#error_modepayment').append('<span>'+err_values+'</span>');
-                            })
+                        $.each(response.errors.userid, function (key, err_values){
+                        $('#error_user').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.date, function (key, err_values){
+                            $('#error_date').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.time, function (key, err_values){
+                            $('#error_time').append('<span>'+err_values+'</span>');
+                        })
+                        $.each(response.errors.modepayment, function (key, err_values){
+                            $('#error_modepayment').append('<span>'+err_values+'</span>');
+                        })
                         $.each(response.errors.payment, function (key, err_values){
-                                $('#error_payment').append('<span>'+err_values+'</span>');
-                            })
+                            $('#error_payment').append('<span>'+err_values+'</span>');
+                        })
                         $.each(response.errors.reference_no, function (key, err_values){
-                                $('#error_reference_no').append('<span>'+err_values+'</span>');
-                            })
+                            $('#error_reference_no').append('<span>'+err_values+'</span>');
+                        })
                     }else{
-                            $('#message-success').text('Created successfully');
-                            $(".success").show();
-                            setTimeout(function() {
-                                $(".success").fadeOut(500);
-                            }, 3000);
-                            $('#create-form').modal('hide');
-                            $('#create-form').find('.refresh').val("");
-                                    pendings.draw();
+                        $('#message-success').text('Created successfully');
+                        $(".success").show();
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 3000);
+                        $('#create-form').modal('hide');
+                        $('#create-form').find('.refresh').val("");
+                        pendings.draw();
                     }
                 }
             });
         })
 
-            //update data from database
-            $('.update_appointment').on('click', function(e){
+        //update data from database
+        $('.update_appointment').on('click', function(e){
             e.preventDefault();
             var appointcode = $('#appointmentcode').val();
             var status = "Success";
             $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
             $.ajax({
                 type: "PUT",
@@ -808,26 +771,24 @@
                 datatype: "json",
                 data: {status:status},
                 beforeSend: function(){
-              
                     $(".main-spinner").show();
                 },
                 complete: function(){
-				            $('#complete-confirmation').modal('hide');
+                    $('#complete-confirmation').modal('hide');
                     $(".main-spinner").hide();
                 },
                 success: function(response){ 
-                  console.log(response);
-                  $('#success').html();
+                    console.log(response);
+                    $('#success').html();
                     $('#success').text('Updated successfully');
-                      $('#success').show();
-                      setTimeout(function() {
-                                $("#success").fadeOut(500);
-                            }, 2000);
-               
-             pendings.draw();
-             complete.draw();
-        }
-    });
+                    $('#success').show();
+                    setTimeout(function() {
+                            $("#success").fadeOut(500);
+                    }, 2000);
+                    pendings.draw();
+                    complete.draw();
+                }
+            });
         });
 
         $('.cancel_appointment').on('click', function(e){
@@ -835,34 +796,32 @@
             var status = "Cancel"
             var appointcode = $('#cancel_id').val();
             $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
             $.ajax({
                 type: "PUT",
-			 url: "/admin/appointment/change_status/"+appointcode,
+			    url: "/admin/appointment/change_status/"+appointcode,
                 data: {status:status},
                 datatype: "json",
                 beforeSend: function(){
-              
-              $(".main-spinner").show();
-          },
-          complete: function(){
-            $('#cancel-confirmation').modal('hide');
-              $(".main-spinner").hide();
-          },
+                    $(".main-spinner").show();
+                },
+                complete: function(){
+                    $('#cancel-confirmation').modal('hide');
+                    $(".main-spinner").hide();
+                },
                 success: function(response){ 
-				console.log(response);
-                  $('#success').html();
+                    $('#success').html();
                     $('#success').text('Cancel successfully');
-                      $('#success').show();
-                      setTimeout(function() {
-                                $("#success").fadeOut(500);
-                            }, 2000);
-                   pendings.draw();
-        }
-    });
+                    $('#success').show();
+                    setTimeout(function() {
+                        $("#success").fadeOut(500);
+                    }, 2000);
+                    pendings.draw();
+                }
+            });
         });
  
         $(document).on('click', '.delete', function(e){
@@ -885,25 +844,20 @@
                 url: "/admin/appointment/delete/"+ appointmentid,
                 datatype: "json",
                 success: function(response){ 
-                  $('#message-success').text('');
-                  $('#message-success').text('Deleted successfully');
-                        $(".success").show();
-                        setTimeout(function() {
-                            $(".success").fadeOut(500);
-                        }, 3000);
-                        $('#delete').modal('hide');
-                        $('#delete').find('input').val("");
-                        $('.table-appointment').load(location.href+' .table-appointment');
-        }
-    });
+                    $('#message-success').text('');
+                    $('#message-success').text('Deleted successfully');
+                    $(".success").show();
+                    setTimeout(function() {
+                        $(".success").fadeOut(500);
+                    }, 3000);
+                    $('#delete').modal('hide');
+                    $('#delete').find('input').val("");
+                    $('.table-appointment').load(location.href+' .table-appointment');
+                }
+            });
         });
 
-        
-
-  
-
         //-------------------- View Calendar --------------------//
-
         var calendar = $('#calendar').fullCalendar({
             height:470,
             editable:true,
@@ -914,92 +868,80 @@
             },
             // events:'/admin/appointment',
             selectable:true,
-           
             color: 'red',
             contentHeight:"auto",
             selectHelper: true,
             viewRender: function(view, element,) {
+                if(day_off.includes("0")){
+                    $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
+                }
+                if(day_off.includes("1")){
+                    $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
+                } 
+                if(day_off.includes("2")){
+                    $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
+                }
+                if(day_off.includes("3")){
+                    $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
+                }
+                if(day_off.includes("4")){
+                    $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
+                }
+                if (day_off.includes("5")){
+                    $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
+                }
+                if (day_off.includes("6")){
+                    $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
+                }
 
+                $('.fc-day.fc-today').css('backgroundColor', 'white');
 
-      if(day_off.includes("0")){
-        $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
-      }
-      if(day_off.includes("1")){
-        $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
-      } 
-      if(day_off.includes("2")){
-        $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
-      }
-      if(day_off.includes("3")){
-        $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
-      }
-       if(day_off.includes("4")){
-        $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
-      }
-      if (day_off.includes("5")){
-        $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
-      }
-      if (day_off.includes("6")){
-        $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
-      }
+                element.find('.fc-day').each(function() {
+                    var date = $(this).data('date');
+                    if (date_off.includes(date)) {
+                        $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
+                    } else {
+                        // $(this).css('background-color', '#829460'); // Green for dates not in the array
+                    }
+                });
 
-      $('.fc-day.fc-today').css('backgroundColor', 'white');
+                element.find('.fc-day').each(function() {
+                    var currentDate = new Date();
+                    var date = $(this).data('date');
+                    var day = new Date(date);
+                    // Check if the date is in the past
+                    if (day < currentDate) {
+                        $(this).css('backgroundColor', '#cc6666'); 
+                        $('.fc-day.fc-today').css('backgroundColor', 'white');
+                    } 
+                });
 
-      element.find('.fc-day').each(function() {
-      var date = $(this).data('date');
-      if (date_off.includes(date)) {
-        $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
-      } else {
-        // $(this).css('background-color', '#829460'); // Green for dates not in the array
-      }
-      });
+                $('.fc-day.fc-today').css('backgroundColor', 'white');
+            },
 
-
-        element.find('.fc-day').each(function() {
-          var currentDate = new Date();
-          var date = $(this).data('date');
-            var day = new Date(date);
-
-            // Check if the date is in the past
-            if (day < currentDate) {
-              $(this).css('backgroundColor', '#cc6666'); 
-              $('.fc-day.fc-today').css('backgroundColor', 'white');
-            } 
-            
-          });
-
-          $('.fc-day.fc-today').css('backgroundColor', 'white');
-
-
-
-    },
-
-    select:function(start, end, allDay)
-      {
-        var startDate = moment(start);
+            select:function(start, end, allDay) {
+                var startDate = moment(start);
                 date = startDate.clone();
-           
-                    var start = $.fullCalendar.formatDate(start, 'Y-MM-DD');
-                    var end = $.fullCalendar.formatDate(end, 'Y-MM-DD HH:mm:ss');
-                    const dayOfWeek = $.fullCalendar.moment(date).day();
-                    let currentDate = new Date(Date.now());
-                    let year = currentDate.getFullYear();
-                    let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
-                    let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
-                    var selected_date = new Date(start);
-                    let formattedDate = `${year}-${month}-${day}`;
+                var start = $.fullCalendar.formatDate(start, 'Y-MM-DD');
+                var end = $.fullCalendar.formatDate(end, 'Y-MM-DD HH:mm:ss');
+                const dayOfWeek = $.fullCalendar.moment(date).day();
+                let currentDate = new Date(Date.now());
+                let year = currentDate.getFullYear();
+                let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
+                let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
+                var selected_date = new Date(start);
+                let formattedDate = `${year}-${month}-${day}`;
 
-                  if(formattedDate == start){
+                if(formattedDate == start){
                       return false;
-                    }else{
-
-                        $.ajaxSetup({
-                        headers:{
-                            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-                        }
+                }else{
+                    $.ajaxSetup({
+                    headers:{
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                    }
                     });
 
-                      $.ajax({
+                    $.ajax({
                         url:"/admin/appointment/Calendar-fetch",
                         type:"Get",
                         datatype: "json",
@@ -1014,59 +956,48 @@
                         },
                         success:function(response)
                         {   
-                              $('#date').val("");
-                              $('#available-time').empty();
-                              
-                              if(date_off.includes(start)){
-                                $('#available-time').append('<option value="0" disabled selected></option>');
-                                $('#message-error').text("Sorry this day is off");
-                                $(".error-calendar").show();
-                                setTimeout(function() {
-                                    $(".error-calendar").fadeOut(500);
-                            }, 3000);
-                    }else{
-
-                      if (selected_date < currentDate) {
-                        $('#available-time').append('<option value="0" disabled selected></option>');
-                      $('#message-error').text("This day is not available");
-                                $(".error-calendar").show();
-                                setTimeout(function() {
-                                    $(".error-calendar").fadeOut(500);
-                            }, 3000);
-                        } else {
-                          if(response.status == "405"){
-                             $('#available-time').append('<option value="0" disabled selected></option>');
-                                    $('#message-error').text('This day is full');
-                                $(".error-calendar").show();
-                                setTimeout(function() {
-                                    $(".error-calendar").fadeOut(500);
-                                }, 3000);
-                                
-                            }else{
-                           
-                              $('#date').val(start);
-                                  $('#viewcalendar').modal('hide');
-                                    $('#date').val(response.date);
-                                    $('#form-dateselected').val(response.date);
-                                    $("#available-time").append("<option value=''>-- select --</option>");
-                                $.each(response.available_time, function(index, val){ 
-                                    $("#available-time").append("<option value='"+val+"'>"+val+"</option>");
-                                } )
-                            }
-                        }
-            
-                    }
-                     
+                            $('#date').val("");
+                            $('#available-time').empty();
+                                if(date_off.includes(start)){
+                                    $('#available-time').append('<option value="0" disabled selected></option>');
+                                    $('#message-error').text("Sorry this day is off");
+                                    $(".error-calendar").show();
+                                    setTimeout(function() {
+                                        $(".error-calendar").fadeOut(500);
+                                    }, 3000);
+                                }else{
+                                    if (selected_date < currentDate) {
+                                        $('#available-time').append('<option value="0" disabled selected></option>');
+                                        $('#message-error').text("This day is not available");
+                                        $(".error-calendar").show();
+                                        setTimeout(function() {
+                                            $(".error-calendar").fadeOut(500);
+                                        }, 3000);
+                                    }else {
+                                        if(response.status == "405"){
+                                            $('#available-time').append('<option value="0" disabled selected></option>');
+                                            $('#message-error').text('This day is full');
+                                            $(".error-calendar").show();
+                                            setTimeout(function() {
+                                                $(".error-calendar").fadeOut(500);
+                                            }, 3000);
+                                        }else{
+                                            $('#date').val(start);
+                                            $('#viewcalendar').modal('hide');
+                                            $('#date').val(response.date);
+                                            $('#form-dateselected').val(response.date);
+                                            $("#available-time").append("<option value=''>-- select --</option>");
+                                            $.each(response.available_time, function(index, val){ 
+                                                $("#available-time").append("<option value='"+val+"'>"+val+"</option>");
+                                            } )
+                                            }
+                                        }
+                                }
                         }
                     })
-              
-
-           }
-                    
-
-             
+                }
             },
-            editable:true,
+          
         });
 
 
@@ -1080,89 +1011,78 @@
             },
             // events:'/admin/appointment',
             selectable:true,
-           
             color: 'red',
             contentHeight:"auto",
             selectHelper: true,
-  
-            viewRender: function(view, element,) {
-              if(day_off.includes("0")){
-        $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
-      }
-      if(day_off.includes("1")){
-        $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
-      } 
-      if(day_off.includes("2")){
-        $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
-      }
-      if(day_off.includes("3")){
-        $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
-      }
-       if(day_off.includes("4")){
-        $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
-      }
-      if (day_off.includes("5")){
-        $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
-      }
-      if (day_off.includes("6")){
-        $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
-      }
-
-     
-      element.find('.fc-day').each(function() {
-      var date = $(this).data('date');
-      if (date_off.includes(date)) {
-        $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
-      } else {
-        // $(this).css('background-color', '#829460'); // Green for dates not in the array
-      }
-      });
-
-          element.find('.fc-day').each(function() {
-          var currentDate = new Date();
-          var date = $(this).data('date');
-            var day = new Date(date);
-
-            // Check if the date is in the past
-            if (day < currentDate) {
-              $(this).css('backgroundColor', '#cc6666'); 
-              $('.fc-day.fc-today').css('backgroundColor', 'white');
-            } 
             
-          });
+            viewRender: function(view, element,) {
+                if(day_off.includes("0")){
+                    $('.fc-day.fc-sun').css('backgroundColor', '#cc6666');
+                }
+                if(day_off.includes("1")){
+                    $('.fc-day.fc-mon').css('backgroundColor', '#cc6666');
+                } 
+                if(day_off.includes("2")){
+                    $('.fc-day.fc-tue').css('backgroundColor', '#cc6666');
+                }
+                if(day_off.includes("3")){
+                    $('.fc-day.fc-wed').css('backgroundColor', '#cc6666');
+                }
+                if(day_off.includes("4")){
+                    $('.fc-day.fc-thu').css('backgroundColor', '#cc6666');
+                }
+                if (day_off.includes("5")){
+                    $('.fc-day.fc-fri').css('backgroundColor', '#cc6666');
+                }
+                if (day_off.includes("6")){
+                    $('.fc-day.fc-sat').css('backgroundColor', '#cc6666');
+                }
 
-          $('.fc-day.fc-today').css('backgroundColor', 'white');
+                $('.fc-day.fc-today').css('backgroundColor', 'white');
 
+                element.find('.fc-day').each(function() {
+                    var date = $(this).data('date');
+                    if (date_off.includes(date)) {
+                        $(this).css('backgroundColor', '#cc6666'); // Red for dates in the array
+                    } else {
+                        // $(this).css('background-color', '#829460'); // Green for dates not in the array
+                    }
+                });
 
+                element.find('.fc-day').each(function() {
+                    var currentDate = new Date();
+                    var date = $(this).data('date');
+                    var day = new Date(date);
+                    // Check if the date is in the past
+                    if (day < currentDate) {
+                        $(this).css('backgroundColor', '#cc6666'); 
+                        $('.fc-day.fc-today').css('backgroundColor', 'white');
+                    } 
+                });
 
-    },
+                $('.fc-day.fc-today').css('backgroundColor', 'white');
+            },
 
-
-    select:function(start, end, allDay)
-      {
-        var startDate = moment(start);
+            select:function(start, end, allDay) {
+                var startDate = moment(start);
                 date = startDate.clone();
-           
-                    var start = $.fullCalendar.formatDate(start, 'Y-MM-DD');
-                    var end = $.fullCalendar.formatDate(end, 'Y-MM-DD HH:mm:ss');
-                    const dayOfWeek = $.fullCalendar.moment(date).day();
+                var start = $.fullCalendar.formatDate(start, 'Y-MM-DD');
+                var end = $.fullCalendar.formatDate(end, 'Y-MM-DD HH:mm:ss');
+                const dayOfWeek = $.fullCalendar.moment(date).day();
+                let currentDate = new Date(Date.now());
+                let year = currentDate.getFullYear();
+                let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
+                let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
+                var selected_date = new Date(start);
+                let formattedDate = `${year}-${month}-${day}`;
 
-                    let currentDate = new Date(Date.now());
-                    let year = currentDate.getFullYear();
-                    let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
-                    let day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if necessary
-                    var selected_date = new Date(start);
-                    let formattedDate = `${year}-${month}-${day}`;
-
-                    // if(formattedDate == start){
-
-                    //     return false;
-                    //   }else{
-
-                        $.ajaxSetup({
-                        headers:{
-                            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-                        }
+                if(formattedDate == start){
+                      return false;
+                }else{
+                    $.ajaxSetup({
+                    headers:{
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                    }
                     });
 
                     $.ajax({
@@ -1173,7 +1093,6 @@
                             start: start,
                         },
                         beforeSend: function(){
-                        $('#complete-confirmation').modal('hide');
                             $(".main-spinner").show();
                         },
                         complete: function(){
@@ -1181,74 +1100,65 @@
                         },
                         success:function(response)
                         {   
-                         
-                          $('#resched_date').val("");
-                          $('#reschedtime').empty();
-                         
-                          if(date_off.includes(start)){
-                            $('#reschedtime').append('<option value="0" disabled selected></option>');
-                      $('#message-error').text("Sorry this day is off");
-                                $(".error-calendar").show();
-                                setTimeout(function() {
-                                    $(".error-calendar").fadeOut(500);
-                            }, 3000);
-                    }else{
-
-                      if (selected_date < currentDate) {
-                        $('#reschedtime').append('<option value="0" disabled selected></option>');
-                      $('#message-error').text("Sorry this day is off");
-                                $(".error-calendar").show();
-                                setTimeout(function() {
-                                    $(".error-calendar").fadeOut(500);
-                            }, 3000);
-                        } else {
-                          if(response.status == "405"){
-                        $('#reschedtime').append('<option value="0" disabled selected></option>');
-                                $('#message-error').text(response.message);
-                            $(".error-calendar").show();
-                            setTimeout(function() {
-                                $(".error-calendar").fadeOut(500);
-                            }, 3000);
-                            
-                            }else{
-                           
-                          $('#resched_date').val(start);
-                                $("#reschedtime").append("<option value=''>-- select --</option>");
-                                $.each(response.available_time, function(index, val){ 
-                                    $("#reschedtime").append("<option value='"+val+"'>"+val+"</option>");
-                                } )
-                            }
-                        }
-                    }
+                            $('#resched_date').val("");
+                            $('#reschedtime').empty();
+                                if(date_off.includes(start)){
+                                    $('#reschedtime').append('<option value="0" disabled selected></option>');
+                                    $('#message-error').text("Sorry this day is off");
+                                    $(".error-calendar").show();
+                                    setTimeout(function() {
+                                        $(".error-calendar").fadeOut(500);
+                                    }, 3000);
+                                }else{
+                                    if (selected_date < currentDate) {
+                                        $('#reschedtime').append('<option value="0" disabled selected></option>');
+                                        $('#message-error').text("Sorry this day is off");
+                                        $(".error-calendar").show();
+                                        setTimeout(function() {
+                                            $(".error-calendar").fadeOut(500);
+                                        }, 3000);
+                                    }else {
+                                        if(response.status == "405"){
+                                            $('#reschedtime').append('<option value="0" disabled selected></option>');
+                                            $('#message-error').text(response.message);
+                                            $(".error-calendar").show();
+                                            setTimeout(function() {
+                                                $(".error-calendar").fadeOut(500);
+                                            }, 3000);
+                                        }else{
+                                            $('#resched_date').val(start);
+                                            $("#reschedtime").append("<option value=''>-- select --</option>");
+                                            $.each(response.available_time, function(index, val){ 
+                                                $("#reschedtime").append("<option value='"+val+"'>"+val+"</option>");
+                                            });
+                                            }
+                                        }
+                                }
                         }
                     })
-
-
-
-            //   }
-                },
-                editable:true,
-            });
+                }
+            },
+        });
 
 
         $('.resched_button').on('click', function(e){
-          $('#reschedid').val();
-          $('#resched_date').val();
-          $('#reschedtime').val();
+            $('#reschedid').val();
+            $('#resched_date').val();
+            $('#reschedtime').val();
 
-          data = {
-            "id": $('#reschedid').val(),
-            "date": $('#resched_date').val(),
-            "time": $('#reschedtime').val(),
-          }
-          
-          $.ajaxSetup({
-            headers:{
-                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+            data = {
+                "id": $('#reschedid').val(),
+                "date": $('#resched_date').val(),
+                "time": $('#reschedtime').val(),
             }
-        });
+          
+            $.ajaxSetup({
+                headers:{
+                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-        $.ajax({
+            $.ajax({
                 type: "PUT",
                 url: "/admin/appointment/resched",
                 datatype: "json",
@@ -1257,41 +1167,35 @@
                     $(".main-spinner").show();
                 },
                 complete: function(){
-				 
                     $(".main-spinner").hide();
                 },
                 success: function(response){ 
-
-                  if(response.status == 400){
-                    $('#error_resched_date, #error_resched_tim' ).html("");
+                    if(response.status == 400){
+                        $('#error_resched_date, #error_resched_tim' ).html("");
                         $.each(response.errors.date, function (key, err_values){
                             $('#error_resched_date').append('<span>'+err_values+'</span>');
                         })
                         $.each(response.errors.time, function (key, err_values){
                             $('#error_resched_tim').append('<span>'+err_values+'</span>');
                         })
-           
-                  }else{
-                    
-                    $('#reschedcalendar').modal('hide');
-                  $('#success').html();
-                    $('#success').text('Reschedule successfully');
-                      $('#success').show();
-                      setTimeout(function() {
-                                $("#success").fadeOut(500);
-                            }, 2000);
-                          pendings.draw();
-                          complete.draw();
-                  }
-             
-        }
-    });
+                    }else{
+                        $('#reschedcalendar').modal('hide');
+                        $('#success').html();
+                        $('#success').text('Reschedule successfully');
+                        $('#success').show();
+                        setTimeout(function() {
+                            $("#success").fadeOut(500);
+                        }, 2000);
+                        pendings.draw();
+                        complete.draw();
+                    }
+                }
+            });
         });
 	   
         $('#mode_payment').on('change', function(e){
             var payment = $(this).val();
-          $('#payment_cash, #change, #reference_no').val(" ");
-
+            $('#payment_cash, #change, #reference_no').val(" ");
             if(payment == "Cash"){
                 $('#cash').show();
                 $('#gcash').hide();
@@ -1301,27 +1205,23 @@
             }
         });
 
+        // payment change 
         $('#payment_cash').on('keyup', function(e){
-          e.preventDefault();
-          let total = $('#reservationfee').val();
-          let payment = $(this).val();
+            e.preventDefault();
+            let total = $('#reservationfee').val();
+            let payment = $(this).val();
+            let change =  parseInt(payment) - parseInt(total);
+            // let change_replace =Number(parseFloat(change).toFixed(2)).toLocaleString('en', {minimumFractionDigits: 2});
 
-          let change =  parseInt(payment) - parseInt(total);
-          // let change_replace =Number(parseFloat(change).toFixed(2)).toLocaleString('en', {minimumFractionDigits: 2});
-
-   
-     
-          if(parseFloat(payment) < parseFloat(total)){
-            // console.log('werwe');
-            console.log('payment is lower than total');
+            if(parseFloat(payment) < parseFloat(total)){
+                console.log('payment is lower than total');
                 $('#change').val('');
             }else if(payment == ""){
                 console.log('null inputs')
                 $('#change').val('');
-            }else{
-                // alert('higher');
-                  console.log('payment is greater than total');
-                            $('#change').val(change);
+            }else {
+                console.log('payment is greater than total');
+                $('#change').val(change);
             }
         });
 

@@ -20,50 +20,48 @@
     }
 
     footer{
-    color:white;
-    border-radius: 55px 55px 0px 0px;
-    background-color: #829460;
-    padding: 0% 2% 0% 2%;
-        }
-
-        .main{
-          min-height:85vh 
-        }
-        .dropdown-menu {
-    right: -90px;
-}
-
-.logoutbutton{
-      background-color: #EDDBC0;
-      border: 0;
-      background: none;
-      outline: none;
-      color: black;
+        color:white;
+        border-radius: 55px 55px 0px 0px;
+        background-color: #829460;
+        padding: 0% 2% 0% 2%;
     }
 
+    .main{
+        min-height:85vh 
+    }
+
+    .dropdown-menu {
+        right: -90px;
+    }
+
+    .logoutbutton{
+        background-color: #EDDBC0;
+        border: 0;
+        background: none;
+        outline: none;
+        color: black;
+    }
 
     .input-box{
-      background: #D0B894; 
-      border-radius: 10px;
-      padding-left: 12px;
-      padding-right: 12px;
-      padding-top: 6px;
-      padding-bottom: 6px;
-      border:none;
-      height: 
+        background: #D0B894; 
+        border-radius: 10px;
+        padding-left: 12px;
+        padding-right: 12px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        border:none;
+        height: 
     }
 
     .input-box input{
-      width:90%;
-      outline:none;
-      background: #D0B894; 
-      border: none
+        width:90%;
+        outline:none;
+        background: #D0B894; 
+        border: none
     }
 
-   
 </style>
 <body>
-
         @if (Auth::check())
             <nav class="navbar navbar-expand-md flex" style="background-color: rgba(130, 148, 96, 1); ">
                 <div class="container-fluid d-flex justify-content-between" >
@@ -111,28 +109,29 @@
                     <!--Grid row-->
                     <div class="row">
                         <!-- Grid column -->
-                        <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3" style="text-align:center">
-                            <h6 class="text-uppercase mb-4 font-weight-bold">ADDRESS</h6>
-                            <p>2nd Flr. Everlasting Bldg., #172 Rizal Avenue, Brgy. San Isidro, Taytay, Philippines</p>
+                        <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3" style="text-align:center; color:white">
+                            <h6 class="text-uppercase mb-4 font-weight-bold"> ADDRESS </h6>
+                            {{-- <p>
+                            2nd Flr. Everlasting Bldg., #172 Rizal Avenue, Brgy. San Isidro, Taytay, Philippines
+                            </p> --}}
+                            {!! $address_clinic->content !!}
                         </div>
                         <!-- Grid column -->
-
                         <hr class="w-100 clearfix d-md-none" />
-
+    
                         <!-- Grid column -->
                         <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3" style="text-align:center">
                             <h6 class="text-uppercase mb-4 font-weight-bold">CONTACT US</h6>
-                            <p>09171732844 - GLOBE</p>
-                            <p>090983992102 - SMART</p>
+                            {!! $contact_us->content !!}
                         </div>
+    
                         <!-- Grid column -->
-
                         <hr class="w-100 clearfix d-md-none" />
-
+    
                         <!-- Grid column -->
                         <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3" style="text-align:center">
-                            <h6 class="text-uppercase mb-4 font-weight-bold">EMAIL US</h6>
-                            <p>jgmarquez.psych@gmail.com</p>
+                            <h6 class="text-uppercase mb-4 font-weight-bold"> EMAIL US </h6>
+                            {!! $email_us->content !!}
                         </div>
 
                         <!-- Grid column -->
@@ -149,7 +148,6 @@
                 </section>
             </div>
         </footer>
-
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
       <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 

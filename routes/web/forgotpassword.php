@@ -12,5 +12,5 @@ Route::get('/resendCode', [AuthController::class, 'resend_code'])->middleware('a
 Route::get('/verifycode/sms', [AuthController::class, 'show_verifycode_sms'])->middleware('auth'); // display send otp by email 
 Route::get('/resendCode/sms', [AuthController::class, 'resend_code_sms'])->middleware('auth'); //resend code via sms
 Route::get('/resetpassword', [AuthController::class, 'reset_password'])->middleware('auth'); //show reset password form
-Route::get('/resetpage', [AuthController::class, 'show_reset']); //showreset page
+Route::get('/resetpage', [AuthController::class, 'show_reset'])->middleware(['auth']); //showreset page
 Route::put('/updatepassword', [AuthController::class, 'update_password'])->middleware('auth');

@@ -3,39 +3,38 @@
 @section('content')
 
 <style>
-      .input-box{
-            background-color: #D0B894;
-            border-radius: 6px;
-            padding-left: 5px;
-            border-bottom: solid gray 2px;
-            border-right:solid gray 2px;
-            border-top:solid black 2px;
-            border-left: solid black 2px;
-            /* height: 30px; */
-      }
+    .input-box{
+        background-color: #D0B894;
+        border-radius: 6px;
+        padding-left: 5px;
+        border-bottom: solid gray 2px;
+        border-right:solid gray 2px;
+        border-top:solid black 2px;
+        border-left: solid black 2px;
+    }
 
-      .input-box input{
-            background-color: #D0B894;
-            border: none;
-            outline: none;
-            width: 90%;
-      }
-      .custom-select{
-            height: 30px;
-            padding-left: 5px;
-            border-bottom: solid gray 2px;
-            border-right:solid gray 2px;
-            border-top:solid black 2px;
-            border-left: solid black 2px;
-      }
+    .input-box input{
+        background-color: #D0B894;
+        border: none;
+        outline: none;
+        width: 90%;
+    }
+    .custom-select{
+        height: 30px;
+        padding-left: 5px;
+        border-bottom: solid gray 2px;
+        border-right:solid gray 2px;
+        border-top:solid black 2px;
+        border-left: solid black 2px;
+    } 
 </style>
 <div class="row m-4">
+
     <div class="col-md-8 col-md-offset-5">
         <h1> <b>USER</b>  </h1>
     </div>
 
-    <div id="success" class="error alert alert-success" style="display: none;">
-    </div>
+    <div id="success" class="error alert alert-success" style="display: none;"></div>
 
     <div class="main-spinner" style=" position:fixed; width:100%; left:0;right:0;top:0;bottom:0; background-color: rgba(255, 255, 255, 0.279);  z-index:9999; display:none; "> 
         <div class="spinner">
@@ -286,7 +285,7 @@
                             <div class="row" style="margin-top:1%">
                                     <div class="col-sm" style="">
                                         <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Mobile No.</label>
-                                        <input class=" mobileno  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="text"> 
+                                        <input class=" mobileno  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="number"> 
                                         <div class="mt-0 mb-2">
                                             <span  role="alert" class="block mt-5 pb-4 text-danger" id="mobileno"></span>
                                         </div>
@@ -352,8 +351,11 @@
 
                                     <div class="col-sm-6">
                                         <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Confirm Password</label>
-
-                                        <input autocomplete="off" class="password_confirmation rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="password">  
+                                        <div class="input-box">
+                                            <input type="password" class="create_password_confirmation">
+                                            <i class="create_show_confirm_password fa-regular fa-eye-slash"></i>
+                                            <i class="create_hidden_confirm_password fa fa-eye" style="display: none;" ></i>
+                                        </div> 
 
                                         <div class="mt-0 mb-2">
                                             <span  role="alert" class="block mt-5 pb-4 text-danger" id="confirmpassword"></span>
@@ -364,9 +366,8 @@
                         </div>
                     </div>
                     <div class="modal-footer" style="border-top-color: black"> 
-                        <button type="button" data-bs-dismiss="modal" style="background: #829460;
-                        border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Close</button>
-                        <button  class=" add_user " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Create</button>
+                        <button type="button" data-bs-dismiss="modal" class="close_button">Close</button>
+                        <button  class="add_user create-button ">Create</button>
                     </div>
                 </div>
             </div>
@@ -388,8 +389,9 @@
                         <div class="row">
                               <div class="col-sm-4  ">
                                     <input type="text" hidden id="usercode">
-                                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >First Name</label>
+                                    <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >First Name</label>
                                     <input class=" fname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" id="edit_fname" style="background: #D0B894;">
+
                                     <div class="mt-0 mb-2">
                                       <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_fname"></span>
                                     </div>
@@ -464,7 +466,7 @@
       
                               <div class="col-sm-7">
                                     <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Email</label>
-                                   <input class=" email rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_email" style="background: #D0B894;"type="text"> 
+                                    <input class=" email rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_email" style="background: #D0B894;"type="text"> 
 
                                     <div class="mt-0 mb-2">
                                         <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_email"></span>
@@ -509,34 +511,36 @@
                                       </div>
                               </div>
                         </div>
-      
+                        
                         <div class="row" style="margin-top:1%">
-                              <div class="col-sm-6">
-                                   <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Password</label>
-                                    <div class="input-box">
-                                          <input type="password" class="create_password"  id="edit_password">
-                                          <i class="create_show_password fa-regular fa-eye-slash"></i>
-                                          <i class="create_hidden_password fa fa-eye" style="display: none;" ></i>
-                                    </div>
-      
-                                    <div class="mt-0 mb-2">
-                                        <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_password"></span>
-                                    </div>
-                              </div>
-      
-                              <div class="col-sm-6">
-                                    <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Confirm Password</label>
-      
-                                    <input autocomplete="off" class="password_confirmation rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="password" id="edit_confirmpassword">  
-      
-                                    <div class="mt-0 mb-2">
-                                      <span  role="alert" class="block mt-5 pb-4 text-danger" id="confirmpassword"></span>
-                                    </div>
-                              </div>
-      
+                            <div class="col-sm-6">
+                                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Password</label>
+                                <div class="input-box">
+                                        <input type="password" class="edit_password" id="edit_password">
+                                        <i class="edit_show_password fa-regular fa-eye-slash"></i>
+                                        <i class="edit_hidden_password fa fa-eye" style="display: none;" ></i>
+                                </div>
+
+                                <div class="mt-0 mb-2">
+                                    <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_password"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Confirm Password</label>
+                                <div class="input-box">
+                                    <input type="password" class="edit_password_confirmation" id="edit_password_confirmation">
+                                    <i class="edit_show_confirm_password fa-regular fa-eye-slash"></i>
+                                    <i class="edit_hidden_confirm_password fa fa-eye" style="display: none;" ></i>
+                                </div> 
+
+                                <div class="mt-0 mb-2">
+                                    <span  role="alert" class="block mt-5 pb-4 text-danger" id="confirmpassword"></span>
+                                </div>
+                            </div>
                         </div>
-                  </div>
-                  </div>
+                    </div>
+                </div>
                   
         <div class="modal-footer" style="border-top-color: black"> 
           <button type="button" data-bs-dismiss="modal" style="background: #829460;
@@ -662,9 +666,9 @@
 @section('scripts')
 <script>
     $(document).ready(function (){
-        
+
         refresh_table();
-        $('#birthday').on('change', function(){
+        $(document).on('change', '#birthday', function(){
             const birthday = $(this).val();
             const currentDate = new Date();
             const dateObject = new Date(birthday);
@@ -679,8 +683,27 @@
             if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
                 age--; // Adjust age if current month and day are earlier
             }
-            $('#age').val(" ");
+            $('#age').html("");
             $('#age').val(age);
+        }) 
+
+        $(document).on('change', '#edit_birthday', function(){
+            const birthday = $(this).val();
+            const currentDate = new Date();
+            const dateObject = new Date(birthday);
+            const birthYear = dateObject.getFullYear();
+            const currentYear = currentDate.getFullYear();
+            const birthMonth = dateObject.getMonth();
+            const currentMonth = currentDate.getMonth();
+            const birthDay = dateObject.getDate();
+            const currentDay = currentDate.getDate();
+            let age = currentYear - birthYear;
+
+            if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+                age--; // Adjust age if current month and day are earlier
+            }
+            $('#edit_age').html("");
+            $('#edit_age').val(age);
         }) 
   
         function refresh_table(){
@@ -712,13 +735,13 @@
                     $('#admin').attr("hidden",true);
                     $("#secretary").attr("hidden",false);
                     refresh_table();
-               } else if (usertype == 'patient') {
-                $('#patient').attr("hidden",false);
+               }else if (usertype == 'patient') {
+                    $('#patient').attr("hidden",false);
                     $('#admin').attr("hidden",true);
                     $("#secretary").attr("hidden",true);
                     refresh_table();
-               } else {
-                $('#patient').attr("hidden",true);
+               }else {
+                    $('#patient').attr("hidden",true);
                     $('#admin').attr("hidden",false);
                     $("#secretary").attr("hidden",true);
                     refresh_table();
@@ -745,7 +768,7 @@
                 'username': $('.username').val(),
                 'address': $('.address').val(),
                 'password': $('.create_password').val(),
-                'password_confirmation': $('.password_confirmation').val(),
+                'password_confirmation': $('.create_password_confirmation').val(),
                 'usertype': $('.usertype').val(),
                 'status': $('.status').val(),
             }
@@ -811,6 +834,7 @@
                         $('#usertype').append('<span>'+err_values+'</span>');
                         })
                     }else{
+                        refresh_table();
                         $('#success').html();
                         $('#success').text('Created successfully');
                         $('#success').show();
@@ -819,7 +843,6 @@
                         }, 2000);
                         $('#create').modal('hide');
                         $('.modal-create').load(location.href+' .modal-create');
-                        refresh_table();
                     }
                 }
             });
@@ -912,15 +935,15 @@
                 'mobile_number': $('#edit_mobileno').val(), 
                 'email': $('#edit_email').val(),
                 'password': $('#edit_password').val(),
-                'password_confirmation': $('#edit_confirmpassword').val(),
+                'password_confirmation': $('#edit_password_confirmation').val(),
                 'usertype': $('#edit_usertype').val(),
                 'status': $('#edit_status').val(),
             }
 
             $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
             
             $.ajax({
@@ -1068,8 +1091,6 @@
                     url: "/admin/profile/pagination/paginate-data?patient="+page , 
                     datatype: "json",
                     success: function(response){
-                    console.log('from paginate' + usertype); 
-                    console.log(response);
                     $('.patient').html(response);
                     }
                 });
@@ -1080,8 +1101,6 @@
                     url: "/admin/profile/pagination/paginate-data?secretary="+page , 
                     datatype: "json",
                     success: function(response){ 
-                    console.log('from paginate' + usertype);
-                    console.log(response);
                     $('.secretary').html(response);
                     }
                 });
@@ -1092,8 +1111,6 @@
                     url: "/admin/profile/pagination/paginate-data?admin="+page , 
                     datatype: "json",
                     success: function(response){
-                    console.log('from paginate' + usertype);
-                    console.log(response); 
                     $('.admin').html(response);
                     }
                 });
@@ -1198,6 +1215,7 @@
             });
         })
 
+        // hide and unhide button in create modal
         $(document).on('click','.create_show_password', function(){
                   $('.create_show_password').hide();
                   $('.create_password').attr('type', 'text');
@@ -1221,7 +1239,32 @@
                   $('.create_password_confirmation').attr('type', 'password');
                   $('.create_hidden_confirm_password').hide();
             });
-});
+
+            // hide and unhide button in edit modal
+            $(document).on('click','.edit_show_password', function(){
+                  $('.edit_show_password').hide();
+                  $('.edit_password').attr('type', 'text');
+                  $('.edit_hidden_password').show();
+            });
+
+            $(document).on('click','.edit_hidden_password', function(){
+                  $('.edit_show_password').show();
+                  $('.edit_password').attr('type', 'password');
+                  $('.edit_hidden_password').hide();
+            });
+
+            $(document).on('click','.edit_show_confirm_password', function(){
+                  $('.edit_show_confirm_password').hide();
+                  $('.edit_password_confirmation').attr('type', 'text');
+                  $('.edit_hidden_confirm_password').show();
+            });
+
+            $(document).on('click','.edit_hidden_confirm_password', function(){
+                  $('.edit_show_confirm_password').show();
+                  $('.edit_password_confirmation').attr('type', 'password');
+                  $('.edit_hidden_confirm_password').hide();
+            });
+    });
 </script>
 
 @endsection
