@@ -21,7 +21,6 @@ class FullCalendarController extends Controller
     public function index(Request $request)         
     {   
         $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
-        // $days = BusinessHour::select('day')->where('off', '1')->whereNot('appointment_method', 'walkin')->groupBy('day')->get();
         $walkins = BusinessHour::select('day')->where('off', '1')->where('appointment_method', 'walkin')->groupBy('day')->get();
         $dates = Dayoff_date::select('date')->get();
         $day_array = [];
@@ -88,12 +87,12 @@ class FullCalendarController extends Controller
     }
 
     public function getprice($servicename, Request $request){
-            $price = Service::where('servicename', '=', $servicename )->get('price');
-            if ($price){
-                return response()->json([
-                    'price' =>  $price,
-                  ]);
-            }
+        $price = Service::where('servicename', '=', $servicename )->get('price');
+        if ($price){
+            return response()->json([
+                'price' =>  $price,
+                ]);
+        }
     }
 
     public function create(Request $request){
@@ -104,37 +103,6 @@ class FullCalendarController extends Controller
         $businessHours = BusinessHour::select('from')->where('day', $Datename)->get();
 
         return response()->json(['datename' => $Datename, 'businesshours' => $businessHours]);
-        //     $appointment->time = $request->input('time');
-
-        // $validator = Validator::make($request->all(), [
-        //     "service" => ['required'],
-        // ]);
-
-        // if($validator->fails())
-        // {
-        //     return response()->json([
-        //         'status'=>400,
-        //         'errors'=> $validator->messages(),
-        //     ]);
-        // }else{
-
-         
-        //     $appointment = new Appointment();
-        //     $appointment->user_id = Auth::user()->id;
-        //     $appointment->fullname = Auth::user()->fname.' '.Auth::user()->mname.' '.Auth::user()->lname  ;
-        //     $appointment->address =  Auth::user()->address;
-        //     $appointment->email =  Auth::user()->email;
-        //     $appointment->mobileno =  Auth::user()->mobileno;
-        //     $appointment->date =  $request->input('date');
-        //     $appointment->time = $request->input('time');
-        //     $appointment->service = $request->input('service');
-        //     $appointment->price = $request->input('price');
-        //     $appointment->status = "Pending";
-        //     $appointment->save();
-        //     Mail::to('ronnelardales2192@gmail.com')->send(new patientbook);
-        //     return url('/patient/homepage');
-        // }
-
        
     }
 }

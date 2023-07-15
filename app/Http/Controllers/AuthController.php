@@ -19,6 +19,16 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthController extends Controller
 {
+
+    public function Audit_Trail($activity){
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = $activity;
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+    }
+
     public function verifyemail(){
         return view('auth.verify');
       
@@ -98,17 +108,12 @@ class AuthController extends Controller
                     $userauth = User::where('email','=', $request->input('email'))->first(); 
                     auth()->login($userauth);
 
-                    $audit_trail = new AuditTrail();
-                    $audit_trail->user_id = Auth::user()->id;
-                    $audit_trail->username = Auth::user()->username;
-                    $audit_trail->activity = 'Created an account';
-                    $audit_trail->usertype = Auth::user()->usertype;
-                    $audit_trail->save();
+                    $activity = "Created an account";
+                    $this->Audit_Trail($activity);
 
                     if(Auth::user()->usertype == 'admin'){
                         return redirect('admin/dashboard');
                     }elseif(Auth::user()->usertype == 'patient'){
-                        // Alert::success('Created Successfully', 'Your account is successfully created, wait for the administrator approval to used the full function of the system. Please check back later');
                         return redirect('patient/homepage')->with('success', 'Your account is successfully created, wait for the administrator approval to used the full function of the system. Please check back later' );
                     }else{
                         return redirect('secretary/dashboard');
@@ -313,12 +318,8 @@ class AuthController extends Controller
             'password' => $password,
         ]);
 
-        $audit_trail = new AuditTrail();
-        $audit_trail->user_id = Auth::user()->id;
-        $audit_trail->username = Auth::user()->username;
-        $audit_trail->activity = 'Change password';
-        $audit_trail->usertype = Auth::user()->usertype;
-        $audit_trail->save();
+        $activity = "Change password";
+        $this->Audit_Trail($activity);
 
         if(Auth::check()){
             if(Auth::user()->usertype == 'admin'){

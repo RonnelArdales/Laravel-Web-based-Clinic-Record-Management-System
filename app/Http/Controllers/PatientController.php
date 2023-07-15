@@ -28,6 +28,16 @@ use Illuminate\Support\Facades\Mail;
 class PatientController extends Controller
 {
 
+    public function Audit_trail($activity){
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = $activity;
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+    }
+
     public function homepage(){
       
         $speak_with_you = Guestpage::where('title', 'speak with you')->select('content')->first() ;
@@ -41,7 +51,6 @@ class PatientController extends Controller
                                                                             ->with('speakingup', $speakingup);
     }
     public function profileshow(){
-        
 
         $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
         $walkins = BusinessHour::select('day')->where('off', '1')->where('appointment_method', 'walkin')->groupBy('day')->get();
@@ -103,7 +112,6 @@ class PatientController extends Controller
             "lname" => ['required', 'min:4'],
             "birthday" => ['required'],
             "address" => ['required', 'min:4'],
-            "address" => ['required', 'min:4'],
             "gender" => ['required'],
             "mobileno" => ['required', 'min:4'],
             "email" => ['required', 'email' ],
@@ -146,12 +154,8 @@ class PatientController extends Controller
         
         $user->save();
 
-        $audit_trail = new AuditTrail();
-        $audit_trail->user_id = Auth::user()->id;
-        $audit_trail->username = Auth::user()->username;
-        $audit_trail->activity = 'Update profile';
-        $audit_trail->usertype = Auth::user()->usertype;
-        $audit_trail->save();
+        $activity = "Update profile";
+        $this->Audit_trail($activity);
 
         return redirect('/patient/profile')->with('success', 'Updated successfully');
     }
@@ -219,23 +223,14 @@ class PatientController extends Controller
             $appointment->status = 'pending';
             $appointment->save();
 
-            $admins = User::where('usertype', 'admin')->get();
-            $secretaries = User::where('usertype', 'secretary')->get();
+            $admins = User::where('usertype',['admin', 'secretary'] )->get();
  
             foreach ($admins as $admin) {
                 Mail::to($admin->email)->send(new Bookappointment);
             }
 
-            foreach ($secretaries as $secretary) {
-                Mail::to($secretary->email)->send(new Bookappointment);
-            }
-
-            $audit_trail = new AuditTrail();
-            $audit_trail->user_id = Auth::user()->id;
-            $audit_trail->username = Auth::user()->username;
-            $audit_trail->activity = 'Create an appointment';
-            $audit_trail->usertype = Auth::user()->usertype;
-            $audit_trail->save();
+            $activity = "Create an appointment";
+            $this->Audit_trail($activity);
             
             return redirect('patient/homepage')->with('success', 'Created Successfully, Please wait for your appointment');
     }
@@ -247,12 +242,8 @@ class PatientController extends Controller
         $date = $user->date;
         $time = $user->time;
 
-        $audit_trail = new AuditTrail();
-        $audit_trail->user_id = Auth::user()->id;
-        $audit_trail->username = Auth::user()->username;
-        $audit_trail->activity = 'Change appointment status to cancel';
-        $audit_trail->usertype = Auth::user()->usertype;
-        $audit_trail->save();
+        $activity = "Change appointment status to cancel";
+        $this->Audit_trail($activity);
 
         Mail::to($user->email)->send(new Cancelappointmentpatient($fullname, $date, $time));
 

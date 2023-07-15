@@ -12,6 +12,17 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+
+    public function Audit_trail($activity){
+
+        $audit_trail = new AuditTrail();
+        $audit_trail->user_id = Auth::user()->id;
+        $audit_trail->username = Auth::user()->username;
+        $audit_trail->activity = $activity;
+        $audit_trail->usertype = Auth::user()->usertype;
+        $audit_trail->save();
+
+    }
     public function profile(){
         
         if(Auth::user()->usertype == 'admin'){
@@ -89,14 +100,9 @@ class UserController extends Controller
                   $user->emailstatus = "unverified";
                   $user->usertype = $request->input('usertype');
                   $user->save();
-      
-                  $audit_trail = new AuditTrail();
-                  $audit_trail->user_id = Auth::user()->id;
-                  $audit_trail->username = Auth::user()->username;
-                  $audit_trail->activity = 'Create new account ';
-                  $audit_trail->usertype = Auth::user()->usertype;
-                  $audit_trail->save();
 
+                  $activity = "Create new account ";
+                  $this->Audit_trail($activity);
 
                   return response()->json([
                       'status'=>200,
@@ -105,8 +111,6 @@ class UserController extends Controller
               }
 
         }else{
-
-
 
             $validator = Validator::make($request->all(), [
                 "first_name" => ['required'],
@@ -165,30 +169,18 @@ class UserController extends Controller
                 $user->usertype = "patient";
                 $user->save();
     
-                $audit_trail = new AuditTrail();
-                $audit_trail->user_id = Auth::user()->id;
-                $audit_trail->username = Auth::user()->username;
-                $audit_trail->activity = 'Create new account ';
-                $audit_trail->usertype = Auth::user()->usertype;
-    
-                $audit_trail->save();
+                $activity = "Create new account ";
+                $this->Audit_trail($activity);
                 
                 return response()->json([
                     'status'=>200,
                     'message' => 'audit trail',
                 ]);
             }
-
-
-
         }
-
-     
-      
     }
 
     public function update_user($id, Request $request){
-
         
         if(Auth::user()->usertype == 'admin'){
             $validator = Validator::make($request->all(), [
@@ -218,53 +210,46 @@ class UserController extends Controller
                   'status.required' => 'status is required',
                 ]);
       
-              if($validator->fails())
-              {
+              if($validator->fails()){
                   return response()->json([
                       'status'=>400,
                       'errors'=> $validator->messages(),
                   ]);
-              }else
-              {
-                  if($request->input('password') == null){
-                      $arrItem = array(
-                          'fname' =>$request->get('first_name'),
-                          'mname' => $request->get('mname'),
-                          'lname' => $request->get('last_name'),
-                          'birthday' => $request->get('birthday'),
-                          'age' => $request->get('age'),
-                          'address' => $request->get('address'),
-                          'gender' => $request->get('gender'),
-                          'mobileno' => $request->get('mobile_number'),
-                          'email' => $request->get('email'),
-                          'usertype' => $request->get('usertype'),
-                          'status' => $request->get('status'),
-                      );
-                      DB::table('users')->where('id', $id)->update($arrItem);
+              }else{
+                if($request->input('password') == null){
+                    $arrItem = array(
+                        'fname' =>$request->get('first_name'),
+                        'mname' => $request->get('mname'),
+                        'lname' => $request->get('last_name'),
+                        'birthday' => $request->get('birthday'),
+                        'age' => $request->get('age'),
+                        'address' => $request->get('address'),
+                        'gender' => $request->get('gender'),
+                        'mobileno' => $request->get('mobile_number'),
+                        'email' => $request->get('email'),
+                        'usertype' => $request->get('usertype'),
+                        'status' => $request->get('status'),
+                    );
+                    DB::table('users')->where('id', $id)->update($arrItem);
 
-                      $audit_trail = new AuditTrail();
-                      $audit_trail->user_id = Auth::user()->id;
-                      $audit_trail->username = Auth::user()->username;
-                      $audit_trail->activity = 'update account ';
-                      $audit_trail->usertype = Auth::user()->usertype;
-                      $audit_trail->save();
-      
-                  }else{
+                    $activity = "Update account";
+                    $this->Audit_trail($activity);
+                    
+                }else{
 
                     $validator = Validator::make($request->all(), [
                          "password" => 'confirmed|min:8',
                     ],[
                         'password.confirmed' => 'Password did not match',
-                      ]);
+                    ]);
 
-                      if($validator->fails())
-                      {
-                          return response()->json([
-                              'status'=>400,
-                              'errors'=> $validator->messages(),
-                          ]);
-                      }else
-                      {
+                    if($validator->fails())
+                    {
+                        return response()->json([
+                            'status'=>400,
+                            'errors'=> $validator->messages(),
+                        ]);
+                    }else{
 
                         $encrypt = bcrypt($request->input('password'));
                         $arrItem = array(
@@ -281,27 +266,20 @@ class UserController extends Controller
                             'usertype' => $request->get('usertype'),
                             'status' => $request->get('status'),
                         );
+
                         DB::table('users')->where('id', $id)->update($arrItem);
 
-                        $audit_trail = new AuditTrail();
-                        $audit_trail->user_id = Auth::user()->id;
-                        $audit_trail->username = Auth::user()->username;
-                        $audit_trail->activity = 'update account ';
-                        $audit_trail->usertype = Auth::user()->usertype;
-                        $audit_trail->save();
+                        $activity = "Update account";
+                        $this->Audit_trail($activity);
 
                         return response()->json([
                             'status'=>200,
                             
                         ]);
-
-                      }
-
-                  }
-              }
-
+                    }
+                }
+            }
   
-
         }else{
 
             $validator = Validator::make($request->all(), [
@@ -349,12 +327,8 @@ class UserController extends Controller
                     );
                     DB::table('users')->where('id', $id)->update($arrItem);
 
-                    $audit_trail = new AuditTrail();
-                    $audit_trail->user_id = Auth::user()->id;
-                    $audit_trail->username = Auth::user()->username;
-                    $audit_trail->activity = 'update account';
-                    $audit_trail->usertype = Auth::user()->usertype;
-                    $audit_trail->save();
+                   $activity = "Update account";
+                    $this->Audit_trail($activity);
 
                     return response()->json([
                         'status'=>200,
@@ -367,52 +341,7 @@ class UserController extends Controller
 
         }
 
- 
-      
     }
-
-    //delete user 
-    public function delete_user($id)
-    {
-
-        
-        if(Auth::user()->usertype == 'admin'){
-
-            DB::table('users')->where('id', $id)->delete();
-
-
-            $audit_trail = new AuditTrail();
-            $audit_trail->user_id = Auth::user()->id;
-            $audit_trail->username = Auth::user()->username;
-            $audit_trail->activity = 'Delete an account ';
-            $audit_trail->usertype = Auth::user()->usertype;
-
-            return response()->json([
-                'status'=>200,
-                    'message' => 'deleted successfully',
-            ]);
-
-        }else{
-
-            DB::table('users')->where('id', $id)->delete();
-
-            $audit_trail = new AuditTrail();
-            $audit_trail->user_id = Auth::user()->id;
-            $audit_trail->username = Auth::user()->username;
-            $audit_trail->activity = 'Delete an account ';
-            $audit_trail->usertype = Auth::user()->usertype;
-
-            return response()->json([
-                'status'=>200,
-                    'message' => 'deleted successfully',
-            ]);
-            
-        }
-
-
-   
-    }
-
 
     //show user data in edit page
     public function edit_user($id){
@@ -434,7 +363,6 @@ class UserController extends Controller
             }
 
         }else{
-
             
             $user = User::where('id', $id )->get();
             if($user){
@@ -450,13 +378,10 @@ class UserController extends Controller
             }
             
         }
-
-
        
     }
 
     public function profile_paginate(Request $request){
-
         
         if(Auth::user()->usertype == 'admin'){
 
@@ -474,10 +399,10 @@ class UserController extends Controller
             }
 
         }else{
+
             $patients = DB::table('users')->where('usertype', 'patient')->whereNot('status', 'pending')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'patient');
-                return view('pagination.pagination_patient', compact('patients'))->render();
+            return view('pagination.pagination_patient', compact('patients'))->render();
         }
   
-       
     }
 }

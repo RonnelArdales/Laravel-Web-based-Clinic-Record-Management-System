@@ -12,7 +12,7 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::get('/sendsms', [AuthController::class, 'sendsms']);
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');//show dashboard page
 
-    //----------------------Profile----------------------------//
+    //---------------------- User ----------------------------//
     Route::get('/profile', [UserController::class, 'profile'])->name('admin.profile');
     Route::post('/profile/createuser/store', [UserController::class, 'store_user']); 
     Route::get('/profile/edit/{id}', [UserController::class, 'edit_user'])->name('users.show');

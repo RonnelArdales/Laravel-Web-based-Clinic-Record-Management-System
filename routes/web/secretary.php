@@ -12,12 +12,11 @@ Route::prefix('/secretary')->middleware('auth', 'verify' ,'issecretary' )->group
     
     Route::get('/dashboard',  [SecretaryController::class, 'dashboard'] );
 
-    //-------------------Users -------------------------------//
+    //------------------- Users -------------------------------//
     Route::get('/profile', [SecretaryController::class, 'profile'])->name('secretary.profile') ;  
     Route::post('/profile/createuser/store', [UserController::class, 'store_user']);  
     Route::get('/profile/edit/{id}', [UserController::class, 'edit_user'])->name('users.show');
     Route::put('/profile/update/{id}', [UserController::class, 'update_user']);
-    Route::delete('/profile/delete/{id}', [UserController::class, 'delete_user']); 
     Route::get('/profile/pagination/paginate-data', [UserController::class, 'profile_paginate']);
 
     //------------------ Pending user -----------------//

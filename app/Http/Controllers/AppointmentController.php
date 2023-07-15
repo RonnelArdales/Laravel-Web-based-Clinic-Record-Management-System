@@ -120,15 +120,13 @@ class AppointmentController extends Controller
                         ->make(true);
             }
 
-
         }else{
+            
             if ($request->ajax()) {
                 $data = Appointment::where('status', 'success')->orderby('created_at', 'desc');
                 return Datatables::of($data)
                         ->make(true);
             }
-
-            //secretary side
   
         }
     }
