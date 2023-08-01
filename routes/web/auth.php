@@ -10,12 +10,9 @@ Route::group(['middleware' => ['auth']], function() {
     //-----------search------------//
 
     Route::get('/diagnosis/filter/{year}', [SearchController::class, 'filter_diagnosis']);
-    Route::get('/profile/search-name', [SearchController::class, 'profile_search_user']);
-    Route::get('/profile/search-usertype', [SearchController::class, 'search_usertype']);
+    Route::get('/user/search-name', [SearchController::class, 'profile_search_user']);
+    Route::get('/user/search-usertype', [SearchController::class, 'search_usertype']);
     Route::get('/appointment/search-name', [SearchController::class, 'appointment_search_user']);
-    Route::get('/getservice/{id}', [AdminController::class, 'get_service']);
-    Route::get('/getdiscount/{id}', [AdminController::class, 'get_discount']);
-    Route::get('/discount', [AdminController::class, 'index_discount']);
 
     //----------filter report -----------//
 

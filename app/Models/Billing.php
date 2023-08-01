@@ -18,4 +18,6 @@ class Billing extends Model
         return $this->belongsTo(User::class, 'user_id', 'id'); // select * from user where 
         // return $this->hasMany(User::class, 'id', 'user_id');
     }
+
+
 }

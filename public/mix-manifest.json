@@ -1,0 +1,21 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/js/admin/user.js": "/js/admin/user.js",
+    "/js/admin/document.js": "/js/admin/document.js",
+    "/js/admin/consultation/create.js": "/js/admin/consultation/create.js",
+    "/js/admin/consultation/index.js": "/js/admin/consultation/index.js",
+    "/js/admin/consultation/view.js": "/js/admin/consultation/view.js",
+    "/js/secretary/user.js": "/js/secretary/user.js",
+    "/js/admin_secretary/pending.js": "/js/admin_secretary/pending.js",
+    "/js/admin_secretary/appointment.js": "/js/admin_secretary/appointment.js",
+    "/js/admin_secretary/queuing.js": "/js/admin_secretary/queuing.js",
+    "/js/admin_secretary/transaction.js": "/js/admin_secretary/transaction.js",
+    "/js/admin_secretary/billing.js": "/js/admin_secretary/billing.js",
+    "/js/system_settings/service.js": "/js/system_settings/service.js",
+    "/js/system_settings/discount.js": "/js/system_settings/discount.js",
+    "/js/system_settings/businessHours.js": "/js/system_settings/businessHours.js",
+    "/js/system_settings/modeofpayment.js": "/js/system_settings/modeofpayment.js",
+    "/js/system_settings/guestpage/index.js": "/js/system_settings/guestpage/index.js",
+    "/js/system_settings/guestpage/edit.js": "/js/system_settings/guestpage/edit.js",
+    "/css/app.css": "/css/app.css"
+}

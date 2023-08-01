@@ -3,27 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guestpage;
+use App\Services\system_settings\GuestpageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class GuestpageController extends Controller
 {
-    public function index_guestpage(){
-        $speak_with_you = Guestpage::where('title', 'speak with you')->select('content')->first() ;
-        $about_us_1 = Guestpage::where('title', 'about us 1')->first();
-        $about_us_2 = Guestpage::where('title', 'about us 2')->first();
-        $doctors_info = Guestpage::where('title', 'doctor info')->first();
-        $speakingup = Guestpage::where('title', 'why speaking up is important important?')->first();
-
-        return view('Guest_homepage', ['speakwithyou' => $speak_with_you])->with('aboutus1', $about_us_1)
-                                                                          ->with('aboutus2', $about_us_2)
-                                                                          ->with('doctorsinfo', $doctors_info)
-                                                                          ->with('speakingup', $speakingup);
+    public function index(){
+            $content = Guestpage::all();
+            return view('system_settings.guestpage', ['guestpages' => $content]);
     }
 
-    public function aboutus(){
-        $about_us_1 = Guestpage::where('title', 'about us 1')->first();
-        $about_us_2 = Guestpage::where('title', 'about us 2')->first();
-    
-        return view('patient.about_us')->with('aboutus1', $about_us_1)->with('aboutus2', $about_us_2);
+    public function edit(Guestpage $guestpage){
+        return view('system_settings.edit_guestpage', ['guestpages' => $guestpage]);
+    }
+
+    public function update(Guestpage $guestpage, Request $request){
+        $validator = Validator::make($request->all(), [
+            'image' => 'bail|mimes:img,jpg,png|max:3000'
+        ],[
+            'image.mimes'=>'the file must be a image',
+        ])->stopOnFirstFailure(true);
+
+        if($validator->fails()) {
+            return Redirect::back()->withErrors($validator);
+        }else{
+
+            $data = (new GuestpageService())->update($guestpage, $request->all(), $request->image);
+
+            if(Auth::user()->usertype === "admin"){
+                return redirect()->route('admin.guestpage.index')->with('success', 'updated Successfully');
+            }else{
+                return redirect()->route('secretary.guestpage.index')->with('success', 'updated Successfully');
+            }
+        }
     }
 }

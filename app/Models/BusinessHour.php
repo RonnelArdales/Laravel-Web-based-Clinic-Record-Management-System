@@ -13,10 +13,15 @@ class BusinessHour extends Model
     protected $guarded = [];
 
 
-    public function getFromAttribute($value)
-{
-    return Carbon::parse($value)->format('h:i A');
-}
+    public function getFromAttribute($value){
+        return Carbon::parse($value)->format('h:i A');
+    }
+
+    public static function getBusinessHour(){
+       $businesshours = self::select('day')->where('off', '1')->groupBy('day')->get();
+
+       return $businesshours;
+    }
 
     // public function getTimesPeriodAttribute()
     // {
@@ -34,5 +39,6 @@ class BusinessHour extends Model
 
     //     }, $times);
     // }
+
     
 }

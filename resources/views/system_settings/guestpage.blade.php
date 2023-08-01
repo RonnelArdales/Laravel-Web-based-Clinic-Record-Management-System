@@ -23,7 +23,12 @@
                 <td>{!! \Illuminate\Support\Str::limit(strip_tags($guestpage->content), 20) !!}</td>
                 <td>{{$guestpage->updated_at}}</td>
                 <td>
-                    <a href="/admin/guestpage/edit/{{$guestpage->id}}" class="edit btn btn-primary btn-sm">Edit</a>
+                    @if (Auth::user()->usertype === "admin")
+                        <a href="{{route('admin.guestpage.edit', $guestpage->id )}}" class="edit btn btn-primary btn-sm">Edit</a>
+                    @else
+                        <a href="{{route('secretary.guestpage.edit', $guestpage->id )}}" class="edit btn btn-primary btn-sm">Edit</a>
+                    @endif
+                    
                 </td>
             </tr>
             @endforeach
@@ -33,30 +38,7 @@
 @endsection
 
 @section('scripts')
-<script>
-    $(document).ready(function (){
-        setTimeout(function() {
-            $(".success").fadeOut(800);
-            }, 2000);
 
-        deleteall();
+<script src="{{mix('js/system_settings/guestpage/index.js')}}"></script>
 
-        function deleteall () {
-            if (window.location.href) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: "post",
-                    url: "/admin/billing/addtocart/deleteall",
-                    datatype: "json",
-                    success: function(response){ 
-                    }
-                });   
-            }
-        }
-    });
-</script>
 @endsection

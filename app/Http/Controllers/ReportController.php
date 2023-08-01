@@ -28,7 +28,6 @@ class ReportController extends Controller
         
     }
 
-
     public function view_appointment(Request $request){
         $mops = Modeofpayment::all();
         $appointments = Appointment::orderBy('created_at', 'desc')->paginate(10, ['*'], 'appointments');

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\AuditTrailService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,18 +12,17 @@ class Appointment extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $primaryKey = 'id';
+
     protected $casts = [
         'date' => 'date',
     ];
 
     public function setDateAttribute( $value ) {
-        $this->attributes['date'] = Carbon::createFromFormat('m-d-Y', $value)->format('Y-m-d');
 
+            $this->attributes['date'] = Carbon::createFromFormat('m-d-Y', $value)->format('Y-m-d');
+   
       }
-    //   public function setTimeAttribute( $value ) {
-    //     $this->attributes['time'] = Carbon::createFromFormat('h:i A', $value)->format('H:i:s');
-
-    //   }
 
     public function getDateAttribute($value)
     {

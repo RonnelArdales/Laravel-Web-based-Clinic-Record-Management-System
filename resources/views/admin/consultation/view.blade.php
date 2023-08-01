@@ -22,37 +22,12 @@
                         <h3 class="card-title">Patient Record</h3>
                     </div>
                     <div class="card-body mt-3">
-                        <div class="" style="background:#EDDBC0; padding: 20px 30px ;border-left:12px solid white; border-radius: 5px;box-shadow:  4px 4px 2px rgba(0, 0, 0, 0.25)">
-                            Patient name: <label style="font-size: 23px" for=""><b> {{$userinfo->fname}} {{$userinfo->lname}}</b></label>
-                        </div>
+                  
+                    <x-patientname :userinfo="$userinfo" />
 
                         <div class="row mt-3" style="padding-left:15px " >
-                            <div class="rounded    row col-md" style="height:420px; margin:0px;padding-top:10px ; margin-right:18px ;background: #EDDBC0; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); ">  
-                                <div class="col-sm " >
-                                    <label style="font-size:  20px" for=""><b>Basic Information:</b> </label>
-                                    <hr style="margin-top:10px">
-                                    
-                                    <label style="font-size: 13px;" for="">Address:</label><br>
-                                    <label style="font-family: 'Poppins';font-style: normal; font-size:18px"  for="">{{$userinfo->address}} </label><br>
-
-                                    <label style="font-size: 13px; margin-top:8px" for="">Age:</label><br>
-                                    <label style="font-size: 18px" for="">{{$userinfo->age}} </label><br>
-
-                                    <label style="font-size: 13px;  margin-top:8px" for="">Gender:</label><br>
-                                    <label style="font-size: 18px" for="">{{$userinfo->gender}} </label><br>
-
-                                    <label style="font-size: 13px;  margin-top:8px" for="">Contact no:</label><br>
-                                    <label style="font-size: 18px" for="">{{$userinfo->mobileno}} </label><br>
-                                        
-                                    <label style="font-size: 13px; margin-top:8px" for="">Email:</label><br>
-                                    <label style="font-size: 18px" for="">{{$userinfo->email}}</label><br>
-
-                                    <label style="font-size: 13px; margin-top:8px" for="">Last appointment:</label><br>
-                                    <label style="font-size: 18px" for="">{{ date('M d, Y ', strtotime($last->date))}}</label><br>
-                                    <div class="d-flex justify-content-center row" style="text-align: center; margin-top:20px">
-                                    </div>
-                                </div>
-                            </div>
+                            
+                            <x-patientbasicinfo :userinfo="$userinfo" :last="$last" />
 
                             <div class="col-md-8" style="margin-right:15px;border-radius: 5px; padding:0px; box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25); background: #EDDBC0; padding-left:15px; padding-right:15px; padding-bottom:50px">
                                 <div style="margin-top:5px; " class="d-flex justify-content-between" >
@@ -165,35 +140,9 @@
                    
 
 @section('scripts')
-<script>
-    $(document).ready(function() {
 
-        $('#printer').on('click', function(e) {
-            e.preventDefault();
-            $('#encrypt-confirmation').modal('show');
-        })
+<script src="{{mix('js/admin/consultation/view.js')}}"></script>
 
-        $('#set-encrypt').on('click', function(e) {
-            e.preventDefault();
-            $('#adminpass, #userpass, #type ' ).html("");
-            $('#type').val('encrypt');
-            $('#encrypt-confirmation').modal('hide');
-            $('#insert-password').modal('show');
-        })
-
-        $("#insert-password").on("hidden.bs.modal", function(e){
-            e.preventDefault();
-            $('#adminpass, #userpass, #type  ' ).html("");
-        });
-
-        window.addEventListener('beforeunload', function () {
-            // Close any open modal windows
-            $('#adminpass, #userpass, #type  ' ).html("");
-            $('#insert-password').modal('hide');
-            $('#encrypt-confirmation').modal('hide');
-        });
-    })
-</script>
 @endsection
 
 

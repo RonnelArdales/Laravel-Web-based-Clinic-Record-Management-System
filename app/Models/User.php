@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -53,8 +54,8 @@ class User extends Authenticatable
     ];
 
     public function appointment(){
-                                        //1st parameter - unique id sa appointment table
-                                       //2nd parameter - unique id sa user table (sa table na pagmumulan ng data)
+        //1st parameter - unique id sa appointment table
+       //2nd parameter - unique id sa user table (sa table na pagmumulan ng data)
         return $this->hasOne(Appointment::class, 'user_id', 'id'); // select * from appointment where id or userid = 
     }
 
@@ -65,4 +66,5 @@ class User extends Authenticatable
     public function consultation(){
         return $this->hasMany(Consultation::class, 'user_id', 'id');
     }
+ 
 }

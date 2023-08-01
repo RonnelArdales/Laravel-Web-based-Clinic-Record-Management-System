@@ -23,8 +23,13 @@
         @if (session()->has('success'))
             <div class="alert alert-success success"  id="success" >{{ session('success') }}</div> 
         @endif
-  
-        <form action="/admin/reservationfee/update/{{$reservationfee->id}}" method="POST">
+
+        @if (auth()->user()->usertype === 'admin')
+            <form action="{{route('admin.reservationfee.update', $reservationfee->id )}}" method="POST">
+        @else
+            <form action="{{route('secretary.reservationfee.update', $reservationfee->id )}}" method="POST">
+        @endif
+     
             @method('PUT')
             @csrf
         

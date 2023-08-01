@@ -9,4 +9,10 @@ class Reservationfee extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $table = 'reservationfees';
+
+    public static function getReservationfee(){
+        return self::select('reservationfee')->first();
+
+    }
 }

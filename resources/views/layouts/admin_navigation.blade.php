@@ -403,8 +403,8 @@
                               </a>
                          </li>
 
-                         <li class=" my-1 mx-3  {{Request::is('admin/profile') ? 'active-bar' : '';}}">
-                              <a href="/admin/profile"> 
+                         <li class=" my-1 mx-3  {{Request::is('admin/user') ? 'active-bar' : '';}}">
+                              <a href="/admin/user"> 
                                    <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" alt=""> 
                               <span>User</span> 
                               </a>
@@ -454,14 +454,14 @@
                                                   Request::is('admin/consultation/viewconsultation/*/*')
                                              
                          ? 'active-bar' : '';}}">
-                              <a href="/admin/consultation"> 
+                              <a href="{{route('consultation.index')}}"> 
                                    <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/consult_las4n9.png" alt=""> 
                                    <span>Consultation</span>
                               </a>
                          </li>
 
                          <li class=" my-1 mx-3 {{Request::is('admin/document') ? 'active-bar' : '';}}">
-                              <a href="/admin/document"> 
+                              <a href="{{route('document.index')}}"> 
                                    <img class="icon" src="{{url('logo/documents.png')}}" alt=""> 
                                    <span>Documents</span>
                               </a>
@@ -522,7 +522,7 @@
                          </ul> 
      
                          <li class=" my-1 mx-3 {{ Request::is('admin/service') ||
-                                                  Request::is('admin/discount') ||
+                                                  Request::is('admidn/discount') ||
                                                   Request::is('admin/business_hours') ||
                                                   Request::is('admin/guestpage') ||
                                                   Request::is('admin/reservationfee') ||
@@ -543,21 +543,21 @@
                               ? 'show' : 'collapse';}} flex-column list-unstyled" id="setting" data-bs-parent="#menu">
                               
                               <li class=" my-1 mx-3  {{Request::is('admin/service') ? 'active-bar' : '';}}">
-                                   <a href="/admin/service"> 
+                                   <a href="{{ route('admin.service.index') }}"> 
                                         <img class="icon dropdown" src="{{url('/logo/service.png')}}" alt=""> 
                                         <span>Service</span>
                                    </a>
                               </li>
 
                               <li class=" my-1 mx-3 {{Request::is('admin/discount') ? 'active-bar' : '';}}">
-                                   <a href="/admin/discount"> 
+                                   <a href="{{route('admin.discount.index')}}"> 
                                         <img class="icon dropdown" src="{{url('/logo/discount2.png')}}" alt=""> 
                                         <span>Discount</span>
                                    </a>
                               </li>
 
                               <li class=" my-1 mx-3 {{Request::is('admin/modeofpayment') ? 'active-bar' : '';}}">
-                                   <a href="/admin/modeofpayment"> 
+                                   <a href="{{route('admin.modeofpayment.index')}}"> 
                                         <img class="icon dropdown" src="{{url('/logo/discount2.png')}}" alt=""> 
                                         <span style="font-size: 17.5px" >Mode of Payment</span>
                                    </a>
@@ -571,14 +571,14 @@
                               </li>
 
                               <li class=" my-1 mx-3 {{Request::is('admin/guestpage') ? 'active-bar' : '';}}">
-                                   <a href="/admin/guestpage"> 
+                                   <a href="{{route('admin.guestpage.index')}}"> 
                                         <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296805/JG%20marquez/guestpage_zylemm.png" alt=""> 
                                         <span>Guestpage</span>
                                    </a>
                               </li>
 
                               <li class=" my-1 mx-3 {{Request::is('admin/reservationfee') ? 'active-bar' : '';}}">
-                                   <a href="/admin/reservationfee"> 
+                                   <a href="{{route('admin.reservationfee.index')}}"> 
                                         <img class="icon dropdown" src="{{url('logo/reservationsettings.png')}}" alt=""> 
                                         <span>Reservation Fee</span>
                                    </a>
@@ -596,8 +596,8 @@
                               </a>
                          </li>
 
-                         <li class=" my-1 mx-3  {{Request::is('secretary/profile') ? 'active-bar' : '';}}">
-                              <a href="/secretary/profile"> 
+                         <li class=" my-1 mx-3  {{Request::is('secretary/user') ? 'active-bar' : '';}}">
+                              <a href="/secretary/user"> 
                                    <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" alt=""> 
                                    <span>User</span> 
                               </a>
@@ -699,14 +699,14 @@
                                         ? 'show' : 'collapse';}} flex-column list-unstyled" id="setting" data-bs-parent="#menu">
                               
                               <li class=" my-1 mx-3  {{Request::is('secretary/service') ? 'active-bar' : '';}}">
-                                   <a href="/secretary/service"> 
+                                   <a href="{{route('secretary.service.index')}}"> 
                                         <img class="icon dropdown" src="{{url('/logo/service.png')}}" alt=""> 
                                         <span>Service</span>
                                    </a>
                               </li>
 
                               <li class=" my-1 mx-3 {{Request::is('secretary/discount') ? 'active-bar' : '';}}">
-                                   <a href="/secretary/discount"> 
+                                   <a href="{{route('secretary.discount.index')}}"> 
                                         <img class="icon dropdown" src="{{url('/logo/discount2.png')}}" alt=""> 
                                         <span>Discount</span>
                                    </a>
@@ -720,21 +720,21 @@
                               </li>
 
                               <li class=" my-1 mx-3 {{Request::is('secretary/guestpage') ? 'active-bar' : '';}}">
-                                   <a href="/secretary/guestpage"> 
+                                   <a href="{{route('secretary.guestpage.index')}}"> 
                                         <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296805/JG%20marquez/guestpage_zylemm.png" alt=""> 
                                         <span>Guestpage</span>
                                    </a>
                               </li>
 
                               <li class=" my-1 mx-3 {{Request::is('secretary/reservationfee') ? 'active-bar' : '';}}">
-                                   <a href="/secretary/reservationfee"> 
+                                   <a href="{{route('secretary.reservationfee.index')}}"> 
                                         <img class="icon dropdown" src="{{url('logo/reservationsettings.png')}}" alt=""> 
                                         <span>Reservation Fee</span>
                                    </a>
                                    </li>
 
                               <li class=" my-1 mx-3 {{Request::is('secretary/modeofpayment') ? 'active-bar' : '';}}">
-                                   <a href="/secretary/modeofpayment"> 
+                                   <a href="{{route('secretary.modeofpayment.index')}}"> 
                                         <img class="icon dropdown" src="{{url('/logo/discount2.png')}}" alt=""> 
                                         <span style="font-size: 17.5px" >Mode of Payment</span>
                                    </a>
@@ -783,9 +783,9 @@
 
      <div class=" my-container active-cont">
           <div class="p-1 main overflow-auto ">
-               <a style="background-color: #829460; padding:10px"  id="menu-btn">
+               {{-- <a style="background-color: #829460; padding:10px"  id="menu-btn">
                     <img width="30" height="30" src="{{url('/logo/menu.png')}}" alt="">
-               </a>
+               </a> --}}
                          
                @yield('content')       
           </div>
@@ -794,10 +794,11 @@
      <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
      <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+     
 
      @yield('scripts')
 
-     <script>
+     {{-- <script>
      var menu_btn = document.querySelector("#menu-btn");
      var sidebar = document.querySelector("#sidebar");
      var container = document.querySelector(".my-container");
@@ -806,7 +807,7 @@
      sidebar.classList.toggle("active-nav") + main.classList.toggle("add-left") ;
      container.classList.toggle("active-cont") ;
      });
-     </script>
+     </script> --}}
 </body>
 </html>
 

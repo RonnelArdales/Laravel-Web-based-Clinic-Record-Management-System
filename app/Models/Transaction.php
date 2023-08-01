@@ -23,4 +23,8 @@ class Transaction extends Model
         return $this->belongsTo(User::class, 'user_id', 'id'); // select * from user where 
         // return $this->hasMany(User::class, 'id', 'user_id');
     }
+
+    public static function getBilling(){
+        return self::distinct()->select('transno', 'user_id', 'fullname', 'sub_total', 'status', 'total' )->latest('created_at')->get();
+    }
 }

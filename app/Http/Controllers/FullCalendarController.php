@@ -2,19 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\patientbook;
 use App\Models\Appointment;
-use App\Models\Appointmentnew;
 use App\Models\BusinessHour;
 use App\Models\Dayoff_date;
-use App\Models\Discount;
-use App\Models\Reservationfee;
 use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
 
 class FullCalendarController extends Controller
 {
@@ -42,12 +35,7 @@ class FullCalendarController extends Controller
         return view('calendar.appointment', compact('day', 'days'))->with('day_array', $day_array)->with('walkin_array', $walkin_array)->with('date_array', $date_array);
     }
 
-    public function index_businesshour(){
-        $businessHours = BusinessHour::all();
-        $service = Service::all();
-        return view('calendar.businesshour', compact('businessHours'))->with('services', $service);
-    }
-    public function store(Request $request){
+    public function get_time(Request $request){
         
         $start = $request->start;
         $date = date('m-d-Y', strtotime($start));
@@ -64,13 +52,14 @@ class FullCalendarController extends Controller
 
         if(in_array($day_numeric, $day_array)){
 
-            return response()->json(['status' => 405, 'message' => 'Sorry, this day is off' ]);
+            return response()->json(['status' => 405, 'message' => 'This date is not available' ]);
 
         }else{
             if( empty($availablehours) ){
                 return response()->json([
                     'status' => 405,
-                    'message' => "Sorry, no time available",
+                    'message' => "Sorry, this date is full",
+                    'working hours in specific day' => $workinghours,
                     'available time' => $availablehours
                 ]);
             }else{
@@ -83,7 +72,6 @@ class FullCalendarController extends Controller
             }
     
         }
-            
     }
 
     public function getprice($servicename, Request $request){

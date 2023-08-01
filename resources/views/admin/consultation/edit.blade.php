@@ -21,42 +21,15 @@
                 <div class="card-header" style="text-align: center; ">
                     <h3 class="card-title">Patient Record</h3>
                 </div>
-                    <div class="card-body mt-3">
-                        <div class="" style="background:#EDDBC0; padding: 20px 30px ;border-left:12px solid white; border-radius: 5px;box-shadow:  4px 4px 2px rgba(0, 0, 0, 0.25)">
-                            Patient name: <label style="font-size: 23px" for=""><b> {{$userinfo->fname}} {{$userinfo->lname}}</b></label>
-                        </div>
+                <div class="card-body mt-3">
+
+                    <x-patientname :userinfo="$userinfo" />
 
                         <div class="row mt-3" style="padding-left:15px " >
-                            <div class="rounded    row col-md" style="height:420px; margin:0px;padding-top:10px ; margin-right:18px ;background: #EDDBC0;
-                            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); ">  
-                                <div class="col-sm " >
-                                    <label style="font-size:  20px" for=""><b>Basic Information:</b> </label>
-                                    <hr style="margin-top:10px">
-                                    
-                                    <label style="font-size: 13px;" for="">Address:</label><br>
-                                    <label style="font-family: 'Poppins';font-style: normal; font-size:18px"  for="">{{$userinfo->address}} </label><br>
+                         
+                            <x-patientbasicinfo :userinfo="$userinfo" :last="$last" />
 
-                                    <label style="font-size: 13px; margin-top:8px" for="">Age:</label><br>
-                                    <label style="font-size: 18px" for="">{{$userinfo->age}} </label><br>
-
-                                    <label style="font-size: 13px;  margin-top:8px" for="">Gender:</label><br>
-                                    <label style="font-size: 18px" for="">{{$userinfo->gender}} </label><br>
-
-                                    <label style="font-size: 13px;  margin-top:8px" for="">Contact no:</label><br>
-                                    <label style="font-size: 18px" for="">{{$userinfo->mobileno}} </label><br>
-                                        
-                                    <label style="font-size: 13px; margin-top:8px" for="">Email:</label><br>
-                                    <label style="font-size: 18px" for="">{{$userinfo->email}}</label><br>
-
-                                    <label style="font-size: 13px; margin-top:8px" for="">Last appointment:</label><br>
-                                    <label style="font-size: 18px" for="">{{ date('M d, Y ', strtotime($last->date))}}</label><br>
-                                    {{-- {{$last->date->format('M d, Y')}} --}}
-                                    <div class="d-flex justify-content-center row" style="text-align: center; margin-top:20px">
-                                    </div>
-
-                                </div>
-                            </div>
-                        <div class="col-md-8" style="margin-right:15px;border-radius: 5px; padding:0px; box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25); background: #EDDBC0; padding-left:15px; padding-right:15px; padding-bottom:50px">
+                            <div class="col-md-8" style="margin-right:15px;border-radius: 5px; padding:0px; box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25); background: #EDDBC0; padding-left:15px; padding-right:15px; padding-bottom:50px">
                             <div style="margin-top:5px; " class="d-flex justify-content-between" >
                                 <a href="/admin/consultation/viewrecords/{{$userinfo->id}} " class="btn "><img height="20" width="20" src="{{url('logo/arrow.png')}}" alt=""></a>
                             </div>
@@ -66,7 +39,7 @@
                                 <label style="font-size:  24px" for=""><b> Edit consultation</b></label>
                             </div>
 
-                            <form action="/admin/consultation/update/{{$consultations->id}}" method="POST">
+                            <form action="{{route('consultation.update', $consultations->id)}}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <input hidden name="user_id" value="{{$userinfo->id}}" type="text">
@@ -125,13 +98,6 @@
 </div>
 @endsection            
 
-@section('scripts')
-<script>
-    $(document).ready(function() {
-
-    })
-</script>
-@endsection
 
 
 

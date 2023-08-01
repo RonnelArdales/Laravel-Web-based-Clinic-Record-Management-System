@@ -25,39 +25,13 @@
                 </div>
 
                 <div class="card-body mt-3">
-                    <div class="" style="background:#EDDBC0; padding: 20px 30px ;border-left:12px solid white; border-radius: 5px;box-shadow:  4px 4px 2px rgba(0, 0, 0, 0.25)">
-                        Patient name: <label style="font-size: 23px" for=""><b> {{$userinfo->fname}} {{$userinfo->lname}}</b></label>
-                    </div>
+
+                    <x-patientname :userinfo="$userinfo" />
 
                     <div class="row mt-3" style="padding-left:15px " >
-                        <div class="rounded    row col-md" style="height:420px; margin:0px;padding-top:10px ; margin-right:18px ;background: #EDDBC0;
-                        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); ">  
-                            <div class="col-sm " >
-                                <label style="font-size:  20px" for=""><b>Basic Information:</b> </label>
-                                <hr style="margin-top:10px">
-                                
-                                <label style="font-size: 13px;" for="">Address:</label><br>
-                                <label style="font-family: 'Poppins';font-style: normal; font-size:18px"  for="">{{$userinfo->address}} </label><br>
+                        
+                        <x-patientbasicinfo :userinfo="$userinfo" :last="$last" />
 
-                                <label style="font-size: 13px; margin-top:8px" for="">Age:</label><br>
-                                <label style="font-size: 18px" for="">{{$userinfo->age}} </label><br>
-
-                                <label style="font-size: 13px;  margin-top:8px" for="">Gender:</label><br>
-                                <label style="font-size: 18px" for="">{{$userinfo->gender}} </label><br>
-
-                                <label style="font-size: 13px;  margin-top:8px" for="">Contact no:</label><br>
-                                <label style="font-size: 18px" for="">{{$userinfo->mobileno}} </label><br>
-                                    
-                                <label style="font-size: 13px; margin-top:8px" for="">Email:</label><br>
-                                <label style="font-size: 18px" for="">{{$userinfo->email}}</label><br>
-
-                                <label style="font-size: 13px; margin-top:8px" for="">Last appointment:</label><br>
-                                <label style="font-size: 18px" for="">{{ date('M d, Y ', strtotime($last->date))}}</label><br>
-                                <div class="d-flex justify-content-center row" style="text-align: center; margin-top:20px"></div>
-                            </div>
-            
-                    
-                        </div>
                         <div class="col-md-8" style="margin-right:15px;border-radius: 5px; padding:0px; box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25); background: #EDDBC0">
                             <div style="margin-top:5px; margin-left:10px">
                                 <a href="/admin/consultation"><img height="20" width="20" src="{{url('logo/arrow.png')}}" alt=""></a>
@@ -86,8 +60,8 @@
                                             <td>{{$consult->date}}</td>
                                             <td>{{$consult->time}}</td>
                                             <td style="text-align: center">
-                                                <a href="/admin/consultation/viewconsultation/{{$consult->id}}/{{$consult->user_id}}" class=" btn btn-sm btn-primary">View</a>
-                                                <a href="/admin/consultation/edit/{{$consult->id}}/{{$consult->user_id}}" class=" btn btn-sm btn-info" style="color: white" >Edit</a>
+                                                <a href="{{route('consultation.show', $consult->id, $consult->user_id)}}" class=" btn btn-sm btn-primary">View</a>
+                                                <a href="{{route('consultation.edit', $consult->id, )}}" class=" btn btn-sm btn-info" style="color: white" >Edit</a>
                                                 <button value="{{$consult->id}}" class=" delete btn btn-sm btn-danger" > Delete</button>
                                             </td> 
                                         </tr>

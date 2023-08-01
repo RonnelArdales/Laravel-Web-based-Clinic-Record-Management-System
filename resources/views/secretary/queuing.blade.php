@@ -72,60 +72,9 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function (){
-        // deleteall();
-
-        var complete = $('#today').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "/secretary/queuing",
-            dom: 'frtp',
-            pageLength: 10,
-            responsive: true,
-            columns: [
-                {data: 'id', name: 'id' , orderable: false, searchable: false},
-                {data: 'user_id', name: 'user_id' , orderable: false, searchable: false},
-                {data: 'fullname', name: 'fullname' , orderable: false},
-                {data: 'contact_no', name: 'contact_no' , orderable: false, searchable: false},
-                {data: 'email', name: 'email' , orderable: false, searchable: false},
-                {data: 'date', name: 'date' , orderable: false, searchable: false},
-                {data: 'time', name: 'time' , orderable: false, searchable: false},
-            ],
-            initComplete: function() {
-                var api = this.api();
-                var dataCount = api.data().length;
-                if (dataCount < 10) {
-                    $('#today_paginate').hide(); // Hide pagination element
-                }
-            }     
-        });
-
-        var upcoming = $('#upcoming').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "/secretary/queuing/upcoming",
-            dom: 'frtp',
-            pageLength: 10,
-            responsive: true,
-            columns: [
-                {data: 'id', name: 'id' , orderable: false, searchable: false},
-                {data: 'user_id', name: 'user_id' , orderable: false, searchable: false},
-                {data: 'fullname', name: 'fullname' , orderable: false},
-                {data: 'contact_no', name: 'contact_no' , orderable: false, searchable: false},
-                {data: 'email', name: 'email' , orderable: false, searchable: false},
-                {data: 'date', name: 'date' , orderable: false, searchable: false},
-                {data: 'time', name: 'time' , orderable: false, searchable: false},
-            ], 
-            initComplete: function() {
-                var api = this.api();
-                var dataCount = api.data().length;
-                if (dataCount < 10) {
-                    $('#upcoming_paginate').hide(); // Hide pagination element
-                }
-            }
-        });
-
-    });
+    let usertype = '{{ Auth::user()->usertype }}';
 </script>
+<script src="{{ mix('js/admin_secretary/queuing.js') }}"></script>
+
 
 @endsection

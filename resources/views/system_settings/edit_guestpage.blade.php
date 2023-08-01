@@ -12,7 +12,12 @@
         @foreach ($errors->all() as $message) 
         <div class="alert alert-danger error" id="error">{{ $message }}</div>
         @endforeach
-            <form action="/admin/guestpage/update/{{$guestpages->id}}" method="POST" enctype="multipart/form-data">
+
+        @if (Auth::user()->usertype === "admin")
+            <form action="{{route('admin.guestpage.update', $guestpages->id)}}" method="POST" enctype="multipart/form-data">
+        @else
+            <form action="{{route('secretary.guestpage.update', $guestpages->id)}}" method="POST" enctype="multipart/form-data">
+        @endif
                 @method('PUT')
                 @csrf
                 <div class="row"  >
@@ -74,66 +79,7 @@
 @endsection
 
 @section('scripts')
-<script>
-    $('#content').summernote({
-        placeholder: 'Hello stand alone ui',
-        tabsize: 2,
-        lineHeights: ['0.5', '1.0'],
-        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48' , '64', '82', '150'],
-        fontNames: ['Arial', 'Arial Black', 'Song Myung', 'Inter', 'Poppins'],
-        toolbar: [
-            ['height', ['height']],
-            ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear', 'italic']],
-            ['forecolor', ['color']], // Use 'forecolor' instead of 'color'
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['fontname', ['fontname']],
-            ['fontsize', ['fontsize']],
-            // ['insert', ['link', 'picture', 'video']],
-            ['view', ['fullscreen', 'codeview', 'help']]
-        ],
-        callbacks: {
-            onInit: function() {
-            // Find the background color button and remove it
-            $('.note-color').parent().remove();
-            }
-        }
-    });
-    $(document).ready(function (){
-        setTimeout(function() {
-            $(".error").fadeOut(800);
-        }, 2000);
 
-        deleteall();
-        
-        function deleteall () {
-            if (window.location.href) {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "post",
-                url: "/admin/billing/addtocart/deleteall",
-                datatype: "json",
-                success: function(response){ 
-                }
-            });
-                
-            }
-        }
-
-        $(document).on('click', '.change', function (){
-            $('.image').show();
-        });
-
-        $(document).on('click', '.remove', function (){
-            $('.image_featured').hide();
-            $('.image_noicon').show();
-            $('#image_status').val("remove");
-        });
-    });
-</script>
+<script src="{{mix('js/system_settings/guestpage/edit.js')}}"></script>
 
 @endsection

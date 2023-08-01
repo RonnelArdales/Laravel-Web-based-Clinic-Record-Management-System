@@ -9,4 +9,5 @@ class Addtocartservice extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
 }

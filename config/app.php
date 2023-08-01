@@ -159,6 +159,7 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
+        Barryvdh\Debugbar\ServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
@@ -218,6 +219,7 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade\PDF::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
         // 'PDF' => Elibyy\TCPDF\Facades\TCPDF::class
     ])->toArray(),
 

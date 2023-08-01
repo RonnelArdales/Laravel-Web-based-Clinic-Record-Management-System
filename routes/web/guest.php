@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\ClinicuserController;
+use App\Http\Controllers\Front_EndController;
 use App\Http\Controllers\GuestpageController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest'])->group(function () {
-    Route::get('/about_us', [GuestpageController::class, 'aboutus']);
-    Route::get('/', [GuestpageController::class, 'index_guestpage']);
+    Route::get('/about_us', [Front_EndController::class, 'aboutus']);
+    Route::get('/', [Front_EndController::class, 'homepage']);
     Route::get('/login', function () {return view('auth.login');})->name('login');
     Route::get('/register', function () {return view('auth.register');});
     Route::post('/store', [ClinicuserController::class, 'store']);

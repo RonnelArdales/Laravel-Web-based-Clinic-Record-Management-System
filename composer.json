@@ -16,6 +16,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
+        "proengsoft/laravel-jsvalidation": "^4.8",
         "realrashid/sweet-alert": "^7.0",
         "spatie/db-dumper": "^3.3",
         "twilio/sdk": "^7.3",

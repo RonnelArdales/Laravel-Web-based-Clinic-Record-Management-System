@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Front_EndController;
 use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\GuestpageController;
 use App\Http\Controllers\PatientController;
@@ -10,8 +11,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/patient')->middleware('auth','ispatient', 'verify')->group(function(){
 
-    Route::get('/homepage', [PatientController::class, 'homepage'])->name('patient.homepage');
-    Route::get('/about_us', [GuestpageController::class, 'aboutus']);
+    Route::get('/homepage', [Front_EndController::class, 'homepage'])->name('patient.homepage');
+    Route::get('/about_us', [Front_EndController::class, 'aboutus']);
+    
     //--------------profile-------------------------//
     Route::get('/profile', [PatientController::class, 'profileshow'])->name('patient.profile') ;
     Route::get('/profile/edit/user={id}', [PatientController::class, 'edit_profile']);
@@ -25,7 +27,6 @@ Route::prefix('/patient')->middleware('auth','ispatient', 'verify')->group(funct
    
     // ------------ appointment -------------------//
     Route::get('/appointment', [FullCalendarController::class, 'index']);
-    Route::get('/appointment/business-hour', [FullCalendarController::class, 'index_businesshour']);
     Route::post('/action', [FullCalendarController::class,'store']);
     Route::get('/service-get/{servicename}', [FullCalendarController::class,'getprice']);
     Route::post('/appointment/create', [FullCalendarController::class, 'create']);
