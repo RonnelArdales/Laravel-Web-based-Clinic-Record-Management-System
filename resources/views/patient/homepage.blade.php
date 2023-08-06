@@ -35,17 +35,19 @@
         </div>
         
         <div class="textpage1">
-            <h1 class="speak">Speak.</h1>
-            <h2 class="werehere">We're here for you.</h2>
-            
-            <div class="speakforyou" >
+            <h1 style="font-size: 6vw; margin-left:3%; margin-top:2.5rem; font-family:Song Myung; color:black; ">Speak.</h1>
+            <h2 style="font-size:2.8vw; margin-left:8.5%; margin-top: -2%; font-family:Song Myung; color:black;">We're here for you.</h2>
+            <div class="speakforyou"  style="margin-left:1.25rem; margin-right:1.25rem ;  margin-bottom: 3%;" >
                 {!!$speakwithyou->content!!}
             </div>
-
-            <div class="btnloginregister">
-                <a href="/register" class="btnregister" >Register</a> 
-                <a href="/login"  class="btnlogin"  >Log in</a> 
+            <div class="" style="margin-top: 25px">
+                @if (Auth::user()->status == 'pending')
+                <a hidden href="/patient/appointment/"  style="text-decoration:none; font-family:Poppins; font-weight:900; text-align:center; color:#829460; border: 0.2vw solid; line-height: 1vw;  border-radius: 2vw 0vw; margin-left: 0.5%; padding:0.4vw 2vw 0.4vw 2vw" class="button-size" >Book now</a> 
+                @else
+                <a href="/patient/appointment/"  style="text-decoration:none; font-family:Poppins; font-weight:900; text-align:center; color:#829460; border: 0.2vw solid; line-height: 1vw;  border-radius: 2vw 0vw; margin-left: 0.5%; padding:0.4vw 2vw 0.4vw 2vw" class="button-size" >Book now</a> 
+                @endif
             </div>
+           
         </div>
     </div>
     

@@ -484,12 +484,13 @@
 
 @section('scripts')
 
+
 <script>
     let usertype = "{{Auth::user()->usertype}}";
     let day_off = {!! json_encode($day_array) !!};
     let date_off = {!! json_encode($date_array) !!};
 </script>
 
-<script src="{{ mix('js/admin_secretary/appointment.js') }}"></script>
+@vite( 'resources/js/admin_secretary/appointment.js')
 
 @endsection

@@ -187,6 +187,7 @@
 <script>
     let usertype = '{{ Auth::user()->usertype }}';
 </script>
-<script src="{{ mix('js/admin_secretary/billing.js') }}"></script>
+
+@vite( 'resources/js/admin_secretary/billing.js')
 
 @endsection

@@ -164,6 +164,6 @@
         let usertype = "{{Auth::user()->usertype}}"; 
     </script>
 
-    <script src="{{mix('js/system_settings/service.js')}}"></script>
-
+    @vite( 'resources/js/system_settings/service.js')
+    
 @endsection

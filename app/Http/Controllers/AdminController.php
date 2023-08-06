@@ -11,7 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use mysqli;
 
 class AdminController extends Controller
 {
@@ -75,14 +75,6 @@ class AdminController extends Controller
         ;
     }
 
-    public function addtocart_paginate(Request $request){
-        $appointments = Appointment::all();
-        $addtocarts =  DB::table('addtocartservices')->paginate(4, ['*'], 'addtocart');
-        $services = Service::all();
-        $sum = Addtocartservice::sum('price');
-        return view('pagination.pagination_addtocart', compact('addtocarts', 'sum'))->render();
-    }
-
     public function get_filterdata(Request $request){
 
         $query = Appointment::query();
@@ -94,6 +86,55 @@ class AdminController extends Controller
         $appointments = $query->orderBy('created_at', 'desc')->paginate(10);
 
         return view('reports.searchresult.appointment_result', compact('appointments'))->render();
+    }
+
+    public function backup_database(){
+        
+        $databaseHost = env('DB_HOST');
+        $databasePort = env('DB_PORT');
+        $databaseName = env('DB_DATABASE');
+        $databaseUser = env('DB_USERNAME');
+        $databasePassword = env('DB_PASSWORD');
+
+        $mysqli = new mysqli($databaseHost, $databaseUser, $databasePassword, $databaseName);
+
+        if ($mysqli->connect_errno) {
+            die("Failed to connect to MySQL: " . $mysqli->connect_error);
+        }
+
+        $tables = array();
+        $result = $mysqli->query("SHOW TABLES");
+        while ($row = $result->fetch_array()) {
+            $tables[] = $row[0];
+        }
+
+        $backupPath = public_path('/backup.sql');
+        $backupFile = fopen($backupPath, 'w');
+
+        foreach ($tables as $table) {
+            $result = $mysqli->query("SELECT * FROM $table");
+            $numColumns = $result->field_count;
+
+            fwrite($backupFile, "DROP TABLE IF EXISTS $table;\n");
+            $createTableQuery = $mysqli->query("SHOW CREATE TABLE $table");
+            $createTable = $createTableQuery->fetch_assoc();
+            fwrite($backupFile, $createTable['Create Table'] . ";\n");
+
+            while ($row = $result->fetch_array()) {
+                $rowValues = array();
+                for ($i = 0; $i < $numColumns; $i++) {
+                    $rowValues[] = "'" . $mysqli->real_escape_string($row[$i]) . "'";
+                }
+                fwrite($backupFile, "INSERT INTO $table VALUES (" . implode(',', $rowValues) . ");\n");
+            }
+
+            fwrite($backupFile, "\n");
+        }
+
+        fclose($backupFile);
+        $mysqli->close();
+
+        return response()->download($backupPath)->deleteFileAfterSend(true);
     }
 
 }

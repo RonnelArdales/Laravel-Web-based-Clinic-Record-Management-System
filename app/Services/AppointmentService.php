@@ -95,23 +95,23 @@ class AppointmentService {
         return $appointment;
     }
 
-    public function update($data, $user){
+    public function update($data, $appointment){
 
         if($data['status'] == "Success"){
 
-            $user->update(['status' => "success"]);
+            $appointment->update(['status' => "success"]);
 
             (new AuditTrailService())->store('Change appointment status to success');
 
         }else if($data['status'] == "Cancel"){
 
-            $user->update(['status' => "cancel"]);
+            $appointment->update(['status' => "cancel"]);
 
-            Mail::to($user->email)->send(new Cancelappointment($user->fullname, $user->date, $user->time));
+            Mail::to($appointment->email)->send(new Cancelappointment($appointment->fullname, $appointment->date, $appointment->time));
 
             (new AuditTrailService())->store('Change appointment status to Cancel');
 
-            return $user;
+            return $appointment;
 
         }else{
 
@@ -119,29 +119,30 @@ class AppointmentService {
 
             if(Auth::user()->usertype === "admin" || Auth::user()->usertype === "secretary"){
 
-                $user->update([ 'date' => $data['date'],
+                $appointment->update([ 'date' => $data['date'],
                                 'time' => $time,  
                             ]);
                 
-                Mail::to($user->email)->send(new reschedule_admintopatient($user->fullname, $data['date'], $time));
+                Mail::to($appointment->email)->send(new reschedule_admintopatient($appointment->fullname, $data['date'], $time));
 
                 (new AuditTrailService())->store('Reschedule Appointment');
 
             }else{
-                $date = Carbon::createFromFormat('m-d-Y', $data['date'])->format('Y-m-d');
-
-                $user->update([ 'date' => $date,
+          
+            
+                $appointment->update([ 'date' =>$data['date'],
                                 'time' => $time,
-                                'reschedule_limit' => 1,
+                                'reschedule_limit' => 0,
                             ]);
 
                 $users = User::whereIn('usertype', ['secretary', 'admin'])->where('status', 'verified')->get();
                 
                 foreach($users as $user){
-                    Mail::to($user->email)->send(new reschedule_patienttoadmin($user->fullname, $date, $time));
+                    Mail::to($user->email)->send(new reschedule_patienttoadmin($appointment->fullname, $data['date'], $time));
                 }
 
                 (new AuditTrailService())->store('Reschedule Appointment');
+
             }
         }
 

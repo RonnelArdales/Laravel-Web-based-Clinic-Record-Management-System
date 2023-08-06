@@ -21,7 +21,8 @@
           <div class="me-auto col-md-8 col-md-offset-5">
                <h1> <b>CONSULTATION</b> </h1>
           </div>
-          <form style="margin-right:15px;" action="/backup-database" method="GET">
+          <form style="margin-right:15px;" action="/admin/backup-database" method="POST">
+               @csrf
                <button  style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" class="btn btn-primary ml-6 show-create " type="submit">Backup data</button>
           </form>
           <a href="{{route('consultation.create')}}" style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" class="btn btn-primary ml-6 show-create">Create</a>
@@ -52,7 +53,7 @@
 
 @section('scripts')
 
-<script src="{{ mix('js/admin/consultation/index.js') }}"></script>
+@vite( 'resources/js/admin/consultation/index.js')
 
 @endsection
 

@@ -53,9 +53,6 @@
             <h1 class="resetpassword1" >RESET</h1><br>
             <h1 class="resetpassword1" >PASSWORD.</h1>
         </div>
-        {{-- <div class="divvtitle2" >
-            <h1 class="resetpassword1" >RESET PASSWORD.</h1>
-        </div> --}}
         
         <div class="llinee"></div>
         @if(Session::has('success'))
@@ -63,7 +60,7 @@
                 <span class="block sm:inline">{{Session::get('success')}}</span>
             </div>
         @endif
-            <form action="/select/sendcode" method="POST">
+            <form action="/forgot_password/select/sendcode" method="POST">
                 @csrf
                 <div class="container">
                     <div class="row">

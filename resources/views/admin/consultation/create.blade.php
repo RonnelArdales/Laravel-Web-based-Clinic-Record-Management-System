@@ -132,6 +132,6 @@
 
 @section('scripts')
 
-<script src="{{mix('js/admin/consultation/create.js')}}"></script>
+@vite( 'resources/js/admin/consultation/create.js')
 
 @endsection

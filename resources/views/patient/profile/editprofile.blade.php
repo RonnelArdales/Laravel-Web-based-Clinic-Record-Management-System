@@ -24,7 +24,7 @@
             <p>Keep your profile <b> updated </b> to avoid misinformation and <b>change password regularly  </b> to avoid forgetting your password. </p>
         </div>
 
-        <form action="/patient/profile/update/{{Auth::user()->id}}" method="POST">
+        <form action="{{ route('profile.update', Auth::user()->id )}}" method="POST">
             @csrf
             @method('PUT')
             <div style="display: flex;flex-direction:column; justify-content:center;">

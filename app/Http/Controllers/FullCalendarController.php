@@ -11,29 +11,6 @@ use Illuminate\Http\Request;
 
 class FullCalendarController extends Controller
 {
-    public function index(Request $request)         
-    {   
-        $days = BusinessHour::select('day')->where('off', '1')->groupBy('day')->get();
-        $walkins = BusinessHour::select('day')->where('off', '1')->where('appointment_method', 'walkin')->groupBy('day')->get();
-        $dates = Dayoff_date::select('date')->get();
-        $day_array = [];
-        $date_array = [];
-        foreach($days as $day){
-            $day_array[] = date('w', strtotime($day->day));
-        }
-
-        foreach($dates as $date){
-            $date_array[] = $date->date;
-        }
-
-        $walkin_array = [];
-        foreach ($walkins as $walkin){
-            $walkin_array[] = date('w', strtotime($walkin->day));
-        } 
-
-        $day = BusinessHour::select('day', 'off')->distinct()->get();
-        return view('calendar.appointment', compact('day', 'days'))->with('day_array', $day_array)->with('walkin_array', $walkin_array)->with('date_array', $date_array);
-    }
 
     public function get_time(Request $request){
         
@@ -83,14 +60,4 @@ class FullCalendarController extends Controller
         }
     }
 
-    public function create(Request $request){
-
-        $date =  $request->input('date');
-        $try = date('Y-m-d');
-        $Datename = Carbon::createFromFormat('Y-m-d', $date)->format('l');
-        $businessHours = BusinessHour::select('from')->where('day', $Datename)->get();
-
-        return response()->json(['datename' => $Datename, 'businesshours' => $businessHours]);
-       
-    }
 }

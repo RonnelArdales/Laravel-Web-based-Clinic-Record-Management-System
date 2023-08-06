@@ -221,7 +221,7 @@ $(document).ready(function (){
 
     $(document).on('click', '.delete_user', function(e){
         e.preventDefault();
-        id =   $('#delete_no').val();
+        let id =   $('#delete_no').val();
         let url = (usertype  === "admin") ? "/admin/billing/"+ id :  "/secretary/billing/"+ id;
         $.ajaxSetup({
         headers: {

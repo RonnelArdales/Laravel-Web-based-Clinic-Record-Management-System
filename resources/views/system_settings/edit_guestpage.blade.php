@@ -80,6 +80,6 @@
 
 @section('scripts')
 
-<script src="{{mix('js/system_settings/guestpage/edit.js')}}"></script>
+@vite( 'resources/js/system_settings/guestpage/edit.js')
 
 @endsection

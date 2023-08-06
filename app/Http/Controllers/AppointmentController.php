@@ -2,27 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Appointment\ModeOfPaymentRequest;
 use App\Http\Requests\Appointment\StoreAppointmentRequest;
-use App\Mail\Cancelappointment;
-use App\Mail\reschedule_admintopatient;
-use App\Mail\reschedule_patienttoadmin;
 use App\Models\Appointment;
-use App\Models\AuditTrail;
 use App\Models\BusinessHour;
 use App\Models\Dayoff_date;
 use App\Models\Modeofpayment;
 use App\Models\Reservationfee;
 use App\Models\Service;
-use App\Models\User;
 use App\Services\AppointmentService;
-use App\Services\UserService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use DataTables;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AppointmentController extends Controller
@@ -156,7 +145,6 @@ class AppointmentController extends Controller
             }else{
             $data =   $this->appointmentService->update($request->all(), $appointment);
             return response()->json([
-             
                 'data' => $data,
             ]);
             }

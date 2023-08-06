@@ -19,7 +19,7 @@
                 <h3 class="login-heading mb-4" style="font-weight:700;">Enter Password</h3>
                   <hr>
                 <!-- Sign In Form -->
-                <form action="/updatepassword" method="POST">
+                <form action="/forgot_password/updatepassword" method="POST">
                         @method('PUT')
                         @csrf
       

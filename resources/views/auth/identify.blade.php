@@ -19,7 +19,7 @@
                                 <h3 class="login-heading mb-4" style="font-weight:700;" >Find your account</h3>
                                 <hr>
                                 <!-- Sign In Form -->
-                                <form action="/confirm" method="GET">
+                                <form action="/forgot_password/find_email/process" method="GET">
                                     @csrf
                                     <h6 style="text-align: center;">Please enter your email for your account.</h6>
                                     <div class="form-floating mb-1">  

@@ -209,8 +209,6 @@
         //---------------store appointment--------------------------//
         $(document).on('click', '.store_appointment', function(e){
             e.preventDefault();
-            payment = $('#payment').val();
-            reservation_fee = $('#reservation_fee').val();
             let url = (usertype === 'admin') ? "/admin/appointment": "/secretary/appointment";
             let data ={
                     'userid' : $('#userid').val(),
@@ -243,7 +241,6 @@
                     $(".main-spinner").hide();
                 },
                 success: function(response){
-                    console.log(response); 
                     if(response.status == 400){
                         $('#error_user, #error_date, #error_time, #error_modepayment, #error_payment, #error_reference_no ' ).html("");
                         $.each(response.errors.userid, function (key, err_values){
@@ -351,20 +348,15 @@
         });
 
         $('.resched_button').on('click', function(e){
-            $('#reschedid').val();
-            $('#resched_date').val();
-            $('#reschedtime').val();
             const status = "Reschedule"
-         
             let id = $('#reschedid').val();
-            console.log(id);
             let url = (usertype === 'admin') ? "/admin/appointment/"+ id : "/secretary/appointment/"+ id;
-            data = {
-                _method : "PUT",
-                "status" : status,
-                "date": $('#resched_date').val(),
-                "time": $('#reschedtime').val(),
-            }
+            let data = {
+                    _method : "PUT",
+                    "status" : status,
+                    "date": $('#resched_date').val(),
+                    "time": $('#reschedtime').val(),
+                }
           
             $.ajaxSetup({
                 headers:{

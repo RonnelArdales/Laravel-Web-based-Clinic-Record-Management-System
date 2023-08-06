@@ -1,19 +1,34 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\SignupController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicuserController;
 use App\Http\Controllers\Front_EndController;
-use App\Http\Controllers\GuestpageController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest'])->group(function () {
-    Route::get('/about_us', [Front_EndController::class, 'aboutus']);
+    
+    // front page
     Route::get('/', [Front_EndController::class, 'homepage']);
-    Route::get('/login', function () {return view('auth.login');})->name('login');
-    Route::get('/register', function () {return view('auth.register');});
-    Route::post('/store', [ClinicuserController::class, 'store']);
+    Route::get('/about_us', [Front_EndController::class, 'aboutus']);
+
+    // Login page
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/login/process', [LoginController::class, 'process']);
+
+    // sign up
+    Route::get('/register', [SignupController::class, 'index'] );
+    Route::post('/store', [SignupController::class, 'store']);
     Route::get('/confirmemail', [ClinicuserController::class , 'confirmemail']);
+
+    //verify email
+    Route::get('/verify-email/{email}', [SignupController::class, 'verifyemail'])->name('verify-email');
+    Route::get('/resendCode/create/{email}', [SignupController::class, 'resend_code_create']);
+   
 });
 
-Route::post('/login/process', [ClinicuserController::class, 'process']);
+Route::post('/verifyconfirm/{email}', [SignupController::class, 'emailverifycode']);
 
-Route::post('/logout', [ClinicuserController::class, 'logout'])->name('logout');
+
+

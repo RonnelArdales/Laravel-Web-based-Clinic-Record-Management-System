@@ -247,14 +247,14 @@ $(document).ready(function(){
     
     $('#document').on('click', '.delete', function(e) {
         e.preventDefault();
-        var id = $(this).data('id');
+        const id = $(this).data('id');
         $('#documentid').val(id);
        $('#delete').modal('show');
     });
 
     $('#deletefile').on('click',  function(e) {
         e.preventDefault();
-        id =  $('#documentid').val();
+        let id =  $('#documentid').val();
         $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

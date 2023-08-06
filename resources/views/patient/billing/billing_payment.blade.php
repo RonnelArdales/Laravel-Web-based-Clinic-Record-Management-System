@@ -17,14 +17,6 @@
                 <div class="col-sm "> 
                     <form action="" method="post">
                         @csrf
-                        <div class="form-group">
-                            <label for="">Reference code:</label>
-                            <input type="text" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background:#DDDDDD ; width:170px" name="reference_no" id="reference"><br>
-                            @error('reference_no')
-                                <span  style="margin-bottom:10px" role="alert" class="block  text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-
                         <div class="form-group" style="">
                             <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >ID:</label>  
                             <input class="view1 bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="user_id" readonly value="{{Auth::user()->id}}"  type="text">
@@ -32,11 +24,26 @@
 
                         <div class="form-group" style="">
                             <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Fullname:</label>  
-                            <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="fullname" readonly value="{{{$info['fullname']}}}"  type="text">
+                            <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="fullname" readonly value="{{Auth::user()->fname }} {{Auth::user()->lname }}"  type="text">
+                        </div>
+                    
+                        <div class="form-group" style="">
+                            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Date:</label>  
+                            <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="date" readonly value="{{{$info['date']}}}"  type="text">
                         </div>
 
                         <div class="form-group" style="">
-                            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Mode of payment:</label>
+                            <label class="mb-0 rounded bg-[#EDDBC0]  mb-2 ml-3 " >Time:</label>  
+                            <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="time" id="view_fname" readonly value="{{{$info['time']}}}"  type="text">
+                        </div>
+
+                        <div class="form-group" style="">
+                            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Reservation fee:</label>  
+                            <input class="view1 bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="reservation_fee" readonly value="{{$fee->reservationfee}}"  type="text">
+                        </div>
+
+                        <div class="form-group mb-2 ml-3 " style="">
+                            <label class="mb-0 rounded bg-[#EDDBC0] " >Mode of payment:</label>
                             <select name="mop" id="mop" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background:#DDDDDD ; width:170px" >
                             <option value="">--select--</option>
                             @foreach ($mops as $mop)
@@ -48,30 +55,21 @@
                             @enderror
                         </div>
 
-                        <div class="form-group" style="">
-                            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Reservation fee:</label>  
-                            <input class="view1 bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="reservation_fee" readonly value="{{$fee->reservationfee}}"  type="text">
-                        </div>
-                    
-                        <div class="form-group" style="">
-                            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 " >Date:</label>  
-                            <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="date" readonly value="{{{$info['date']}}}"  type="text">
-                        </div>
-
-                        <div class="form-group" style="">
-                            <label class="mb-0 rounded bg-[#EDDBC0] ml-3 " >Time:</label>  
-                            <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" name="time" id="view_fname" readonly value="{{{$info['time']}}}"  type="text">
+                        <div class="form-group mb-2 ml-3 ">
+                            <label for="">Reference code:</label>
+                            <input type="text" class="text-currency rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background:#DDDDDD ; width:170px" name="reference_no" id="reference"><br>
+                            @error('reference_no')
+                                <span  style="margin-bottom:10px" role="alert" class="block  text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                 
-                        <div class="d-flex justify-content-center row" style="text-align: center; margin-top:20px">
-                            {{-- <button type="button" class=" close " style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; margin-right:20px " data-bs-dismiss="modal">Close</button> --}}
+                        <div class="d-flex justify-content-center row" style="text-align: center; margin-top:35px">
                             <a style=" background: transparent; line-height: 30px;;text-decoration:none;border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; margin-right:20px "   href="/patient/appointment"> Cancel </a>
                             <button   class="proceed"  type="button" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px; height: 37px; ">Proceed</button>
-                        
                         </div>
                     </form>
                 </div>
-                <div class="col-sm mt-4 mt-sm-0 d-flex justify-content-center modeofpay" >
+                <div class="col-sm mt-4 mt-sm-0 d-flex justify-content-center modeofpay" style="width: 300px; height:300px">
                     {{-- <img src="{{url('/logo/gcash.png')}}" style="border-radius:20px" width="300" height="300" alt=""> --}}
                 </div>
             </div>   
@@ -96,17 +94,15 @@
                     </div>
                     <div style=" display: flex; justify-content: center; margin-bottom:40px "  >
                         <button type="button" class=" close " style="margin-right:15px; background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">No</button>
-                        <form action="/patient/billing/payment/store" method="POST">
+                        <form action="{{route('appointment.store')}}" method="POST">
                             @csrf
                             <input hidden type="text"  name="reference_no" id="confirmation-referenceno">
                             <input hidden name="user_id" readonly value="{{Auth::user()->id}}"  type="text">
-                            <input hidden name="fullname" readonly value="{{{$info['fullname']}}}"  type="text">
+                            <input hidden name="fullname" readonly value="{{Auth::user()->fname }} {{Auth::user()->lname }}"  type="text">
                             <input hidden name="mop" id="confirmation-mop" readonly   type="text">
                             <input hidden name="reservation_fee" readonly value="{{$fee->reservationfee}}"  type="text">
                             <input hidden name="date" readonly value="{{{$info['date']}}}"  type="text">
-                            <input hidden
-                            
-                            name="time" id="view_fname" readonly value="{{{$info['time']}}}"  type="text">
+                            <input hidden name="time" id="view_fname" readonly value="{{{$info['time']}}}"  type="text">
                             <button type="submit" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Yes</button>
                         </form>
                     </div>

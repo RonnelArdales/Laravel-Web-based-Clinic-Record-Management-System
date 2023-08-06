@@ -16,7 +16,7 @@ class ModeofpaymentService {
             $filename = date('YmdHis'). '.' . $request['image']->getClientOriginalExtension();
             $request['image']->move(public_path('modeofpayment/'), $filename);
             $request['image'] = $filename;
-            $mop->image = $request['image'];
+            $mop->image = $filename;
         }
     
         $mop->modeofpayment = $request['mop'];

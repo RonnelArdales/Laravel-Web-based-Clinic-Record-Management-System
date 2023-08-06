@@ -38,7 +38,7 @@ class ModeofpaymentController extends Controller
 
         }else{
 
-         $data = (new ModeofpaymentService())->store($request->only(['mop', 'image']), $request->file());
+         $data = (new ModeofpaymentService())->store($request->only(['mop', 'image']), $request->file('image'));
 
             return response()->json([
                 'status' =>'success',

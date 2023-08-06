@@ -39,6 +39,6 @@
 
 @section('scripts')
 
-<script src="{{mix('js/system_settings/guestpage/index.js')}}"></script>
+@vite( 'resources/js/system_settings/guestpage/index.js')
 
 @endsection

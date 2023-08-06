@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guestpage;
+use Illuminate\Support\Facades\Auth;
 
 class Front_EndController extends Controller
 {
@@ -13,10 +14,18 @@ class Front_EndController extends Controller
         $doctors_info = Guestpage::where('title', 'doctor info')->first();
         $speakingup = Guestpage::where('title', 'why speaking up is important important?')->first();
 
-        return view('Guest_homepage', ['speakwithyou' => $speak_with_you])->with('aboutus1', $about_us_1)
-                                                                          ->with('aboutus2', $about_us_2)
-                                                                          ->with('doctorsinfo', $doctors_info)
-                                                                          ->with('speakingup', $speakingup);
+        if(Auth::check()){
+            return view('patient.homepage', ['speakwithyou' => $speak_with_you])->with('aboutus1', $about_us_1)
+            ->with('aboutus2', $about_us_2)
+            ->with('doctorsinfo', $doctors_info)
+            ->with('speakingup', $speakingup);
+        }else{
+            return view('Guest_homepage', ['speakwithyou' => $speak_with_you])->with('aboutus1', $about_us_1)
+            ->with('aboutus2', $about_us_2)
+            ->with('doctorsinfo', $doctors_info)
+            ->with('speakingup', $speakingup);
+        }
+
     }
 
     public function aboutus(){

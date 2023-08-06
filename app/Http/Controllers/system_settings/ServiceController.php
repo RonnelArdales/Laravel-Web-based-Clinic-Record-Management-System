@@ -16,6 +16,7 @@ class ServiceController extends Controller
     }
 
     public function store(Request $request){
+
         $validator = Validator::make($request->all(), [
             'servicename'=>'required',
             'price' =>'required',
@@ -60,9 +61,10 @@ class ServiceController extends Controller
     }
 
     public function update($id, Request $request){
+
         $validator = Validator::make($request->all(), [
             'servicename'=>'required',
-            'price'=>'required',
+            'price' =>'required',
         ]);
 
         if($validator->fails())
@@ -74,28 +76,25 @@ class ServiceController extends Controller
             }
         else
         {
-                $arrItem = array(
-                    'services' =>$request->get('servicename'),
-                    'price' => $request->get('price'),
-                );
+            $update = Service::where('servicecode', $id)->update([ "services" => $request->input('servicename'),
+                                                                    "price" => $request->get('price'),
+                                                                ]);
 
-                $upadted = DB::table('services')->where('servicecode', $id)->update($arrItem);
- 
-                (new AuditTrailService())->store("Update service");
+            (new AuditTrailService())->store("Update service");
 
-                if($upadted){
-                    return response()->json([
-                        'status'=>200,
-                            'message' => 'service updated successfully',
-                        
-                    ]);
-                }else{
-                    return response()->json([
-                        'status'=>400,
-                            'message' => 'service updated unsuccessfully',
-                        
-                    ]);
-                }
+            if($update){
+                return response()->json([
+                    'status'=>200,
+                        'message' => 'service updated successfully',
+                    
+                ]);
+            }else{
+                return response()->json([
+                    'status'=>400,
+                        'message' => 'service updated unsuccessfully',
+                    
+                ]);
+            }
         }
     }
 

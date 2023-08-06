@@ -101,6 +101,7 @@ Route::prefix('/secretary')->middleware('auth', 'verify' ,'issecretary' )->group
     ]);
 
     //--------------------mode of payment-----------------------//
+    Route::post('/modeofpayment/store', [ModeofpaymentController::class, 'store']);
     Route::post('/modeofpayment/update/{id}', [ModeofpaymentController::class, 'update']);
     Route::resource('/modeofpayment', ModeofpaymentController::class)->except(['show', 'update'])->names([
         'index' => 'secretary.modeofpayment.index',

@@ -25,7 +25,9 @@ $(document).ready(function () {
 
     $('#users').on('click', '.verify', function(e) {
         e.preventDefault();
+      
         var id = $(this).data('id');
+
         $('#userid').val(" ");
         $('#userid').val(id);
         $('#verify').modal('show');
@@ -33,7 +35,7 @@ $(document).ready(function () {
 
     $(document).on('click', '.verify_user', function(e) {
         e.preventDefault();
-        id = $('#userid').val();
+        const id = $('#userid').val();
         var url = (usertype === 'admin') ? "/admin/pendinguser/"+ id : "/secretary/pendinguser/"+ id;
         $.ajaxSetup({
             headers: {

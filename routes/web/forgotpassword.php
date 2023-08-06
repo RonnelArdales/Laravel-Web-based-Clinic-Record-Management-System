@@ -1,16 +1,22 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/identify', [AuthController::class, 'identify_email']); //show find email
-Route::get('/confirm', [AuthController::class, 'confirm_email']); //find if email exixst
-Route::get('/select', [AuthController::class, 'index_select'])->middleware('auth'); //
-Route::post('/select/sendcode', [AuthController::class, 'select_sendcode'])->middleware('auth'); //
-Route::get('/verifycode/email', [AuthController::class, 'show_verifycode_email'])->middleware('auth'); // display send otp by email 
-Route::get('/resendCode', [AuthController::class, 'resend_code'])->middleware('auth'); //resend code via email
-Route::get('/verifycode/sms', [AuthController::class, 'show_verifycode_sms'])->middleware('auth'); // display send otp by email 
-Route::get('/resendCode/sms', [AuthController::class, 'resend_code_sms'])->middleware('auth'); //resend code via sms
-Route::get('/resetpassword', [AuthController::class, 'reset_password'])->middleware('auth'); //show reset password form
-Route::get('/resetpage', [AuthController::class, 'show_reset'])->middleware(['auth']); //showreset page
-Route::put('/updatepassword', [AuthController::class, 'update_password'])->middleware('auth');
+Route::prefix('forgot_password')->group(function(){
+    Route::get('/find_email', [ForgotPasswordController::class, 'findEmail_index']);
+    Route::get('/find_email/process', [ForgotPasswordController::class, 'confirm_email']);
+
+    Route::middleware(['auth'])->group(function(){
+        Route::get('/select', [ForgotPasswordController::class, 'selectSend_index']);
+        Route::post('/select/sendcode', [ForgotPasswordController::class, 'select_sendcode']);
+        Route::get('/verifycode/email', [ForgotPasswordController::class, 'show_verifycode_email']); 
+        Route::get('/verifycode/sms', [ForgotPasswordController::class, 'show_verifycode_sms']); 
+        Route::get('/resendCode', [ForgotPasswordController::class, 'resend_code']);
+        Route::get('/resendCode/sms', [ForgotPasswordController::class, 'resend_code_sms']);
+        Route::get('/resetpassword', [ForgotPasswordController::class, 'reset_password']); 
+        Route::get('/resetpage', [ForgotPasswordController::class, 'reset_index']);
+        Route::put('/updatepassword', [ForgotPasswordController::class, 'update_password']);
+    });
+});

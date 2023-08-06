@@ -88,7 +88,7 @@ class SearchController extends Controller
             }
         }
 
-        public function profile_search_user(Request $request, $usertype){
+        public function profile_search_user(Request $request){
 
             if($request->ajax()){
                 $name =  $request->input('search');

@@ -103,7 +103,7 @@ class UserController extends Controller
     }
 
     public function profile_paginate(Request $request){
-        
+
         if(Auth::user()->usertype == 'admin'){
 
             $usertype = $request->input('usertypetable');

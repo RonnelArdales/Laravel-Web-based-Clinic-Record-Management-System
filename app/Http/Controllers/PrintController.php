@@ -267,7 +267,7 @@ class PrintController extends Controller
         
     }
 
-    public function download_transaction($id){
+    public function download_ConsultationFile($id){
 
     $file = Consultationfile::where('id', $id)->first();
 

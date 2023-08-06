@@ -62,7 +62,7 @@
   
 
 	{{-- create user modal --}}
-	<div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="create"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content"  style="background: #EDDBC0;">
 				<div class="modal-header" style="border-bottom-color: gray">
@@ -73,7 +73,7 @@
 					<div class="mb-5 pt-6  ">
 						<div class=" columns-1 sm:columns-2">
 							<form method="POST" id="store_data" enctype="multipart/form-data" >
-									{{ csrf_field() }}
+							{{ csrf_field() }}
 							<label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Mode of payment</label>
 							<input name="mop" class=" mop_name bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text"> 
 							<br>
@@ -175,10 +175,11 @@
 @section('scripts')
 
 	<script>
-		let usertype = "{{Auth::user()->usertype}}"; 
+		var usertype = "{{Auth::user()->usertype}}"; 
+
 	</script>
 
-	<script src="{{mix('js/system_settings/modeofpayment.js')}}"></script>
-
+	@vite( 'resources/js/system_settings/modeofpayment.js')
+	
 @endsection
 

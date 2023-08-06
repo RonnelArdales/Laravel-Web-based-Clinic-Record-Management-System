@@ -1,11 +1,19 @@
 <?php
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\SignupController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PaginationController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
+
+
 Route::group(['middleware' => ['auth']], function() {
+
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+    Route::get('/verify-email-auth', [SignupController::class, 'verifyemail_auth']); 
+    Route::get('/resend/auth', [SignupController::class, 'resendcode_verify']); 
 
     //-----------search------------//
 

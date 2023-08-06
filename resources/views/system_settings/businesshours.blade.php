@@ -173,9 +173,9 @@
 @section('scripts')
 
     <script>
-        let usertype = "{{Auth::user()->usertype}}"; 
+        var usertype = "{{Auth::user()->usertype}}"; 
     </script>
 
-    <script src="{{mix('js/system_settings/businessHours.js')}}"></script>
-
+    @vite( 'resources/js/system_settings/businessHours.js')
+    
 @endsection

@@ -16,7 +16,7 @@
                                     </div>
                                 @endif
                                 <!-- Sign In Form -->
-                                <form action="/resetpassword" method="GET">
+                                <form action="/forgot_password/resetpassword" method="GET">
                                     @csrf
                                     <h6>Please enter the code that we sent to email.</h6>
                                     <div class="form-floating ">
@@ -30,7 +30,7 @@
                                         <span  role="alert" class="block mt-0 text-danger">{{Session::get('error')}}</span>
                                     @endif
                                     <hr style="margin-bottom: 0px; margin-top:10px" >
-                                    <a href="/resendCode" style="text-decoration: none">Resend Code</a>
+                                    <a href="/forgot_password/resendCode" style="text-decoration: none">Resend Code</a>
                                     <div class="d-grid" style="margin-top: 2%;justify-content:right;">
                                         <input type="text" name="emailotp" hidden value="email">
                                         <button style="background: #829460; border-radius: 15px; color:white; border:#829460;width: 110px;height: 37px;" type="submit">Verify Code</button>

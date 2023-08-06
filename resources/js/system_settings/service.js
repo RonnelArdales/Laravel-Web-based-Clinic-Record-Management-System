@@ -74,13 +74,13 @@ $(document).ready(function (){
         //update data from database
     $(document).on('click', '.update_service', function(e){
         e.preventDefault();
-        var sercode = $('#servicecode').val();
-        var url = (usertype === 'admin') ? '/admin/service/' + sercode : '/secretary/service/' + sercode;
-        var data ={
-            _method: 'PUT',
+        const sercode = $('#servicecode').val();
+        let url = (usertype === 'admin') ? '/admin/service/' + sercode : '/secretary/service/' + sercode;
+        let data ={
             'servicename' : $('#edit_servicename').val(),
             'price': $('#edit_price').val(), 
         }
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -88,7 +88,7 @@ $(document).ready(function (){
         });
 
        $.ajax({
-            type: 'POST', 
+            type: 'PUT', 
             url: url,
             data: data,
             datatype: "json",
@@ -96,10 +96,10 @@ $(document).ready(function (){
                 if(response.status == 400){
                     $('#error_servicename, #error_price' ).html("");
                     $.each(response.errors.servicename, function (key, err_values){
-                    $('#error_servicename').append('<span>'+err_values+'</span>');
-                    });
+                        $('#error_servicename').append('<span>'+err_values+'</span>');
+                    })
                     $.each(response.errors.price, function (key, err_values){
-                    $('#error_price').append('<span>'+err_values+'</span>');
+                        $('#error_price').append('<span>'+err_values+'</span>');
                     });
                 }else{                  
                     $('#message-success').text('Updated successfully');

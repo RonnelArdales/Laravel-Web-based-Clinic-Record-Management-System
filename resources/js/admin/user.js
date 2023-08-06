@@ -425,6 +425,7 @@ $(document).ready(function (){
         let usertype = $('#usertypetable').val();
         let search = $('#search-fullname').val();
 
+        console.log(usertype + " " + search);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -435,9 +436,10 @@ $(document).ready(function (){
             url: '/user/search-name',
             method:'GET',
             data: {search:search,
-                usertype:usertype,
+                    usertype:usertype,
                                     },
             success:function(response){
+                
                 if(usertype == 'patient'){
                     $('.patient').html("");
                     if(response.message == 'Nofound'){

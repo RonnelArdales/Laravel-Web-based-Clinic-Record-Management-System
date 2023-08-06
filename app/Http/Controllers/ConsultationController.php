@@ -84,7 +84,6 @@ class ConsultationController extends Controller
 
     public function get_appointment_information($id){
         $appointment = Appointment::with('user')->where('id', $id)->first();
-        
         return response()->json([   'appointment' => $appointment,
                                     'gender' => $appointment->user->gender,
                                     'age' => $appointment->user->age,

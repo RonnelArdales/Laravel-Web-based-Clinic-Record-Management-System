@@ -663,10 +663,6 @@
     
 @section('scripts')
 
-<script>
-    let usertype = "{{Auth::user()->usertype}}";
-</script>
-
-<script src="{{ mix('js/admin/user.js') }}"></script>
+@vite( 'resources/js/admin/user.js')
 
 @endsection

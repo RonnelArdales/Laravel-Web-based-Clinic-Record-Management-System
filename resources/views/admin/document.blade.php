@@ -295,6 +295,6 @@
 
 @section('scripts')
 
-<script src="{{mix('js/admin/document.js')}}"></script>
+@vite( 'resources/js/admin/document.js')
 
 @endsection

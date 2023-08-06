@@ -141,11 +141,11 @@
 
 @section('scripts')
 
-<script src="{{mix('js/admin/consultation/view.js')}}"></script>
+@vite( 'resources/js/admin/consultation/view.js')
 
 @endsection
 
-
+ 
 
   
 

@@ -83,7 +83,7 @@
                     </div>
                     <div class="modal-footer" style="border-top-color: gray">
                     <button style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px; height: 37px; " type="button" class=" close btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " class=" add_discount " >Create</button>
+                    <button  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " class="add_discount " >Create</button>
                     </div>
                 </div>
             </div>
@@ -158,11 +158,11 @@
 @section('scripts')
 
     <script>
-        let usertype = "{{Auth::user()->usertype}}"; 
+        var usertype = "{{Auth::user()->usertype}}"; 
     </script>
 
-    <script src="{{mix('js/system_settings/discount.js')}}"></script>
-
+    @vite( 'resources/js/system_settings/discount.js')
+    
 @endsection
 
 

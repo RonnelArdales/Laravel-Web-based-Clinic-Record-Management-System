@@ -61,6 +61,7 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::get('/consultation/show_appointment', [ConsultationController::class, 'fetch_success_appointment']);
     Route::get('/consultation/getappointment/{id}', [ConsultationController::class, 'get_appointment_information']);
     Route::get('/consultation/viewrecords/{id}', [ConsultationController::class, 'patient_consultation_history'])->name('consultation.show_history');
+    Route::post('/backup-database', [AdminController::class, 'backup_database']);
     Route::resource('/consultation', ConsultationController::class);
     
     //-------------------Documents---------------------------//
@@ -104,8 +105,9 @@ Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(functi
     Route::put('/business_hours/off_status', [BusinesshoursController::class, 'off_status']);
     
     //--------------------mode of payment-----------------------//
+    Route::post('/modeofpayment/store', [ModeofpaymentController::class, 'store']);
     Route::post('/modeofpayment/update/{id}', [ModeofpaymentController::class, 'update']);
-    Route::resource('/modeofpayment', ModeofpaymentController::class)->except(['show', 'update'])->names([
+    Route::resource('/modeofpayment', ModeofpaymentController::class)->except(['show', 'update' ])->names([
         'index' => 'admin.modeofpayment.index',
     ]);
 

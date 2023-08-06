@@ -511,4 +511,6 @@
 
 <script src="{{ asset('js/secretary/user.js') }}"></script>
 
+@vite( 'resources/js/secretary/user.js')
+
 @endsection

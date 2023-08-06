@@ -17,7 +17,7 @@
                                 @endif
 
                                 <!-- Sign In Form -->
-                                <form action="/verifyconfirm" method="POST">
+                                <form action="/verifyconfirm/{{Auth()->user()->email}}" method="POST">
                                     @csrf
 
                                     <h6>Please enter the code that we sent to email.</h6>

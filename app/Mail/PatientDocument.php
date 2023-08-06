@@ -14,16 +14,18 @@ class PatientDocument extends Mailable
     use Queueable, SerializesModels;
     public $fullname;
     public $date;
+    public $file_path;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($fullname, $date)
+    public function __construct($fullname, $date, $path_file)
     {
         $this->fullname = $fullname;
         $this->date = $date;
+        $this->file_path = $path_file;
     }
 
     /**
@@ -43,8 +45,13 @@ class PatientDocument extends Mailable
     {
         $fullname = $this->fullname;
         $date = $this->date;
+        $file_path = $this->file_path;
+        
    
-        return $this->markdown('mail.patientdocument', compact('fullname','date' ));
+        return $this->markdown('mail.patientdocument', compact('fullname','date' ))->attach($file_path, [
+            'as' =>  $fullname ."_" . $date. '.pdf', // The name to display for the attached file
+            'mime' => 'application/pdf', // Change the MIME type according to your file type
+        ]);
       
     }
 

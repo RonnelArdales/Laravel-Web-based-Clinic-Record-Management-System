@@ -73,7 +73,7 @@
                               font-weight: 400;">Forgot Password?</p>
                               <a style="font-family: 'Poppins';
                               font-style: normal;
-                              font-weight: 400;margin-left:3px;color:#829460;" href="/identify">Click Here</a>
+                              font-weight: 400;margin-left:3px;color:#829460;" href="/forgot_password/find_email">Click Here</a>
                         </div>
                   </div>
             </form> 

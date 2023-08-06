@@ -62,6 +62,7 @@ class DocumentService {
         $filename = date('YmdHis'). '.' . $data['pdf']->getClientOriginalExtension();
         $data['pdf']->move(public_path('consultation/'), $filename);
         $data['pdf'] = $filename;
+        $path = public_path('consultation/'.$filename);
 
         $date = Carbon::createFromFormat('m/d/Y', $data['date'])->format('Y-m-d');
         $documents = new Consultationfile();
@@ -76,7 +77,7 @@ class DocumentService {
 
         $user = User::where('id', $data['user_id'])->first();
         
-        Mail::to($user->email)->send(new PatientDocument ($data['fullname'], $date));
+        Mail::to($user->email)->send(new PatientDocument ($data['fullname'], $date, $path));
         
         (new AuditTrailService())->store('Create document');
     }
