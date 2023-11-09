@@ -75,7 +75,7 @@
 							<form method="POST" id="store_data" enctype="multipart/form-data" >
 							{{ csrf_field() }}
 							<label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Mode of payment</label>
-							<input name="mop" class=" mop_name bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text"> 
+							<input name="mop" class=" mop_name rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" style="background: #D0B894;"> 
 							<br>
 							<div class="mt-0 mb-2">
 								<span  role="alert" class="block mt-5 pb-4 text-danger" id="mop"></span>
@@ -113,7 +113,7 @@
 									{{ csrf_field() }}
 							<label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Mode of payment</label>
 							<input type="text" hidden id="mop_id">
-							<input name="mop" class=" edit_mop_name bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_mop_name" type="text"> 
+							<input name="mop" class=" edit_mop_name rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_mop_name" style="background: #D0B894;" type="text"> 
 							<br>
 							<div class="mt-0 mb-2">
 							<span  role="alert" class="block mt-5 pb-4 text-danger" id="error_mop"></span>

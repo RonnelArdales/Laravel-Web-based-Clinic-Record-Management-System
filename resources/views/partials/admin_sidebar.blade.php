@@ -15,7 +15,7 @@
 
     <li class=" my-1 mx-3  {{Request::is('admin/pendinguser') ? 'active-bar' : '';}}">
          <a href="/admin/pendinguser"> 
-              <img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" alt=""> 
+          <img class="icon" src="{{url('/logo/pendinguser.jpg')}}" alt=""> 
          <span>Pending User</span> 
          </a>
     </li>
@@ -101,13 +101,6 @@
               </a>
          </li>
 
-         {{-- <li class="my-1 mx-3  {{Request::is('') ? 'active-bar' : '';}}">
-              <a href="#"> 
-                   <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/consult_las4n9.png" alt=""> 
-                   <span>Transaction</span>
-              </a>
-         </li> --}}
-
          <li class="my-1 mx-3  {{Request::is('admin/reports/billing') ? 'active-bar' : '';}}">
               <a href="/admin/reports/billing"> 
                    <img class="icon dropdown" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/billing_b1dkbm.png" alt=""> 
@@ -161,7 +154,7 @@
 
          <li class=" my-1 mx-3 {{Request::is('admin/modeofpayment') ? 'active-bar' : '';}}">
               <a href="{{route('admin.modeofpayment.index')}}"> 
-                   <img class="icon dropdown" src="{{url('/logo/discount2.png')}}" alt=""> 
+                   <img class=" dropdown icon" src="{{url('/logo/modeofpayment1.png')}}" alt=""> 
                    <span style="font-size: 17.5px" >Mode of Payment</span>
               </a>
          </li>

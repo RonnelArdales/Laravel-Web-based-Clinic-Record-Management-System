@@ -37,8 +37,8 @@ class StoreAppointmentRequest extends FormRequest
     public function messages(){
         return [
             'userid.required'=>'Patient information is required',
-            'date.required' => 'Appointment date is required',
-            'time.required' => 'Appointment time is required',
+            'date.required' => 'Date is required',
+            'time.required' => 'Time is required',
             'modeofpayment.required' => 'Mode of payment is required', 
         ];
     }

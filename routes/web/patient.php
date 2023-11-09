@@ -9,7 +9,7 @@ use App\Http\Controllers\User\User_ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('/patient')->middleware('auth','ispatient', 'verify')->group(function(){
+Route::prefix('/patient')->middleware('verify','auth','ispatient', 'isforgetpassword')->group(function(){
 
     Route::get('/homepage', [Front_EndController::class, 'homepage'])->name('patient.homepage');
     Route::get('/about_us', [Front_EndController::class, 'aboutus']);

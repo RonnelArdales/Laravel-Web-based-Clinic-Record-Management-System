@@ -21,7 +21,7 @@ class TransactionController extends Controller
         $service = Service::all();
         $sum = Addtocartservice::sum('price');
         $patients =  DB::table('users')->where('usertype', 'patient')->where('status', 'verified')->orderBy('created_at', 'desc')->paginate(6, ['*'], 'patient');
-        return view('admin.transaction', [
+        return view('admin_secretary.transaction', [
                                         'services' => $service, 
                                         'addtocarts'=> $addtocarts, 
                                         'sum'=>$sum,

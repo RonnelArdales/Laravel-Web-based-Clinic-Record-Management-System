@@ -1,5 +1,15 @@
 $(document).ready(function(){
 
+    const textarea = $('#note');
+
+    function adjustTextareaHeight() {
+      textarea.css('height', 'auto');
+      textarea.css('height', textarea.prop('scrollHeight') + 'px');
+    }
+  
+    textarea.on('input', adjustTextareaHeight);
+    
+
     setTimeout(function() {
         $(".success").fadeOut(500);
     }, 3000);
@@ -42,14 +52,22 @@ $(document).ready(function(){
         });
     });
 
+    $('.show-create').on('click', function(){
+        $('#create').modal('show');
+        $('#note').html();
+        $('#note').val('I hope this message finds you well. As requested, I\'m providing you with access to your consultation results and recommendations. You have the option to access the document securely through your account on our website or on email. This ensures both convenience and privacy in retrieving the information.\n\nPassword:');
+    });
     $('#viewappointments').on('hidden.bs.modal', function() {
         $('.appointment').DataTable().destroy();
     });
 
     $(".create").on("hidden.bs.modal", function(e){
         e.preventDefault();
-        $('#create').find('input, select').val("");
+        textarea.css('height', '160px'); //
+        $('#create').find('input, select, textarea').val("");
     });
+
+
 
     $('.getappointment').on('click', function(e){
         e.preventDefault();
@@ -81,6 +99,7 @@ $(document).ready(function(){
                 $(".main-spinner").hide();
             },
             success: function(response){ 
+                console.log(response);
                 if(response.status == 400){
                     $('#error_userid, #error_file, #error_doc_type' ).html("");
                     $.each(response.errors.fullname, function (key, err_values){

@@ -5,12 +5,13 @@
     label{
         font-family: 'Poppins';
     }
-    .addtocart_input, .service_input{
+    .addtocart_input{
         background: #D0B894;
         border-radius: 10px;
         border:none;
         margin-bottom: 1%;
-        text-align: center; 
+        text-align: center;
+        width: 100%; 
     }
 
 </style>
@@ -82,22 +83,21 @@
     <div class="modal fade" id="encrypt-confirmation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="background: #EDDBC0;">
-                <div class="modal-header" style="border-bottom-color: gray">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel"> </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header" style="border-bottom-color: gray; display: flex; justify-content: center; padding:10px">
+                    <h2 class="modal-title text-center" id="exampleModalLabel"> <b>HOLD ON.</b> </h2>
                 </div>
+                
                 <div class="modal-body">
-                    <div class="mb-5 pt-6  ">
-                        <div class=" columns-1 sm:columns-2">
-                            <h5>Do you want to encrypt this file?</h5>
+                    <div class="mb-3 mt-4  ">
+                        <div class=" columns-1 sm:columns-2 " style="display: flex; justify-content: center; ">
+                            <input type="text" hidden id="cancel_id">
+                            <h4 style="font-size:19px"  >Are you sure you want to cancel this appointment?</h4>
                         </div>
                     </div>
 
                     <div class="modal-footer" style="border-top-color: gray">
-                        {{-- <button type="button" class=" close btn btn-secondary"  style="background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button> --}}
-                        {{-- <button class=" cancel_appointment p-2 w-30 bg-[#829460]  mt-7 rounded" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; "  >Cancel</button> --}}
+                        <a  href="/admin/consultation/print/{{$consultations->id}}"> <button class="cancel_appointment "style="margin-right:15px; background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px; "  >No</button></a>
                         <button class=" " id="set-encrypt" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Yes</button>
-                        <a  href="/admin/consultation/print/{{$consultations->id}}"> <button class=" cancel_appointment "style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >No</button></a>
                     </div>
                 </div>
             </div>
@@ -109,21 +109,31 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="background: #EDDBC0;">
                 <div class="modal-header" style="border-bottom-color: gray">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel"> </h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">Set Password</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="/admin/consultation/print/{{$consultations->id}}">
                         <div class="mb-5 pt-6  ">
                             <div class=" columns-1 sm:columns-2">
-                                <label style="font-size: 20px"  for="">Set password in the file</label> <br>
                                 <input type="text" id="type" name="type" hidden value="encrypt">
                                 
-                                <label style="margin-top:10px" for="">User Password</label><br>
-                                <input type="text" id="userpass" name="userpass" class="addtocart_input" value=""><br>
-
-                                <label style="margin-top:10px" for="">Admin Password</label><br>
-                                <input type="text" name="adminpass"  id="adminpass" class="addtocart_input">
+                                <div>
+                                    <label style="margin-top:10px" for="">User Password</label><br>
+                                    <input type="text" id="userpass" name="userpass" style="width: 100%" class="addtocart_input" value="">
+                                    @error('userpass')
+                                        
+                                    @enderror
+                                </div>
+                                
+                                <div>
+                                    <label style="margin-top:10px" for="">Admin Password</label><br>
+                                    <input type="text" name="adminpass"  id="adminpass"  style="width: 100%" class="addtocart_input">
+                                    @error('adminpass')
+                                        
+                                    @enderror
+                                </div>
+                                
                             </div>
                         </div>
                         <div class="modal-footer" style="border-top-color: gray">

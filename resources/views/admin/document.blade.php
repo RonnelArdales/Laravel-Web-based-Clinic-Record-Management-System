@@ -11,7 +11,7 @@
         border-radius: 10px;
         border:none;
         margin-bottom: 1%;
-        text-align: center; 
+        
     }
  </style>
 <div class="row m-4" style="font-family: Poppins;">
@@ -32,7 +32,7 @@
         <div class="me-auto col-md-8 col-md-offset-5">
             <h1> <b>DOCUMENT</b>  </h1>
         </div>
-        <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" type="button" class="btn btn-primary ml-6 show-create" data-bs-toggle="modal" data-bs-target="#create"  >
+        <button style="border: none;background: #829460;border-radius: 20px;font-family:Poppins;font-weight: 400;font-size:1.2vw; color:white; padding-left:20px; padding-right:20px" type="button" class="btn btn-primary ml-6 show-create"  >
         Create
         </button>
     </div>
@@ -68,44 +68,50 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-4 pt-6  ">
-                        <div class=" columns-1 sm:columns-2">
                             <form method="POST" id="store_data" enctype="multipart/form-data" class="row">
                                 {{ csrf_field() }}
-                                <div class="col-md-6">
-                                    <label for="">Appointment id</label><br>
-                                    <input type="text"  class="input" id="appointment_id"  style="width: 300px" name="appointment_id" readonly>
-                                    <button class="getappointment btn btn-outline-success" type="button" style="border: 1px solid #829460;"><img src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" style="height: 15px ;
-                                        width: 15px ;" id="appointment" alt="" ></button><br>
-                                    <label style="margin-top:10px" for="">Fullname</label><br>
-                                    <input type="text" class="input" readonly  style="width: 300px" id="user_id" name="user_id" hidden>
-                                    <input type="text" class="input" readonly  style="width: 300px" id="fullname" name="fullname">
-                                    <label style="margin-top:10px" for="">Appointment date</label><br>
-                                    <input type="text" class="input"  style="width: 300px" id="date" name="date"><br>
-                                    <div class="mt-0 mb-2">
-                                        <span  role="alert" class="block mt-5   text-danger" id="error_userid"></span>
+                              
+                                    <div class="row" style="padding-right:0px">
+                                        <div class="col-sm-6">
+                                            <label for="">Appointment id</label><br>
+                                            <div style="display:inline;">
+                                                <input class=" fullname refresh rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894; width:87%" id="appointment_id" name="appointment_id" readonly type="text"> 
+                                                <button class="getappointment btn btn-outline-success" type="button" style="border: 1px solid #829460;"><img src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" style="height: 15px ;
+                                                    width: 15px ;" id="appointment" alt="" ></button><br> 
+                                            </div>
+                                            <label style="margin-top:10px" for="">Fullname</label><br>
+                                            <input type="text" class="rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400"  style="width: 100%; background: #D0B894;" readonly  style="width: 100%" id="user_id" name="user_id" hidden>
+                                            <input type="text" class="rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400"  style="width: 100%; background: #D0B894;" readonly  style="width: 100%" id="fullname" name="fullname">
+                                            <label style="margin-top:10px" for="">Appointment date</label><br>
+                                            <input type="text" class="rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400"  style="width: 100%; background: #D0B894;" id="date" name="date"><br>
+                                            <div class="mt-0 mb-2">
+                                                <span  role="alert" class="block mt-5   text-danger" id="error_userid"></span>
+                                            </div>    
+                                        </div>
+        
+                                        <div class="col-sm-6">
+                                            <label style="margin-bottom: 5px;" for="">Description</label><br>
+                                            <input class=" w-100 rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894;" name="doc_type" class="input" type="text">
+                                            <br>
+                                            <div class="mt-0 mb-2">
+                                                    <span  role="alert" class="block mt-5   text-danger" id="error_doc_type"></span>
+                                            </div>
+                        
+                                            <label style="margin-top:5px" for="">Upload pdf</label><br>
+                                            <input type="file" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  id="pdf" name="pdf"><br>
+                                            <div class="mt-0 mb-2">
+                                                <span  role="alert" class="block mt-5   text-danger" id="error_file"></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-            
-                                <div class="col-md-6">
-                                    <label style="margin-bottom: 5px;" for="">Description</label><br>
-                                    <input style="width:300px" name="doc_type" class="input" type="text">
-                                    <br>
-                                    <div class="mt-0 mb-2">
-                                            <span  role="alert" class="block mt-5   text-danger" id="error_doc_type"></span>
-                                    </div>
-                
-                                    <label style="margin-top:5px" for="">Upload pdf</label><br>
-                                    <input type="file" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  id="pdf" name="pdf"><br>
-                                    <div class="mt-0 mb-2">
-                                        <span  role="alert" class="block mt-5   text-danger" id="error_file"></span>
-                                    </div>
-                                </div>
+ 
                                 
                                 <div class="form-group" >
-                                    <label for="message-text"    class="col-form-label">Note:</label>
-                                    <textarea class="input" style="width: 100%;text-align: justify ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; min-height: 100px; height:auto" id="note" name="note"></textarea>
+                                    <label for="message-text"  style="margin-top:5px" >Note</label>
+                                    <textarea class="input" style="width: 100%; text-align: justify; padding: 10px; text-justify: inter-word; white-space: pre-wrap; min-height: 160px; overflow:hidden; resize:none" id="note"   name="note"></textarea>
+
                                 </div>
-                        </div>
+                     
                     </div>
                     <div class="modal-footer" style="border-top-color: gray">
                         <button type="button" style=" border-radius: 30px; border: 2px solid #829460;width: 110px;height: 37px; color:#829460;; background:transparent;" data-bs-dismiss="modal">Close</button>
@@ -153,7 +159,7 @@
         </div>
     </div>
 
-              {{------------------------View transaction-------------------------------}}
+              {{------------------------View document-------------------------------}}
     <div class="modal fade" id="view" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content" style="background: #EDDBC0;">
@@ -168,28 +174,28 @@
                                 <div class="col-md-6">
 
                                     <label for="">Appointment id</label><br>
-                                    <input type="text"  class="input" id="view_appointemntid"  style="width: 300px" name="appointment_id" readonly><br>
+                                    <input type="text"  class="input" id="view_appointemntid"  style="width: 100%" name="appointment_id" readonly><br>
                                     
                                     <label style="margin-top:10px" for="">Fullname</label><br>
-                                    <input type="text" class="input" readonly  style="width: 300px" id="user_id" name="user_id" hidden>
-                                    <input type="text" class="input" readonly   style="width: 300px" id="view_fullname" name="fullname">
+                                    <input type="text" class="input" readonly  style="width: 100%" id="user_id" name="user_id" hidden>
+                                    <input type="text" class="input" readonly   style="width: 100%" id="view_fullname" name="fullname">
 
                                     <label style="margin-top: 10px" for="">Appointment date</label><br>
-                                    <input readonly type="text" readonly class="input"  style="width: 300px" id="view_date" name="date"><br>
+                                    <input readonly type="text" readonly class="input"  style="width: 100%" id="view_date" name="date"><br>
                                 
                                 </div>
             
                                 <div  class="col-md-6">
                                     <label style="margin-top: 0px" for="">Description</label><br>
-                                    <input readonly type="text" class="input"  style="width: 300px" id="view_doc_type" name="date"><br>
+                                    <input readonly type="text" class="input"  style="width: 100%" id="view_doc_type" name="date"><br>
                             
-                                    <label style="margin-top:13px" for="">Uploaded pdf</label><br>
-                                    <input readonly type="text"class="input" readonly   style="width: 300px" id="view_file" name="pdf"><br>
+                                    <label style="margin-top:11px" for="">Uploaded pdf</label><br>
+                                    <input readonly type="text"class="input" readonly   style="width: 100%" id="view_file" name="pdf"><br>
                                 </div>
 
                                 <div class="form-group" >
                                     <label for="message-text" style="margin-top:20px"  class="col-form-label">Note:</label>
-                                    <textarea class="input" style="width: 100%;text-align: justify ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; min-height: 100px; height:auto" id="view_note" name="note"></textarea>
+                                    <textarea class="input" style="width: 100%;text-align: justify ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; min-height: 160px; resize:none" readonly id="view_note" name="note"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -217,38 +223,42 @@
                     <div class="mb-4 pt-6  ">
                         <div class=" columns-1 sm:columns-2">
                             <form method="POST" id="update_data" enctype="multipart/form-data" class="row">
-                                <div class="col-md-6">
-                                    <label for="">Appointment id</label><br>
-                                    <input type="text" hidden id="document_id" name="document_id">
-                                    <input  type="text"  class="input" id="edit_appointmentid"  style="width: 300px" name="appointment_id" readonly>
-                                    <br>
 
-                                    <label style="margin-top:10px" for="">fullname</label><br>
-                                    <input type="text" class="input" readonly  style="width: 300px" id="edit_userid" name="user_id" hidden>
-                                    <input type="text" class="input" readonly  style="width: 300px" id="edit_fullname" name="fullname">
-                                
-                                    <label style="margin-top:10px" for="">Appointment date</label><br>
-                                    <input readonly type="text" class="input"  style="width: 300px" id="edit_date" name="date"><br>
-                                </div>
-                        
-                                <div  class="col-md-6">
-                                    <label style="margin-bottom: 5px;" for="">Description</label><br>
-                                    <input style="width:300px" name="doc_type" id="edit_doc_type" class="input" type="text">
-                                    <br>
-                                    <div class="mt-0 mb-2">
-                                        <span  role="alert" class="block mt-5   text-danger" id="error_edit_doc_type"></span>
+                                <div class="row" style=" padding-right:0px">
+                                    <div class="col-sm-6">
+                                        <input type="text" hidden id="document_id" name="document_id">
+                                        <input type="text" class="rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400"  style="width: 100%; background: #D0B894;" readonly  style="width: 100%" id="edit_userid" name="user_id" hidden>
+                                        <label for="">Appointment id</label><br>
+                                        <div style="display:inline;">
+                                        <input class=" fullname refresh rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894; width:87%" id="edit_appointmentid"   name="appointment_id" readonly type="text"> 
+                               
+                                        </div>
+                                        <label style="margin-top:10px" for="">Fullname</label><br>
+                                        <input type="text" class="rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400"  style="width: 100%; background: #D0B894;" readonly  style="width: 100%" id="edit_fullname" name="fullname">
+                                        <label style="margin-top:10px" for="">Appointment date</label><br>
+                                        <input type="text" class="rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400"  style="width: 100%; background: #D0B894;" id="edit_date" name="date"><br>
+                                        <div class="mt-0 mb-2">
+                                            <span  role="alert" class="block mt-5   text-danger" id="error_userid"></span>
+                                        </div>    
                                     </div>
-                
-                                    <label style="margin-top:5px" for="">Upload pdf</label><br>
-                                    <input type="file" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  id="pdf" name="pdf"><br>
-
-                                    <div class="mt-0 mb-2">
-                                        <span  role="alert" class="block mt-5   text-danger" id="error_edit_file"></span>
+    
+                                    <div class="col-sm-6">
+                                        <label style="margin-bottom: 5px;" for="">Description</label><br>
+                                        <input class=" w-100 rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894;" id="edit_doc_type" name="doc_type" class="input" type="text">
+                                        <br>
+                                        <div class="mt-0 mb-2">
+                                                <span  role="alert" class="block mt-5   text-danger" id="error_doc_type"></span>
+                                        </div>
+                    
+                                        <label style="margin-top:5px" for="">Upload pdf</label><br>
+                                        <input type="file" class="rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="pdf" name="pdf"><br>
+                                        <div class="mt-0 mb-2">
+                                            <span  role="alert" class="block mt-5   text-danger" id="error_file"></span>
+                                        </div>
                                     </div>
                                 </div>
-
                                 <div class="form-group" >
-                                    <label for="message-text" style="margin-top:20px"  class="col-form-label">Note:</label>
+                                    <label for="message-text" style="margin-top:5px"  class="col-form-label">Note:</label>
                                     <textarea class="input" style="width: 100%;text-align: justify ;padding:10px; text-justify: inter-word;  white-space: pre-wrap; min-height: 100px; height:auto" id="edit_note" name="note"></textarea>
                                 </div>
                         </div>
@@ -297,4 +307,17 @@
 
 @vite( 'resources/js/admin/document.js')
 
+<script>
+    // Select the textarea element
+var textarea = $('#note');
+
+// Attach an input event listener to the textarea
+textarea.on('input', function() {
+  // Reset the height to its default value to calculate the scrollHeight properly
+  $(this).height('auto');
+  
+  // Set the new height to match the scrollHeight
+  $(this).height(this.scrollHeight);
+});
+</script>
 @endsection

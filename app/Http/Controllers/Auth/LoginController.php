@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\SendVerifycode;
+use App\Models\Appointment;
 use App\Models\EmailOtp;
 use App\Models\User;
 use App\Services\AuditTrailService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
@@ -35,10 +37,9 @@ class LoginController extends Controller
 
         }else{  
 
-            $email = $request->input('email');
-            $password = $request->input('password');
-            $user = User::where('email','=', $email)->first();
-
+            $email = $request->only('email');
+            $password = $request->only('password');
+            $user = User::where('email', $email)->first();
             if($user){
                 if(Hash::check($request->password, $user->password)){
 
@@ -46,31 +47,37 @@ class LoginController extends Controller
                         return  redirect()->back()->with('error', 'Your account has been inactive, please contact the admin');
                     }else {
                         if($user->emailstatus == 'unverified'){
+
+                            $latest_verification_code = EmailOtp::where('email', $email)->latest()->first();
+
+                            if($latest_verification_code->expire_at <  Carbon::now()){
+                                $otp = rand(10, 99999);
+                                $time = Carbon::now()->addMinute(5);
+                                EmailOtp::create([
+                                'email' =>  Auth::user()->email,
+                                'verifycode' => $otp,
+                                'expire_at' => $time ,
+                                        ]); 
+                                Mail::to(Auth::user()->email)->send(new SendVerifycode($otp));
+                            }
+
                             auth()->login($user);
-                            $otp = rand(10, 99999);
-                            $time = Carbon::now()->addMinute(5);
-                            EmailOtp::create([
-                            'email' =>  Auth::user()->email,
-                            'verifycode' => $otp,
-                            'expire_at' => $time ,
-                                    ]); 
-                            Mail::to(Auth::user()->email)->send(new SendVerifycode($otp));
+
                             return redirect('/verify-email-auth');
-                        }else{
-                            auth()->login($user);
                             
+                        }else{
+
+                            auth()->login($user);
+
                             (new AuditTrailService())->store("Login");
 
                             if($user->usertype == 'admin'){
-                            return redirect('admin/dashboard');
+                                return redirect('admin/dashboard');
                             }elseif($user->usertype == 'patient'){
-
-                             // Alert::success('success Title', 'Success Message');
-
-                           return redirect('patient/homepage');
-                           }else{
+                                return redirect('patient/homepage');
+                            }else{
                                 return redirect('secretary/dashboard');
-                           }
+                            }
                         }
                     }
                 }else{
@@ -81,5 +88,4 @@ class LoginController extends Controller
             }
         }
     }
-    
 }

@@ -15,29 +15,28 @@ class SearchController extends Controller
 {
         //search user
 
-        public function filter_diagnosis($year){
-
-            $gender_records = Consultation::selectRaw('primary_diag, 
-    MONTH(created_at) as month, 
-    COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male", 
-    COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female", 
-    COUNT(*) as "all"')
-    ->whereNotNull('primary_diag')
-    ->whereYear('created_at', '=',  $year )
-    ->groupBy('primary_diag', 'month')
-    ->get();
+    public function filter_diagnosis($year){
+        $gender_records = Consultation::selectRaw('primary_diag, 
+        YEAR(created_at) as year,
+        COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male", 
+        COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female", 
+        COUNT(*) as "all"')
+        ->whereNotNull('primary_diag')
+        ->whereYear('created_at', $year)
+        ->groupBy('primary_diag', 'year')
+        ->get();
 
 
     $diagnosis=[];
     $male=[];
     $female=[];
     foreach($gender_records as $gender){
-    $diagnosis[]=$gender->primary_diag;
-    $male[]=$gender->male;
-    $female[]=$gender->female;
+        $diagnosis[]=$gender->primary_diag;
+        $male[]=$gender->male;
+        $female[]=$gender->female;
     }
-    return response()->json(['diagnosis' => $diagnosis, 'male'=>$male, 'female'=> $female]);
-        }
+    return response()->json(['diagnosis' => $diagnosis, 'male'=>$male, 'female'=> $female, "year" => $year]);
+    }
 
 
         public function search_user(Request $request){

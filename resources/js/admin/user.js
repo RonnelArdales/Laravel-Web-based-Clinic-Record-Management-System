@@ -34,9 +34,9 @@ $(document).ready(function (){
         const currentDay = currentDate.getDate();
         let age = currentYear - birthYear;
 
-        if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
-            age--; // Adjust age if current month and day are earlier
-        }
+        // if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+        //     age--; // Adjust age if current month and day are earlier
+        // }
         $('#edit_age').html("");
         $('#edit_age').val(age);
     }) 
@@ -57,7 +57,7 @@ $(document).ready(function (){
 
     $(".modal").on("hidden.bs.modal", function(){ 
         $('#create, #edit, #delete').find('input, select').val("");
-        $('#fname, #mname, #lname,#gender, #usertype, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password, #status, #age '  ).html("");
+        $('#fname, #mname, #lname,#gender, #usertype,  #create_error_birthday, #create_error_age, #address, #mobileno, #email, #username, #confirmpassword, #password, #status, #age , #birthday'  ).html("");
         $('#error_fname, #error_lname, #error_gender, #error_usertype, #error_birthday, #error_address, #error_mobileno, #error_email, #error_password, #error_status'  ).html("");
     });
 
@@ -134,7 +134,7 @@ $(document).ready(function (){
             },
             success: function(response){
                 if(response.status == 400){
-                    $('#fname, #mname, #lname,#gender, #usertype, #birthday, #address, #mobileno, #email, #username, #confirmpassword, #password, #status, #age '  ).html("");
+                    $('#fname, #mname, #lname,#gender, #usertype, #create_error_birthday, #create_error_age, #address, #mobileno, #email, #username, #confirmpassword, #password, #status '  ).html("");
                     $.each(response.errors.first_name, function (key, err_values){
                     $('#fname').append('<span>'+err_values+'</span>');
                     })

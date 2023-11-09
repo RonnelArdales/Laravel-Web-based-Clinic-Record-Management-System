@@ -78,11 +78,10 @@
             background:#829460;
             height: 22px;
             color: white;
-            font-size: 14px;"
-
+            font-size: 14px;
       }
 
-    .input-box #password_confirmation{
+      .input-box #password_confirmation{
             width:95%;
             outline:none;
             border:none;
@@ -90,16 +89,14 @@
             height: 22px;
             color: white;
             font-size: 14px;"
-         
-    }
-
+      }
 </style>
 
 <body>
       <div>
             <div class="container-fluid " style="width:100%; color:white">
                   <div class="row">                    
-                        <div class="col-sm"  >
+                        <div class="col-sm" style="padding: 0px" >
                               <div class="sample" >
                                     <a href="/" style="text-decoration: none;color:white"><h4  style="font-weight: 800;padding-left:15px;" >JG MARQUEZ, RPSY</h4></a> 
                               </div>
@@ -117,7 +114,7 @@
                               <!----FILL UP FORM FOR REGISTER / TEXTBOXES----------->
 
                               <div style="padding:4%; width:75%;height: auto;align-self:center;"> 
-                                    <form class="row  "  action="/store" method="POST">
+                                    <form class="row"  action="/store" method="POST">
                                           @csrf
                                           <div class="container">
                                                 <div class="row" style="color: white">
@@ -167,7 +164,7 @@
 
                                                             <div class="col-sm" style="padding-right: 0;">
                                                                   <label  for="">Sex</label>
-                                                                  <select style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0;margin-top:8px; color: white;font-size: 14px;padding:0;" name="gender" class="form-control">
+                                                                  <select style="background:#829460;border: 1px solid #EDDBC0;height: 24px;border-radius:0;margin-top:8px; color: white;font-size: 14px;padding:0px 0px 0px 12px;" name="gender" class="form-control">
                                                                   <option style="text-align:center;line-height:0;font-size:2px" value="">--select--</option>
                                                                   <option value="Male" {{old('gender') == "Male" ? 'selected' : ''}}>Male</option>
                                                                   <option value="Female" {{old('gender') == "Female" ? 'selected' : ''}}>Female</option>
@@ -290,9 +287,9 @@
                         const currentDay = currentDate.getDate();
                         let age = currentYear - birthYear;
 
-                        if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
-                              age--; // Adjust age if current month and day are earlier
-                        }
+                        // if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+                        //       age--; // Adjust age if current month and day are earlier
+                        // }
 
                         $('#age').html("");
                         $('#age').val(age);

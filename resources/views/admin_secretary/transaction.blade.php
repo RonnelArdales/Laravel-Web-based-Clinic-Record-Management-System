@@ -3,14 +3,16 @@
 @section('content')
 
 <style>
-
+    label{
+        font-family: 'Poppins';
+    }
     .addtocart_input, .service_input{
         background: #D0B894;
         border-radius: 10px;
         border:none;
         margin-bottom: 1%;
         text-align: left; 
-        padding-left:30px;
+        padding-left:20px;
     }
 </style>
 
@@ -185,12 +187,8 @@
 @endsection
 
 @section('scripts')
-
 <script>
     let usertype = '{{ Auth::user()->usertype }}';
 </script>
-
 @vite( 'resources/js/admin_secretary/transaction.js')
-
-
 @endsection

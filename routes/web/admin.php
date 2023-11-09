@@ -21,7 +21,7 @@ use App\Http\Controllers\system_settings\ServiceController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 
-Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', )->group(function(){
+Route::prefix('/admin')->middleware('auth', 'verify' ,'isadmin', 'isforgetpassword' )->group(function(){
 
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');//show dashboard page
 

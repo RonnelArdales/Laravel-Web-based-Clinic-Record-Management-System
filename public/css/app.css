@@ -46,36 +46,48 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+input, select{
+    text-indent: 10px;
+}
+
 .currency-wrap{
     position:relative;
+    background-color:  #D0B894;
 }
 
 .currency-code{
     position:absolute;
     top:7px;
-    padding-left: 10px
+    padding-left: 10px;
+    background-color:  #D0B894;
 }
 
 .text-currency{
     padding:2px 22px;
     border:solid 1px #ccc;
     border-radius:5px;
+    background-color:  #D0B894;
 }
 
 .currency-wrap-payment{
     position:relative;
+    width: 20px;
+    background-color:  #D0B894;
 }
 
 .currency-code-payment{
     position:absolute;
     top:3px;
-    padding-left: 10px
+    padding-left: 10px;
+
+    border-left:1px solid;
+    border-radius:1px;
 }
 
 .text-currency-payment{
-    padding:2px 22px;
-    border:solid 1px #ccc;
+    padding:2px 0px 2px 20px;
     border-radius:5px;
+    background-color:  #D0B894;
 }
 
 body{
@@ -127,13 +139,6 @@ ul.no-bullet{
     padding: 1px;
 }
 
-/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
-
-
-/* Optional: Style the caret down icon */
-
-
-/* Some media queries for responsiveness */
 
 .side-navbar  a {
 
@@ -174,12 +179,14 @@ ul.no-bullet{
 }
 
 .close_button:hover{
-    background: #829460;
+    /* background: #829460;
     border-radius: 30px; 
     color:white; 
     border:#67764c;
     width: 110px;
-    height: 37px;
+    height: 37px; */
+    color:#728253;
+    background-color: #dbc5a4;
 }
 
 .close_button{
@@ -194,7 +201,7 @@ ul.no-bullet{
 .dropdown-btn {
     /* new */
     text-decoration: none;
-    font-size: 1.3vw;
+    font-size: 18px ;
     color: white;
     display: block;
     border: none;
@@ -203,7 +210,7 @@ ul.no-bullet{
     cursor: pointer;
     outline: none;
     text-align: left;
-    padding-left: 17px;
+    padding: 12px 15px 12px 17px ;
 }
 /* On mouse-over */
 .side-navbar a:hover, .dropdown-btn:hover {
@@ -244,6 +251,21 @@ ul.no-bullet{
     -moz-appearance: none;
     text-indent: 1px;
     text-overflow: '';
+    padding-left: 10px;
+}
+
+.viewuser{
+    border-width: 1px;
+    border-color: gray;
+    pointer-events: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    border-radius: 5px;
+    width: 100%;
+    background-color:#D0B894;
+    text-indent: 15px;
 }
 td{
     height: -20vh;

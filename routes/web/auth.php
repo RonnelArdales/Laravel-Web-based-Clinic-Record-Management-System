@@ -12,8 +12,11 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth']], function() {
 
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
-    Route::get('/verify-email-auth', [SignupController::class, 'verifyemail_auth']); 
-    Route::get('/resend/auth', [SignupController::class, 'resendcode_verify']); 
+    
+    Route::group(['middleware' => ['isforgetpassword']], function() {
+        Route::get('/verify-email-auth', [SignupController::class, 'verifyemail_auth']); 
+        Route::get('/resend/auth', [SignupController::class, 'resendcode_verify']); 
+    });
 
     //-----------search------------//
 

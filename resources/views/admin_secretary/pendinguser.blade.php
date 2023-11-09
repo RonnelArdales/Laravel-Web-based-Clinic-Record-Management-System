@@ -29,10 +29,8 @@
                         <tr>
                             <th>Patient Id</th>
                             <th>Fullname</th>
-                            <th>Gender</th>
-                            <th>Age</th>
+                            <th>username</th>
                             <th >Date Created</th>
-                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -64,8 +62,8 @@
                     </div>
 
                     <div style=" display: flex; justify-content: center; margin-bottom:40px "  >
-                        <button type="button" class=" btn btn-secondary" style=" margin-right:15px; background: transparent; border-radius: 30px; color:#829460; border: 2px solid #829460;width: 110px;height: 37px;  " data-bs-dismiss="modal">Cancel</button>
-                        <button class="verify_user" id="verify_user"  style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Yes</button>
+                        <button type="button" class="close_button " style="margin-right: 15px" data-bs-dismiss="modal">Cancel</button>
+                        <button class="verify_user create-button" id="verify_user">Yes</button>
                     </div>
                 </div>
             </div>

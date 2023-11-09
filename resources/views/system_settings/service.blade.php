@@ -70,13 +70,13 @@
                     <div class="mb-5 pt-6  ">
                         <div class=" columns-1 sm:columns-2">
                             <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Service name</label>
-                            <input class=" servicename bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text"> 
+                            <input class=" servicename rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" style="background: #D0B894;"> 
                             <br>
                             <div class="mt-0 mb-2">
                                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="name"></span>
                             </div>
                             <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Price</label>
-                            <input class="price bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" type="number">
+                            <input class="price rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894;" type="number">
                             <span  role="alert" class="block mt-5   text-danger" id="price"></span>
                             <br>
                             <div class="mt-0 mb-2">
@@ -106,14 +106,14 @@
                         <div class=" columns-1 sm:columns-2">
                             <input type="hidden" id="servicecode">
                             <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Service name</label>
-                            <input class="servicename bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_servicename" type="text"> 
+                            <input class="servicename rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_servicename" style="background: #D0B894;" type="text"> 
                             <br>
                             <div class="mt-0 mb-2">
                                 <span  role="alert" class="block mt-5   text-danger" id="error_servicename"></span>
                             </div>
 
                             <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Price</label>
-                            <input class="price bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" id="edit_price" type="number">
+                            <input class="price rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" id="edit_price" type="number" style="background: #D0B894;">
                             <br>           
                             <div class="mt-0 mb-2">
                                 <span  role="alert" class="block mt-5   text-danger" id="error_price"></span>

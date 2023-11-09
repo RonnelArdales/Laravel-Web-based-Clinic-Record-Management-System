@@ -1,7 +1,7 @@
 @extends('layouts.admin_navigation')
 @section('content')
 <div class="row m-4">
-    <div class="col-md-8 col-md-offset-5">
+    <div class="col-md-8 col-md-offset-5" style="margin-top:10px">
         <h1><b>GUEST PAGE</b></h1>
     </div>
     <p style="font-size: 18px; margin-bottom:10px">Edit page</p>

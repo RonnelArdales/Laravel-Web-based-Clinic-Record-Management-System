@@ -1,12 +1,19 @@
 <x-mail::message>
 
+<style>
+    * {
+        color: black;
+    }
+</style>
 Dear {{$fullname}},
-
-
-Your consulation file on {{ date('M d, Y', strtotime($date)) }} is already sent in your account.
-
-
-
+<br>
+<br>
+{{$note}}
+<br>
+<br>
 Best regards,<br>
 Dr.Joseph Marquez,
+
 </x-mail::message>
+
+

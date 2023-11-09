@@ -2,23 +2,16 @@
 
 namespace App\Http\Controllers\User;
 use App\http\Controllers\Controller;
-use App\Mail\Bookappointment;
 use App\Models\Appointment;
 use App\Models\BusinessHour;
 use App\Models\Dayoff_date;
 use App\Models\Modeofpayment;
 use App\Models\Reservationfee;
-use App\Models\Transaction;
-use App\Models\User;
 use App\Services\AppointmentService;
-use App\Services\AuditTrailService;
 use App\Services\User\User_AppointmentService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Svg\Tag\Rect;
 
 class User_AppointmentController extends Controller
 {

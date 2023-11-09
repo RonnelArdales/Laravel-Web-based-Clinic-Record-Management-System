@@ -4,22 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\AuditTrail;
-use App\Models\Billing;
 use App\Models\Consultation;
 use App\Models\Consultationfile;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Elibyy\TCPDF\Facades\TCPDF;
 use Dompdf\Dompdf;
 use DOMPDF\Options;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class PrintController extends Controller
 {
@@ -44,49 +39,6 @@ class PrintController extends Controller
             $pdf = Pdf::loadView('print.users', array('userss' => $users ))->setPaper('A4','landscape');
             return $pdf->stream('User report.pdf');
         }
-        // if($request->input('fullname')){
-        //     $name =  $request->input('fullname');
-        //     $users = User::where('fname', 'LIKE', '%'.$name.'%' )->orWhere('mname', 'LIKE', '%'.$name.'%')->orWhere('lname', 'LIKE', '%'.$name.'%')->get();
-        //     $pdf = Pdf::loadView('print.users', array('userss' => $users))->setPaper('landscape');
-        //     return $pdf->stream('invoice.pdf');
-        // }else if($request->input('usertype')){
-        //     $usertype =  $request->input('usertype');
-        //     $users = User::Where('usertype', $usertype)->get();
-        //     $pdf = Pdf::loadView('print.users', array('userss' => $users))->setPaper('landscape');
-        //     return $pdf->stream('invoice.pdf');
-        // }else{
-        //     $users = User::all();
-        //     // $options = new Options();
-        //     // $options->set('isRemoteEnabled',true);      
-        //     // $dompdf = new Dompdf( $options );
-
-        //     // $dompdf
-        
-        //     // $contxt = stream_context_create([ 
-        //     //     'ssl' => [
-        //     //         'verify_peer' => FALSE,
-        //     //         'verify_peer_name' => FALSE,
-        //     //         'allow_self_signed'=> TRUE
-        //     //     ]
-        //     // ]);
-        //     // $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
-        //     // $pdf->getDomPDF()->setHttpContext($contxt);
-
-        //     // $contxt = stream_context_create([ 
-        //     //     'ssl' => [
-        //     //         'verify_peer' => FALSE,
-        //     //         'verify_peer_name' => FALSE,
-        //     //         'allow_self_signed'=> TRUE
-        //     //     ]
-        //     // ]);
-        //     // $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
-        //     // $pdf->getDomPDF()->setHttpContext($contxt);
-
-
-           
-        //     $pdf = Pdf::loadView('print.users', array('userss' => $users ))->setPaper('A4','landscape');
-        //     return $pdf->stream('invoice.pdf');
-        // }
     }
 
     public function print_auditTrail(Request $request){
@@ -251,6 +203,10 @@ class PrintController extends Controller
     }
 
     public function print_consultation_result($id, Request $request){
+        Validator::make($request->all(),[
+            'userpass' => 'required',
+            'adminpass' => 'required',
+        ]);
         $consultations = Consultation::where('id', $id)->first();
         $userinfo = User::where('id', $consultations->user_id)->first();
         $filename = $consultations->fullname . "_" . $consultations->date;    

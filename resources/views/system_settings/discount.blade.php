@@ -68,13 +68,13 @@
                     <div class="mb-5 pt-6  ">
                         <div class=" columns-1 sm:columns-2">
                             <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Discount name</label>
-                            <input class=" discountname bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text"> 
+                            <input style="background: #D0B894;" class=" discountname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text"> 
                             <br>
                             <div class="mt-0 mb-2">
                                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="name"></span>
                             </div>
                             <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Percentage</label>
-                            <input class="percentage bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" type="number">
+                            <input style="background: #D0B894;" class="percentage rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" type="number">
                             <br>
                             <div class="mt-0 mb-2">
                                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="percent"></span>
@@ -104,13 +104,13 @@
                         <div class=" columns-1 sm:columns-2">
                             <input type="hidden" id="discountcode">
                             <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Discount name</label>
-                            <input class="discountname bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_discountname" type="text"> 
+                            <input class="discountname rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_discountname" style="background: #D0B894;" type="text"> 
                             <br>
                             <div class="mt-0 mb-2">
                                 <span  role="alert" class="block mt-5   text-danger" id="error_discountname"></span>
                             </div>
                             <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Percentage</label>
-                            <input class="percentage bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" id="edit_percentage" type="number">
+                            <input class="percentage  rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" id="edit_percentage" type="number" style="background: #D0B894;">
                             <br>
                             <div class="mt-0 mb-2">
                                 <span  role="alert" class="block mt-5   text-danger" id="error_percent"></span>

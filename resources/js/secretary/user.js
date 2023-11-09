@@ -13,9 +13,9 @@
             const currentDay = currentDate.getDate();
             let age = currentYear - birthYear;
 
-            if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
-                age--; // Adjust age if current month and day are earlier
-            }
+            // if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+            //     age--; // Adjust age if current month and day are earlier
+            // }
             $('#age').html("");
             $('#age').val(age);
         })
@@ -76,7 +76,7 @@
             });
             $.ajax({
                 type: "POST",
-                url: "/secretary/user",
+                url: "/secretary/user/",
                 data: data,
                 dataType: "json",
                 beforeSend: function(){

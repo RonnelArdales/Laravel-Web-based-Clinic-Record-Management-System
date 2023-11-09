@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -52,6 +53,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // public function setInputAttribute($value)
+    // {
+    //     $this->attributes['fname'] = preg_replace('/[^a-zA-Z0-9]/', '', $value);
+    //     $this->attributes['mname'] = preg_replace('/[^a-zA-Z0-9]/', '', $value);
+    //     $this->attributes['lname'] = preg_replace('/[^a-zA-Z0-9]/', '', $value);
+    //     $this->attributes['birthday'] = preg_replace('/[^a-zA-Z0-9]/', '', $value);
+    //     $this->attributes['age'] = preg_replace('/[^a-zA-Z0-9]/', '', $value);
+    //     $this->attributes['address'] = preg_replace('/[^a-zA-Z0-9]/', '', $value);
+    //     $this->attributes['gender'] = preg_replace('/[^a-zA-Z0-9]/', '', $value);
+    //     $this->attributes['mobileno'] = preg_replace('/[^a-zA-Z0-9]/', '', $value);
+    // }
 
     public function appointment(){
         //1st parameter - unique id sa appointment table

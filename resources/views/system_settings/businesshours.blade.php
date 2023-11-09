@@ -18,8 +18,8 @@
     }
 </style>
 
-<div class="row m-4">
-    <div class="col-md-8 col-md-offset-5">
+<div class="row m-4" >
+    <div class="col-md-8 col-md-offset-5" style="margin-top:15px">
         <h1><B>BUSINESS HOURS</B></h1>
     </div>   
 
@@ -136,7 +136,7 @@
                     <div class="mb-5 pt-6  ">
                         <div class=" columns-1 sm:columns-2 modal-asd">
                             <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Day</label>
-                            <select name="businessdays" id="create_businessday" style="width:200px" class="create_businessday bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5">
+                            <select name="businessdays" id="create_businessday" style="width:200px; background: #D0B894;" class="create_businessday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5">
                                 <option value="">select</option>
                                 <option value="Monday">Monday</option>
                                 <option value="Tuesday">Tuesday</option>
@@ -151,7 +151,7 @@
                                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_day"></span>
                             </div>
                             <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Time</label>
-                            <input class="create_businesstime bg-white rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" type="time">
+                            <input class="create_businesstime rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400" type="time" style="background: #D0B894;">
                             <br>
                             <div class="mt-0 mb-2">
                                 <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_time"></span>

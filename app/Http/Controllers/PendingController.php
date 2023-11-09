@@ -21,11 +21,7 @@ class PendingController extends Controller
         if ($request->ajax()) {
             return $this->pendingService->getDataForDatatables();
         }
-        if(Auth::user()->usertype == 'admin'){
-            return view('admin.pendinguser');
-        }else{
-            return view('secretary.pendinguser');
-        }
+        return view('admin_secretary.pendinguser');
     }
 
     public function update($id){

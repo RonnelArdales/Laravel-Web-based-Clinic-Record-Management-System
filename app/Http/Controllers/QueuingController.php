@@ -33,7 +33,7 @@ class QueuingController extends Controller
                     ->make(true);
         }
         
-        return view('admin.queuing');
+        return view('admin_secretary.queuing');
     }
 
     public function upcoming_queuing(Request $request){

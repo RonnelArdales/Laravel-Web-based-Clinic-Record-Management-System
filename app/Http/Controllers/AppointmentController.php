@@ -46,13 +46,7 @@ class AppointmentController extends Controller
             return  $this->appointmentService->getPendingStatusforDatatable();
         }
 
-        if(Auth::user()->usertype == 'admin'){
-
-            return view('admin.appointment', compact( 'services', 'day', 'days', 'mops', 'fee'))->with('day_array', $day_array)->with('date_array', $date_array);
-        }else{
-            return view('secretary.appointment', compact('services', 'day', 'days', 'mops', 'fee' ))->with('day_array', $day_array)->with('date_array', $date_array);
-        
-    }
+        return view('admin_secretary.appointment', compact( 'services', 'day', 'days', 'mops', 'fee'))->with('day_array', $day_array)->with('date_array', $date_array);
 
 }
 

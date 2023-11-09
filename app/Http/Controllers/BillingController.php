@@ -16,18 +16,10 @@ class BillingController extends Controller
         if ($request->ajax()) {
             return (new BillingService())->getBillingForDatatable();
         }
-        if(Auth::user()->usertype === "admin"){
-            return view('admin.billing', [
-                'discounts' =>Discount::all(),
-                'mops' =>Modeofpayment::all(),
-              ]);
-        }else{
-            return view('secretary.billing', [
-                'discounts' =>Discount::all(),
-                'mops' =>Modeofpayment::all(),
-              ]);
-        }
-   
+        return view('admin_secretary.billing', [
+            'discounts' =>Discount::all(),
+            'mops' =>Modeofpayment::all(),
+        ]);
     }
 
     public function edit($id){

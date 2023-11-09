@@ -38,10 +38,11 @@ class DocumentController extends Controller
 
       }else{
      
-         $this->documentService->store($request->all());
+         $user = $this->documentService->store($request->all());
 
          return response()->json([
              'status' =>'success',
+             'data' => $user,
          ]);
       }
    }

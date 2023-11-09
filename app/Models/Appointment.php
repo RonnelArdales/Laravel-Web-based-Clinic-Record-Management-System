@@ -19,9 +19,7 @@ class Appointment extends Model
     ];
 
     public function setDateAttribute( $value ) {
-
             $this->attributes['date'] = Carbon::createFromFormat('m-d-Y', $value)->format('Y-m-d');
-   
       }
 
     public function getDateAttribute($value)

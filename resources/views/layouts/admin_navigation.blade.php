@@ -24,7 +24,9 @@
      <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Gujarati:wght@700&family=Poppins:wght@400;700&family=Song+Myung&display=swap" rel="stylesheet">
 
     <title>@yield('title',)</title>
+    
     <link rel="icon"  href="{!! asset('logo/icon.ico') !!}"/>
+
      <link rel="stylesheet" href="{{asset('css/app.css')}}">
 
 </head>

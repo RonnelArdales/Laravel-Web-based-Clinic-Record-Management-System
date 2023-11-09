@@ -147,7 +147,7 @@
 
          <li class=" my-1 mx-3 {{Request::is('secretary/modeofpayment') ? 'active-bar' : '';}}">
               <a href="{{route('secretary.modeofpayment.index')}}"> 
-                   <img class="icon dropdown" src="{{url('/logo/discount2.png')}}" alt=""> 
+                    <img class=" dropdown icon" src="{{url('/logo/modeofpayment1.png')}}" alt=""> 
                    <span style="font-size: 17.5px" >Mode of Payment</span>
               </a>
          </li>

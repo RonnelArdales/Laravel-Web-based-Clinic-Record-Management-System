@@ -14,10 +14,8 @@ $(document).ready(function () {
         columns: [
             {data: 'id', name: 'id' , orderable: false, searchable: false},
             {data: 'fullname', name: 'fullname' , orderable: false},
-            {data: 'gender', name: 'gender' , orderable: false, searchable: false},
-            {data: 'age', name: 'age' , orderable: false, searchable: false},
+            {data: 'username', name: 'username' , orderable: false, searchable: false},
             {data: 'created_at', name: 'created_at' , orderable: false, searchable: false},
-            {data: 'status', name: 'status', orderable: false, searchable: false},
             { data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

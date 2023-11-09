@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'issecretary' => \App\Http\Middleware\SecretaryMiddleware::class,
         'ispatient' => \App\Http\Middleware\PatientMiddleware::class,
         'verify' => \App\Http\Middleware\VerifiedMiddleware::class,
+        'isforgetpassword' => \App\Http\Middleware\ResetPasswordMiddleware::class,
         'deleteaddtocart' => \App\Http\Middleware\Deleteaddtocart::class,
     ];
 }

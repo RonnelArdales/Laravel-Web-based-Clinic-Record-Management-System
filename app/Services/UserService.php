@@ -25,8 +25,6 @@ class UserService {
     }
 
     public function store(array $data){
-
-        $encrypt = bcrypt($data['password']);
         
         $user = ['fname' => $data['first_name'],
             'mname' => $data['mname'],
@@ -38,10 +36,9 @@ class UserService {
             'mobileno' => $data['mobile_number'],
             'email' => $data['email'],
             'username' => $data['username'],
-            'password' => $encrypt,
+            'password' => bcrypt($data['password']),
             'status' => $data['status'],
             'emailstatus' => 'unverified',
-            'usertype' => $data['usertype'],
         ];
 
         if (Auth::user()->usertype === "admin"){

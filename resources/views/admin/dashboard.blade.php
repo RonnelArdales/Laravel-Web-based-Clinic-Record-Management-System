@@ -93,9 +93,9 @@
     <div class="d-flex bd-highlight container" style="padding: 0; margin-top:30px">
         <div class=" " style=" width:100%; ">
             <div class="select-wrapper" style="margin-bottom: 10px">
-                <label for="">Filter</label>
-                <select name="" id="year-filter">
-                    <option value="">--select year--</option>
+                <label style="margin-right:5px" for="">Filter: </label>
+                <select name="" id="year-filter" style="width: 100px">
+                    <option value="{{ now()->format('Y') }}">{{ now()->format('Y') }}</option>
                     @foreach (range(date('Y') + 3 , 1900) as $year)
                     <option value="{{ $year }}">{{ $year }}</option>
                     @endforeach
@@ -180,7 +180,8 @@
             yAxis:{
                 title:{
                 text:'Gender'
-                }
+                },
+                gridLineColor: '#000000'
             },
             series:[{
                 name: 'Male',

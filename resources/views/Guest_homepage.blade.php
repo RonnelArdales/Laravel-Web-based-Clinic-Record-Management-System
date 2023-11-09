@@ -12,25 +12,29 @@
     }
 </style>
 
-<div class="container-fluid" style="padding: 0px" >
-    <div class="bgpic" >  
-        <div style="box-shadow: 20px 20px 15px rgba(0, 0, 0, 0.25);height: auto; left: 65%; padding: 0.3rem;padding-bottom:11%; text-align: center; background-color:#829460; width: 33%; top:0px; border-radius:0 0 500px 500px; position: absolute; z-index:1; "class="collapse dont-collapse-lg"> 
-            <img style="height: 19vw; width: 19vw; margin-top: 2.5rem; margin-left:auto; margin-right: auto; border-radius: 9999px; " src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt="JGRPSYlogo">
-            <h1 style="margin-top: 1.75rem;font-family:Poppins; text-align:center; font-size:2vw; color:white;font-weight: 900; "> PSYCHOLOGICAL SERVICES </h1>
-            <p style="font-size: 1vw; margin-top:5%; margin-bottom:5%; color:white; text-align:center;font-family:Song Myung; "> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae dolorem tenetur quam! Assumenda explicabo architecto voluptate, rerum minima vel, id vitae, aliquid in reiciendis fugit sunt pariatur? Dignissimos, et iste. </p>
-        </div>
+<div class="container-fluid" style="padding: 0px"    >
+    <div class="first-div-container">
+        <div class="first-div-content-bgcolor">
+            <div style="display: flex; flex-direction:row" class="container-fluid">
+                <div style=" "class="collapse dont-collapse-lg right-top-container"> 
+                    <img style=" " src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1674970093/JG%20marquez/logo_oeppyy.png" alt="JGRPSYlogo">
+                    <h1> PSYCHOLOGICAL SERVICES </h1>
+                    <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae dolorem tenetur quam! Assumenda explicabo architecto voluptate, rerum minima vel, id vitae, aliquid in reiciendis fugit sunt pariatur? Dignissimos, et iste. </p>
+                </div>
+                
+                <div class="textpage1">
+                    <h1 class="speak">Speak.</h1>
+                    <h2 class="werehere">We're here for you.</h2>
+                    
+                    <div class="speakforyou" >
+                        {!!$speakwithyou->content!!}
+                    </div>
         
-        <div class="textpage1">
-            <h1 class="speak">Speak.</h1>
-            <h2 class="werehere">We're here for you.</h2>
-            
-            <div class="speakforyou" >
-                {!!$speakwithyou->content!!}
-            </div>
-
-            <div class="btnloginregister">
-                <a href="/register" class="btnregister" >Register</a> 
-                <a href="/login"  class="btnlogin"  >Log in</a> 
+                    <div class="btnloginregister">
+                        <a href="/register" class="btnregister" >Register</a> 
+                        <a href="/login"  class="btnlogin"  >Log in</a> 
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -91,7 +95,7 @@
     </div>
 </div>
 
-<div style="width: 100%; height: auto; text-align:center; font-family:Poppins;">
+<div style="width: 100%; height: auto; text-align:center; font-family:Poppins; padding-bottom:25px">
     <p class="gettoknow">GET TO KNOW US</p>
     <p class="aboutus">ABOUT US</p>
     <div class="blackline">  </div>
@@ -153,8 +157,6 @@
     </div>
 </div>
 
-    
-
 <div style="width: 100%; height: auto; padding:4%;">
     <div class="container-fluid">
         <div class="row">
@@ -162,8 +164,6 @@
             <div class="col-lg">
                 <div style="text-align: justify; ">
                     <p class="whytitle"> WHY SPEAKING UP IS IMPORTANT? </p>
-                
-                    
                     <div class="whycontent">
                         <p>{!! $speakingup->content !!}</p>
                     </div>

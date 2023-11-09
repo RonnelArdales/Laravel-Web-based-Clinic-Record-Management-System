@@ -5,7 +5,7 @@
 <div class="row m-4" style="font-family: Poppins;">
 
     <div style="margin-top: 20px; margin-bottom:30px" class="d-flex justify-content-between">
-        <h3>GOOD DAY, <b>ADMIN</b></h3>
+        <h3>GOOD DAY, <b>SECRETARY</b></h3>
         <div >
             <div>
                 {{ now()->format('M d, Y') }}
@@ -93,9 +93,9 @@
     <div class="d-flex bd-highlight container" style="padding: 0; margin-top:30px">
         <div class=" " style=" width:100%; ">
             <div class="select-wrapper" style="margin-bottom: 10px">
-                <label for="">Filter</label>
-                <select name="" id="year-filter">
-                    <option value="">--select year--</option>
+                <label style="margin-right:5px" for="">Filter: </label>
+                <select name="" id="year-filter" style="width: 100px">
+                    <option value="{{ now()->format('Y') }}">{{ now()->format('Y') }}</option>
                     @foreach (range(date('Y') + 3 , 1900) as $year)
                     <option value="{{ $year }}">{{ $year }}</option>
                     @endforeach
@@ -180,7 +180,8 @@
             yAxis:{
                 title:{
                 text:'Gender'
-                }
+                },
+                gridLineColor: '#000000'
             },
             series:[{
                 name: 'Male',
@@ -204,16 +205,16 @@
                 url: "/diagnosis/filter/"+selectedYear , 
                 datatype: "json",
                 success: function(response){ 
-                if (response.diagnosis.length  == 0 ) {
-                    diagnosis_graph.setTitle({ text: 'No Record Found' }); 
-                    diagnosis_graph.series[0].setData(response.male);
-                    diagnosis_graph.series[1].setData(response.female);
-                } else {
-                    diagnosis_graph.setTitle({ text: 'Yearly Mental Health Statistic' }); 
-                    diagnosis_graph.xAxis[0].setCategories(response.diagnosis); 
-                    diagnosis_graph.series[0].setData(response.male);
-                    diagnosis_graph.series[1].setData(response.female);
-                }
+                    if (response.diagnosis.length  == 0 ) {
+                        diagnosis_graph.setTitle({ text: 'No Record Found' }); 
+                        diagnosis_graph.series[0].setData(response.male);
+                        diagnosis_graph.series[1].setData(response.female);
+                    } else {
+                        diagnosis_graph.setTitle({ text: 'Yearly Mental Health Statistic' }); 
+                        diagnosis_graph.xAxis[0].setCategories(response.diagnosis); 
+                        diagnosis_graph.series[0].setData(response.male);
+                        diagnosis_graph.series[1].setData(response.female);
+                    }
                 }
             }); 
         });

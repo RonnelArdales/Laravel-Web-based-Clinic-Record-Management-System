@@ -28,6 +28,7 @@ class ForgotPasswordController extends Controller
 
         if ($user) {
             auth()->login($user);
+            session(['isforgotpassword' => true]);
             return redirect('forgot_password/select');
         }
 
@@ -195,6 +196,8 @@ class ForgotPasswordController extends Controller
         ]);
 
         (new AuditTrailService())->store("Change password");
+        
+        session()->forget('isforgotpassword');
 
         if(Auth::check()){
             if(Auth::user()->usertype == 'admin'){

@@ -1,11 +1,13 @@
-.swal2-popup {
-    height: auto;
+
+body{
+    margin: 0%;
+    padding: 0%;
     background-color: #EDDBC0;
 }
 
-.swalbutton {
-    background-color:  #829460;
-    color: white;
+.swal2-popup {
+    height: auto;
+    background-color: #EDDBC0;
 }
 
 .container1{
@@ -24,7 +26,10 @@
     font-weight: 800;
 }
 .linya{
-    border: 1px solid rgba(0, 0, 0, 0.3);width:100%;align-self:center;margin:1% 0 1% 0;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    width:100%;
+    align-self:center;
+    margin:1% 0 1% 0;
 }
 .divngpamagat2{
     position: absolute;
@@ -37,7 +42,6 @@
     background-color: #EDDBC0;
     top: 4%;
 }
-
 .form-label{
     margin: 4.5% 0 0 0 ;padding:0;font-size: 14px;
 }
@@ -61,52 +65,49 @@
     .form-label{
         margin: 1% 0% 0% 0%;
     }
-
 }
 
-
-body{
-    margin: 0%;
-    padding: 0%;
-    background-color: #EDDBC0;
-}
 .logoutbutton{
-  background-color: #EDDBC0;
-  border: 0;
-  background: none;
-  outline: none;
-  color: black;
+    background-color: #EDDBC0;
+    border: 0;
+    background: none;
+    outline: none;
+    color: black;
 }
 .spinner {
-position: fixed;
-z-index: 1;
-left: 0;
-right: 0;
-top: 0;
-bottom: 0;
-width: 50px;
-height: 50px;
-margin: auto;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    height: 50px;
+    margin: auto;
 }
 
 .currency-wrap{
-  position:relative;
+    position:relative;
 }
 
 .currency-code{
-  position:absolute;
-  top:3px;
-  padding-left: 10px
+    position:absolute;
+    top:3px;
+    padding-left: 10px
 }
 
 .text-currency{
-  padding:2px 22px;
-  border:solid 1px #ccc;
-  border-radius:5px;
+    padding:2px 22px;
+    border:solid 1px #ccc;
+    border-radius:5px;
 }
 
 .fc-day.fc-today{
-  background-color: aliceblue;
+    background-color: aliceblue;
+}
+
+.fc-day {
+    background-color: #829460;
 }
 
 #calendar {
@@ -119,19 +120,23 @@ margin: auto;
     margin-right: 20px;
     width: 100px;
 }
+
 .fc-body{
-    background-color: #829460;
+    border-color: #555;
 }
 
 .fc td {
     border-color: black;
 }
+
 footer{
     color:white;
     border-radius: 55px 55px 0px 0px;
     background-color: #829460;
     padding: 0% 2% 0% 2%;
 }
+    /* flex-direction:row; padding: 0% 2% 0% 2%;
+        bottom:0; left: 0; right:0; font-family: Poppins; background-color: #829460; height:auto; width:100%; color:white;border-radius: 55px 55px 0px 0px; */
 .column1, .column2 , .column3, .column4 {
     width: 25%;
     height: auto;
@@ -152,58 +157,7 @@ footer{
     text-overflow: '';
 }
 
-@media (min-width: 1408px) {
-    .collapse.dont-collapse-lg {
-        display: block;
-        height: auto !important;
-        visibility: visible;
-    }
 
-    .speakforyou{
-        max-width:640px;
-    }
-}
-
-@media (min-width: 768px) {
-    .button-size{
-        font-size: 1.5vw;
-    }
-    .title{
-        font-size: 1.75rem;
-    }
-}    
-
-@media (max-width: 768px) {
-    .button-size{
-        font-size: 10px;
-    }
-    .title{
-        padding-top: 7px;
-        font-size: 1.4rem;
-    }
-}
-
-@media (max-width: 767px) {
-    .button-size{
-        font-size: 10px;
-    }
-    .line{
-        width: 4600px;
-        margin-right: 20px
-    }
-}
-
-@media (max-width: 992px) {
-    .button-size{
-        font-size: 10px;
-    }
-}
-
-@media (min-width: 1120px) {
-    .speakforyou{
-        width: 100%
-    }
-}
 
 ::-webkit-scrollbar {
     width: 10px;
@@ -224,6 +178,27 @@ footer{
     background: #555; 
 }
 
-.fc-content-skeleton .fc-day-top .fc-day-number {
-    font-size: 20px;
+.title{
+    font-size: 1.75rem;
+}
+
+.txtbrown3{
+    text-align:center; font-size:1.5vw; 
+}
+
+
+
+.input-box{
+    background: #EDDBC0; 
+    border: 1px solid #829460;
+    padding-left:12px;
+    padding-right:12px;
+    height:29px;
+}
+
+.input-box input{
+    outline: none;
+    border:none;
+    background: #EDDBC0; 
+    width: 93%;
 }

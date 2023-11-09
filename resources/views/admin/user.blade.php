@@ -245,10 +245,10 @@
 
                                         <div class="col">
                                                 <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Birthday</label>
-                                                <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;text-decoration:aliceblue;" type="date" id="birthday"> 
+                                                <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; height:29px;"  type="date" id="birthday"> 
 
                                                 <div class="mt-0 mb-2">
-                                                <span  role="alert" class="block mt-5 pb-4 text-danger" id="create_error_birthday"></span>
+                                                    <span  role="alert" class="block mt-5 pb-4 text-danger" id="create_error_birthday"></span>
                                                 </div>
                                         </div>
 
@@ -304,19 +304,21 @@
                                     <div class="col-sm-4" style="">
                                         <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Username</label>
                                         <input class=" username rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"  style="background: #D0B894;" type="text"> 
+
                                         <div class="mt-0 mb-2">
-                                        <span  role="alert" class="block mt-5 pb-4 text-danger" id="username"></span>
+                                            <span  role="alert" class="block mt-5 pb-4 text-danger" id="username"></span>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Usertype:</label>
-                                        <select name="usertype" class="usertype rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"style="background: #D0B894;" >
+                                        <select name="usertype" class="usertype custom-select rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;"  style="height:200px" >
                                             <option value="">--select--</option>
                                             <option value="patient">Patient</option>
                                             <option value="secretary">Secretary</option>
                                             <option value="admin">Admin</option>
                                         </select>
+
                                         <div class="mt-0 mb-2">
                                             <span  role="alert" class="block mt-5 pb-4 text-danger" id="usertype"></span>
                                         </div>
@@ -324,10 +326,10 @@
 
                                     <div class="col-sm-4">
                                         <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
-                                        <select name="status" class="status rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5"style="background: #D0B894;" >
-                                        <option value="">--select--</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="verified">Verified</option>
+                                        <select name="status" class="status custom-select rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;"  style="height:200px" >
+                                            <option value="">--select--</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="verified">Verified</option>
                                         </select>
                                         <div class="mt-0 mb-2">
                                         <span  role="alert" class="block mt-5 pb-4 text-danger" id="status"></span>
@@ -416,7 +418,7 @@
       
                                     <div class="col">
                                           <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Birthday</label>
-                                          <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_birthday" style="background: #D0B894;text-decoration:aliceblue;" type="date"> 
+                                          <input class=" birthday rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_birthday" style="background: #D0B894;text-decoration:aliceblue; height:29px;" type="date"> 
                                           
                                           <div class="mt-0 mb-2">
                                             <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_birthday"></span>
@@ -434,7 +436,7 @@
       
                                     <div class="col-sm" style="padding-right: 0;">
                                           <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Sex:</label>
-                                          <select name="gender" class="gender rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_gender"  style="background: #D0B894;"  >
+                                            <select name="gender" class="gender custom-select rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_gender"  style="height:200px" >
                                                 <option value="" {{$user->gender == "" ? 'selected' : ''}}></option>
                                                 <option value="Male" {{$user->gender == "Male" ? 'selected' : ''}}>Male</option>
                                                 <option value="Female" {{$user->gender == "Female" ? 'selected' : ''}}>Female</option>
@@ -477,8 +479,8 @@
                         <div class="row" style="margin-top:1%">
                               <div class="col-sm-4" style="">
                                     <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Username</label>
-
                                     <input readonly class=" username rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="edit_username" style="background: #D0B894;" type="text"> 
+                                    
                                     <div class="mt-0 mb-2">
                                       <span  role="alert" class="block mt-5 pb-4 text-danger" id="error_username"></span>
                                     </div>
@@ -486,11 +488,11 @@
       
                               <div class="col-sm-4">
                                     <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Usertype:</label>
-                                    <select name="usertype" class="usertype rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_usertype" >
-                                    <option value="" {{$user->usertype == "" ? 'selected' : ''}}></option>
-                                    <option value="patient" {{$user->usertype == "patient" ? 'selected' : ''}}>Patient</option>
-                                    <option value="secretary" {{$user->usertype == "secretary" ? 'selected' : ''}}>Secretary</option>
-                                    <option value="admin" {{$user->usertype == "admin" ? 'selected' : ''}}>Admin</option>
+                                    <select name="gender" class="gender custom-select rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_usertype"  style="height:200px" >
+                                        <option value="" {{$user->usertype == "" ? 'selected' : ''}}></option>
+                                        <option value="patient" {{$user->usertype == "patient" ? 'selected' : ''}}>Patient</option>
+                                        <option value="secretary" {{$user->usertype == "secretary" ? 'selected' : ''}}>Secretary</option>
+                                        <option value="admin" {{$user->usertype == "admin" ? 'selected' : ''}}>Admin</option>
                                     </select>
 
                                     <div class="mt-0 mb-2">
@@ -500,10 +502,10 @@
       
                               <div class="col-sm-4">
                                     <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
-                                    <select class=" rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_status" >
-                                    <option value="" {{$user->status == "" ? 'selected' : ''}}></option>
-                                    <option value="verified" {{$user->status == "verified" ? 'selected' : ''}}>Verfied</option>
-                                    <option value="inactive" {{$user->status == "inactive" ? 'selected' : ''}}>Inactive</option>
+                                    <select name="gender" class="gender custom-select rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894;" id="edit_status"   style="height:200px" >
+                                        <option value="" {{$user->status == "" ? 'selected' : ''}}></option>
+                                        <option value="verified" {{$user->status == "verified" ? 'selected' : ''}}>Verfied</option>
+                                        <option value="inactive" {{$user->status == "inactive" ? 'selected' : ''}}>Inactive</option>
                                     </select>
 
                                       <div class="mt-0 mb-2">
@@ -543,9 +545,8 @@
                 </div>
                   
         <div class="modal-footer" style="border-top-color: black"> 
-          <button type="button" data-bs-dismiss="modal" style="background: #829460;
-          border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Close</button>
-          <button  class=" update_user " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; ">Update</button>
+            <button type="button" data-bs-dismiss="modal" class="close_button">Close</button>
+          <button  class=" update_user create-button " >Update</button>
         </div>
       </div>
     </div>
@@ -555,78 +556,80 @@
     {{-- view modal --}}
 
     <div class="modal fade" id="view" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-        <div class="modal-dialog" >
+        <div class="modal-dialog  modal-dialog-centered modal-lg " >
             <div class="modal-content"style="background: #EDDBC0;">
                 <div class="modal-header" style="border-bottom-color: gray">
                     <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:700;">View User</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            <div class="modal-body">
-                <div class="mb-5 pt-6  ">
-                    <div class=" columns-1 sm:columns-2">
-                        <input type="hidden" id="usercode">
-                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Name:</label>  
-                    <input class="view1 mname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400" id="view_fname" readonly  type="text">
+                <div class="modal-body">
+                    <div class="mb-3 pt-6  ">
+                          <div class="container">
+                                <div class="row">
+                                    <label class="bg-[#EDDBC0] "  >Fullname:</label>
+                                    <div class="col-sm-12  ">
+                                        <input class="viewuser "  style="width: 100%"  id="view_fname" readonly  type="text">
+                                    </div>
+                                </div>
 
-                    <br>
-
-                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Birthday:</label>
-                    <input class="view1 lname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_birthday" readonly  type="text"> 
+                                <div class="row " style="margin-top: 5px">
+                                    <div class="col-md-5 ">
+                                        <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Birthday:</label>
+                                        <input class=" viewuser "   id="view_birthday" readonly  type="text">
+                                    </div>
+                                    <div class="col-md-5 ">
+                                        <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Gender:</label>
+                                        <input class="viewuser "  id="view_gender" readonly  type="text">
+                                    </div>
+                                    <div class="col-md-2 ">
+                                        <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Age:</label>
+                                        <input class="viewuser "   id="view_age" readonly  type="text">
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-top: 10px">
+                                    <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Address</label>
+                                    <textarea name="" id="view_address" cols="30" class="viewuser" rows="5"></textarea>
+                                </div>
+                     
+                                <div class="row" style="margin-top:5px">
+                                      <div class="col-sm-6" style="">
+                                            <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Mobile No.</label>
+                                            <input class="viewuser" id="view_mobileno" type="text"> 
+                                      </div>
+              
+                                      <div class="col-sm-6">
+                                            <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Email</label>
+                                            <input  class="viewuser" id="view_email" style="background: #D0B894;"type="text"> 
+                                      </div>
+                                </div>
+              
+                                <div class="row" style="margin-top:10px">
+                                      <div class="col-sm-4" style="">
+                                            <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Username</label>
+                                            <input  class="viewuser" id="view_username" style="background: #D0B894;"type="text"> 
                 
-                    <br>
-
-                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Age:</label>
-                    <input class="view1 lname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_age" readonly  type="text"> 
-                
-                    <br>
-
-                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Address:</label>
-                    <input style="width: 80%; height:auto;" class="view1 lname bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_address" readonly  type="text"> 
-                
-                    <br>
-
-                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Gender: </label>
-                    <select name="gender" readonly class=" view1 gender" id="view_gender" >
-                        <option value="" {{$user->gender == "" ? 'selected' : ''}}></option>
-                        <option value="Male" {{$user->gender == "Male" ? 'selected' : ''}}>Male</option>
-                        <option value="Female" {{$user->gender == "Female" ? 'selected' : ''}}>Female</option>
-                    </select>
-                
-                    <br>
-
-                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2  ml-3 fw-bold" >Mobile No.: </label>
-                    <input class="view1 mobileno bg-[#EDDBC0] rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="view_mobileno" readonly  type="text"> 
-            
-                    <br>
-
-                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Email: </label>
-                    <input style="width:80%; height:auto;" class="view1 email bg-[#EDDBC0] rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" readonly id="view_email" >
-
-                    <br>
-
-                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Username:</label>
-                    <input class="view1 email bg-[#EDDBC0] rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" readonly id="view_username" > 
-
-                    <br>
-                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Usertype: </label>
-                    <select name="usertype" class=" view1 usertype" readonly id="view_usertype" >
-                        <option value="" {{$user->usertype == "" ? 'selected' : ''}}></option>
-                        <option value="patient" {{$user->usertype == "patient" ? 'selected' : ''}}>Patient</option>
-                        <option value="secretary" {{$user->usertype == "secretary" ? 'selected' : ''}}>Secretary</option>
-                        <option value="admin" {{$user->usertype == "admin" ? 'selected' : ''}}>Admin</option>
-                    </select>
-
-                    <br>
-
-                    <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3 fw-bold" >Status:</label>
-                    <input class="view1 email bg-[#EDDBC0] rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" type="text" readonly id="view_status" > 
-
+                                      </div>
+              
+                                      <div class="col-sm-4">
+                                            <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Usertype:</label>
+                                            <input  class="viewuser" id="view_usertype" style="background: #D0B894;"type="text"> 
+                                      </div>
+              
+                                      <div class="col-sm-4">
+                                            <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Status:</label>
+                                            <input  class="viewuser" id="view_status" style="background: #D0B894;"type="text"> 
+        
+                              
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
+                          
+                    <div class="modal-footer" style="border-top-color: gray">
+                        <button type="button" data-bs-dismiss="modal" class="close_button">Close</button>
                     </div>
-                </div>
-                <div class="modal-footer" style="border-top-color: gray">
-                    <button type="button" class="  " style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
+              </div>
             </div>
         </div>
     </div>

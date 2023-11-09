@@ -158,94 +158,109 @@
                 </div>
 
                 <div class="modal-body">
-                    <div class="mb-5 pt-6  ">
+                    <div class="mb-3 pt-6  ">
                         <div class=" columns-1 sm:columns-2 create-refresh" >
                             <input class="userid  refresh" id="userid"  type="text" hidden> 
                             <input class="contactno  refresh" id="contactno"  type="text"  hidden> 
                             <input class="email  refresh" id="email"  type="text" hidden > 
-                            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Name</label><br>
-                            <input class=" fullname   refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="fullname" style="width:390px" readonly type="text"> 
-                            <button class="patients btn btn-outline-success" style="border: 1px solid #829460;"><img src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png" style="height: 20px ;
-                                width: 20px ;" alt="" ></button>
-                            <br>
-
-                            <div class="mt-0 mb-2">
-                                <span  role="alert" class="block mt-5   text-danger" id="error_user"></span>
-                            </div>
-
-                            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Date</label><br>
-                            <input class="date  refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="date" style="width:390px" type="text" readonly> 
-                            <button class="calendar btn btn-outline-secondary"><img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296625/JG%20marquez/booking_te8ipg.png" style="height: 20px ;
-                                width: 20px ;" alt=""></button>
-                            <br>
-
-                            <div class="mt-0 mb-2">
-                                <span  role="alert" class="block mt-5   text-danger" id="error_date"></span>
-                            </div>
-                    
-                            <label class="mb-6 rounded bg-[#EDDBC0] mb-2 ml-3">Available time:</label><br>
-                            <select class=" available-time   refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="available-time" style="width:435px">
-                            <option value="">-- select time --</option>
-                            <option value="">No available time</option>
-                            </select>
-                            <br>
-
-                            <div class="mt-0 mb-2">
-                                <span  role="alert" class="block mt-5   text-danger" id="error_time"></span>
-                            </div>
-                    
-                            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Reservation fee</label><br>
-                            <input readonly class="reservationfee  rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="reservationfee"  type="text" value="{{$fee->reservationfee}}" > 
-                            <br>
-                            <div class="mt-0 mb-2">
-                            </div>
-
-                            <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Mode of payment</label><br>
-                            <select name="mode_payment" id="mode_payment" class="  refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="width: 210px">
-                            <option value="">--select--</option>
-                            <option value="Cash">Cash</option>
-                            @foreach ($mops as $mop)
-                            <option value="{{$mop->modeofpayment}}">{{$mop->modeofpayment}}</option>
-                            @endforeach
-                            </select><br>
-
-                            <div class="mt-0 mb-2">
-                                <span  role="alert" class="block mt-5   text-danger" id="error_modepayment"></span>
-                            </div>
-
-                            <div id="cash" style="display: none; margin-top: 10px">
-                                <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Payment</label><br>
-                                <div class="currency-wrap-payment">
-                                <span class="currency-code-payment">₱</span>
-                                <input type="number" class=" refresh text-currency-payment" id="payment_cash" placeholder="0.00" class="payment_cash" name="payment_cash" value=""/>
+                         
+               
+                            <div >
+                                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Fullname</label><br>
+                                <div style="display: flex;">
+                                    <input class=" fullname   refresh  w-100 rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894;" id="fullname" readonly type="text"> 
+                                    <button class="patients btn btn-outline-success" style="border: 1px solid #829460; margin-left:10px; height:35px; width:40px; padding:4px 10px 4px 10px"><img src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296487/JG%20marquez/profile_mubmbi.png"  style="height:20px; width:20px" alt="" ></button>    
                                 </div>
-                                <div class="mt-0 mb-2">
-                                <span  role="alert" class="block mt-5   text-danger" id="error_payment"></span>
+                                <div class="mt-0 ">
+                                    <span  role="alert" class="block mt-5   text-danger" id="error_user"></span>
                                 </div>
-                        
-                                <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" >Change</label><br>
-                                <div class="currency-wrap-payment">
-                                    <span class="currency-code-payment">₱</span>
-                                    <input type="text" class=" refresh text-currency-payment" placeholder="0.00" readonly id="change" name="change" />
+                            </div>
+                 
+                            
+
+                            <div style="margin-top: 15px">
+                                <label class="mb-0 rounded bg-[#EDDBC0]  ml-3" >Date</label><br>
+                                <div style="display: flex">
+                                    <input class=" date refresh rounded w-100 text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="date" style=" background: #D0B894;" readonly type="text"> 
+                                    <button class="calendar btn btn-outline-secondary" style="margin-left:10px; height:35px; width:40px; padding:4px 10px 4px 10px"><img class="icon" src="https://res.cloudinary.com/uhno-dos-tres/image/upload/v1676296625/JG%20marquez/booking_te8ipg.png" style="height: 20px ; width: 20px" alt=""></button>
+                                </div>
+
+                                <div class="mt-0 ">
+                                    <span  role="alert" class="block mt-5   text-danger" id="error_date"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="row" style="margin-top:15px">
+                                <div class="col-sm-6">
+                                    <label class="rounded bg-[#EDDBC0] ml-3">Available time:</label><br>
+                                    <div style="display:flex">
+                                        <select class="available-time   refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; height:29px; width:100%"  id="available-time">
+                                            <option value=""> -- select time -- </option>
+                                        </select>
+                                    </div>
+                                    <div class="mt-0 ">
+                                        <span  role="alert" class="block mt-5   text-danger" id="error_time"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <label class=" rounded bg-[#EDDBC0]  ml-3" >Reservation fee</label><br>
+                                    <input readonly class="reservationfee  w-100 rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894;" id="reservationfee"  type="text" value="{{$fee->reservationfee}}" > 
+                                </div>
+                            </div>
+               
+                            <div style="margin-top: 15px">
+                                <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Mode of payment</label><br>
+                                <select name="mode_payment" id="mode_payment" class="  refresh rounded rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" style="background: #D0B894; height:29px; width:100%">
+                                <option value="">--select--</option>
+                                <option value="Cash">Cash</option>
+                                @foreach ($mops as $mop)
+                                <option value="{{$mop->modeofpayment}}">{{$mop->modeofpayment}}</option>
+                                @endforeach
+                                </select>
+    
+                                <div class="mt-0">
+                                    <span  role="alert" class="block mt-5   text-danger" id="error_modepayment"></span>
                                 </div>
                             </div>
 
-                            <div id="gcash" style="display:none; margin-top: 10px">
-                                <label class="mb-0 rounded bg-[#EDDBC0] mb-2 ml-3" for="">Reference no:</label><br>
-                                <input type="text" class="refresh rounded text-gray-700 focus:outline-none border-b-4 border-gray-400 mg-5" id="reference_no" name="reference_no"><br>
+                            <div id="cash" style="display:none; margin-top:15px" class="row">
+                                    <div class="col-sm-6">
+                                        <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Payment</label><br>
+                                        <div class="currency-wrap-payment">
+                                            <span class="currency-code-payment">₱</span>
+                                            <input type="number" class=" refresh text-currency-payment" id="payment_cash" placeholder="0.00" class="payment_cash" name="payment_cash" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="mb-0 rounded bg-[#EDDBC0] ml-3" >Change</label><br>
+                                        <div class="currency-wrap-payment">
+                                            <span class="currency-code-payment">₱</span>
+                                            <input type="text" class=" refresh text-currency-payment" placeholder="0.00" readonly id="change" name="change" />
+                                        </div>
+                                    </div>
+                                    <div class="mt-0 ">
+                                        <span  role="alert" class="block mt-5   text-danger" id="error_payment"></span>
+                                    </div>
+                            </div>
 
-                                <div class="mt-0 mb-2">
+                            <div id="gcash" style="display:none; margin-top: 20px">
+                                <label class="mb-0 rounded bg-[#EDDBC0] ml-3" for="">Reference no:</label><br>
+                                <input type="text" class="refresh rounded  w-100 rounded  text-gray-700 focus:outline-none border-b-4 border-gray-400" style="background: #D0B894;" id="reference_no" name="reference_no"><br>
+
+                                <div class="mt-0 ">
                                     <span  role="alert" class="block mt-5   text-danger" id="error_reference_no"></span>
                                 </div>
                             </div>
 
                         </div>
                     </div>
+                </div>
                     <div class="modal-footer" style="border-top-color: gray">
                         <button type="button" class=" " style=" border-radius: 30px; border: 2px solid #829460;width: 110px;height: 37px; color:#829460;; background:transparent;" data-bs-dismiss="modal">Close</button>
                         <button class=" store_appointment" style="background: #829460;border-radius: 30px; color:white; border:#829460;width: 110px;height: 37px; " >Create</button>
                     </div>
-                </div>
+                
             </div>
         </div>
     </div>

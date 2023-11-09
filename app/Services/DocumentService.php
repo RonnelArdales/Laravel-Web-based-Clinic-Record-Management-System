@@ -77,7 +77,7 @@ class DocumentService {
 
         $user = User::where('id', $data['user_id'])->first();
         
-        Mail::to($user->email)->send(new PatientDocument ($data['fullname'], $date, $path));
+        Mail::to($user->email)->send(new PatientDocument ($data['fullname'], $date, $path, $data['note']));
         
         (new AuditTrailService())->store('Create document');
     }
@@ -90,16 +90,20 @@ class DocumentService {
             $document->note = $data['note'];
             $document->documenttype = $data['doc_type'];
             if($pdf){
-            
                 if(File::exists($path)){
                     File::delete($path);
                 }
                 $filename = date('YmdHis'). '.' . $data['pdf']->getClientOriginalExtension();
                 $data['pdf']->move(public_path('consultation/'), $filename);
+                $path = public_path('consultation/'.$filename);
                 $input['pdf'] = $filename;
                 $document->filename = $filename;
+
+                $user = User::where('id', $data['user_id'])->first();
+        
+                Mail::to($user->email)->send(new PatientDocument ($data['fullname'], $data['date'], $path, $data['note']));
             }
-                
+            
             $document->save();
 
             (new AuditTrailService())->store('Update document');

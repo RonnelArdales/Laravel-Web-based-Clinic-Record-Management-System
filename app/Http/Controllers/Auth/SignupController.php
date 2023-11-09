@@ -41,16 +41,17 @@ class SignupController extends Controller
 
         (new AuditTrailService())->store_unverified($user, "Create an Account");
 
+        auth()->login($user);
         $otp = rand(10, 99999);
         $time = Carbon::now()->addMinute(5);
-             EmailOtp::create([
-                'email' =>  $request->input('email'),
-                'verifycode' => $otp,
-                'expire_at' => $time ,
-             ]); 
-            Mail::to($request->input('email'))->send(new SendVerifycode($otp));
-
-        return Redirect::route('verify-email', ['email' => $request->input('email')]);
+        EmailOtp::create([
+        'email' =>  Auth::user()->email,
+        'verifycode' => $otp,
+        'expire_at' => $time ,
+                ]); 
+        Mail::to(Auth::user()->email)->send(new SendVerifycode($otp));
+        
+        return redirect('/verify-email-auth');
     }
 
     public function verifyemail($email){
@@ -73,7 +74,6 @@ class SignupController extends Controller
         
     }
 
-
     public function emailverifycode(Request $request, $email){
 
         $validated = $request->validate([
@@ -83,49 +83,36 @@ class SignupController extends Controller
         ]);
 
         if(Auth::check()){
-            $emailverify = EmailOtp::where('email',   Auth::user()->email)->where('verifycode' ,  $request->input('code')) ->first();
-            if($emailverify){
-                if($emailverify->expire_at > Carbon::now()){
-                    $user = User::where('id', Auth::user()->id)->first();
-                    $user->emailstatus = 'verified';
-                    $user->save();
-                    if(Auth::user()->usertype == 'admin'){
-                        return redirect('admin/dashboard')  ;
-                    }elseif(Auth::user()->usertype == 'patient'){
-                        return redirect('patient/homepage');
-                    }else{
-                        return redirect('secretary/dashboard');
-                    }  
-                }else{
-                    return redirect()->back()->with('error', 'Verification code has expired ' );
-                }
-            }else{
+            $emailverify = EmailOtp::where('email', Auth::user()->email)->where('verifycode' ,  $request->only('code')) ->first();
+
+            if(!$emailverify){
                 return redirect()->back()->with('error', 'Incorrect verification code' );
             }
-        }else{
-            $emailverify = EmailOtp::where('email', '=',  $email)->where('verifycode' , '=', $request->input('code')) ->first();
-            if($emailverify){
-                if($emailverify->expire_at > Carbon::now()){
-                    
-                    $user = User::where('email', $email)->first();
-                    $user->emailstatus = "verified";
-                    $user->save();
 
-                    Auth()->login($user);
-                    (new AuditTrailService())->store("Verified email");
-                    
-                    if(Auth::user()->usertype == 'admin'){
-                        return redirect('admin/dashboard');
-                    }elseif(Auth::user()->usertype == 'patient'){
+            if($emailverify->expire_at < Carbon::now()){
+                return redirect()->back()->with('error', 'Verification code has expired ' );
+            }
+
+            $user = User::where('id', Auth::user()->id)->first();
+            $user->emailstatus = 'verified';
+            $user->save();
+
+            switch (Auth::user()->usertype){
+                case "admin":
+                    return redirect('admin/dashboard');
+                    break;
+                case "secretary":
+                    return redirect('secretary/dashboard');
+                    break;
+                case "patient":
+                    if(Auth::user()->status == 'pending'){
                         return redirect('patient/homepage')->with('success', 'Your account is successfully created, wait for the administrator approval to used the full function of the system. Please check back later' );
-                    }else{
-                        return redirect('secretary/dashboard');
+                        break;
                     }
-                }else{
-                    return redirect()->back()->with('error', 'Verification code has expired ' );
-                }
-            }else{
-                return redirect()->back()->with('error', 'Incorrect verification code' );
+                    return redirect('patient/homepage');
+                    break;
+                default:
+                    abort(401);
             }
         }
     }

@@ -125,7 +125,8 @@ class AppointmentService {
                 
                 Mail::to($appointment->email)->send(new reschedule_admintopatient($appointment->fullname, $data['date'], $time));
 
-                (new AuditTrailService())->store('Reschedule Appointment');
+                // (new AuditTrailService())->store('Reschedule Appointment');
+                return $data['date'];
 
             }else{
           

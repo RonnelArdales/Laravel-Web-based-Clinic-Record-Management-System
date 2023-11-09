@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use mysqli;
 
@@ -42,14 +43,14 @@ class AdminController extends Controller
         $totals = array_column($try, 'total', 'month');
         
         $gender_records = Consultation::selectRaw('primary_diag, 
-            MONTH(created_at) as month, 
-            COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male", 
-            COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female", 
-            COUNT(*) as "all"')
-            ->whereNotNull('primary_diag')
-            ->whereYear('created_at', '=',  date('Y') )
-            ->groupBy('primary_diag', 'month')
-            ->get();
+        YEAR(created_at) as year,
+        COUNT(CASE WHEN gender = "Male" THEN 1 ELSE NULL END) as "male", 
+        COUNT(CASE WHEN gender = "Female" THEN 1 ELSE NULL END) as "female", 
+        COUNT(*) as "all"')
+        ->whereNotNull('primary_diag')
+        ->whereYear('created_at', date('Y'))
+        ->groupBy('primary_diag', 'year')
+        ->get();
 
         $diagnosis=[];
         $male=[];

@@ -20,7 +20,7 @@ use App\Http\Controllers\system_settings\ServiceController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 
-Route::prefix('/secretary')->middleware('auth', 'verify' ,'issecretary' )->group(function(){
+Route::prefix('/secretary')->middleware('auth', 'verify' ,'issecretary', 'isforgetpassword' )->group(function(){
     
     Route::get('/dashboard',  [SecretaryController::class, 'dashboard'] );
 
